@@ -178,13 +178,13 @@ public static class Name_Generator
                     }
                     break;
                 case PartsofSpeech.noun:
-                    fullName += nouns[rnd.Next() % nouns.Count];
+                    fullName += placeNouns[rnd.Next() % placeNouns.Count];
                     break;
                 case PartsofSpeech.adjective:
-                    fullName += adjective[rnd.Next() % adjective.Count];
+                    fullName += placeAdjective[rnd.Next() % placeAdjective.Count];
                     break;
                 case PartsofSpeech.place:
-                    fullName += places[rnd.Next() % places.Count];
+                    fullName += placePlaces[rnd.Next() % placePlaces.Count];
                     break;
                 default:
                     break;
@@ -261,7 +261,7 @@ new string[] {
       }
     );
 
-    static readonly ReadOnlyCollection<string> nouns = new ReadOnlyCollection<string>(
+    static readonly ReadOnlyCollection<string> placeNouns = new ReadOnlyCollection<string>(
      new string[] {
         "Band",
         "Pizza",
@@ -306,7 +306,7 @@ new string[] {
      }
    );
 
-    static readonly ReadOnlyCollection<string> adjective = new ReadOnlyCollection<string>(
+    static readonly ReadOnlyCollection<string> placeAdjective = new ReadOnlyCollection<string>(
      new string[] {
         "Time",
         "Mystery",
@@ -432,7 +432,7 @@ new string[] {
      }
    );
 
-    static readonly ReadOnlyCollection<string> places = new ReadOnlyCollection<string>(
+    static readonly ReadOnlyCollection<string> placePlaces = new ReadOnlyCollection<string>(
      new string[] {
         "Place",
         "Emporium",
