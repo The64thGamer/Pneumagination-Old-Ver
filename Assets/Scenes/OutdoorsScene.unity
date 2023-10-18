@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2301.5374, g: 2383.1213, b: 3432.7974, a: 1}
+  m_IndirectSpecularColor: {r: 2302.757, g: 2384.1194, b: 3433.7231, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -135,8 +135,6 @@ MonoBehaviour:
   materialType: 8
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1 &157207112
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,8 +434,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1001 &361315747
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -496,6 +492,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5181479454297603700, guid: 50b032af3e3f04146946d82d07095cf9,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d29160eb883c9f84eae7ee9f8b677259, type: 2}
     - target: {fileID: -3809945072200597350, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -552,8 +553,6 @@ MonoBehaviour:
   materialType: 4
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &361315752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,8 +568,6 @@ MonoBehaviour:
   materialType: 5
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &408477956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,8 +583,6 @@ MonoBehaviour:
   materialType: 2
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1 &432432459
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,8 +647,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &632671718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,8 +662,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1001 &637093059
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -800,8 +791,6 @@ MonoBehaviour:
   materialType: 1
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &637093066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -817,8 +806,6 @@ MonoBehaviour:
   materialType: 1
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &637093067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -834,8 +821,6 @@ MonoBehaviour:
   materialType: 1
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &637093068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -851,8 +836,6 @@ MonoBehaviour:
   materialType: 1
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &689825789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -868,8 +851,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1 &751355994
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,58 +946,6 @@ MonoBehaviour:
   materialType: 3
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
---- !u!1 &1101095533
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1101095535}
-  - component: {fileID: 1101095534}
-  m_Layer: 0
-  m_Name: Test Script
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1101095534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1101095533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aea95b3003fd6684b93bc09acb32f807, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  generateRandomName: 1
-  age: 0
-  seed: 16
-  placeName: 
-  firstName: 
-  lastName: 
---- !u!4 &1101095535
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1101095533}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1131957852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,8 +1262,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1464734661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1350,8 +1277,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1464734662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1367,8 +1292,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1464734663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1384,8 +1307,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1464734664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1401,8 +1322,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1483544148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1418,8 +1337,6 @@ MonoBehaviour:
   materialType: 3
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1001 &1755534748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1584,8 +1501,6 @@ MonoBehaviour:
   materialType: 9
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1755534758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1601,8 +1516,6 @@ MonoBehaviour:
   materialType: 7
   materialLocation: 0
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1755534759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1618,8 +1531,6 @@ MonoBehaviour:
   materialType: 6
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1755534760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1635,8 +1546,6 @@ MonoBehaviour:
   materialType: 6
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!114 &1755534761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1652,8 +1561,6 @@ MonoBehaviour:
   materialType: 6
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!115 &1787309872
 MonoScript:
   m_ObjectHideFlags: 0
@@ -1715,11 +1622,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5953c22be8c8f644cb37b30474fc9b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 0
-  materialLocation: 0
-  grime: 0
-  rain: 0
-  snow: 0
 --- !u!1 &1823688464
 GameObject:
   m_ObjectHideFlags: 0
@@ -1963,6 +1865,71 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: a59dc18defe778745b000993a6375171, type: 2}
+--- !u!1 &1913721395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1913721396}
+  - component: {fileID: 1913721398}
+  - component: {fileID: 1913721397}
+  m_Layer: 0
+  m_Name: Data Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1913721396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -40.4866, y: -165.35843, z: -209.06595}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1913721397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea95b3003fd6684b93bc09acb32f807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generateRandomName: 0
+  age: 0
+  seed: 0
+  placeName: 
+  firstName: 
+  lastName: 
+--- !u!114 &1913721398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 542e8be098071fd41a6263957cb77c52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rainPercent: 0
+  snowPercent: 0
 --- !u!114 &1980918010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1978,8 +1945,6 @@ MonoBehaviour:
   materialType: 0
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1
@@ -2043,14 +2008,12 @@ MonoBehaviour:
   materialType: 3
   materialLocation: 1
   grime: 0
-  rain: 0
-  snow: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1823688467}
+  - {fileID: 1913721396}
   - {fileID: 2013410475}
-  - {fileID: 1101095535}
   - {fileID: 794460555}
   - {fileID: 1788443484}
