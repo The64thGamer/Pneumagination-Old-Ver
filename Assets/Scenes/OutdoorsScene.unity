@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3331.4575, g: 4004.8872, b: 4875.141, a: 1}
+  m_IndirectSpecularColor: {r: 3827.1147, g: 4230.518, b: 4660.891, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -223,13 +223,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 157207112}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.46823823, y: 0, z: 0, w: 0.88360226}
+  m_LocalRotation: {x: 0.42024413, y: 0, z: 0, w: 0.90741116}
   m_LocalPosition: {x: -18.955317, y: 4.1591134, z: -7.0465026}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1382779751}
-  m_LocalEulerAnglesHint: {x: 55.84, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 49.7, y: 0, z: 0}
 --- !u!114 &157207115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1101,6 +1101,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5631577187415642687, guid: 17b5c2547d677f5489b13d2ab922782b,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b8890ed816e088643b41b0d92830c32d, type: 2}
     - target: {fileID: 919132149155446097, guid: 17b5c2547d677f5489b13d2ab922782b,
         type: 3}
       propertyPath: m_Name
@@ -1399,12 +1404,17 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 83a7e2e5a0b00eb44ad2cf8ad6cf3c94, type: 2}
+      objectReference: {fileID: 2100000, guid: d29160eb883c9f84eae7ee9f8b677259, type: 2}
     - target: {fileID: 919132149155446097, guid: 42704b4a51fb1b64d8b4f2195fb79c5b,
         type: 3}
       propertyPath: m_Name
       value: Roof
       objectReference: {fileID: 0}
+    - target: {fileID: 2343119464091865963, guid: 42704b4a51fb1b64d8b4f2195fb79c5b,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 83a7e2e5a0b00eb44ad2cf8ad6cf3c94, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1683,7 +1693,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 30000
   field of view: 60
   orthographic: 0
   orthographic size: 5

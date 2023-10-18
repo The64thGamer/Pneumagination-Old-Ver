@@ -490,7 +490,7 @@ MonoBehaviour:
     m_Value: 5
   shapeOffset:
     m_OverrideState: 1
-    m_Value: {x: 0.2, y: 0, z: 0}
+    m_Value: {x: 70.9, y: 0, z: 0}
   erosionFactor:
     m_OverrideState: 1
     m_Value: 0.8
