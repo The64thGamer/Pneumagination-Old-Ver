@@ -9438,10 +9438,10 @@
     "m_Guid": {
         "m_GuidSerialized": "626287b6-5533-4ebb-b419-d72e8f64b03d"
     },
-    "m_Name": "Extra Shininess",
+    "m_Name": "Roughness",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Extra Shininess",
-    "m_DefaultReferenceName": "_Extra_Shininess",
+    "m_RefNameGeneratedByDisplayName": "Roughness",
+    "m_DefaultReferenceName": "_Roughness",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
