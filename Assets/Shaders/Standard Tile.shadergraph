@@ -137,9 +137,6 @@
             "m_Id": "ab790065adbb411daaff987622b3f0a3"
         },
         {
-            "m_Id": "2ba1d86fba5a4cf2b433e1518befc195"
-        },
-        {
             "m_Id": "0eb3430137d64f3bb4df145bf20b4750"
         },
         {
@@ -3520,42 +3517,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
-    "m_ObjectId": "2ba1d86fba5a4cf2b433e1518befc195",
-    "m_Group": {
-        "m_Id": "d36a198349b54959ac9d7734e54cc702"
-    },
-    "m_Name": "Property",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": -1993.0,
-            "y": 516.0,
-            "width": 105.0,
-            "height": 33.99993896484375
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "6fd997cb58b44a968132d3b6ff407d30"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_Property": {
-        "m_Id": "f32bab35416b4a20a3b50fb54ed30772"
-    }
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.AddNode",
     "m_ObjectId": "2c59627b29764aeba96a802b8f79dc5d",
     "m_Group": {
@@ -6241,21 +6202,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "6fd997cb58b44a968132d3b6ff407d30",
-    "m_Id": 0,
-    "m_DisplayName": "Snow",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Out",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "70453e429596450d965b1fa49f3f5e23",
     "m_Id": 1,
@@ -7718,10 +7664,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1994.0,
-            "y": 320.0,
+            "x": -2377.0,
+            "y": 332.0,
             "width": 104.0,
-            "height": 33.999969482421878
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -9727,8 +9673,8 @@
     "m_ObjectId": "d36a198349b54959ac9d7734e54cc702",
     "m_Title": "Standard",
     "m_Position": {
-        "x": -2085.0,
-        "y": -1166.0001220703125
+        "x": -2402.0,
+        "y": -722.0
     }
 }
 
