@@ -42,6 +42,7 @@ public struct DEAD_Actuator
     public AnimationClip animation;
     public int dtuIndex;
     public DEAD_Actuator_Type actuatorType;
+    public bool invertedFlow;
 
     [Header("Lever Settings")]
     public Transform fulcrumBone;
@@ -58,6 +59,8 @@ public struct DEAD_Actuator
     public float airflowExtension;
     [Range(0, 1)]
     public float airflowRetraction;
+    public float airlineLengthFeet;
+
 
     [Header("Stepper Motor / Servo Settings")]
     public float minAngleDegrees;
