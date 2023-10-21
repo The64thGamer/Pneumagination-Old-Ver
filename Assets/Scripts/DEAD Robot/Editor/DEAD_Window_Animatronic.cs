@@ -48,7 +48,8 @@ public class DEAD_Window_Animatronic : Editor
         for (int i = 0; i < actuators.Length; i++)
         {
             AnimatorControllerLayer newLayer = new AnimatorControllerLayer();
-            newLayer.name = controller.MakeUniqueLayerName(actuators[i].actuationName + " DTU(" + actuators[i].dtuIndex.ToString() + ") ID(" + i + ")");
+            string uniqueName = actuators[i].actuationName + " ID(" + i + ")";
+            newLayer.name = controller.MakeUniqueLayerName(uniqueName);
             newLayer.stateMachine = new AnimatorStateMachine();
             newLayer.stateMachine.name = newLayer.name;
             newLayer.stateMachine.hideFlags = HideFlags.HideInHierarchy;
@@ -57,7 +58,7 @@ public class DEAD_Window_Animatronic : Editor
                 name = actuators[i].actuationName,
                 speed = 0,
                 timeParameterActive = true,
-                timeParameter = actuators[i].dtuIndex.ToString(),
+                timeParameter = uniqueName,
                 motion = actuators[i].animation,
             }, Vector3.zero);
             if (AssetDatabase.GetAssetPath(controller) != "")
@@ -67,14 +68,7 @@ public class DEAD_Window_Animatronic : Editor
             newLayer.blendingMode = AnimatorLayerBlendingMode.Additive;
             newLayer.defaultWeight = 1f;
             controller.AddLayer(newLayer);
-        }
-
-        //Add Parameters
-        int[] dtuIndexes = dead_Animatronic.GetDTUIndexes();
-        dtuIndexes = dtuIndexes.Distinct().ToArray();
-        for (int i = 0; i < dtuIndexes.Length; i++)
-        {
-            controller.AddParameter(dtuIndexes[i].ToString(),AnimatorControllerParameterType.Float);
+            controller.AddParameter(uniqueName, AnimatorControllerParameterType.Float);
         }
 
         animator.runtimeAnimatorController = controller;

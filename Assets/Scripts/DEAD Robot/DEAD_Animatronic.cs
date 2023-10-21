@@ -26,7 +26,7 @@ public class DEAD_Animatronic : MonoBehaviour
         animatorHashes = new int[deadActuators.Length];
         for (int i = 0; i < deadActuators.Length; i++)
         {
-            animatorHashes[i] = Animator.StringToHash(deadActuators[i].dtuIndex.ToString());
+            animatorHashes[i] = Animator.StringToHash(deadActuators[i].actuationName + " ID(" + i + ")");
         }
     }
 
