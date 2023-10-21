@@ -59,6 +59,7 @@ public class Custom_Geometry : MonoBehaviour
         concrete,
         plaster,
         plastic,
+        earth,
     }
     public enum MaterialLocation
     {

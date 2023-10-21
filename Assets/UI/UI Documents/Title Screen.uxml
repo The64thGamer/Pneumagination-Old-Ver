@@ -3,7 +3,7 @@
     <ui:VisualElement style="flex-grow: 1; background-color: rgb(72, 72, 72); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
         <ui:VisualElement name="MainMenu" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
             <ui:Label tabindex="-1" text="Pneumagination" display-tooltip-when-elided="true" style="font-size: 70px; -unity-font-style: bold;" />
-            <ui:Label tabindex="-1" text="Alpha v0.1" display-tooltip-when-elided="true" style="font-size: 40px;" />
+            <ui:Label tabindex="-1" text="Alpha v0.2" display-tooltip-when-elided="true" style="font-size: 40px;" />
             <ui:VisualElement style="flex-grow: 1;" />
             <ui:VisualElement style="flex-grow: 1; justify-content: space-evenly;">
                 <ui:Button text="Load Map" display-tooltip-when-elided="true" name="LoadMap" style="font-size: 70px; width: 600px;" />
