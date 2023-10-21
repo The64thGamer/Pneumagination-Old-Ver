@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Video;
 
 public class DEAD_Interface : MonoBehaviour
 {
     [SerializeField] float psi = 40;
     [SerializeField] float[] dataTransferUnit;
+
+    [Header("Showtapes")]
+    [SerializeField] int activeShowtapeSlot;
+    [SerializeField] DEAD_ShowtapeSlot[] showtapeSlots;
 
     public float GetData(int index)
     {
@@ -41,4 +47,11 @@ public class DEAD_Interface : MonoBehaviour
     {
         return Mathf.Max(0,psi);
     }
+}
+
+[System.Serializable]
+public class DEAD_ShowtapeSlot
+{
+    public string triggerString;
+    public DEAD_Showtape showtape;
 }
