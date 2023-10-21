@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/Test.uss?fileID=7433441132597879392&amp;guid=8188b2563d7b06e40b894faa1480da29&amp;type=3#Test" />
+    <ui:VisualElement style="flex-grow: 1; background-color: rgb(72, 72, 72); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
+        <ui:VisualElement name="MainMenu" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
+            <ui:Label tabindex="-1" text="Pneumagination" display-tooltip-when-elided="true" style="font-size: 70px; -unity-font-style: bold;" />
+            <ui:Label tabindex="-1" text="Alpha v0.1" display-tooltip-when-elided="true" style="font-size: 40px;" />
+            <ui:VisualElement style="flex-grow: 1;" />
+            <ui:VisualElement style="flex-grow: 1; justify-content: space-evenly;">
+                <ui:Button text="Load Map" display-tooltip-when-elided="true" name="LoadMap" style="font-size: 70px; width: 600px;" />
+                <ui:Button text="Name Generator" display-tooltip-when-elided="true" name="NameGenerator" style="font-size: 70px; width: 600px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1;" />
+            <ui:Label tabindex="-1" text="The 64th Gamer 2023, Use WASD + EQ + Num Keys to move bots. Don&apos;t expect much lol." display-tooltip-when-elided="true" style="font-size: 40px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="MenuGenerator" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none;">
+            <ui:Label tabindex="-1" text="Name Generator" display-tooltip-when-elided="true" style="font-size: 70px; -unity-font-style: bold;" />
+            <ui:Label tabindex="-1" text="Ok so this is gonna be used to randomly generate business names in-game at some point but&#10;its also extremely fun to mess around with. &#10;Either you let the generator make random first or last names, or you put whatever you want.&#10;Keep pressing the button to get different results." display-tooltip-when-elided="true" style="font-size: 40px;" />
+            <ui:VisualElement style="flex-grow: 1; justify-content: space-around; align-items: stretch;">
+                <ui:Toggle label="Random First &amp; Last Names" name="RandomNames" value="true" style="font-size: 50px;" />
+                <ui:TextField picking-mode="Ignore" label="First Name" name="FirstName" style="font-size: 50px;" />
+                <ui:TextField picking-mode="Ignore" label="Last Name" name="LastName" style="font-size: 50px;" />
+                <ui:VisualElement style="flex-grow: 1; align-items: center; align-self: center; justify-content: space-around; flex-direction: row; flex-shrink: 1; max-height: 100px; width: 1458px;">
+                    <ui:Button text="Generate Business" display-tooltip-when-elided="true" name="GenBusiness" style="font-size: 50px; width: 650px;" />
+                    <ui:Button text="Back" display-tooltip-when-elided="true" name="BackButton" style="font-size: 50px; width: 650px;" />
+                </ui:VisualElement>
+                <ui:Label tabindex="-1" text="&quot;Generated Name&quot;" display-tooltip-when-elided="true" name="FinalName" style="font-size: 50px; -unity-text-align: upper-center; color: rgb(255, 255, 255); -unity-font-style: bold;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

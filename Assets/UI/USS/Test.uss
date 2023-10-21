@@ -1,0 +1,4 @@
+.unity-toggle__checkmark {
+    min-width: 70px;
+    min-height: 70px;
+}
