@@ -52,7 +52,7 @@ MonoBehaviour:
     colorBufferFormat: 48
     supportCustomPass: 1
     customBufferFormat: 12
-    supportedLitShaderMode: 2
+    supportedLitShaderMode: 1
     planarReflectionResolution:
       m_Values: 000100000004000000080000
       m_SchemaId:
@@ -157,12 +157,12 @@ MonoBehaviour:
       lutFormat: 48
       bufferFormat: 74
     dynamicResolutionSettings:
-      enabled: 0
+      enabled: 1
       useMipBias: 0
-      enableDLSS: 0
-      DLSSPerfQualitySetting: 0
+      enableDLSS: 1
+      DLSSPerfQualitySetting: 1
       DLSSInjectionPoint: 0
-      DLSSUseOptimalSettings: 0
+      DLSSUseOptimalSettings: 1
       DLSSSharpness: 0
       fsrOverrideSharpness: 0
       fsrSharpness: 0.92

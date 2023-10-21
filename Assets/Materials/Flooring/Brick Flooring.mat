@@ -16,6 +16,7 @@ Material:
   - _DISABLE_SSR_TRANSPARENT
   - _MATERIALTYPE_CONCRETE
   m_InvalidKeywords:
+  - _DEPTHOFFSET_ON
   - _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -67,6 +68,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissiveColorMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Height:
+        m_Texture: {fileID: 2800000, guid: 07a3b38c347163e4c9f47d9769288488, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
@@ -181,7 +186,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _DepthOffsetEnable: 0
+    - _DepthOffsetEnable: 1
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
     - _DetailSmoothnessScale: 1
