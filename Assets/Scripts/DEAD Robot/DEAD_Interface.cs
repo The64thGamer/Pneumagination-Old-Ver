@@ -16,6 +16,17 @@ public class DEAD_Interface : MonoBehaviour
 
         return dataTransferUnit[index];
     }
+
+    public void SetData(int index, float value)
+    {
+        if (index < 0 || index > dataTransferUnit.Length - 1 || dataTransferUnit == null)
+        {
+            return;
+        }
+
+        dataTransferUnit[index] = value;
+    }
+
     public int GetDTUArrayLength()
     {
         if(dataTransferUnit == null)
