@@ -9,13 +9,45 @@ public class DEAD_Animatronic : MonoBehaviour
 {
     [SerializeField] string name;
     [SerializeField] DEAD_Actuator[] deadActuators;
+    [SerializeField] DEAD_Interface deadInterface;
 
-    DEAD_Interface deadInterface;
+    int[] animatorHashes;
     Animator animator;
+
+    private void Start()
+    {
+        animator = this.GetComponent<Animator>();
+        ResetHashes();
+    }
 
     void ResetHashes()
     {
+        animatorHashes = new int[deadActuators.Length];
+        for (int i = 0; i < deadActuators.Length; i++)
+        {
+            animatorHashes[i] = Animator.StringToHash(deadActuators[i].dtuIndex.ToString());
+        }
+    }
 
+    private void Update()
+    {
+        if(deadInterface != null)
+        {
+            UpdateMovements();
+        }
+    }
+
+    void UpdateMovements()
+    {
+        if(deadInterface == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < deadActuators.Length; i++)
+        {
+            animator.SetFloat(animatorHashes[i], deadInterface.GetData(deadActuators[i].dtuIndex));
+        } 
     }
 
     public int[] GetDTUIndexes()
