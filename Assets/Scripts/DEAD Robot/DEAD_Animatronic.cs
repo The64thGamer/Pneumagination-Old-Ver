@@ -46,7 +46,7 @@ public class DEAD_Animatronic : MonoBehaviour
 
         for (int i = 0; i < deadActuators.Length; i++)
         {
-            animator.SetFloat(animatorHashes[i], deadInterface.GetData(deadActuators[i].dtuIndex));
+            animator.SetFloat(animatorHashes[i], Mathf.Lerp(animator.GetFloat(animatorHashes[i]), deadInterface.GetData(deadActuators[i].dtuIndex),Time.deltaTime * 10));
         } 
     }
 

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2990.9866, g: 3370.768, b: 3894.227, a: 1}
+  m_IndirectSpecularColor: {r: 2990.5002, g: 3370.1724, b: 3893.6177, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3866,8 +3866,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3d804c0d6e5bc4ca6aec7ad60eddb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
-  deadActuators: []
+  name: Dead Animatronic
+  deadActuators:
+  - actuationName: Large Bend
+    animation: {fileID: 511522296394549480, guid: de40f9b30141fc84e82b56155d9d1a80,
+      type: 3}
+    dtuIndex: 0
+    actuatorType: 0
+    invertedFlow: 0
+    fulcrumBone: {fileID: 0}
+    effortBone: {fileID: 0}
+    leverStartBone: {fileID: 0}
+    leverEndBone: {fileID: 0}
+    leverWeights: []
+    boreDiameterInch: 0
+    strokeLengthInch: 0
+    rodDiameterInch: 0
+    airflowExtension: 0
+    airflowRetraction: 0
+    airlineLengthFeet: 0
+    minAngleDegrees: 0
+    maxAngleDegrees: 0
+    torqueChartNm:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    speedChartRpm:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+  - actuationName: Medium Bend
+    animation: {fileID: 6313662144966393745, guid: de40f9b30141fc84e82b56155d9d1a80,
+      type: 3}
+    dtuIndex: 1
+    actuatorType: 0
+    invertedFlow: 0
+    fulcrumBone: {fileID: 0}
+    effortBone: {fileID: 0}
+    leverStartBone: {fileID: 0}
+    leverEndBone: {fileID: 0}
+    leverWeights: []
+    boreDiameterInch: 0
+    strokeLengthInch: 0
+    rodDiameterInch: 0
+    airflowExtension: 0
+    airflowRetraction: 0
+    airlineLengthFeet: 0
+    minAngleDegrees: 0
+    maxAngleDegrees: 0
+    torqueChartNm:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    speedChartRpm:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+  - actuationName: Small Bend
+    animation: {fileID: -3570698691758749976, guid: de40f9b30141fc84e82b56155d9d1a80,
+      type: 3}
+    dtuIndex: 2
+    actuatorType: 0
+    invertedFlow: 0
+    fulcrumBone: {fileID: 0}
+    effortBone: {fileID: 0}
+    leverStartBone: {fileID: 0}
+    leverEndBone: {fileID: 0}
+    leverWeights: []
+    boreDiameterInch: 0
+    strokeLengthInch: 0
+    rodDiameterInch: 0
+    airflowExtension: 0
+    airflowRetraction: 0
+    airlineLengthFeet: 0
+    minAngleDegrees: 0
+    maxAngleDegrees: 0
+    torqueChartNm:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    speedChartRpm:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+  deadInterface: {fileID: 1913721400}
 --- !u!95 &1823527677
 Animator:
   serializedVersion: 7
@@ -4375,6 +4469,8 @@ GameObject:
   - component: {fileID: 1913721398}
   - component: {fileID: 1913721397}
   - component: {fileID: 1913721399}
+  - component: {fileID: 1913721400}
+  - component: {fileID: 1913721401}
   m_Layer: 0
   m_Name: Data Manager
   m_TagString: Untagged
@@ -4451,6 +4547,42 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1913721400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7266ff4cfe620c44ab175fb6a8b49a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataTransferUnit:
+  - 0
+  - 0
+  - 0
+--- !u!114 &1913721401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a73f8ebf73672054ab6ab611e9973141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dead_Interface: {fileID: 1913721400}
+  testingValues:
+  - index: 0
+    value: 0
+  - index: 1
+    value: 0
+  - index: 2
+    value: 0
 --- !u!114 &1980918010
 MonoBehaviour:
   m_ObjectHideFlags: 0
