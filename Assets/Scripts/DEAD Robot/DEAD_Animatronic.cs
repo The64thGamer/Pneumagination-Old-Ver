@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -46,8 +47,23 @@ public class DEAD_Animatronic : MonoBehaviour
 
         for (int i = 0; i < deadActuators.Length; i++)
         {
-            animator.SetFloat(animatorHashes[i], Mathf.Lerp(animator.GetFloat(animatorHashes[i]), deadInterface.GetData(deadActuators[i].dtuIndex),Time.deltaTime * 10));
+            animator.SetFloat(animatorHashes[i], CalculateAirflow(i));
         } 
+    }
+
+    float CalculateAirflow(int index)
+    {
+        float time = Time.deltaTime * deadInterface.GetPSI();
+        float dtuData = deadInterface.GetData(deadActuators[index].dtuIndex);
+        if (Convert.ToBoolean((int)dtuData))
+        {
+            time *= deadActuators[index].airflowExtension;
+        }
+        else
+        {
+            time *= deadActuators[index].airflowRetraction;
+        }
+        return Mathf.Lerp(animator.GetFloat(animatorHashes[index]), dtuData, time);
     }
 
     public int[] GetDTUIndexes()

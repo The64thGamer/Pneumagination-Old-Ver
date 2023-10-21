@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class DEAD_Interface : MonoBehaviour
 {
+    [SerializeField] float psi = 40;
     [SerializeField] float[] dataTransferUnit;
 
     public float GetData(int index)
@@ -34,5 +35,10 @@ public class DEAD_Interface : MonoBehaviour
             return 0;
         }
         return dataTransferUnit.Length;
+    }
+
+    public float GetPSI()
+    {
+        return Mathf.Max(0,psi);
     }
 }
