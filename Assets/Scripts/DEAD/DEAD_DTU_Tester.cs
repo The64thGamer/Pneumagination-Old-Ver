@@ -20,6 +20,7 @@ public class DEAD_DTU_Tester : MonoBehaviour
     [Header("Send Commands")]
     [SerializeField] string command;
     [SerializeField] bool sendCommand;
+    [SerializeField] bool nonRecordableCommand;
 
 
     private void Update()
@@ -29,7 +30,7 @@ public class DEAD_DTU_Tester : MonoBehaviour
             if(sendCommand)
             {
                 sendCommand = false;
-                dead_Interface.SendCommand(command);
+                dead_Interface.SendCommand(command,nonRecordableCommand);
             }
             for (int i = 0; i < 10; i++)
             {

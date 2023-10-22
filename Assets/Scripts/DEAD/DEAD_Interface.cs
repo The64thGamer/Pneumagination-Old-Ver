@@ -172,7 +172,7 @@ public class DEAD_Interface : MonoBehaviour
                             {
                                 if (commands[found].time > oldTime)
                                 {
-                                    SendCommand(commands[found].value);
+                                    SendCommand(commands[found].value,false);
                                 }
                                 found++;
                             }
@@ -201,7 +201,7 @@ public class DEAD_Interface : MonoBehaviour
         }
 
         dataTransferUnit[index] = value;
-        if (showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
+        if (playingShowtape && showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
         {
             dtuSet.Invoke(index, showtapeSlots[activeShowtapeSlot].currentTimeElapsed, value);
         }
@@ -284,7 +284,7 @@ public class DEAD_Interface : MonoBehaviour
         return Mathf.Max(0,fallbackPsi);
     }
 
-    public void SendCommand(string name)
+    public void SendCommand(string name, bool nonRecordableCommand)
     {
         for (int i = 0; i < commands.Length; i++)
         {
@@ -294,7 +294,7 @@ public class DEAD_Interface : MonoBehaviour
             }
         }
 
-        if (showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
+        if (playingShowtape && !nonRecordableCommand && showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
         {
             commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
         }
