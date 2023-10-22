@@ -8,7 +8,6 @@ using UnityEngine.Animations;
 [RequireComponent(typeof(Animator))]
 public class DEAD_Animatronic : MonoBehaviour
 {
-    [SerializeField] string name;
     [SerializeField] DEAD_Actuator[] deadActuators;
     [SerializeField] DEAD_Interface deadInterface;
 

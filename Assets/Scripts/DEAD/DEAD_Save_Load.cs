@@ -154,12 +154,19 @@ public class DEAD_Showtape
 
     [Header("A/V")]
     public float endOfTapeTime;
-    [HideInInspector] public byte[][] audioClips;
-    [HideInInspector] public byte[][] videoClips;
+    [HideInInspector] public List<DEAD_ByteArray> audioClips;
+    [HideInInspector] public List<DEAD_ByteArray> videoClips;
 
     [Header("Signals")]
     public DEAD_Showtape_Layers[] layers;
-    public byte[][] additionalBytes;
+    [HideInInspector] public List<DEAD_ByteArray> additionalBytes;
+}
+
+[System.Serializable]
+public class DEAD_ByteArray
+{
+    public string fileName;
+    [HideInInspector]public byte[] array;
 }
 
 [System.Serializable]

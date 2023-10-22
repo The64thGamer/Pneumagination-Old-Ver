@@ -246,7 +246,7 @@ public class DEAD_Interface : MonoBehaviour
         showtapeSlots[index].nonBlankShowtape = true;
         if (showtapeSlots[index].showtape.audioClips != null)
         {
-            showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Length];
+            showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Count];
             StartCoroutine(ImportAudio(index));
         }
     }
@@ -264,9 +264,9 @@ public class DEAD_Interface : MonoBehaviour
     {
         loadingState = LoadingState.loading;
         NAudioImporter importer = this.GetComponent<NAudioImporter>();
-        for (int i = 0; i < showtapeSlots[index].showtape.audioClips.Length; i++)
+        for (int i = 0; i < showtapeSlots[index].showtape.audioClips.Count; i++)
         {
-            importer.Import(showtapeSlots[index].showtape.audioClips[i]);
+            importer.Import(showtapeSlots[index].showtape.audioClips[i].array);
             while (!importer.isInitialized && !importer.isError)
             {
                 yield return null;
