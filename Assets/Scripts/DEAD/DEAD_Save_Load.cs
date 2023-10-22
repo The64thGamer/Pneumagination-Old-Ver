@@ -12,11 +12,14 @@ public static class DEAD_Save_Load
 {
     public static DEAD_Showtape LoadShowtape(string filePath)
     {
-        return JsonUtility.FromJson<DEAD_Showtape>(DecompressString(ReadFile(filePath)));
+        DEAD_Showtape showtape = JsonUtility.FromJson<DEAD_Showtape>(DecompressString(ReadFile(filePath)));
+        showtape.filePath = filePath;
+        return showtape;
     }
 
     public static void SaveShowtape(string filePath, DEAD_Showtape showtape)
     {
+        showtape.filePath = "";
         WriteFile(filePath,CompressString(JsonUtility.ToJson(showtape)));
     }
 
@@ -99,6 +102,7 @@ public class DEAD_Showtape
     public string author;
     public string description;
     public string animatronicsUsedFor;
+    public string filePath;
     public UDateTime timeCreated;
     public UDateTime timeLastUpdated;
 
