@@ -16,10 +16,21 @@ public class DEAD_DTU_Tester : MonoBehaviour
     [SerializeField] int index8;
     [SerializeField] int index9;
     [SerializeField] int index0;
+
+    [Header("Send Commands")]
+    [SerializeField] string command;
+    [SerializeField] bool sendCommand;
+
+
     private void Update()
     {
         if(dead_Interface != null)
         {
+            if(sendCommand)
+            {
+                sendCommand = false;
+                dead_Interface.SendCommand(command);
+            }
             for (int i = 0; i < 10; i++)
             {
                 int index = 0;

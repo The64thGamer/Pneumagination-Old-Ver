@@ -9,10 +9,10 @@ using static DEAD_InterfaceCommands;
 public class DEAD_Interface : MonoBehaviour
 {
     [Header("Info")]
+    [SerializeField] public bool autoRewind;
     [SerializeField] float tapeRewindSpeed = 1.5f;
     [SerializeField] float psi = 40;
     [SerializeField] float[] dataTransferUnit;
-    [SerializeField] public bool autoRewind;
 
     [Header("Showtapes")]
     [SerializeField] int activeShowtapeSlot;
