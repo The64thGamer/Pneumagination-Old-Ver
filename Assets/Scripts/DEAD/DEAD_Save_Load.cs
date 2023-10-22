@@ -124,6 +124,7 @@ public class DEAD_Showtape_Layers
 public struct DEAD_Signal_Data
 {
     public float time;
+    public int dtuIndex;
     public float value;
 }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Video;
@@ -9,9 +10,9 @@ using static DEAD_InterfaceCommands;
 public class DEAD_Interface : MonoBehaviour
 {
     [Header("Info")]
-    [SerializeField] public bool autoRewind;
     [SerializeField] float tapeRewindSpeed = 1.5f;
-    [SerializeField] float psi = 40;
+    [SerializeField] float tapePlaySpeed = 1.0f;
+    [SerializeField] float fallbackPsi = 40;
     [SerializeField] float[] dataTransferUnit;
 
     [Header("Showtapes")]
@@ -20,6 +21,132 @@ public class DEAD_Interface : MonoBehaviour
 
     [Header("Commands")]
     [SerializeField] DEAD_InterfaceCommands[] commands;
+
+    //Values
+    bool playingShowtape;
+    bool autoRewind = true;
+
+    void Update()
+    {
+        RunShowtape();
+    }
+
+    void RunShowtape()
+    {
+        //Back out early
+        if(showtapeSlots == null || showtapeSlots.Length == 0)
+        {
+            return;
+        }
+
+        //Double check erroneous settings
+        activeShowtapeSlot = Mathf.Clamp(activeShowtapeSlot,0, showtapeSlots.Length);
+
+        //Playback
+        if(playingShowtape)
+        {
+            //Time Elapsed
+            float oldTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
+            showtapeSlots[activeShowtapeSlot].currentTimeElapsed += Time.deltaTime;
+            float newTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
+
+            //Find Current Signals
+            List<DEAD_Signal_Data> signals = showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer].signals;
+            if (signals != null)
+            {
+                int found = -1;
+
+                if (signals.Count == 1)
+                {
+                    found = 0;
+                }
+                else if (signals.Count > 1)
+                {
+                    //(Non)Binary Search
+                    int left = 0;
+                    int right = signals.Count - 1;
+                    while (left <= right)
+                    {
+                        int middle = (left + right) / 2;
+                        int comparison = Mathf.FloorToInt(signals[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
+                        if (comparison == 0)
+                        {
+                            found = middle;
+                        }
+                        else if (comparison < 0)
+                        {
+                            left = middle + 1;
+                        }
+                        else
+                        {
+                            right = middle - 1;
+                        }
+                    }
+                }
+
+                //Apply all commands since last frame
+                if (found != -1)
+                {
+                    while (found < signals.Count || signals[found].time > newTime)
+                    {
+                        if (signals[found].time > oldTime)
+                        {
+                            dataTransferUnit[signals[found].dtuIndex] = signals[found].value;
+                        }
+                        found++;
+                    }
+                }
+            }
+
+            //Find Current Commands
+            List<DEAD_Command_Data> commands = showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer].commands;
+            if (commands != null)
+            {
+                int found = -1;
+
+                if (commands.Count == 1)
+                {
+                    found = 0;
+                }
+                else if (commands.Count > 1)
+                {
+                    //(Non)Binary Search
+                    int left = 0;
+                    int right = commands.Count - 1;
+                    while (left <= right)
+                    {
+                        int middle = (left + right) / 2;
+                        int comparison = Mathf.FloorToInt(commands[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
+                        if (comparison == 0)
+                        {
+                            found = middle;
+                        }
+                        else if (comparison < 0)
+                        {
+                            left = middle + 1;
+                        }
+                        else
+                        {
+                            right = middle - 1;
+                        }
+                    }
+                }
+
+                //Apply all commands since last frame
+                if (found != -1)
+                {
+                    while (found < commands.Count || commands[found].time > newTime)
+                    {
+                        if (commands[found].time > oldTime)
+                        {
+                            SendCommand(commands[found].value);
+                        }
+                        found++;
+                    }
+                }
+            }
+        }
+    }
 
     public float GetData(int index)
     {
@@ -52,7 +179,7 @@ public class DEAD_Interface : MonoBehaviour
 
     public float GetPSI()
     {
-        return Mathf.Max(0,psi);
+        return Mathf.Max(0,fallbackPsi);
     }
 
     public void SendCommand(string name)
@@ -68,16 +195,45 @@ public class DEAD_Interface : MonoBehaviour
 
     public void ExecuteFunction(DEAD_InterfaceFunctionList function)
     {
+
         switch (function)
         {
             case DEAD_InterfaceFunctionList.debug_Log:
                 Debug.Log("Command Sent");
                 break;
             case DEAD_InterfaceFunctionList.play_Showtape:
+                playingShowtape = true;
                 break;
             case DEAD_InterfaceFunctionList.pause_Showtape:
+                playingShowtape = false;
                 break;
             case DEAD_InterfaceFunctionList.rewind_Showtape:
+                break;
+            case DEAD_InterfaceFunctionList.enable_Auto_Rewind:
+                autoRewind = true;
+                break;
+            case DEAD_InterfaceFunctionList.disable_Auto_Rewind:
+                autoRewind = false;
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_0:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_1:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_2:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_3:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_4:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_5:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_6:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_7:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_8:
+                break;
+            case DEAD_InterfaceFunctionList.set_Active_Tape_9:
                 break;
             default:
                 break;
@@ -97,6 +253,7 @@ public class DEAD_ShowtapeSlot
     public VideoClip[] video;
 
     [Header("Tape")]
+    public int activeLayer;
     public DEAD_Showtape showtape;
 }
 
