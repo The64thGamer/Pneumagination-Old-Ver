@@ -104,7 +104,7 @@ public class DEAD_Recorder : MonoBehaviour
         if (deadInterface != null)
         {
             deadInterface.dtuSet.AddListener(DataSet);
-            deadInterface.commandSet.AddListener(CommandSet);
+            deadInterface.commandSetOnlyRecordables.AddListener(CommandSet);
         }
     }
 
@@ -113,7 +113,7 @@ public class DEAD_Recorder : MonoBehaviour
         if (deadInterface != null)
         {
             deadInterface.dtuSet.RemoveListener(DataSet);
-            deadInterface.commandSet.RemoveListener(CommandSet);
+            deadInterface.commandSetOnlyRecordables.RemoveListener(CommandSet);
         }
     }
 }

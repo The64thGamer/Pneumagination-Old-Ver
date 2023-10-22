@@ -14,13 +14,6 @@ public static class DEAD_Save_Load
     {
         DEAD_Showtape showtape = JsonUtility.FromJson<DEAD_Showtape>(DecompressString(ReadFile(filePath)));
         showtape.filePath = filePath;
-        if (showtape.layers != null)
-        {
-            for (int i = 0; i < showtape.layers.Length; i++)
-            {
-                showtape.layers[i].signals = CompressSignals(showtape.layers[i].signals);
-            }
-        }
         return showtape;
     }
 
@@ -173,8 +166,8 @@ public class DEAD_ByteArray
 public class DEAD_Showtape_Layers
 {
     public string triggerString;
-    public List<DEAD_Signal_Data> signals;
-    public List<DEAD_Command_Data> commands;
+    [HideInInspector] public List<DEAD_Signal_Data> signals;
+    [HideInInspector] public List<DEAD_Command_Data> commands;
 }
 
 [System.Serializable]
