@@ -12,10 +12,17 @@ public class DEAD_Recorder : MonoBehaviour
     [Header("Actions")]
     [SerializeField] bool applyRecordingToTape;
     [SerializeField] bool saveTapeToFile;
+    [SerializeField] bool clearRecordings;
 
     [Header("Data")]
     [SerializeField] List<DEAD_Signal_Data> signals = new List<DEAD_Signal_Data>();
     [SerializeField] List<DEAD_Command_Data> commands = new List<DEAD_Command_Data>();
+    float[] dtuReplica;
+
+    private void Start()
+    {
+        dtuReplica = new float[deadInterface.GetDTUArrayLength()];
+    }
 
     private void Update()
     {
@@ -29,11 +36,32 @@ public class DEAD_Recorder : MonoBehaviour
             saveTapeToFile = false;
             SaveTapeToFile();
         }
+        if (clearRecordings)
+        {
+            clearRecordings = false;
+            ClearRecordings();
+        }
+    }
+
+    void ClearRecordings()
+    {
+        signals = new List<DEAD_Signal_Data>();
+        commands = new List<DEAD_Command_Data>();
+        dtuReplica = new float[deadInterface.GetDTUArrayLength()];
     }
 
     void DataSet(int index, float time, float value)
     {
-        signals.Add(new DEAD_Signal_Data() { dtuIndex = index, time = time, value = value });
+        if(index > dtuReplica.Length - 1)
+        {
+            return;
+        }
+
+        if (dtuReplica[index] != value)
+        {
+            dtuReplica[index] = value;
+            signals.Add(new DEAD_Signal_Data() { dtuIndex = index, time = time, value = value });
+        }
     }
 
     void CommandSet(float time, string value)
