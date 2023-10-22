@@ -11,11 +11,21 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
     [SerializeField] bool loadFile;
     [SerializeField] bool clearData;
 
+    [Header("Move To Interface")]
+    [SerializeField] DEAD_Interface deadInterface;
+    [SerializeField] bool injectIntoInterface;
+    [SerializeField] int showtapeSlot;
+
     [Header("File")]
     [SerializeField] DEAD_Showtape showtape;
 
     private void Update()
     {
+        if(injectIntoInterface)
+        {
+            injectIntoInterface = false;
+            InjectIntoInterface();
+        }
         if(saveFile)
         {
             saveFile = false;
@@ -31,6 +41,15 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
             clearData = false;
             ClearData();
         }
+    }
+
+    void InjectIntoInterface()
+    {
+        if(deadInterface == null)
+        {
+            return;
+        }
+        
     }
 
     void ClearData()

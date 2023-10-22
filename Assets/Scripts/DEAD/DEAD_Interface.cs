@@ -1,12 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.Video;
 using static DEAD_InterfaceCommands;
 
+[RequireComponent(typeof(NAudioImporter))]
 public class DEAD_Interface : MonoBehaviour
 {
     [Header("Info")]
@@ -25,6 +28,13 @@ public class DEAD_Interface : MonoBehaviour
     //Values
     bool playingShowtape;
     bool autoRewind = true;
+    LoadingState loadingState;
+
+    public enum LoadingState
+    {
+        ready,
+        loading,
+    }
 
     void Update()
     {
@@ -160,13 +170,63 @@ public class DEAD_Interface : MonoBehaviour
 
     public void SetData(int index, float value)
     {
-        if (index < 0 || index > dataTransferUnit.Length - 1 || dataTransferUnit == null)
+        if (dataTransferUnit == null || index < 0 || index > dataTransferUnit.Length - 1)
         {
             return;
         }
 
         dataTransferUnit[index] = value;
     }
+
+
+    public void SetShowtape(int index, DEAD_Showtape showtape)
+    {
+        if(showtapeSlots == null || index < 0 || index >showtapeSlots.Length)
+        {
+            return;
+        }
+        SetShowtape(index, showtape, showtapeSlots[index].triggerString);
+    }
+
+    public void SetShowtape(int index, DEAD_Showtape showtape, string triggerString)
+    {
+        if (showtapeSlots == null || index < 0 || index > showtapeSlots.Length)
+        {
+            return;
+        }
+        if(playingShowtape)
+        {
+            playingShowtape = false;
+        }
+        showtapeSlots[index].showtape = showtape;
+        showtapeSlots[index].currentTimeElapsed = 0;
+        showtapeSlots[index].triggerString = triggerString;
+        StartCoroutine(ImportAudio(index));
+    }
+
+    IEnumerator ImportAudio(int index)
+    {
+        loadingState = LoadingState.loading;
+        NAudioImporter importer = this.GetComponent<NAudioImporter>();
+        showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Length];
+        for (int i = 0; i < showtapeSlots[index].showtape.audioClips.Length; i++)
+        {
+            importer.Import(showtapeSlots[index].showtape.audioClips[i]);
+            while (!importer.isInitialized && !importer.isError)
+            {
+                yield return null;
+            }
+
+            if (importer.isError)
+            {
+                Debug.LogError(importer.error);
+            }
+
+            showtapeSlots[index].audio[i] = importer.audioClip;
+        }
+        loadingState = LoadingState.ready;
+    }
+
 
     public int GetDTUArrayLength()
     {
@@ -195,6 +255,11 @@ public class DEAD_Interface : MonoBehaviour
 
     public void ExecuteFunction(DEAD_InterfaceFunctionList function)
     {
+        if(loadingState == LoadingState.loading)
+        {
+            Debug.Log("Didn't execute function, currently in loading state");
+            return;
+        }
 
         switch (function)
         {
