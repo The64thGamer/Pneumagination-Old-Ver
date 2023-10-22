@@ -14,13 +14,59 @@ public static class DEAD_Save_Load
     {
         DEAD_Showtape showtape = JsonUtility.FromJson<DEAD_Showtape>(DecompressString(ReadFile(filePath)));
         showtape.filePath = filePath;
+        if (showtape.layers != null)
+        {
+            for (int i = 0; i < showtape.layers.Length; i++)
+            {
+                showtape.layers[i].signals = CompressSignals(showtape.layers[i].signals);
+            }
+        }
         return showtape;
     }
 
     public static void SaveShowtape(string filePath, DEAD_Showtape showtape)
     {
         showtape.filePath = "";
+        if(showtape.layers != null)
+        {
+            for (int i = 0; i < showtape.layers.Length; i++)
+            {
+                showtape.layers[i].signals = CompressSignals(showtape.layers[i].signals);
+            }
+        }
         WriteFile(filePath,CompressString(JsonUtility.ToJson(showtape)));
+    }
+
+    public static List<DEAD_Signal_Data> CompressSignals(List<DEAD_Signal_Data> data)
+    {
+        List<DEAD_Signal_Data> newData = new List<DEAD_Signal_Data>();
+
+        //FindDTUSize
+        int maxSize = 0;
+        for (int i = 0; i < data.Count; i++)
+        {
+            if (data[i].dtuIndex > maxSize)
+            {
+                maxSize = data[i].dtuIndex;
+            }
+        }
+        float[] tempDTU = new float[maxSize+1];
+
+        //Compare
+        for (int i = 0; i < data.Count; i++)
+        {
+            bool canBeAdded = true;
+            if (data[i].value == tempDTU[data[i].dtuIndex])
+            {
+                canBeAdded = false;
+            }
+            if (canBeAdded)
+            {
+                tempDTU[data[i].dtuIndex] = data[i].value;
+                newData.Add(data[i]);
+            }
+        }
+        return newData;
     }
 
     static bool WriteFile(string path, string data)
@@ -120,8 +166,8 @@ public class DEAD_Showtape
 public class DEAD_Showtape_Layers
 {
     public string triggerString;
-    [HideInInspector] public List<DEAD_Signal_Data> signals;
-    [HideInInspector] public List<DEAD_Command_Data> commands;
+    public List<DEAD_Signal_Data> signals;
+    public List<DEAD_Command_Data> commands;
 }
 
 [System.Serializable]

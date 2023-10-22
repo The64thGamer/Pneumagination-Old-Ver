@@ -1,7 +1,10 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +12,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using static DEAD_InterfaceCommands;
+using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(NAudioImporter))]
@@ -95,6 +99,32 @@ public class DEAD_Interface : MonoBehaviour
                         }
                         else if (signals.Count > 1)
                         {
+                            int left = 0;
+                            int right = signals.Count - 1;
+
+                            while (left <= right)
+                            {
+                                int mid = left + (right - left) / 2;
+
+                                // Check if the target is present at mid
+                                if (Mathf.FloorToInt(signals[mid].time) == Mathf.FloorToInt(oldTime))
+                                {
+                                    found = mid;
+                                }
+
+                                // If the target is greater, ignore left half
+                                if (Mathf.FloorToInt(signals[mid].time) < Mathf.FloorToInt(oldTime))
+                                {
+                                    left = mid + 1;
+                                }
+                                // If the target is smaller, ignore right half
+                                else
+                                {
+                                    right = mid - 1;
+                                }
+                            }
+
+                            /*
                             //(Non)Binary Search
                             int left = 0;
                             int right = signals.Count - 1;
@@ -115,13 +145,18 @@ public class DEAD_Interface : MonoBehaviour
                                     right = middle - 1;
                                 }
                             }
+                            */
                         }
 
-                        //Apply all commands since last frame
+                        //Apply all signals since last frame
                         if (found != -1)
                         {
-                            while (found < signals.Count || signals[found].time > newTime)
+                            while (found < signals.Count)
                             {
+                                if(signals[found].time > newTime)
+                                {
+                                    break;
+                                }
                                 if (signals[found].time > oldTime)
                                 {
                                     dataTransferUnit[signals[found].dtuIndex] = signals[found].value;
@@ -143,6 +178,7 @@ public class DEAD_Interface : MonoBehaviour
                         }
                         else if (commands.Count > 1)
                         {
+                            /*
                             //(Non)Binary Search
                             int left = 0;
                             int right = commands.Count - 1;
@@ -163,13 +199,18 @@ public class DEAD_Interface : MonoBehaviour
                                     right = middle - 1;
                                 }
                             }
+                            */
                         }
 
                         //Apply all commands since last frame
                         if (found != -1)
                         {
-                            while (found < commands.Count || commands[found].time > newTime)
+                            while (found < commands.Count)
                             {
+                                if(commands[found].time > newTime)
+                                {
+                                    break;
+                                }
                                 if (commands[found].time > oldTime)
                                 {
                                     SendCommand(commands[found].value,false);

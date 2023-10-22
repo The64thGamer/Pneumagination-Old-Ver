@@ -54,7 +54,7 @@ public class DEAD_Recorder : MonoBehaviour
         {
             if (showtape.layers == null || showtape.layers.Length == 0)
             {
-                showtape.layers = new DEAD_Showtape_Layers[1];
+                showtape.layers = new DEAD_Showtape_Layers[] { new DEAD_Showtape_Layers()};
             }
 
             //Signals

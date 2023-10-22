@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3873.727, g: 4406.4067, b: 5007.438, a: 1}
+  m_IndirectSpecularColor: {r: 3876.3892, g: 4410.317, b: 5015.5474, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5006,6 +5006,7 @@ GameObject:
   - component: {fileID: 1913721400}
   - component: {fileID: 1913721401}
   - component: {fileID: 1913721402}
+  - component: {fileID: 1913721403}
   m_Layer: 0
   m_Name: Data Manager
   m_TagString: Untagged
@@ -5066,7 +5067,8 @@ MonoBehaviour:
   - 0
   activeShowtapeSlot: 0
   showtapeSlots:
-  - triggerString: 
+  - nonBlankShowtape: 0
+    triggerString: 
     currentTimeElapsed: 0
     audio: []
     video: []
@@ -5096,6 +5098,12 @@ MonoBehaviour:
     function: 1
   - triggerString: Pause
     function: 2
+  dtuSet:
+    m_PersistentCalls:
+      m_Calls: []
+  commandSet:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1913721401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5109,6 +5117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dead_Interface: {fileID: 1913721400}
+  overrideDTU: 0
   index1: 0
   index2: 1
   index3: 2
@@ -5121,6 +5130,7 @@ MonoBehaviour:
   index0: 9
   command: Debug Log
   sendCommand: 0
+  nonRecordableCommand: 0
 --- !u!114 &1913721402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5136,7 +5146,7 @@ MonoBehaviour:
   saveFile: 0
   loadFile: 0
   clearData: 0
-  deadInterface: {fileID: 0}
+  deadInterface: {fileID: 1913721400}
   injectIntoInterface: 0
   showtapeSlot: 0
   showtape:
@@ -5151,6 +5161,18 @@ MonoBehaviour:
       _dateTime: 1/1/0001 12:00:00 AM
     endOfTapeTime: 0
     layers: []
+--- !u!114 &1913721403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c85ca24aed0de7f4bb834c92b727d65b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1980918010
 MonoBehaviour:
   m_ObjectHideFlags: 0
