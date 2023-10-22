@@ -67,9 +67,10 @@ public class DEAD_Interface : MonoBehaviour
         {
             //Time Elapsed
             float oldTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
-            showtapeSlots[activeShowtapeSlot].currentTimeElapsed += Time.deltaTime;
+            showtapeSlots[activeShowtapeSlot].currentTimeElapsed += Time.deltaTime * tapePlaySpeed;
             if(showtapeSlots[activeShowtapeSlot].currentTimeElapsed > showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime)
             {
+                playingShowtape = false;
                 showtapeSlots[activeShowtapeSlot].currentTimeElapsed = showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime;
             }
             float newTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
