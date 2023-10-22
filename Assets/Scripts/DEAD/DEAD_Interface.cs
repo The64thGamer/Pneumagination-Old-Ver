@@ -9,6 +9,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using static DEAD_InterfaceCommands;
+using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(NAudioImporter))]
 public class DEAD_Interface : MonoBehaviour
@@ -30,6 +31,10 @@ public class DEAD_Interface : MonoBehaviour
     bool playingShowtape;
     bool autoRewind = true;
     LoadingState loadingState;
+
+    //Events
+    [HideInInspector] public DEAD_DTUEvent dtuSet = new DEAD_DTUEvent();
+    [HideInInspector] public DEAD_CommandEvent commandSet = new DEAD_CommandEvent();
 
     public enum LoadingState
     {
@@ -196,6 +201,10 @@ public class DEAD_Interface : MonoBehaviour
         }
 
         dataTransferUnit[index] = value;
+        if (showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
+        {
+            dtuSet.Invoke(index, showtapeSlots[activeShowtapeSlot].currentTimeElapsed, value);
+        }
     }
 
 
@@ -227,6 +236,15 @@ public class DEAD_Interface : MonoBehaviour
             showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Length];
             StartCoroutine(ImportAudio(index));
         }
+    }
+
+    public DEAD_Showtape GetShowtape(int index)
+    {
+        if (showtapeSlots == null || index < 0 || index > showtapeSlots.Length || !showtapeSlots[index].nonBlankShowtape)
+        {
+            return null;
+        }
+        return showtapeSlots[index].showtape;
     }
 
     IEnumerator ImportAudio(int index)
@@ -274,6 +292,11 @@ public class DEAD_Interface : MonoBehaviour
             {
                 ExecuteFunction(commands[i].function);
             }
+        }
+
+        if (showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
+        {
+            commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
         }
     }
 
@@ -345,6 +368,16 @@ public class DEAD_ShowtapeSlot
     [Header("Tape")]
     public int activeLayer;
     public DEAD_Showtape showtape;
+}
+
+[System.Serializable]
+public class DEAD_DTUEvent : UnityEvent<int,float,float>
+{
+}
+
+[System.Serializable]
+public class DEAD_CommandEvent : UnityEvent<float, string>
+{
 }
 
 [System.Serializable]
