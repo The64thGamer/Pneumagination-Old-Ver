@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using NAudio.Wave;
 using UnityEngine;
 
@@ -13,18 +14,9 @@ public class NAudioImporter : DecoderImporter
     
     protected override void Initialize()
     {
-        try
-        {
-            if (!uri.IsFile)
-                throw new FormatException("NAudioImporter does not support URLs");
-
-            reader = new Mp3FileReader(uri.LocalPath);            
-            sampleProvider = reader.ToSampleProvider();
-        }
-        catch (Exception e)
-        {
-            OnError(e.Message);
-        }
+        MemoryStream stream = new MemoryStream(uri);
+        reader = new Mp3FileReader(stream);
+        sampleProvider = reader.ToSampleProvider();
     }
 
     protected override void Cleanup()

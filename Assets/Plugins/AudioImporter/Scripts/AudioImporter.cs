@@ -14,7 +14,7 @@ public abstract class AudioImporter : MonoBehaviour
     /// <summary>
     /// The uri of the file being imported.
     /// </summary>
-    public Uri uri { get; private set; }
+    public byte[] uri { get; private set; }
 
     /// <summary>
     /// The AudioClip of the file that is being imported.
@@ -50,11 +50,11 @@ public abstract class AudioImporter : MonoBehaviour
     /// Import an audio file.
     /// </summary>
     /// <param name="uri">The uri to the audio file.</param>
-    public void Import(string uri)
+    public void Import(byte[] uri)
     {
         Abort();
 
-        this.uri = new Uri(uri);
+        this.uri = uri;
 
         isError = false;
         error = string.Empty;

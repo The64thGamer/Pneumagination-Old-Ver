@@ -107,9 +107,7 @@ public abstract class DecoderImporter : AudioImporter
 
     private void CreateClip()
     {
-        string name = Path.GetFileNameWithoutExtension(uri.LocalPath);
-
-        audioClip = AudioClip.Create(name, info.lengthSamples / info.channels, info.channels, info.sampleRate, false);
+        audioClip = AudioClip.Create("Showtape Audio", info.lengthSamples / info.channels, info.channels, info.sampleRate, false);
 
         waitForMainThread.Set();
     }
