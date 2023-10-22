@@ -306,13 +306,13 @@ public class DEAD_Interface : MonoBehaviour
             }
         }
 
-        if (playingShowtape && showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
+        if (showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
         {
             if (!nonRecordableCommand)
             {
                 commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
             }
-            else
+            else if(playingShowtape)
             {
                 commandSetOnlyRecordables.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
             }
