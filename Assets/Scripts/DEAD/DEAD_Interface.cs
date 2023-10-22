@@ -98,7 +98,8 @@ public class DEAD_Interface : MonoBehaviour
                             found = 0;
                         }
                         else if (signals.Count > 1)
-                        {
+                        {                            
+                            //(Non)Binary Search
                             int left = 0;
                             int right = signals.Count - 1;
 
@@ -124,28 +125,6 @@ public class DEAD_Interface : MonoBehaviour
                                 }
                             }
 
-                            /*
-                            //(Non)Binary Search
-                            int left = 0;
-                            int right = signals.Count - 1;
-                            while (left <= right)
-                            {
-                                int middle = (left + right) / 2;
-                                int comparison = Mathf.FloorToInt(signals[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
-                                if (comparison == 0)
-                                {
-                                    found = middle;
-                                }
-                                else if (comparison < 0)
-                                {
-                                    left = middle + 1;
-                                }
-                                else
-                                {
-                                    right = middle - 1;
-                                }
-                            }
-                            */
                         }
 
                         //Apply all signals since last frame
@@ -178,28 +157,31 @@ public class DEAD_Interface : MonoBehaviour
                         }
                         else if (commands.Count > 1)
                         {
-                            /*
                             //(Non)Binary Search
                             int left = 0;
-                            int right = commands.Count - 1;
+                            int right = signals.Count - 1;
+
                             while (left <= right)
                             {
-                                int middle = (left + right) / 2;
-                                int comparison = Mathf.FloorToInt(commands[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
-                                if (comparison == 0)
+                                int mid = left + (right - left) / 2;
+
+                                // Check if the target is present at mid
+                                if (Mathf.FloorToInt(commands[mid].time) == Mathf.FloorToInt(oldTime))
                                 {
-                                    found = middle;
+                                    found = mid;
                                 }
-                                else if (comparison < 0)
+
+                                // If the target is greater, ignore left half
+                                if (Mathf.FloorToInt(commands[mid].time) < Mathf.FloorToInt(oldTime))
                                 {
-                                    left = middle + 1;
+                                    left = mid + 1;
                                 }
+                                // If the target is smaller, ignore right half
                                 else
                                 {
-                                    right = middle - 1;
+                                    right = mid - 1;
                                 }
                             }
-                            */
                         }
 
                         //Apply all commands since last frame

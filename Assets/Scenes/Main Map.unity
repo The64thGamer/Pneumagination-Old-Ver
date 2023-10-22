@@ -5007,6 +5007,7 @@ GameObject:
   - component: {fileID: 1913721401}
   - component: {fileID: 1913721402}
   - component: {fileID: 1913721403}
+  - component: {fileID: 1913721404}
   m_Layer: 0
   m_Name: Data Manager
   m_TagString: Untagged
@@ -5117,7 +5118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dead_Interface: {fileID: 1913721400}
-  overrideDTU: 0
+  overrideDTU: 1
   index1: 0
   index2: 1
   index3: 2
@@ -5173,6 +5174,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c85ca24aed0de7f4bb834c92b727d65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1913721404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a5129083255b742a122bb029f07353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadInterface: {fileID: 1913721400}
+  applyRecordingToTape: 0
+  saveTapeToFile: 0
+  signals: []
+  commands: []
 --- !u!114 &1980918010
 MonoBehaviour:
   m_ObjectHideFlags: 0
