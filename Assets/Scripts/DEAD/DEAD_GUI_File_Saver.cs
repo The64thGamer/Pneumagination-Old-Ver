@@ -49,7 +49,7 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
         {
             return;
         }
-        
+        deadInterface.SetShowtape(showtapeSlot, showtape);
     }
 
     void ClearData()
