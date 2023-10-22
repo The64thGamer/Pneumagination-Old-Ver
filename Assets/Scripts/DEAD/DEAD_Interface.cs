@@ -308,7 +308,7 @@ public class DEAD_Interface : MonoBehaviour
 
         if (playingShowtape && showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
         {
-            if (nonRecordableCommand)
+            if (!nonRecordableCommand)
             {
                 commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
             }
