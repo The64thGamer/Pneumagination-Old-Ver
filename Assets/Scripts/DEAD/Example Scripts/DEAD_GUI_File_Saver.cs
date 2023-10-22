@@ -54,13 +54,24 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
     {
         var extensions = new[] {new ExtensionFilter("Audio Files", "wav", "aiff", "mp3","wma"),};
         string[] files = StandaloneFileBrowser.OpenFilePanel("Load Showtape Audio", "", extensions, false);
-        if (files != null || files.Length != 0)
+        if (files != null && files.Length != 0)
         {
             if (File.Exists(files[0]))
             {
-                showtape.audioClips = new List<DEAD_ByteArray> { new DEAD_ByteArray() {fileName = Path.GetFileName(files[0]), array = File.ReadAllBytes(files[0]) } };
+                StartCoroutine(AudioDataCoroutine(files[0]));
             }
         }
+    }
+
+    IEnumerator AudioDataCoroutine(string path)
+    {
+        Debug.Log("Reading Audio");
+        yield return null;
+        byte[] filestream = File.ReadAllBytes(path);
+        Debug.Log("Audio Read");
+        yield return null;
+        showtape.audioClips = new DEAD_ByteArray[] { new DEAD_ByteArray() { fileName = Path.GetFileName(path), array = filestream } };
+        Debug.Log("Injected Into Showtape");
     }
 
     void InjectIntoInterface()

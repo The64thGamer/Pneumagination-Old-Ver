@@ -77,8 +77,6 @@ public class DEAD_Interface : MonoBehaviour
             //More Double Checks to Back Out
             if (showtapeSlots[activeShowtapeSlot].showtape.layers != null && showtapeSlots[activeShowtapeSlot].showtape.layers.Length != 0)
             {
-                if (showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer] != null)
-                {
                     //Find Current Signals
                     List<DEAD_Signal_Data> signals = showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer].signals;
                     if (signals != null)
@@ -193,7 +191,6 @@ public class DEAD_Interface : MonoBehaviour
                             }
                         }
                     }
-                }
             }
         }
     }
@@ -248,7 +245,7 @@ public class DEAD_Interface : MonoBehaviour
         showtapeSlots[index].nonBlankShowtape = true;
         if (showtapeSlots[index].showtape.audioClips != null)
         {
-            showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Count];
+            showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Length];
             StartCoroutine(ImportAudio(index));
         }
     }
@@ -266,7 +263,7 @@ public class DEAD_Interface : MonoBehaviour
     {
         loadingState = LoadingState.loading;
         NAudioImporter importer = this.GetComponent<NAudioImporter>();
-        for (int i = 0; i < showtapeSlots[index].showtape.audioClips.Count; i++)
+        for (int i = 0; i < showtapeSlots[index].showtape.audioClips.Length; i++)
         {
             importer.Import(showtapeSlots[index].showtape.audioClips[i].array);
             while (!importer.isInitialized && !importer.isError)
