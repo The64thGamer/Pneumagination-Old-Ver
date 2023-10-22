@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -311,6 +312,29 @@ public class DEAD_Interface : MonoBehaviour
         {
             commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
         }
+    }
+
+    public float GetCurrentTapeTime()
+    {
+        if (showtapeSlots == null || activeShowtapeSlot > showtapeSlots.Length)
+        {
+            return 0;
+        }
+
+        return showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
+    }
+
+    public AudioClip GetAudioClip(int slot)
+    {
+        if (showtapeSlots == null || 
+            activeShowtapeSlot > showtapeSlots.Length || 
+            showtapeSlots[activeShowtapeSlot].audio == null || 
+            slot > showtapeSlots[activeShowtapeSlot].audio.Length-1)
+        {
+            return null;
+        }
+
+        return showtapeSlots[activeShowtapeSlot].audio[slot];
     }
 
     public void ExecuteFunction(DEAD_InterfaceFunctionList function)

@@ -101,13 +101,19 @@ public class DEAD_Recorder : MonoBehaviour
 
     private void OnEnable()
     {
-        deadInterface.dtuSet.AddListener(DataSet);
-        deadInterface.commandSet.AddListener(CommandSet);
+        if (deadInterface != null)
+        {
+            deadInterface.dtuSet.AddListener(DataSet);
+            deadInterface.commandSet.AddListener(CommandSet);
+        }
     }
 
     private void OnDisable()
     {
-        deadInterface.dtuSet.RemoveListener(DataSet);
-        deadInterface.commandSet.RemoveListener(CommandSet);
+        if (deadInterface != null)
+        {
+            deadInterface.dtuSet.RemoveListener(DataSet);
+            deadInterface.commandSet.RemoveListener(CommandSet);
+        }
     }
 }

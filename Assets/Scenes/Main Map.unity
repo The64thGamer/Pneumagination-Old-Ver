@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3876.3892, g: 4410.317, b: 5015.5474, a: 1}
+  m_IndirectSpecularColor: {r: 3876.4595, g: 4410.3716, b: 5015.6724, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1585,7 +1585,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3d804c0d6e5bc4ca6aec7ad60eddb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Dead Animatronic
   deadActuators:
   - actuationName: Large Bend
     animation: {fileID: 511522296394549480, guid: de40f9b30141fc84e82b56155d9d1a80,
@@ -2875,6 +2874,155 @@ Transform:
   - {fileID: 157207114}
   - {fileID: 432432461}
   m_Father: {fileID: 1788443484}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1389536466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1389536469}
+  - component: {fileID: 1389536468}
+  - component: {fileID: 1389536467}
+  m_Layer: 0
+  m_Name: Speaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1389536467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389536466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0883c097b7ff21f4e8ef2af8dd2c0af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadInterface: {fileID: 1913721400}
+  defaultAudioSlot: 0
+  defaultAudioChannel: 0
+  commands:
+  - triggerString: Play
+    function: 1
+  - triggerString: Pause
+    function: 2
+--- !u!82 &1389536468
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389536466}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1389536469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389536466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.060881, y: -29.456116, z: 89.493774}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1413480859
 GameObject:
@@ -4402,7 +4550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3d804c0d6e5bc4ca6aec7ad60eddb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Dead Animatronic
   deadActuators:
   - actuationName: Large Bend
     animation: {fileID: 511522296394549480, guid: de40f9b30141fc84e82b56155d9d1a80,
@@ -5085,6 +5232,8 @@ MonoBehaviour:
       timeLastUpdated:
         _dateTime: 1/1/0001 12:00:00 AM
       endOfTapeTime: 0
+      audioClips: []
+      videoClips: []
       layers:
       - triggerString: 
         signals: []
@@ -5092,6 +5241,7 @@ MonoBehaviour:
       - triggerString: 
         signals: []
         commands: []
+      additionalBytes: []
   commands:
   - triggerString: Debug Log
     function: 0
@@ -5147,6 +5297,7 @@ MonoBehaviour:
   saveFile: 0
   loadFile: 0
   clearData: 0
+  loadAudioData: 0
   deadInterface: {fileID: 1913721400}
   injectIntoInterface: 0
   showtapeSlot: 0
@@ -5161,7 +5312,10 @@ MonoBehaviour:
     timeLastUpdated:
       _dateTime: 1/1/0001 12:00:00 AM
     endOfTapeTime: 0
+    audioClips: []
+    videoClips: []
     layers: []
+    additionalBytes: []
 --- !u!114 &1913721403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5492,3 +5646,4 @@ SceneRoots:
   - {fileID: 1788443484}
   - {fileID: 1823527674}
   - {fileID: 572697504}
+  - {fileID: 1389536469}
