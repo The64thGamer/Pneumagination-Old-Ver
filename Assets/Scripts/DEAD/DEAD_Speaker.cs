@@ -68,80 +68,83 @@ public class DEAD_Speaker : MonoBehaviour
     {
         for (int i = 0; i < commands.Count; i++)
         {
-            switch (commands[i].function)
+            if (commands[i].triggerString == value)
             {
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.debug_Log:
-                    Debug.Log("Command Sent To Speaker");
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.play_audio:
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.pause_audio:
-                    if(au.clip != null)
-                    {
-                        au.Pause();
-                    }    
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.rewind_audio:
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.unmute_speaker:
-                    au.volume = savedAudioVolume;
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.mute_speaker:
-                    savedAudioVolume = au.volume;
-                    au.volume = 0;
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_0:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_1:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_2:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_3:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_4:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_5:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_6:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_7:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_8:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_9:
-                    activeAudioSlot = 0;
-                    GetAndPlayAudio();
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_pan_stereo:
-                    au.panStereo = 0;
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_pan_left_channel:
-                    au.panStereo = -1;
-                    break;
-                case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_pan_right_channel:
-                    au.panStereo = 1;
-                    break;
-                default:
-                    break;
+                switch (commands[i].function)
+                {
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.debug_Log:
+                        Debug.Log("Command Sent To Speaker");
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.play_audio:
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.pause_audio:
+                        if (au.clip != null)
+                        {
+                            au.Pause();
+                        }
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.rewind_audio:
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.unmute_speaker:
+                        au.volume = savedAudioVolume;
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.mute_speaker:
+                        savedAudioVolume = au.volume;
+                        au.volume = 0;
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_0:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_1:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_2:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_3:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_4:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_5:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_6:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_7:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_8:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_audio_slot_9:
+                        activeAudioSlot = 0;
+                        GetAndPlayAudio();
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_pan_stereo:
+                        au.panStereo = 0;
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_pan_left_channel:
+                        au.panStereo = -1;
+                        break;
+                    case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.set_pan_right_channel:
+                        au.panStereo = 1;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
