@@ -30,6 +30,7 @@ public class DEAD_Interface : MonoBehaviour
     //Events
     [HideInInspector] public DEAD_DTUEvent dtuSet = new DEAD_DTUEvent();
     [HideInInspector] public DEAD_CommandEvent commandSet = new DEAD_CommandEvent();
+    [HideInInspector] public DEAD_CommandEvent commandSetOnlyRecordables = new DEAD_CommandEvent();
 
     public enum LoadingState
     {
@@ -308,9 +309,16 @@ public class DEAD_Interface : MonoBehaviour
             }
         }
 
-        if (playingShowtape && !nonRecordableCommand && showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
+        if (playingShowtape && showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
         {
-            commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
+            if(nonRecordableCommand)
+            {
+                commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
+            }
+            else
+            {
+                commandSetOnlyRecordables.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
+            }
         }
     }
 
