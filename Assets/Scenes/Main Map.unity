@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3876.3892, g: 4410.317, b: 5015.563, a: 1}
+  m_IndirectSpecularColor: {r: 3873.727, g: 4406.4067, b: 5007.438, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5054,9 +5054,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7266ff4cfe620c44ab175fb6a8b49a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoRewind: 0
   tapeRewindSpeed: 1.5
-  psi: 40
+  tapePlaySpeed: 1
+  fallbackPsi: 40
   dataTransferUnit:
   - 0
   - 0
@@ -5070,11 +5070,13 @@ MonoBehaviour:
     currentTimeElapsed: 0
     audio: []
     video: []
+    activeLayer: 0
     showtape:
       name: 
       author: 
       description: 
       animatronicsUsedFor: 
+      filePath: 
       timeCreated:
         _dateTime: 1/1/0001 12:00:00 AM
       timeLastUpdated:
@@ -5134,11 +5136,15 @@ MonoBehaviour:
   saveFile: 0
   loadFile: 0
   clearData: 0
+  deadInterface: {fileID: 0}
+  injectIntoInterface: 0
+  showtapeSlot: 0
   showtape:
     name: 
     author: 
     description: 
     animatronicsUsedFor: 
+    filePath: 
     timeCreated:
       _dateTime: 1/1/0001 12:00:00 AM
     timeLastUpdated:
@@ -5296,7 +5302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: 8ba92e2dd7f884a0f88b98fa2d235fe7, type: 2}
-  m_StaticLightingSkyUniqueID: 4
+  m_StaticLightingSkyUniqueID: 0
   m_StaticLightingCloudsUniqueID: 0
   m_StaticLightingVolumetricClouds: 0
 --- !u!4 &2013410475

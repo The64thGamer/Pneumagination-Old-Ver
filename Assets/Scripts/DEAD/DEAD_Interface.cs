@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -46,112 +47,127 @@ public class DEAD_Interface : MonoBehaviour
         //Back out early
         if(showtapeSlots == null || showtapeSlots.Length == 0)
         {
+            playingShowtape = false;
             return;
         }
 
         //Double check erroneous settings
         activeShowtapeSlot = Mathf.Clamp(activeShowtapeSlot,0, showtapeSlots.Length);
 
+        //Extra Checks
+        if(showtapeSlots[activeShowtapeSlot].showtape == null || !showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
+        {
+            playingShowtape = false;
+            return;
+        }
+
         //Playback
-        if(playingShowtape)
+        if (playingShowtape)
         {
             //Time Elapsed
             float oldTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
             showtapeSlots[activeShowtapeSlot].currentTimeElapsed += Time.deltaTime;
             float newTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
 
-            //Find Current Signals
-            List<DEAD_Signal_Data> signals = showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer].signals;
-            if (signals != null)
+            //More Double Checks to Back Out
+            if (showtapeSlots[activeShowtapeSlot].showtape.layers != null && showtapeSlots[activeShowtapeSlot].showtape.layers.Length != 0)
             {
-                int found = -1;
-
-                if (signals.Count == 1)
+                if (showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer] != null)
                 {
-                    found = 0;
-                }
-                else if (signals.Count > 1)
-                {
-                    //(Non)Binary Search
-                    int left = 0;
-                    int right = signals.Count - 1;
-                    while (left <= right)
+                    //Find Current Signals
+                    List<DEAD_Signal_Data> signals = showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer].signals;
+                    if (signals != null)
                     {
-                        int middle = (left + right) / 2;
-                        int comparison = Mathf.FloorToInt(signals[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
-                        if (comparison == 0)
+                        int found = -1;
+
+                        if (signals.Count == 1)
                         {
-                            found = middle;
+                            found = 0;
                         }
-                        else if (comparison < 0)
+                        else if (signals.Count > 1)
                         {
-                            left = middle + 1;
+                            //(Non)Binary Search
+                            int left = 0;
+                            int right = signals.Count - 1;
+                            while (left <= right)
+                            {
+                                int middle = (left + right) / 2;
+                                int comparison = Mathf.FloorToInt(signals[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
+                                if (comparison == 0)
+                                {
+                                    found = middle;
+                                }
+                                else if (comparison < 0)
+                                {
+                                    left = middle + 1;
+                                }
+                                else
+                                {
+                                    right = middle - 1;
+                                }
+                            }
                         }
-                        else
+
+                        //Apply all commands since last frame
+                        if (found != -1)
                         {
-                            right = middle - 1;
+                            while (found < signals.Count || signals[found].time > newTime)
+                            {
+                                if (signals[found].time > oldTime)
+                                {
+                                    dataTransferUnit[signals[found].dtuIndex] = signals[found].value;
+                                }
+                                found++;
+                            }
                         }
                     }
-                }
 
-                //Apply all commands since last frame
-                if (found != -1)
-                {
-                    while (found < signals.Count || signals[found].time > newTime)
+                    //Find Current Commands
+                    List<DEAD_Command_Data> commands = showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer].commands;
+                    if (commands != null)
                     {
-                        if (signals[found].time > oldTime)
-                        {
-                            dataTransferUnit[signals[found].dtuIndex] = signals[found].value;
-                        }
-                        found++;
-                    }
-                }
-            }
+                        int found = -1;
 
-            //Find Current Commands
-            List<DEAD_Command_Data> commands = showtapeSlots[activeShowtapeSlot].showtape.layers[showtapeSlots[activeShowtapeSlot].activeLayer].commands;
-            if (commands != null)
-            {
-                int found = -1;
+                        if (commands.Count == 1)
+                        {
+                            found = 0;
+                        }
+                        else if (commands.Count > 1)
+                        {
+                            //(Non)Binary Search
+                            int left = 0;
+                            int right = commands.Count - 1;
+                            while (left <= right)
+                            {
+                                int middle = (left + right) / 2;
+                                int comparison = Mathf.FloorToInt(commands[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
+                                if (comparison == 0)
+                                {
+                                    found = middle;
+                                }
+                                else if (comparison < 0)
+                                {
+                                    left = middle + 1;
+                                }
+                                else
+                                {
+                                    right = middle - 1;
+                                }
+                            }
+                        }
 
-                if (commands.Count == 1)
-                {
-                    found = 0;
-                }
-                else if (commands.Count > 1)
-                {
-                    //(Non)Binary Search
-                    int left = 0;
-                    int right = commands.Count - 1;
-                    while (left <= right)
-                    {
-                        int middle = (left + right) / 2;
-                        int comparison = Mathf.FloorToInt(commands[middle].time).CompareTo(Mathf.FloorToInt(oldTime));
-                        if (comparison == 0)
+                        //Apply all commands since last frame
+                        if (found != -1)
                         {
-                            found = middle;
+                            while (found < commands.Count || commands[found].time > newTime)
+                            {
+                                if (commands[found].time > oldTime)
+                                {
+                                    SendCommand(commands[found].value);
+                                }
+                                found++;
+                            }
                         }
-                        else if (comparison < 0)
-                        {
-                            left = middle + 1;
-                        }
-                        else
-                        {
-                            right = middle - 1;
-                        }
-                    }
-                }
-
-                //Apply all commands since last frame
-                if (found != -1)
-                {
-                    while (found < commands.Count || commands[found].time > newTime)
-                    {
-                        if (commands[found].time > oldTime)
-                        {
-                            SendCommand(commands[found].value);
-                        }
-                        found++;
                     }
                 }
             }
@@ -201,14 +217,18 @@ public class DEAD_Interface : MonoBehaviour
         showtapeSlots[index].showtape = showtape;
         showtapeSlots[index].currentTimeElapsed = 0;
         showtapeSlots[index].triggerString = triggerString;
-        StartCoroutine(ImportAudio(index));
+        showtapeSlots[index].nonBlankShowtape = true;
+        if (showtapeSlots[index].showtape.audioClips != null)
+        {
+            showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Length];
+            StartCoroutine(ImportAudio(index));
+        }
     }
 
     IEnumerator ImportAudio(int index)
     {
         loadingState = LoadingState.loading;
         NAudioImporter importer = this.GetComponent<NAudioImporter>();
-        showtapeSlots[index].audio = new AudioClip[showtapeSlots[index].showtape.audioClips.Length];
         for (int i = 0; i < showtapeSlots[index].showtape.audioClips.Length; i++)
         {
             importer.Import(showtapeSlots[index].showtape.audioClips[i]);
@@ -310,6 +330,7 @@ public class DEAD_Interface : MonoBehaviour
 public class DEAD_ShowtapeSlot
 {
     [Header("Info")]
+    [HideInInspector] public bool nonBlankShowtape;
     public string triggerString;
     public float currentTimeElapsed;
 
