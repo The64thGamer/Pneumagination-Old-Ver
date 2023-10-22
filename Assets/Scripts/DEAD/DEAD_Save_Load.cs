@@ -1,3 +1,4 @@
+using OdinSerializer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,12 +8,13 @@ using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.Video;
+using UnityEngine.XR;
 
 public static class DEAD_Save_Load 
 {
     public static DEAD_Showtape LoadShowtape(string filePath)
     {
-        DEAD_Showtape showtape = JsonUtility.FromJson<DEAD_Showtape>(DecompressString(ReadFile(filePath)));
+        DEAD_Showtape showtape = SerializationUtility.DeserializeValue<DEAD_Showtape>(DecompressGZipFile(ReadFile(filePath)), DataFormat.Binary);
         showtape.filePath = filePath;
         return showtape;
     }
@@ -27,7 +29,7 @@ public static class DEAD_Save_Load
                 showtape.layers[i].signals = CompressSignals(showtape.layers[i].signals);
             }
         }
-        WriteFile(filePath,CompressString(JsonUtility.ToJson(showtape)));
+        WriteFile(filePath, CompressGzipFile(SerializationUtility.SerializeValue(showtape, DataFormat.Binary)));
     }
 
     public static List<DEAD_Signal_Data> CompressSignals(List<DEAD_Signal_Data> data)
@@ -62,14 +64,14 @@ public static class DEAD_Save_Load
         return newData;
     }
 
-    static bool WriteFile(string path, string data)
+    static bool WriteFile(string path, byte[] data)
     {
         bool retValue;
         try
         {
             if (!Directory.Exists(Path.GetDirectoryName(path)))
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
-            System.IO.File.WriteAllText(path, data);
+            System.IO.File.WriteAllBytes(path, data);
             retValue = true;
         }
         catch (System.Exception ex)
@@ -81,20 +83,19 @@ public static class DEAD_Save_Load
         return retValue;
     }
 
-    static string ReadFile(string path)
+    static byte[] ReadFile(string path)
     {
-        string text = "";
+        byte[] bytes = null;
         if (File.Exists(path))
         {
             // Read entire text file content in one string
-            text = File.ReadAllText(path);
+            bytes = File.ReadAllBytes(path);
         }
-        return text;
+        return bytes;
     }
 
-    static string CompressString(string text)
+    static byte[] CompressGzipFile(byte[] buffer)
     {
-        byte[] buffer = Encoding.UTF8.GetBytes(text);
         var memoryStream = new MemoryStream();
         using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Compress, true))
         {
@@ -109,12 +110,11 @@ public static class DEAD_Save_Load
         var gZipBuffer = new byte[compressedData.Length + 4];
         Buffer.BlockCopy(compressedData, 0, gZipBuffer, 4, compressedData.Length);
         Buffer.BlockCopy(BitConverter.GetBytes(buffer.Length), 0, gZipBuffer, 0, 4);
-        return Convert.ToBase64String(gZipBuffer);
+        return gZipBuffer;
     }
 
-    static string DecompressString(string compressedText)
+    static byte[] DecompressGZipFile(byte[] gZipBuffer)
     {
-        byte[] gZipBuffer = Convert.FromBase64String(compressedText);
         using (var memoryStream = new MemoryStream())
         {
             int dataLength = BitConverter.ToInt32(gZipBuffer, 0);
@@ -128,12 +128,13 @@ public static class DEAD_Save_Load
                 gZipStream.Read(buffer, 0, buffer.Length);
             }
 
-            return Encoding.UTF8.GetString(buffer);
+            return buffer;
         }
     }
 }
 
 [System.Serializable]
+[HideInInspector]
 public class DEAD_Showtape
 {
     [Header("Info")]

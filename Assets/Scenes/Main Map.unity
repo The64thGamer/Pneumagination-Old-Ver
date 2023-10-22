@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3876.4595, g: 4410.3716, b: 5015.6724, a: 1}
+  m_IndirectSpecularColor: {r: 3875.6372, g: 4409.3325, b: 5014.305, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5255,6 +5255,9 @@ MonoBehaviour:
   commandSet:
     m_PersistentCalls:
       m_Calls: []
+  commandSetOnlyRecordables:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1913721401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5301,21 +5304,6 @@ MonoBehaviour:
   deadInterface: {fileID: 1913721400}
   injectIntoInterface: 0
   showtapeSlot: 0
-  showtape:
-    name: 
-    author: 
-    description: 
-    animatronicsUsedFor: 
-    filePath: 
-    timeCreated:
-      _dateTime: 1/1/0001 12:00:00 AM
-    timeLastUpdated:
-      _dateTime: 1/1/0001 12:00:00 AM
-    endOfTapeTime: 0
-    audioClips: []
-    videoClips: []
-    layers: []
-    additionalBytes: []
 --- !u!114 &1913721403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5343,6 +5331,7 @@ MonoBehaviour:
   deadInterface: {fileID: 1913721400}
   applyRecordingToTape: 0
   saveTapeToFile: 0
+  clearRecordings: 0
   signals: []
   commands: []
 --- !u!114 &1980918010

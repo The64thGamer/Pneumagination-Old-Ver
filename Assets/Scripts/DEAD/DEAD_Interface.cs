@@ -409,7 +409,7 @@ public class DEAD_ShowtapeSlot
 
     [Header("Tape")]
     public int activeLayer;
-    public DEAD_Showtape showtape;
+    [HideInInspector] public DEAD_Showtape showtape;
 }
 
 [System.Serializable]
