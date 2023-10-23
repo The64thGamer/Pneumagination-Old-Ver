@@ -17,6 +17,9 @@ public class Player_UI : MonoBehaviour
     [SerializeField] AnimationCurve hotkeyRelease;
     [SerializeField] AnimationCurve uiMove;
 
+    [Header("Data")]
+    [SerializeField] Texture2D[] hotkeyIcons = new Texture2D[10];
+
     float[] hotBarKeyScale = new float[10];
     VisualElement[] hotBarVisualElements = new VisualElement[10];
 
@@ -35,6 +38,8 @@ public class Player_UI : MonoBehaviour
         {
             hotBarVisualElements[i] = document.rootVisualElement.Q<VisualElement>("Hotbar" + i);
         }
+
+        UpdateHotbarIcons();
     }
 
     private void Update()
@@ -56,6 +61,14 @@ public class Player_UI : MonoBehaviour
         hotBarKeyScale[number] = Mathf.Clamp01(hotBarKeyScale[number] + ((down ? hotBarKeyAnimationSpeed : -hotBarKeyAnimationSpeed) * Time.deltaTime));
         hotBarVisualElements[number].style.scale = Vector2.Lerp(Vector2.one, Vector2.one * hotBarKeyminSize, down ? hotkeyPress.Evaluate(hotBarKeyScale[number]) : hotkeyRelease.Evaluate(hotBarKeyScale[number]));
         hotBarVisualElements[number].style.translate = new StyleTranslate() { value = new Translate() { y = Mathf.Lerp(0, hotBarKeyYOffset, down ? hotkeyPress.Evaluate(hotBarKeyScale[number]) : hotkeyRelease.Evaluate(hotBarKeyScale[number]))} };
+    }
+
+    void UpdateHotbarIcons()
+    {
+        for (int i = 0; i < hotBarVisualElements.Length; i++)
+        {
+            hotBarVisualElements[i].Q<VisualElement>("Icon").style.backgroundImage = hotkeyIcons[i];
+        }
     }
 
 }
