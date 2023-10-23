@@ -35,7 +35,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _AO_Rough_Metal:
-        m_Texture: {fileID: 2800000, guid: 13fc73971bbf66846b4a55ba83bbe155, type: 3}
+        m_Texture: {fileID: 2800000, guid: eaab1578281a38f45bd3428df4ebe41a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -63,7 +63,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Diffuse_Map:
-        m_Texture: {fileID: 2800000, guid: 40cde5d632488d94a8448c930b4f4b2b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6d58aa79c5d312745afce8bbfbb081cb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissiveColorMap:
@@ -103,7 +103,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal_Map:
-        m_Texture: {fileID: 2800000, guid: 910f6682d836f3449a46754ea2b0bc9d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7c15cec56492fb74a9c5ca1fc86a07c0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecularColorMap:
@@ -272,7 +272,7 @@ Material:
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _Thickness: 1
-    - _Tiling: 0.3048
+    - _Tiling: 0.02032
     - _TransmissionEnable: 1
     - _TransmissionMask: 1
     - _TransparentBackfaceEnable: 0
