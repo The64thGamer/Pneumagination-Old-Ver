@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3875.6372, g: 4409.3325, b: 5014.305, a: 1}
+  m_IndirectSpecularColor: {r: 3876.399, g: 4410.317, b: 5015.5786, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1124,6 +1124,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 2233159609872564409, guid: 50b032af3e3f04146946d82d07095cf9,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9f1e0b8841c39e34cbddc4929608e8eb, type: 2}
     - target: {fileID: 2803138036367434984, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -4293,7 +4298,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1788443484}
-  - component: {fileID: 1788443485}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -4318,18 +4322,6 @@ Transform:
   - {fileID: 1382779751}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1788443485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788443483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5953c22be8c8f644cb37b30474fc9b68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1799476660
 GameObject:
   m_ObjectHideFlags: 0
@@ -5297,6 +5289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874439a1bf7bce7489d19b0bca055e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createNewFile: 0
   saveFile: 0
   loadFile: 0
   clearData: 0
@@ -5304,6 +5297,16 @@ MonoBehaviour:
   deadInterface: {fileID: 1913721400}
   injectIntoInterface: 0
   showtapeSlot: 0
+  name: 
+  author: 
+  description: 
+  animatronicsUsedFor: 
+  endOfTapeTime: 0
+  filePath: 
+  timeCreated:
+    _dateTime: 1/1/0001 12:00:00 AM
+  timeLastUpdated:
+    _dateTime: 1/1/0001 12:00:00 AM
 --- !u!114 &1913721403
 MonoBehaviour:
   m_ObjectHideFlags: 0
