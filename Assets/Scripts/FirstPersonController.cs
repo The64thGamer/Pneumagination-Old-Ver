@@ -80,7 +80,8 @@ namespace StarterAssets
                 fov = 70;
                 PlayerPrefs.SetFloat("Settings: FOV", fov);
             }
-
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         void OnEnable()
@@ -148,7 +149,7 @@ namespace StarterAssets
             fovAdder = Mathf.Clamp01(Mathf.Abs(fovAdder) - (Time.deltaTime*1.5f)) * Mathf.Sign(fovAdder);
 
             //Mouselook
-            if (!isPaused)
+            if (!inputMenu)
             {
                 currentRotation.x += Input.GetAxis("Mouse X") * sensitivity;
                 currentRotation.y -= Input.GetAxis("Mouse Y") * sensitivity;
