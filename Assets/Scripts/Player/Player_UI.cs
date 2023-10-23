@@ -18,7 +18,7 @@ public class Player_UI : MonoBehaviour
     [SerializeField] AnimationCurve uiMove;
 
     [Header("Data")]
-    [SerializeField] Texture2D[] hotkeyIcons = new Texture2D[10];
+    [SerializeField] HotKeyIcons[] hotkeyIcons = new HotKeyIcons[10];
 
     float[] hotBarKeyScale = new float[10];
     VisualElement[] hotBarVisualElements = new VisualElement[10];
@@ -67,8 +67,17 @@ public class Player_UI : MonoBehaviour
     {
         for (int i = 0; i < hotBarVisualElements.Length; i++)
         {
-            hotBarVisualElements[i].Q<VisualElement>("Icon").style.backgroundImage = hotkeyIcons[i];
+            VisualElement key = hotBarVisualElements[i].Q<VisualElement>("Icon");
+            key.style.backgroundImage = hotkeyIcons[i].icon;
+            key.style.scale = new Vector2(hotkeyIcons[i].flippedX ? -1 : 1, 1);
         }
+    }
+
+    [System.Serializable]
+    struct HotKeyIcons
+    {
+        public Texture2D icon;
+        public bool flippedX;
     }
 
 }
