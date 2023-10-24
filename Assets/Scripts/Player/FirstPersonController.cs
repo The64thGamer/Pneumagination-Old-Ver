@@ -144,17 +144,7 @@ namespace StarterAssets
                 inputMenuAlreadyPressed = false;
             }
 
-            //Fov
-            if (fovUp.action.IsPressed())
-            {
-                fovAdder = -1.0f;
-            }
-            if (fovDown.action.IsPressed())
-            {
-                fovAdder = 1.0f;
-            }
-            fov = Mathf.Clamp(Mathf.Lerp(fov, fov + (fovAdder/2.0f), fovCurve.Evaluate(Mathf.Abs(fovAdder))),1.0f,120f);
-            fovAdder = Mathf.Clamp01(Mathf.Abs(fovAdder) - (Time.deltaTime*1.5f)) * Mathf.Sign(fovAdder);
+
 
             //Mouselook
             if (!inputMenu)
@@ -165,6 +155,17 @@ namespace StarterAssets
                 currentRotation.y = Mathf.Clamp(currentRotation.y, -maxYAngle, maxYAngle);
                 Quaternion rot = Quaternion.Euler(currentRotation.y, currentRotation.x, 0);
                 _mainCamera.transform.rotation = rot;
+                //Fov
+                if (fovUp.action.IsPressed())
+                {
+                    fovAdder = -1.0f;
+                }
+                if (fovDown.action.IsPressed())
+                {
+                    fovAdder = 1.0f;
+                }
+                fov = Mathf.Clamp(Mathf.Lerp(fov, fov + (fovAdder / 2.0f), fovCurve.Evaluate(Mathf.Abs(fovAdder))), 1.0f, 120f);
+                fovAdder = Mathf.Clamp01(Mathf.Abs(fovAdder) - (Time.deltaTime * 1.5f)) * Mathf.Sign(fovAdder);
             }
             else
             {
