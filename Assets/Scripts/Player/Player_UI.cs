@@ -100,43 +100,53 @@ public class Player_UI : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             int index = hotkeyDTUIndexes[i];
-            bool value = false;
+            int value = -1;
             switch (i)
             {
                 case 1:
-                    if (Input.GetKey(KeyCode.Alpha1)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha1)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha1)) { value = 0; }
                     break;
                 case 2:
-                    if (Input.GetKey(KeyCode.Alpha2)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha2)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha2)) { value = 0; }
                     break;
                 case 3:
-                    if (Input.GetKey(KeyCode.Alpha3)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha3)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha3)) { value = 0; }
                     break;
                 case 4:
-                    if (Input.GetKey(KeyCode.Alpha4)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha4)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha4)) { value = 0; }
                     break;
                 case 5:
-                    if (Input.GetKey(KeyCode.Alpha5)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha5)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha5)) { value = 0; }
                     break;
                 case 6:
-                    if (Input.GetKey(KeyCode.Alpha6)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha6)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha6)) { value = 0; }
                     break;
                 case 7:
-                    if (Input.GetKey(KeyCode.Alpha7)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha7)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha7)) { value = 0; }
                     break;
                 case 8:
-                    if (Input.GetKey(KeyCode.Alpha8)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha8)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha8)) { value = 0; }
                     break;
                 case 9:
-                    if (Input.GetKey(KeyCode.Alpha9)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha9)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha9)) { value = 0; }
                     break;
                 case 0:
-                    if (Input.GetKey(KeyCode.Alpha0)) { value = true; }
+                    if (Input.GetKeyDown(KeyCode.Alpha0)) { value = 1; }
+                    if (Input.GetKeyUp(KeyCode.Alpha0)) { value = 0; }
                     break;
                 default:
                     break;
             }
-            if (value)
+            if (value != -1)
             {
                 deadInterface.SetData(index, 1);
             }
