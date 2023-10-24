@@ -24,6 +24,7 @@ public class DEAD_Interface : MonoBehaviour
 
     //Values
     bool playingShowtape;
+    float currentTapeSpeed = 1;
     bool autoRewind = true;
     LoadingState loadingState;
 
@@ -346,6 +347,11 @@ public class DEAD_Interface : MonoBehaviour
         }
 
         return showtapeSlots[activeShowtapeSlot].audio[slot];
+    }
+
+    public float GetCurrentTapeSpeed()
+    {
+        return currentTapeSpeed;
     }
 
     public void ExecuteFunction(DEAD_InterfaceFunctionList function)

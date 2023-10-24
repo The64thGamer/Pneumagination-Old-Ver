@@ -68,10 +68,22 @@ public class DEAD_Speaker : MonoBehaviour
         }
         au.clip = deadInterface.GetAudioClip(activeAudioSlot);
         au.time = deadInterface.GetCurrentTapeTime();
+        au.pitch = deadInterface.GetCurrentTapeSpeed();
+        if(au.pitch < 0)
+        {
+            au.loop = true;
+            StartCoroutine(StopLoop());
+        }
         if (au.clip != null)
         {
             au.Play();
         }
+    }
+
+    public IEnumerator StopLoop()
+    {
+        yield return null;
+        au.loop = false;
     }
 
     void CommandSet(float time, string value)
@@ -95,6 +107,7 @@ public class DEAD_Speaker : MonoBehaviour
                         }
                         break;
                     case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.rewind_audio:
+                        GetAndPlayAudio();
                         break;
                     case DEAD_SpeakerCommands.DEAD_InterfaceFunctionList.unmute_speaker:
                         au.volume = savedAudioVolume;
