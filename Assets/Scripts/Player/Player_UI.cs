@@ -239,7 +239,7 @@ public class Player_UI : MonoBehaviour
 
     void UpdateTabPositions()
     {
-        showInfoPopup.style.translate = new StyleTranslate() { value = new Translate(0, Mathf.Lerp(1111, 86, uiMove.Evaluate(showInfoPopupPosition))) };
+        showInfoPopup.style.translate = new StyleTranslate() { value = new Translate(0, Mathf.Lerp(830, 0, uiMove.Evaluate(showInfoPopupPosition))) };
     }
 
     void UpdateHotbarIcons()
@@ -284,7 +284,7 @@ public class Player_UI : MonoBehaviour
             {
                 while (showInfoPopupPosition > 0)
                 {
-                    showInfoPopupPosition -= Time.deltaTime * 5;
+                    showInfoPopupPosition -= Time.deltaTime * 8;
                     yield return null;
                 }
                 showInfoPopupPosition = 0;
@@ -293,7 +293,7 @@ public class Player_UI : MonoBehaviour
             {
                 while (showInfoPopupPosition < 1)
                 {
-                    showInfoPopupPosition += Time.deltaTime * 5;
+                    showInfoPopupPosition += Time.deltaTime * 8;
                     yield return null;
                 }
                 showInfoPopupPosition = 1;

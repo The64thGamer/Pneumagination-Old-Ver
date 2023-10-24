@@ -10,7 +10,7 @@
                 <ui:Button text="Name Generator" display-tooltip-when-elided="true" name="NameGenerator" style="font-size: 70px; width: 600px;" />
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 1;" />
-            <ui:Label tabindex="-1" text="The 64th Gamer 2023, Use WASD + EQ + Num Keys to move bots. Don&apos;t expect much lol." display-tooltip-when-elided="true" style="font-size: 40px;" />
+            <ui:Label tabindex="-1" text="The 64th Gamer 2023, WASD to move, press &quot;E&quot; to access the UI. You can make showtapes." display-tooltip-when-elided="true" style="font-size: 40px;" />
         </ui:VisualElement>
         <ui:VisualElement name="MenuGenerator" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none;">
             <ui:Label tabindex="-1" text="Name Generator" display-tooltip-when-elided="true" style="font-size: 70px; -unity-font-style: bold;" />
