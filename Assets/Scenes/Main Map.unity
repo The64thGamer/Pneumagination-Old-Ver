@@ -3186,6 +3186,7 @@ MonoBehaviour:
     flippedX: 0
   - icon: {fileID: 0}
     flippedX: 0
+  hotkeyDTUIndexes: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
 --- !u!1 &794460553
 GameObject:
   m_ObjectHideFlags: 19

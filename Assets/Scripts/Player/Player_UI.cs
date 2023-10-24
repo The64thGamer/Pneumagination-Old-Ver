@@ -103,43 +103,43 @@ public class Player_UI : MonoBehaviour
             int value = -1;
             switch (i)
             {
-                case 1:
+                case 0:
                     if (Input.GetKeyDown(KeyCode.Alpha1)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha1)) { value = 0; }
                     break;
-                case 2:
+                case 1:
                     if (Input.GetKeyDown(KeyCode.Alpha2)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha2)) { value = 0; }
                     break;
-                case 3:
+                case 2:
                     if (Input.GetKeyDown(KeyCode.Alpha3)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha3)) { value = 0; }
                     break;
-                case 4:
+                case 3:
                     if (Input.GetKeyDown(KeyCode.Alpha4)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha4)) { value = 0; }
                     break;
-                case 5:
+                case 4:
                     if (Input.GetKeyDown(KeyCode.Alpha5)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha5)) { value = 0; }
                     break;
-                case 6:
+                case 5:
                     if (Input.GetKeyDown(KeyCode.Alpha6)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha6)) { value = 0; }
                     break;
-                case 7:
+                case 6:
                     if (Input.GetKeyDown(KeyCode.Alpha7)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha7)) { value = 0; }
                     break;
-                case 8:
+                case 7:
                     if (Input.GetKeyDown(KeyCode.Alpha8)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha8)) { value = 0; }
                     break;
-                case 9:
+                case 8:
                     if (Input.GetKeyDown(KeyCode.Alpha9)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha9)) { value = 0; }
                     break;
-                case 0:
+                case 9:
                     if (Input.GetKeyDown(KeyCode.Alpha0)) { value = 1; }
                     if (Input.GetKeyUp(KeyCode.Alpha0)) { value = 0; }
                     break;
@@ -148,7 +148,7 @@ public class Player_UI : MonoBehaviour
             }
             if (value != -1)
             {
-                deadInterface.SetData(index, 1);
+                deadInterface.SetData(index, value);
             }
         }
     }
