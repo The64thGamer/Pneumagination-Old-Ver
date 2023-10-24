@@ -268,6 +268,10 @@ public class DEAD_Interface : MonoBehaviour
             return;
         }
         SetShowtape(index, showtape, showtapeSlots[index].triggerString);
+        if(playingShowtape)
+        {
+            playingShowtape = false;
+        }
     }
 
     public void SetShowtape(int index, DEAD_Showtape showtape, string triggerString)
