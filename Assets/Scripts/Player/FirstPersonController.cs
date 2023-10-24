@@ -11,6 +11,7 @@ namespace StarterAssets
     {
 
         [Header("Objects")]
+        [SerializeField] Player_UI playerUI;
         [SerializeField] Camera _mainCamera;
         [SerializeField] Transform camOffet;
 
@@ -95,7 +96,7 @@ namespace StarterAssets
             fovDown.action?.Enable();
         }
 
-        public void Update()
+        void Update()
         {
             if (_controller == null) { return; }
 
@@ -119,7 +120,14 @@ namespace StarterAssets
             if (menuAction.action.IsPressed() && !inputMenuAlreadyPressed)
             {
                 inputMenuAlreadyPressed = true;
-                inputMenu = !inputMenu;
+                if(inputMenu)
+                {
+                    inputMenu = !playerUI.CheckIfCanExitMenu();
+                }
+                else
+                {
+                    inputMenu = true;
+                }
                 if (inputMenu)
                 {
                     Cursor.lockState = CursorLockMode.None;
@@ -332,12 +340,17 @@ namespace StarterAssets
         }
 
 
-        public void ModifyPlayerHeight()
+        void ModifyPlayerHeight()
         {
             float newHeight = Mathf.Lerp(height, height / 2.0f, crouchCurve.Evaluate(currentPositionData.currentCrouchLerp));
             camOffet.localPosition = new Vector3(0, newHeight, 0);
             _controller.height = newHeight;
             _controller.center = new Vector3(0, newHeight/2.0f, 0);
+        }
+
+        public bool CheckifPlayerInMenu()
+        {
+            return inputMenu;
         }
 
     }

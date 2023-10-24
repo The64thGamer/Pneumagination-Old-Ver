@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3378.0142, g: 3836.9985, b: 4407.5317, a: 1}
+  m_IndirectSpecularColor: {r: 3378.3735, g: 3837.5063, b: 4407.969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2801,6 +2801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd053400822b65548becce89525f8050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerUI: {fileID: 782576459}
   _mainCamera: {fileID: 1823688466}
   camOffet: {fileID: 1049782763}
   isPaused: 0
@@ -3082,7 +3083,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   document: {fileID: 128686996}
   deadInterface: {fileID: 1913721400}
-  controller: {fileID: 0}
+  controller: {fileID: 782576457}
   hotkeyPress:
     serializedVersion: 2
     m_Curve:

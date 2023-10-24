@@ -47,7 +47,7 @@ public class Player_UI : MonoBehaviour
         document.rootVisualElement.Q<Button>("LoadShow").clicked += () => LoadFile();
         document.rootVisualElement.Q<Button>("SaveShow").clicked += () => SaveFile();
         document.rootVisualElement.Q<Button>("ShowInfo").clicked += () => StartCoroutine(VisualizeShowInfoPopup(Convert.ToBoolean(showInfoPopupPosition)));
-        document.rootVisualElement.Q<Button>("ClearAllData").clicked += () => CreateNewShowtape();
+        document.rootVisualElement.Q<Button>("ClearAllData").clicked += () => CreateNewShowtape(false);
         document.rootVisualElement.Q<Button>("EditScreenBack").clicked += () => StartCoroutine(VisualizeShowInfoPopup(true));
         document.rootVisualElement.Q<Button>("BrowseAudio").clicked += () => InjectAudioData();
         document.rootVisualElement.Q<Button>("Play").clicked += () => SendCommand("Play");
@@ -69,7 +69,7 @@ public class Player_UI : MonoBehaviour
         playbackTime = document.rootVisualElement.Q<Label>("PlaybackTime");
         if (deadInterface.GetShowtape(0) == null)
         {
-            CreateNewShowtape();
+            CreateNewShowtape(true);
         }
 
         UpdateHotbarIcons();
@@ -94,6 +94,11 @@ public class Player_UI : MonoBehaviour
 
     void SendCommand(string command)
     {
+        if (!controller.CheckifPlayerInMenu())
+        {
+            return;
+        }
+
         deadInterface.SendCommand(command, true);
         if (command == "Play")
         {
@@ -184,7 +189,7 @@ public class Player_UI : MonoBehaviour
 
     IEnumerator VisualizeShowInfoPopup(bool hide)
     {
-        if (!showInfoPopupMoving)
+        if (!showInfoPopupMoving && controller.CheckifPlayerInMenu())
         {
             showInfoPopupMoving = true;
             if (hide)
@@ -211,6 +216,11 @@ public class Player_UI : MonoBehaviour
 
     void InjectAudioData()
     {
+        if (!controller.CheckifPlayerInMenu())
+        {
+            return;
+        }
+
         var extensions = new[] { new ExtensionFilter("Audio Files", "wav", "aiff", "mp3", "wma"), };
         string[] files = StandaloneFileBrowser.OpenFilePanel("Load Showtape Audio", "", extensions, false);
         if (files != null && files.Length != 0)
@@ -224,8 +234,13 @@ public class Player_UI : MonoBehaviour
         }
     }
 
-    void CreateNewShowtape()
+    void CreateNewShowtape(bool overridePlayerCheck)
     {
+        if (!controller.CheckifPlayerInMenu() && !overridePlayerCheck)
+        {
+            return;
+        }
+
         showtape = new DEAD_Showtape();
         showtape.name = "My Showtape";
         showtape.author = "Me";
@@ -237,6 +252,11 @@ public class Player_UI : MonoBehaviour
 
     void SaveFile()
     {
+        if(!controller.CheckifPlayerInMenu())
+        {
+            return;
+        }
+
         //Save
         string path = StandaloneFileBrowser.SaveFilePanel("Save Showtape File", "", "MyShowtape", new[] { new ExtensionFilter("Showtape Files", "showtape"), });
         if (path != "")
@@ -247,6 +267,11 @@ public class Player_UI : MonoBehaviour
 
     void LoadFile()
     {
+        if (!controller.CheckifPlayerInMenu())
+        {
+            return;
+        }
+
         string[] files = StandaloneFileBrowser.OpenFilePanel("Load Showtape File", "", "showtape", false);
         if (files != null && files.Length != 0)
         {
@@ -257,6 +282,14 @@ public class Player_UI : MonoBehaviour
         }
     }
 
+    public bool CheckIfCanExitMenu()
+    {
+        if(showInfoPopupPosition > 0)
+        {
+            return false;
+        }
+        return true;
+    }
 }
 
 [System.Serializable]
