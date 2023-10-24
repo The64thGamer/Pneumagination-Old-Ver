@@ -100,22 +100,6 @@ namespace StarterAssets
         {
             if (_controller == null) { return; }
 
-            //Grab Inputs
-            inputMovement = moveAxis.action.ReadValue<Vector2>();
-            inputJump = jump.action.IsPressed();
-            inputRun = run.action.IsPressed();
-
-            //Crouch
-            if (crouch.action.IsPressed() && !inputCrouchAlreadyPressed)
-            {
-                inputCrouchAlreadyPressed = true;
-                inputCrouch = !inputCrouch;
-            }
-            else if (!crouch.action.IsPressed())
-            {
-                inputCrouchAlreadyPressed = false;
-            }
-
             //Menu
             if (menuAction.action.IsPressed() && !inputMenuAlreadyPressed)
             {
@@ -138,6 +122,7 @@ namespace StarterAssets
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
+
             }
             else if (!menuAction.action.IsPressed())
             {
@@ -155,6 +140,21 @@ namespace StarterAssets
                 currentRotation.y = Mathf.Clamp(currentRotation.y, -maxYAngle, maxYAngle);
                 Quaternion rot = Quaternion.Euler(currentRotation.y, currentRotation.x, 0);
                 _mainCamera.transform.rotation = rot;
+                //Grab Inputs
+                inputMovement = moveAxis.action.ReadValue<Vector2>();
+                inputJump = jump.action.IsPressed();
+                inputRun = run.action.IsPressed();
+
+                //Crouch
+                if (crouch.action.IsPressed() && !inputCrouchAlreadyPressed)
+                {
+                    inputCrouchAlreadyPressed = true;
+                    inputCrouch = !inputCrouch;
+                }
+                else if (!crouch.action.IsPressed())
+                {
+                    inputCrouchAlreadyPressed = false;
+                }
                 //Fov
                 if (fovUp.action.IsPressed())
                 {

@@ -6728,7 +6728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7266ff4cfe620c44ab175fb6a8b49a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tapeRewindSpeed: 1.5
+  tapeRewindSpeed: -1.5
   tapePlaySpeed: 1
   fallbackPsi: 40
   dataTransferUnit:
