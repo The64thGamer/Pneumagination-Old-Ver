@@ -6774,6 +6774,8 @@ MonoBehaviour:
     function: 1
   - triggerString: Pause
     function: 2
+  - triggerString: Rewind
+    function: 3
   dtuSet:
     m_PersistentCalls:
       m_Calls: []

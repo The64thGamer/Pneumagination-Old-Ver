@@ -10,7 +10,7 @@ using static DEAD_InterfaceCommands;
 public class DEAD_Interface : MonoBehaviour
 {
     [Header("Info")]
-    [SerializeField] float tapeRewindSpeed = 1.5f;
+    [SerializeField] float tapeRewindSpeed = -1.5f;
     [SerializeField] float tapePlaySpeed = 1.0f;
     [SerializeField] float fallbackPsi = 40;
     [SerializeField] float[] dataTransferUnit;
@@ -24,7 +24,7 @@ public class DEAD_Interface : MonoBehaviour
 
     //Values
     bool playingShowtape;
-    float currentTapeSpeed = 1;
+    float currentTapeSpeed;
     bool autoRewind = true;
     LoadingState loadingState;
 
@@ -68,12 +68,34 @@ public class DEAD_Interface : MonoBehaviour
         {
             //Time Elapsed
             float oldTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
-            showtapeSlots[activeShowtapeSlot].currentTimeElapsed += Time.deltaTime * tapePlaySpeed;
-            if (showtapeSlots[activeShowtapeSlot].currentTimeElapsed > showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime)
+            float currentTimeElapsed = showtapeSlots[activeShowtapeSlot].currentTimeElapsed + (Time.deltaTime * currentTapeSpeed);
+            if(currentTimeElapsed < 0)
             {
+                currentTimeElapsed = 0;
                 playingShowtape = false;
-                showtapeSlots[activeShowtapeSlot].currentTimeElapsed = showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime;
             }
+            if (currentTimeElapsed > showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime)
+            {
+                currentTimeElapsed = showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime;
+                if(autoRewind)
+                {
+                    //Auto Rewind will fail to call if you don't have a string set for it
+                    string command = "";
+                    for (int i = 0; i < commands.Length; i++)
+                    {
+                        if (commands[i].function == DEAD_InterfaceFunctionList.rewind_Showtape)
+                        {
+                            command = commands[i].triggerString;
+                        }
+                    }
+                    SendCommand(command, true);
+                }
+                else
+                {
+                    playingShowtape = false;
+                }
+            }
+            showtapeSlots[activeShowtapeSlot].currentTimeElapsed = currentTimeElapsed;
             float newTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
 
             //More Double Checks to Back Out
@@ -369,11 +391,14 @@ public class DEAD_Interface : MonoBehaviour
                 break;
             case DEAD_InterfaceFunctionList.play_Showtape:
                 playingShowtape = true;
+                currentTapeSpeed = tapePlaySpeed;
                 break;
             case DEAD_InterfaceFunctionList.pause_Showtape:
                 playingShowtape = false;
                 break;
             case DEAD_InterfaceFunctionList.rewind_Showtape:
+                playingShowtape = true;
+                currentTapeSpeed = tapeRewindSpeed;
                 break;
             case DEAD_InterfaceFunctionList.enable_Auto_Rewind:
                 autoRewind = true;
