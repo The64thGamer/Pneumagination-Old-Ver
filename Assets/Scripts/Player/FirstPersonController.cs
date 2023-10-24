@@ -202,7 +202,7 @@ namespace StarterAssets
             Vector3 targetSpeed = new Vector3(newAxis.x, 0.0f, newAxis.z).normalized * baseSpeed / 25.0f;
             if(inputRun)
             {
-                targetSpeed *= 1.5f;
+                targetSpeed *= 2f;
             }
 
 
