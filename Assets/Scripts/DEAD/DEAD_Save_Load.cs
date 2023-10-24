@@ -22,7 +22,8 @@ public static class DEAD_Save_Load
     public static void SaveShowtape(string filePath, DEAD_Showtape showtape)
     {
         showtape.filePath = "";
-        if(showtape.layers != null)
+        showtape.timeLastUpdated = new UDateTime() { dateTime = DateTime.Now };
+        if (showtape.layers != null)
         {
             for (int i = 0; i < showtape.layers.Length; i++)
             {
