@@ -7,6 +7,7 @@ using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.VolumeComponent;
 
 public class Player_UI : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class Player_UI : MonoBehaviour
 
     [Header("Data")]
     [SerializeField] HotKeyIcons[] hotkeyIcons = new HotKeyIcons[10];
+    [SerializeField] int[] hotkeyDTUIndexes = new int[10];
 
     //UI Objects
     VisualElement[] hotBarVisualElements = new VisualElement[10];
@@ -90,6 +92,55 @@ public class Player_UI : MonoBehaviour
 
         UpdateTabPositions();
         UpdatePlaybackBar();
+        SendData();
+    }
+
+    void SendData()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            int index = hotkeyDTUIndexes[i];
+            bool value = false;
+            switch (i)
+            {
+                case 1:
+                    if (Input.GetKey(KeyCode.Alpha1)) { value = true; }
+                    break;
+                case 2:
+                    if (Input.GetKey(KeyCode.Alpha2)) { value = true; }
+                    break;
+                case 3:
+                    if (Input.GetKey(KeyCode.Alpha3)) { value = true; }
+                    break;
+                case 4:
+                    if (Input.GetKey(KeyCode.Alpha4)) { value = true; }
+                    break;
+                case 5:
+                    if (Input.GetKey(KeyCode.Alpha5)) { value = true; }
+                    break;
+                case 6:
+                    if (Input.GetKey(KeyCode.Alpha6)) { value = true; }
+                    break;
+                case 7:
+                    if (Input.GetKey(KeyCode.Alpha7)) { value = true; }
+                    break;
+                case 8:
+                    if (Input.GetKey(KeyCode.Alpha8)) { value = true; }
+                    break;
+                case 9:
+                    if (Input.GetKey(KeyCode.Alpha9)) { value = true; }
+                    break;
+                case 0:
+                    if (Input.GetKey(KeyCode.Alpha0)) { value = true; }
+                    break;
+                default:
+                    break;
+            }
+            if (value)
+            {
+                deadInterface.SetData(index, 1);
+            }
+        }
     }
 
     void SendCommand(string command)
