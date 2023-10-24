@@ -259,6 +259,11 @@ public class DEAD_Interface : MonoBehaviour
         return showtapeSlots[index].showtape;
     }
 
+    public LoadingState getLoadingState()
+    {
+        return loadingState;
+    }
+
     IEnumerator ImportAudio(int index)
     {
         loadingState = LoadingState.loading;
@@ -308,12 +313,13 @@ public class DEAD_Interface : MonoBehaviour
 
         if (showtapeSlots != null && activeShowtapeSlot < showtapeSlots.Length && showtapeSlots[activeShowtapeSlot] != null && showtapeSlots[activeShowtapeSlot].nonBlankShowtape)
         {
-            if (!nonRecordableCommand)
+            if (nonRecordableCommand)
             {
                 commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
             }
             else if(playingShowtape)
             {
+                commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
                 commandSetOnlyRecordables.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
             }
         }
