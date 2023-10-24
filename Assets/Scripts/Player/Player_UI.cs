@@ -34,13 +34,19 @@ public class Player_UI : MonoBehaviour
     //UI Objects
     VisualElement[] hotBarVisualElements = new VisualElement[10];
     VisualElement showInfoPopup;
+    VisualElement viewer;
     ProgressBar playbackBar;
-    Label playbackTime;
+    Label playbackTime; 
+    ProgressBar viewerPlaybackBar;
+    Label viewerPlaybackTime;
+    Label viewerShowtapeName;
 
     //UI Values
     float[] hotBarKeyScale = new float[10];
     float showInfoPopupPosition = 0;
     bool showInfoPopupMoving;
+    float viewerPosition = 0;
+    bool viewerMoving;
 
     //Objects
     [HideInInspector] DEAD_Showtape showtape;
@@ -88,8 +94,12 @@ public class Player_UI : MonoBehaviour
             hotBarVisualElements[i] = document.rootVisualElement.Q<VisualElement>("Hotbar" + i);
         }
         showInfoPopup = document.rootVisualElement.Q<VisualElement>("ShowInfoPopup");
+        viewer = document.rootVisualElement.Q<VisualElement>("ViewerBar");
         playbackBar = document.rootVisualElement.Q<ProgressBar>("PlaybackBar");
         playbackTime = document.rootVisualElement.Q<Label>("PlaybackTime");
+        viewerPlaybackBar = document.rootVisualElement.Q<ProgressBar>("ViewerPlaybackBar");
+        viewerPlaybackTime = document.rootVisualElement.Q<Label>("ViewerPlaybackTime");
+        viewerShowtapeName = document.rootVisualElement.Q<Label>("ViewerShowtapeName");
         if (deadInterface.GetShowtape(0) == null)
         {
             CreateNewShowtape(true);
@@ -97,6 +107,7 @@ public class Player_UI : MonoBehaviour
         dtuReplica = new float[deadInterface.GetDTUArrayLength()];
 
         UpdateHotbarIcons();
+
     }
 
     private void Update()
@@ -115,6 +126,16 @@ public class Player_UI : MonoBehaviour
         UpdateTabPositions();
         UpdatePlaybackBar();
         SendData();
+
+
+        if (!controller.CheckifPlayerInMenu() && viewerPosition == 0)
+        {
+            StartCoroutine(VisualizeViewer(false));
+        }
+        if (controller.CheckifPlayerInMenu() && viewerPosition == 1)
+        {
+            StartCoroutine(VisualizeViewer(true));
+        }
     }
 
     void SendData()
@@ -233,13 +254,18 @@ public class Player_UI : MonoBehaviour
     void UpdatePlaybackBar()
     {
         playbackTime.text = TimeSpan.FromSeconds(deadInterface.GetCurrentTapeTime()).ToString(@"mm\:ss") + "/" + TimeSpan.FromSeconds(showtape.endOfTapeTime).ToString(@"mm\:ss");
+        viewerPlaybackTime.text = playbackTime.text;
         playbackBar.highValue = showtape.endOfTapeTime;
+        viewerPlaybackBar.highValue = playbackBar.highValue;
         playbackBar.value = deadInterface.GetCurrentTapeTime();
+        viewerPlaybackBar.value = playbackBar.value;
+
     }
 
     void UpdateTabPositions()
     {
         showInfoPopup.style.translate = new StyleTranslate() { value = new Translate(0, Mathf.Lerp(830, 0, uiMove.Evaluate(showInfoPopupPosition))) };
+        viewer.style.translate = new StyleTranslate() { value = new Translate(0, Mathf.Lerp(112, 0, uiMove.Evaluate(viewerPosition))) };
     }
 
     void UpdateHotbarIcons()
@@ -257,6 +283,7 @@ public class Player_UI : MonoBehaviour
         document.rootVisualElement.Q<TextField>("ShowtapeName").SetValueWithoutNotify(showtape.name);
         document.rootVisualElement.Q<TextField>("ShowtapeAuthor").SetValueWithoutNotify(showtape.author);
         document.rootVisualElement.Q<TextField>("ShowtapeDescription").SetValueWithoutNotify(showtape.description);
+        viewerShowtapeName.text = showtape.name;
         Label fileName = document.rootVisualElement.Q<Label>("ShowAudioFileName");
         if (showtape.audioClips != null && showtape.audioClips.Length > 0 && showtape.audioClips[0].fileName != null)
         {
@@ -299,6 +326,33 @@ public class Player_UI : MonoBehaviour
                 showInfoPopupPosition = 1;
             }
             showInfoPopupMoving = false;
+        }
+    }
+
+    IEnumerator VisualizeViewer(bool hide)
+    {
+        if (!viewerMoving)
+        {
+            viewerMoving = true;
+            if (hide)
+            {
+                while (viewerPosition > 0)
+                {
+                    viewerPosition -= Time.deltaTime * 8;
+                    yield return null;
+                }
+                viewerPosition = 0;
+            }
+            else
+            {
+                while (viewerPosition < 1)
+                {
+                    viewerPosition += Time.deltaTime * 8;
+                    yield return null;
+                }
+                viewerPosition = 1;
+            }
+            viewerMoving = false;
         }
     }
 

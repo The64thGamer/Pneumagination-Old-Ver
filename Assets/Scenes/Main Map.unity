@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3378.35, g: 3837.483, b: 4407.938, a: 1}
+  m_IndirectSpecularColor: {r: 3378.3735, g: 3837.5063, b: 4407.969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6680,6 +6680,7 @@ GameObject:
   - component: {fileID: 1913721398}
   - component: {fileID: 1913721400}
   - component: {fileID: 1913721403}
+  - component: {fileID: 1913721404}
   m_Layer: 0
   m_Name: Data Manager
   m_TagString: Untagged
@@ -6738,35 +6739,257 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   activeShowtapeSlot: 0
-  showtapeSlots:
-  - nonBlankShowtape: 0
-    triggerString: 
-    currentTimeElapsed: 0
-    audio: []
-    video: []
-    activeLayer: 0
-    showtape:
-      name: 
-      author: 
-      description: 
-      animatronicsUsedFor: 
-      filePath: 
-      timeCreated:
-        _dateTime: 1/1/0001 12:00:00 AM
-      timeLastUpdated:
-        _dateTime: 1/1/0001 12:00:00 AM
-      endOfTapeTime: 0
-      audioClips: []
-      videoClips: []
-      layers:
-      - triggerString: 
-        signals: []
-        commands: []
-      - triggerString: 
-        signals: []
-        commands: []
-      additionalBytes: []
   commands:
   - triggerString: Debug Log
     function: 0
@@ -6797,6 +7020,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c85ca24aed0de7f4bb834c92b727d65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1913721404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913721395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66aac4fbe54cd3143b7c23c6e3015747, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadInterface: {fileID: 1913721400}
+  convertRshwAndInjectIntoInterface: 0
+  saveFile: 0
 --- !u!114 &1980918010
 MonoBehaviour:
   m_ObjectHideFlags: 0
