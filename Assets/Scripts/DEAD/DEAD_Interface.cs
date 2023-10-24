@@ -17,7 +17,7 @@ public class DEAD_Interface : MonoBehaviour
 
     [Header("Showtapes")]
     [SerializeField] int activeShowtapeSlot;
-    [SerializeField] DEAD_ShowtapeSlot[] showtapeSlots;
+    [HideInInspector] DEAD_ShowtapeSlot[] showtapeSlots;
 
     [Header("Commands")]
     [SerializeField] DEAD_InterfaceCommands[] commands;
@@ -32,6 +32,11 @@ public class DEAD_Interface : MonoBehaviour
     [HideInInspector] public DEAD_DTUEvent dtuSet = new DEAD_DTUEvent();
     [HideInInspector] public DEAD_CommandEvent commandSet = new DEAD_CommandEvent();
     [HideInInspector] public DEAD_CommandEvent commandSetOnlyRecordables = new DEAD_CommandEvent();
+
+    private void Start()
+    {
+        showtapeSlots = new DEAD_ShowtapeSlot[1] { new DEAD_ShowtapeSlot() };
+    }
 
     public enum LoadingState
     {
@@ -69,7 +74,7 @@ public class DEAD_Interface : MonoBehaviour
             //Time Elapsed
             float oldTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
             float currentTimeElapsed = showtapeSlots[activeShowtapeSlot].currentTimeElapsed + (Time.deltaTime * currentTapeSpeed);
-            if(currentTimeElapsed < 0)
+            if (currentTimeElapsed < 0)
             {
                 currentTimeElapsed = 0;
                 playingShowtape = false;
@@ -77,7 +82,7 @@ public class DEAD_Interface : MonoBehaviour
             if (currentTimeElapsed > showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime)
             {
                 currentTimeElapsed = showtapeSlots[activeShowtapeSlot].showtape.endOfTapeTime;
-                if(autoRewind)
+                if (autoRewind)
                 {
                     //Auto Rewind will fail to call if you don't have a string set for it
                     string command = "";
@@ -99,7 +104,7 @@ public class DEAD_Interface : MonoBehaviour
             float newTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
 
             bool swapTimesBack = false;
-            if(newTime < oldTime)
+            if (newTime < oldTime)
             {
                 swapTimesBack = true;
                 float temp = oldTime;
@@ -160,7 +165,10 @@ public class DEAD_Interface : MonoBehaviour
                             }
                             if (signals[found].time > oldTime)
                             {
-                                dataTransferUnit[signals[found].dtuIndex] = signals[found].value;
+                                if (signals[found].dtuIndex < dataTransferUnit.Length)
+                                {
+                                    dataTransferUnit[signals[found].dtuIndex] = signals[found].value;
+                                }
                             }
                             found++;
                         }
@@ -268,7 +276,7 @@ public class DEAD_Interface : MonoBehaviour
             return;
         }
         SetShowtape(index, showtape, showtapeSlots[index].triggerString);
-        if(playingShowtape)
+        if (playingShowtape)
         {
             playingShowtape = false;
         }
@@ -315,18 +323,32 @@ public class DEAD_Interface : MonoBehaviour
         NAudioImporter importer = this.GetComponent<NAudioImporter>();
         for (int i = 0; i < showtapeSlots[index].showtape.audioClips.Length; i++)
         {
-            importer.Import(showtapeSlots[index].showtape.audioClips[i].array);
-            while (!importer.isInitialized && !importer.isError)
+            if (showtapeSlots[index].showtape.audioClips[0].array != null || showtapeSlots[index].showtape.audioClips[0].array.Length > 0)
             {
-                yield return null;
-            }
+                bool wavAttemptFailed = false;
+                try
+                {
+                    showtapeSlots[index].audio[i] = WaveLoader.LoadWaveToAudioClip(showtapeSlots[index].showtape.audioClips[i].array);
+                }
+                catch (Exception message)
+                {
+                    //wavAttemptFailed = true;
+                    Debug.LogError(message);
+                }
 
-            if (importer.isError)
-            {
-                Debug.LogError(importer.error);
+                if (wavAttemptFailed)
+                {
+                    importer.Import(showtapeSlots[index].showtape.audioClips[i].array);
+                    while (!importer.isInitialized && !importer.isError)
+                    {
+                        yield return null;
+                    }
+                    if (!importer.isError)
+                    {
+                        showtapeSlots[index].audio[i] = importer.audioClip;
+                    }
+                }
             }
-
-            showtapeSlots[index].audio[i] = importer.audioClip;
         }
         loadingState = LoadingState.ready;
     }
@@ -362,7 +384,7 @@ public class DEAD_Interface : MonoBehaviour
             {
                 commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
             }
-            else if(playingShowtape)
+            else if (playingShowtape)
             {
                 commandSet.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);
                 commandSetOnlyRecordables.Invoke(showtapeSlots[activeShowtapeSlot].currentTimeElapsed, name);

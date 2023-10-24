@@ -16,6 +16,7 @@ public class NAudioImporter : DecoderImporter
     {
         MemoryStream stream = new MemoryStream(uri);
         reader = new Mp3FileReader(stream);
+        
         sampleProvider = reader.ToSampleProvider();
     }
 

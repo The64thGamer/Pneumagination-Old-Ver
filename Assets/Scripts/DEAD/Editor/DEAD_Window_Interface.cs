@@ -6,7 +6,8 @@ using UnityEngine;
 public class DEAD_Window_Interface : Editor
 {
     DEAD_Interface dead_Interface;
-    
+    Texture2D texture;
+
     void OnEnable()
     {
         dead_Interface = target as DEAD_Interface;
@@ -17,7 +18,11 @@ public class DEAD_Window_Interface : Editor
         int widthHeight = Mathf.CeilToInt(Mathf.Sqrt(dead_Interface.GetDTUArrayLength()));
         if (widthHeight > 0)
         {
-            Texture2D texture = new Texture2D(widthHeight, widthHeight);
+            if (texture == null || widthHeight != texture.width)
+            {
+                texture = new Texture2D(widthHeight, widthHeight);
+            }
+
             texture.filterMode = FilterMode.Point;
             Color32[] textureColors = new Color32[widthHeight * widthHeight];
             int index = 0;
