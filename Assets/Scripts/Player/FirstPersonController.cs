@@ -169,7 +169,6 @@ namespace StarterAssets
             else
             {
                 inputMovement = Vector2.zero;
-                inputCrouch = false;
                 inputJump = false;
             }
 
