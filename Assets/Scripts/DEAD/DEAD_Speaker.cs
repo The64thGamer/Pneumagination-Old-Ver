@@ -56,6 +56,16 @@ public class DEAD_Speaker : MonoBehaviour
 
     void GetAndPlayAudio()
     {
+        StartCoroutine(GetAudioCoroutine());  
+    }
+
+
+    IEnumerator GetAudioCoroutine()
+    {
+        while (deadInterface.getLoadingState() == DEAD_Interface.LoadingState.loading)
+        {
+            yield return null;
+        }
         au.clip = deadInterface.GetAudioClip(activeAudioSlot);
         au.time = deadInterface.GetCurrentTapeTime();
         if (au.clip != null)
