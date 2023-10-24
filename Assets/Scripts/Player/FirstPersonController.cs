@@ -134,6 +134,11 @@ namespace StarterAssets
             //Mouselook
             if (!inputMenu)
             {
+                if(Input.GetKey(KeyCode.Escape))
+                {
+                    Application.Quit();
+                }
+
                 currentRotation.x += Input.GetAxis("Mouse X") * sensitivity;
                 currentRotation.y -= Input.GetAxis("Mouse Y") * sensitivity;
                 currentRotation.x = Mathf.Repeat(currentRotation.x, 360);
