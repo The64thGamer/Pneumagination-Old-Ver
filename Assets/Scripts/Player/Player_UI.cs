@@ -317,6 +317,7 @@ public class Player_UI : MonoBehaviour
             {
                 byte[] filestream = File.ReadAllBytes(files[0]);
                 showtape.audioClips = new DEAD_ByteArray[] { new DEAD_ByteArray() { fileName = Path.GetFileName(files[0]), array = filestream } };
+                deadInterface.SetShowtape(0, showtape);
                 UpdateShowtapeText();
             }
         }
@@ -338,6 +339,7 @@ public class Player_UI : MonoBehaviour
         signals = new List<DEAD_Signal_Data>();
         commands = new List<DEAD_Command_Data>();
         dtuReplica = new float[deadInterface.GetDTUArrayLength()];
+        deadInterface.SetShowtape(0, showtape);
         UpdateShowtapeText();
     }
 
