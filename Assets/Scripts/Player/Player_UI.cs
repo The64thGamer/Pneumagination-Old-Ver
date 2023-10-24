@@ -53,6 +53,9 @@ public class Player_UI : MonoBehaviour
         document.rootVisualElement.Q<Button>("Play").clicked += () => SendCommand("Play");
         document.rootVisualElement.Q<Button>("Pause").clicked += () => SendCommand("Pause");
         document.rootVisualElement.Q<Button>("Rewind").clicked += () => SendCommand("Rewind");
+        document.rootVisualElement.Q<TextField>("ShowtapeName").RegisterValueChangedCallback(UpdateShowtapeName);
+        document.rootVisualElement.Q<TextField>("ShowtapeAuthor").RegisterValueChangedCallback(UpdateShowtapeAuthor);
+        document.rootVisualElement.Q<TextField>("ShowtapeDescription").RegisterValueChangedCallback(UpdateShowDescription);
     }
 
     private void Start()
@@ -96,6 +99,22 @@ public class Player_UI : MonoBehaviour
         {
             StartCoroutine(UpdateShowMaxLength());
         }
+    }
+
+    void UpdateShowtapeName(UnityEngine.UIElements.ChangeEvent<string> newName)
+    {
+        showtape.name = newName.newValue;
+        UpdateShowtapeText();
+    }
+    void UpdateShowtapeAuthor(UnityEngine.UIElements.ChangeEvent<string> newName)
+    {
+        showtape.author = newName.newValue;
+        UpdateShowtapeText();
+    }
+    void UpdateShowDescription(UnityEngine.UIElements.ChangeEvent<string> newName)
+    {
+        showtape.description = newName.newValue;
+        UpdateShowtapeText();
     }
 
     IEnumerator UpdateShowMaxLength()
