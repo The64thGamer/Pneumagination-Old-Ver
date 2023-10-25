@@ -7,16 +7,15 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Blank Wallpaper
+  m_Name: Ceiling
   m_Shader: {fileID: -6465566751694194690, guid: 1b46ae3274fac824c862fc49987734c8,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _DISABLE_SSR_TRANSPARENT
-  - _MATERIALTYPE_CONCRETE
+  - _MATERIALTYPE_STANDARD
   m_InvalidKeywords:
-  - _DEPTHOFFSET_ON
   - _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -35,7 +34,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _AO_Rough_Metal:
-        m_Texture: {fileID: 2800000, guid: 610646a59bf72f94eb8f2db8f1a6e646, type: 3}
+        m_Texture: {fileID: 2800000, guid: 39d43419cacaa9f408fea17e5e1a7300, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -63,15 +62,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Diffuse_Map:
-        m_Texture: {fileID: 2800000, guid: e608a9175543e57488bd79b66d73e345, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6f5a8d482819c7544a3f2c338af47ba3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissiveColorMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Height:
-        m_Texture: {fileID: 2800000, guid: 07a3b38c347163e4c9f47d9769288488, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
@@ -103,7 +98,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal_Map:
-        m_Texture: {fileID: 2800000, guid: e992489a877f4e14dae44d918b3bee1a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9e4d9a39ced684c44aed17fefe5d918b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecularColorMap:
@@ -186,7 +181,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _DepthOffsetEnable: 1
+    - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
     - _DetailSmoothnessScale: 1
@@ -207,7 +202,7 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _Extra_Shininess: 0.622
+    - _Extra_Shininess: 1
     - _Grime: 0
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
@@ -223,7 +218,7 @@ Material:
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _MATERIALTYPE: 2
+    - _MATERIALTYPE: 0
     - _MaterialID: 1
     - _MaterialTypeMask: 2
     - _Metallic: 0
@@ -272,7 +267,7 @@ Material:
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _Thickness: 1
-    - _Tiling: 0.1016
+    - _Tiling: 0.1524
     - _TransmissionEnable: 1
     - _TransmissionMask: 1
     - _TransparentBackfaceEnable: 0
@@ -294,7 +289,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.62352943, g: 0.5529412, b: 0.4745098, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

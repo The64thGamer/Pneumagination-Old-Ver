@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Title Screen.unity
     guid: a4559bed5a333e5478a35a18a36f8f5c
   - enabled: 1
-    path: Assets/Scenes/Main Map.unity
+    path: Assets/Scenes/Fast Food Place.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
