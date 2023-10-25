@@ -73,7 +73,7 @@ namespace StarterAssets
                 height = 5.5f;
                 PlayerPrefs.SetFloat("Settings: PlayerHeight", height);
             }
-            height -= -0.127f;
+            height -= 0.41f;
 
             fov = PlayerPrefs.GetFloat("Settings: FOV");
             if (fov == 0)
