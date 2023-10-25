@@ -349,8 +349,8 @@ namespace StarterAssets
         {
             float newHeight = Mathf.Lerp(height, height / 2.0f, crouchCurve.Evaluate(currentPositionData.currentCrouchLerp));
             camOffet.localPosition = new Vector3(0, newHeight, 0);
-            _controller.height = newHeight;
-            _controller.center = new Vector3(0, newHeight/2.0f, 0);
+            _controller.height = newHeight + 0.41f;
+            _controller.center = new Vector3(0, (newHeight+ 0.41f) /2.0f, 0);
         }
 
         public bool CheckifPlayerInMenu()
