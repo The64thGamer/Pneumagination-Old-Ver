@@ -2,8 +2,8 @@
     <Style src="project://database/Assets/UI/USS/Test.uss?fileID=7433441132597879392&amp;guid=8188b2563d7b06e40b894faa1480da29&amp;type=3#Test" />
     <ui:VisualElement style="flex-grow: 1; background-color: rgb(72, 72, 72); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
         <ui:VisualElement name="MainMenu" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
-            <ui:Label tabindex="-1" text="Pneumagination" display-tooltip-when-elided="true" style="font-size: 70px; -unity-font-style: bold;" />
-            <ui:Label tabindex="-1" text="Alpha v0.2" display-tooltip-when-elided="true" style="font-size: 40px;" />
+            <ui:Label tabindex="-1" text="Pneumagination" display-tooltip-when-elided="true" style="font-size: 70px; -unity-font-style: bold; -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;);" />
+            <ui:Label tabindex="-1" text="Alpha v0.2" display-tooltip-when-elided="true" style="font-size: 40px; -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;);" />
             <ui:VisualElement style="flex-grow: 1;" />
             <ui:VisualElement style="flex-grow: 1; justify-content: space-evenly;">
                 <ui:Button text="Load Map" display-tooltip-when-elided="true" name="LoadMap" style="font-size: 70px; width: 600px;" />
