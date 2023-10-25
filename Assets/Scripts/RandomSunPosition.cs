@@ -1,13 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RandomSunPosition : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] float timeMultiplier = 15;
+    float timeOfDay;
+    float randomPitch;
+
     void Start()
     {
-        this.transform.eulerAngles = new Vector3(Random.Range(135.0f,45.0f),Random.Range(0.0f,360.0f), 0);
+        timeOfDay = Random.Range(0.41f * 86400, 0.58f * 86400);
+        randomPitch = Random.Range(0.0f, 360.0f);
+    }
+
+    private void Update()
+    {
+        timeOfDay = (timeOfDay + Time.deltaTime * timeMultiplier) % 86400;
+        transform.localRotation = Quaternion.Euler(((timeOfDay / 86400) * 360f) - 90, randomPitch, 0);
     }
 
 }
