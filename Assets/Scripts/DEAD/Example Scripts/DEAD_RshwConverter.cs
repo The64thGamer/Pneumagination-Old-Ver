@@ -111,7 +111,7 @@ public class DEAD_RshwConverter : MonoBehaviour
                     int index = oldShow.signalData[i] - 1;
                     if (oldShow.signalData[i] >= 151)
                     {
-                        index -= 24;
+                        index -= 22;
                     }
                     currentIndexes.Add(index);
                     showtape.layers[0].signals.Add(new DEAD_Signal_Data() { dtuIndex = index, time = time / 60.0f, value = 1 });
