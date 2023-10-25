@@ -340,10 +340,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd053400822b65548becce89525f8050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataManager: {fileID: 0}
   playerUI: {fileID: 9031352389853259661}
   _mainCamera: {fileID: 6487522925483904757}
   camOffet: {fileID: 2556485762120783340}
-  isPaused: 0
   moveAxis:
     m_UseReference: 0
     m_Action:
@@ -436,23 +436,23 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
-  menuAction:
+  editorMenu:
     m_UseReference: 0
     m_Action:
-      m_Name: Menu
+      m_Name: Editor Menu
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 708165cb-014b-4bb7-b7bc-57d5f079ce17
+      m_Id: 5602894c-76a3-49e0-8384-fdf889f063e0
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 20aaf1b7-d551-4c7e-83fb-4e7dff2829ee
+        m_Id: b6b12ad6-d8a2-47c0-98e2-6e8efd414dbc
         m_Path: <Keyboard>/e
         m_Interactions: 
         m_Processors: 
         m_Groups: 
-        m_Action: Menu
+        m_Action: Editor Menu
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
@@ -513,6 +513,26 @@ MonoBehaviour:
         m_Processors: 
         m_Groups: 
         m_Action: Fov Down
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  flyMenu:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Fly Menu
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 81c79aba-1e45-401f-b34c-9e0abd9b2007
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 143f8e16-7713-4524-bb3c-cfc22779b42d
+        m_Path: <Keyboard>/tab
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Fly Menu
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
@@ -578,9 +598,11 @@ MonoBehaviour:
   inputJump: 0
   inputCrouch: 0
   inputCrouchAlreadyPressed: 0
-  inputMenu: 0
-  inputMenuAlreadyPressed: 0
+  inputEditorMenu: 0
+  inputEditorMenuAlreadyPressed: 0
   inputRun: 0
+  inputFlyMenu: 0
+  inputFlyMenuAlreadyPressed: 0
   inputMovement: {x: 0, y: 0}
 --- !u!143 &2662667457579806043
 CharacterController:

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 4150.139, g: 4721.8716, b: 5332.8677, a: 1}
+  m_IndirectSpecularColor: {r: 4150.6587, g: 4721.0396, b: 5328.844, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1199,6 +1199,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 908903d2c418e234688f5524446ee93e,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 24000
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 908903d2c418e234688f5524446ee93e,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 24000
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 908903d2c418e234688f5524446ee93e,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
@@ -1245,6 +1255,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 908903d2c418e234688f5524446ee93e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 908903d2c418e234688f5524446ee93e,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 908903d2c418e234688f5524446ee93e,
@@ -3686,6 +3701,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5555639428295138727, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: dataManager
+      value: 
+      objectReference: {fileID: 1913721398}
+    - target: {fileID: 5555639428295138727, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: flyMenu.m_Action.m_Id
+      value: f363a025-7d04-42a4-b3fe-defc4b0b6fd6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555639428295138727, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: flyMenu.m_Action.m_Name
+      value: Fly Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555639428295138727, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: editorMenu.m_Action.m_Id
+      value: ddc46c9a-d663-4dfc-99fd-6a6d6d153e4e
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555639428295138727, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: editorMenu.m_Action.m_Name
+      value: Editor Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 7198735824386820814, guid: 1c330a5dda1766344b18a150867e4570,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4487,7 +4527,7 @@ Transform:
   m_GameObject: {fileID: 1913721395}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -40.4866, y: -165.35843, z: -209.06595}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4507,6 +4547,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rainPercent: 0
   snowPercent: 0
+  worldFlyingPosition: {x: 0, y: 0, z: 0}
+  worldFlyingSphereSize: 60
 --- !u!114 &1913721400
 MonoBehaviour:
   m_ObjectHideFlags: 0

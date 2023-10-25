@@ -11,21 +11,21 @@ namespace StarterAssets
     {
 
         [Header("Objects")]
+        [SerializeField] Data_Manager dataManager;
         [SerializeField] Player_UI playerUI;
         [SerializeField] Camera _mainCamera;
         [SerializeField] Transform camOffet;
-
-        [Header("Modifiers")]
-        [SerializeField] bool isPaused;
 
         [Header("Input")]
         [SerializeField] InputActionProperty moveAxis;
         [SerializeField] InputActionProperty jump;
         [SerializeField] InputActionProperty crouch;
-        [SerializeField] InputActionProperty menuAction;
+        [SerializeField] InputActionProperty editorMenu;
         [SerializeField] InputActionProperty run;
         [SerializeField] InputActionProperty fovUp;
         [SerializeField] InputActionProperty fovDown;
+        [SerializeField] InputActionProperty flyMenu;
+
 
         [Header("Stats")]
         [SerializeField] float crouchSpeed = 7;
@@ -51,15 +51,21 @@ namespace StarterAssets
         float height;
         float fov = 80f;
         float fovAdder = 0;
-
+        float fovFly = 20f;
+        float fovFlyAdder = 0;
+        Vector3 currentFlyModePan = Vector3.zero;
+        Vector2 lastFlyCamRotation;
+        Vector2 lastRegularCamRotation;
 
         //Inputs
         public bool inputJump;
         public bool inputCrouch;
         public bool inputCrouchAlreadyPressed;
-        public bool inputMenu;
-        public bool inputMenuAlreadyPressed;
+        public bool inputEditorMenu;
+        public bool inputEditorMenuAlreadyPressed;
         public bool inputRun;
+        public bool inputFlyMenu;
+        public bool inputFlyMenuAlreadyPressed;
         public Vector2 inputMovement;
 
 
@@ -90,10 +96,11 @@ namespace StarterAssets
             moveAxis.action?.Enable();
             jump.action?.Enable();
             crouch.action?.Enable();
-            menuAction.action?.Enable();
+            editorMenu.action?.Enable();
             run.action?.Enable();
             fovUp.action?.Enable();
             fovDown.action?.Enable();
+            flyMenu.action?.Enable();
         }
 
         void Update()
@@ -101,66 +108,115 @@ namespace StarterAssets
             if (_controller == null) { return; }
 
             //Menu
-            if (menuAction.action.IsPressed() && !inputMenuAlreadyPressed)
+            if (!inputFlyMenu)
             {
-                inputMenuAlreadyPressed = true;
-                if(inputMenu)
-                {
-                    inputMenu = !playerUI.CheckIfCanExitMenu();
-                }
-                else
-                {
-                    inputMenu = true;
-                }
-                if (inputMenu)
-                {
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
-                else
-                {
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
-
+                EditorMenuCheck();
             }
-            else if (!menuAction.action.IsPressed())
+            if (!inputEditorMenu)
             {
-                inputMenuAlreadyPressed = false;
+                FlyMenuChuck();
             }
 
-
+            inputMovement = Vector2.zero;
+            inputJump = false;
 
             //Mouselook
-            if (!inputMenu)
+            if (!inputEditorMenu && !inputFlyMenu)
             {
-                if(Input.GetKey(KeyCode.Escape))
+                GetPlayerCameraInputs();
+                GetPlayerMovingInputs();
+                GetPauseEscapeInputs();
+                UpdateFOV();
+
+                _mainCamera.transform.localPosition = Vector3.zero;
+
+            }
+            if (inputFlyMenu)
+            {
+                GetPlayerCameraInputs();
+                GetPauseEscapeInputs();
+                UpdateFOV();
+
+                Vector3 flyPos = dataManager.GetWorldFlyingPosition();
+                float flyRadius = dataManager.GetWorldFlyingSphereSize();
+
+                if (Input.GetMouseButton(0))
                 {
-                    Application.Quit();
+                    currentFlyModePan -= _mainCamera.transform.up * Input.GetAxis("Mouse Y") * sensitivity;
+                    currentFlyModePan -= _mainCamera.transform.right * Input.GetAxis("Mouse X") * sensitivity;
+                    if(Vector3.Distance(flyPos,currentFlyModePan) > flyRadius)
+                    {
+                        currentFlyModePan = (currentFlyModePan - flyPos).normalized;
+                        currentFlyModePan *= flyRadius;
+                    }
                 }
 
+                _mainCamera.transform.position = flyPos + currentFlyModePan - (300 * _mainCamera.transform.forward);
+            }
+
+            //Move
+            currentPositionData.position = transform.position;
+            currentPositionData.velocity = _controller.velocity;
+            currentPositionData.mainCamforward = _mainCamera.transform.forward;
+            currentPositionData.mainCamRight = _mainCamera.transform.right;
+            currentPositionData = MovePlayer(currentPositionData);
+            _controller.Move(currentPositionData.velocity);
+        }
+
+        void GetPlayerMovingInputs()
+        {
+            //Grab Inputs
+            inputMovement = moveAxis.action.ReadValue<Vector2>();
+            inputJump = jump.action.IsPressed();
+            inputRun = run.action.IsPressed();
+
+            //Crouch
+            if (crouch.action.IsPressed() && !inputCrouchAlreadyPressed)
+            {
+                inputCrouchAlreadyPressed = true;
+                inputCrouch = !inputCrouch;
+            }
+            else if (!crouch.action.IsPressed())
+            {
+                inputCrouchAlreadyPressed = false;
+            }
+        }
+
+        void GetPauseEscapeInputs()
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+        }
+
+        void GetPlayerCameraInputs()
+        {
+            if (!inputFlyMenu || (inputFlyMenu && Input.GetMouseButton(1)))
+            {
                 currentRotation.x += Input.GetAxis("Mouse X") * sensitivity;
                 currentRotation.y -= Input.GetAxis("Mouse Y") * sensitivity;
-                currentRotation.x = Mathf.Repeat(currentRotation.x, 360);
-                currentRotation.y = Mathf.Clamp(currentRotation.y, -maxYAngle, maxYAngle);
-                Quaternion rot = Quaternion.Euler(currentRotation.y, currentRotation.x, 0);
-                _mainCamera.transform.rotation = rot;
-                //Grab Inputs
-                inputMovement = moveAxis.action.ReadValue<Vector2>();
-                inputJump = jump.action.IsPressed();
-                inputRun = run.action.IsPressed();
-
-                //Crouch
-                if (crouch.action.IsPressed() && !inputCrouchAlreadyPressed)
+            }
+            currentRotation.x = Mathf.Repeat(currentRotation.x, 360);
+            currentRotation.y = Mathf.Clamp(currentRotation.y, -maxYAngle, maxYAngle);
+            Quaternion rot = Quaternion.Euler(currentRotation.y, currentRotation.x, 0);
+            _mainCamera.transform.rotation = rot;
+            //Fov
+            if (inputFlyMenu)
+            {
+                if (fovUp.action.IsPressed())
                 {
-                    inputCrouchAlreadyPressed = true;
-                    inputCrouch = !inputCrouch;
+                    fovFlyAdder = -1.0f;
                 }
-                else if (!crouch.action.IsPressed())
+                if (fovDown.action.IsPressed())
                 {
-                    inputCrouchAlreadyPressed = false;
+                    fovFlyAdder = 1.0f;
                 }
-                //Fov
+                fovFly = Mathf.Clamp(Mathf.Lerp(fovFly, fovFly + (fovFlyAdder), fovCurve.Evaluate(Mathf.Abs(fovFlyAdder))), 0.2f, 40f);
+                fovFlyAdder = Mathf.Clamp01(Mathf.Abs(fovFlyAdder) - (Time.deltaTime * 10f)) * Mathf.Sign(fovFlyAdder);
+            }
+            else
+            {
                 if (fovUp.action.IsPressed())
                 {
                     fovAdder = -1.0f;
@@ -172,20 +228,6 @@ namespace StarterAssets
                 fov = Mathf.Clamp(Mathf.Lerp(fov, fov + (fovAdder / 2.0f), fovCurve.Evaluate(Mathf.Abs(fovAdder))), 1.0f, 120f);
                 fovAdder = Mathf.Clamp01(Mathf.Abs(fovAdder) - (Time.deltaTime * 1.5f)) * Mathf.Sign(fovAdder);
             }
-            else
-            {
-                inputMovement = Vector2.zero;
-                inputJump = false;
-            }
-
-            currentPositionData.position = transform.position;
-            currentPositionData.velocity = _controller.velocity;
-            currentPositionData.mainCamforward = _mainCamera.transform.forward;
-            currentPositionData.mainCamRight = _mainCamera.transform.right;
-
-            currentPositionData = MovePlayer(currentPositionData);
-
-            _controller.Move(currentPositionData.velocity);
 
         }
 
@@ -200,7 +242,7 @@ namespace StarterAssets
             right.Normalize();
             Vector3 newAxis = forward * inputMovement.y + right * inputMovement.x;
             Vector3 targetSpeed = new Vector3(newAxis.x, 0.0f, newAxis.z).normalized * baseSpeed / 25.0f;
-            if(inputRun)
+            if (inputRun)
             {
                 targetSpeed *= 2f;
             }
@@ -216,7 +258,6 @@ namespace StarterAssets
                 currentPositionData.currentCrouchLerp = Mathf.Clamp01(currentPositionData.currentCrouchLerp - (Time.deltaTime * crouchSpeed));
             }
             targetSpeed *= ((1 - currentPositionData.currentCrouchLerp) / 2.0f) + 0.5f;
-            UpdateFOV();
             ModifyPlayerHeight();
 
             //Movement rotation halted in midair
@@ -332,9 +373,82 @@ namespace StarterAssets
             return currentPositionData;
         }
 
+        void EditorMenuCheck()
+        {
+            if (editorMenu.action.IsPressed() && !inputEditorMenuAlreadyPressed)
+            {
+                inputEditorMenuAlreadyPressed = true;
+                if (inputEditorMenu)
+                {
+                    inputEditorMenu = !playerUI.CheckIfCanExitMenu();
+                }
+                else
+                {
+                    inputEditorMenu = true;
+                }
+                if (inputEditorMenu)
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
+
+            }
+            else if (!editorMenu.action.IsPressed())
+            {
+                inputEditorMenuAlreadyPressed = false;
+            }
+        }
+
+        void FlyMenuChuck()
+        {
+            if (flyMenu.action.IsPressed() && !inputFlyMenuAlreadyPressed)
+            {
+                inputFlyMenuAlreadyPressed = true;
+                if (inputFlyMenu)
+                {
+                    inputFlyMenu = !playerUI.CheckIfCanExitMenu();
+                }
+                else
+                {
+                    inputFlyMenu = true;
+                }
+                if (inputFlyMenu)
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                    lastRegularCamRotation = currentRotation;
+                    currentRotation = lastFlyCamRotation;
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    lastFlyCamRotation = currentRotation;
+                    currentRotation = lastRegularCamRotation;
+                }
+
+            }
+            else if (!flyMenu.action.IsPressed())
+            {
+                inputFlyMenuAlreadyPressed = false;
+            }
+        }
+
         public void UpdateFOV()
         {
-            _mainCamera.fieldOfView = fov;
+            if (inputFlyMenu)
+            {
+                _mainCamera.fieldOfView = fovFly;
+            }
+            else
+            {
+                _mainCamera.fieldOfView = fov;
+            }
         }
 
         public void ForceNewPosition(Vector3 pos)
@@ -350,12 +464,12 @@ namespace StarterAssets
             float newHeight = Mathf.Lerp(height, height / 2.0f, crouchCurve.Evaluate(currentPositionData.currentCrouchLerp));
             camOffet.localPosition = new Vector3(0, newHeight, 0);
             _controller.height = newHeight + 0.41f;
-            _controller.center = new Vector3(0, (newHeight+ 0.41f) /2.0f, 0);
+            _controller.center = new Vector3(0, (newHeight + 0.41f) / 2.0f, 0);
         }
 
         public bool CheckifPlayerInMenu()
         {
-            return inputMenu;
+            return inputEditorMenu;
         }
 
     }

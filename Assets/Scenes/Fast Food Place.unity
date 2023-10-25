@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 4153.268, g: 4726.805, b: 5338.5005, a: 1}
+  m_IndirectSpecularColor: {r: 4150.5044, g: 4721.5356, b: 5332.1567, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4157,7 +4157,6 @@ MonoBehaviour:
   m_Script: {fileID: 1787309872}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Entries: []
 --- !u!4 &794460555
 Transform:
   m_ObjectHideFlags: 19
@@ -9352,6 +9351,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rainPercent: 0
   snowPercent: 0
+  worldFlyingPosition: {x: 0, y: 0, z: 0}
+  worldFlyingSphereSize: 120
 --- !u!114 &1913721400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10748,6 +10749,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5555639428295138727, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: dataManager
+      value: 
+      objectReference: {fileID: 1913721398}
     - target: {fileID: 7198735824386820814, guid: 1c330a5dda1766344b18a150867e4570,
         type: 3}
       propertyPath: m_LocalPosition.x
