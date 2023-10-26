@@ -25,7 +25,7 @@ Plans are to develop this game publically and freely for the first part of devel
 ![image](https://github.com/The64thGamer/Pneumagination/assets/69170079/96c1bfc3-e7cb-42a9-871a-d632968a5a35)
 
 # DEAD Engine
-A completely rewritten from scratch animatronics engine based off what was learned from the RR Engine. The Digital Emulators of Animatronic Devices Engine seeks to be more modular than RR and become more of a framework for others to implement their own code to control it. DEAD Engine scripts are going to be completely detatched from the Pneumagination game, and are accessible in Assets/Scripts/DEAD.
+A completely rewritten from scratch animatronics engine based off what was learned from the RR Engine. The Digital Emulators of Animatronic Drivers Engine seeks to be more modular than RR and become more of a framework for others to implement their own code to control it. DEAD Engine scripts are going to be completely detatched from the Pneumagination game, and are accessible in Assets/Scripts/DEAD.
 
 The engine is also going to focus on bringing more physics-accurate simulations to animatronics, focusing on simulated airflow for cylinders, depleting air in air tanks, and shakiness with large movements. Modders will also have an easier time setting up animatronics with new automated Animation Controller creation. 
 
