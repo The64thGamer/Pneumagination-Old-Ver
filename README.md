@@ -1,5 +1,8 @@
+<p align="center">
+<img src="https://raw.githubusercontent.com/The64thGamer/Pneumagination/main/Assets/UI/Logo/FullTallRender.png" height="800">
+</p>
+
 # Pneumagination
-![image](https://github.com/The64thGamer/Pneumagination/assets/69170079/96c1bfc3-e7cb-42a9-871a-d632968a5a35)
 
 Pneumagination is a work-in-progress animatronic restaurant simulation game, where you create your own animatronic-filled store and compete in the market.
 
@@ -18,6 +21,8 @@ If you wanna discuss Pneumagination with other people you can join my personal [
 ### General Plans
 
 Plans are to develop this game publically and freely for the first part of development, sort of a free Early Access, and when the game gets closer to completion I'll put it on Steam while still leaving the free version up. Steam version will also have an open source codebase, but asset files will be locked behind a purchase. I wanna make sure the game is as open and moddable as possible, alongside having the DEAD Engine be easily used in other animatronic projects if users would like to.
+
+![image](https://github.com/The64thGamer/Pneumagination/assets/69170079/96c1bfc3-e7cb-42a9-871a-d632968a5a35)
 
 # DEAD Engine
 A completely rewritten from scratch animatronics engine based off what was learned from the RR Engine. The Digital Emulators of Animatronic Devices Engine seeks to be more modular than RR and become more of a framework for others to implement their own code to control it. DEAD Engine scripts are going to be completely detatched from the Pneumagination game, and are accessible in Assets/Scripts/DEAD.
