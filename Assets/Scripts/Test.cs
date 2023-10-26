@@ -17,11 +17,15 @@ public class Test : MonoBehaviour
     void OnEnable()
     {
         UnityEngine.Cursor.lockState = CursorLockMode.None;
-        SwitchMenu();
-        document.rootVisualElement.Q<Button>("LoadMap").clicked += () => LoadMap();
-        document.rootVisualElement.Q<Button>("NameGenerator").clicked += () => SwitchNameGen();
+        SwitchMenu(0);
+        document.rootVisualElement.Q<Button>("LoadFirstMap").clicked += () => LoadMap(0);
+        document.rootVisualElement.Q<Button>("LoadSecondMap").clicked += () => LoadMap(1);
+        document.rootVisualElement.Q<Button>("Settings").clicked += () => SwitchMenu(2);
+        document.rootVisualElement.Q<Button>("Exit").clicked += () => Application.Quit();
+        document.rootVisualElement.Q<Button>("NameGenerator").clicked += () => SwitchMenu(1);
         document.rootVisualElement.Q<Button>("GenBusiness").clicked += () => GenerateName();
-        document.rootVisualElement.Q<Button>("BackButton").clicked += () => SwitchMenu();
+        document.rootVisualElement.Q<Button>("BackButton").clicked += () => SwitchMenu(0);
+        document.rootVisualElement.Q<Button>("BackFromSettings").clicked += () => SwitchMenu(0);
         document.rootVisualElement.Q<Toggle>("RandomNames").RegisterValueChangedCallback(ToggleRandomName);
 
         int seed = Random.Range(int.MinValue, int.MaxValue);
@@ -55,29 +59,50 @@ public class Test : MonoBehaviour
         document.rootVisualElement.Q<Label>("FinalName").text = "\"" + Name_Generator.GenerateLocationName(seed, document.rootVisualElement.Q<TextField>("FirstName").value, document.rootVisualElement.Q<TextField>("LastName").value) + "\"";
     }
 
-    void LoadMap()
+    void LoadMap(int map)
     {
         loadingScene = true;
-        SceneManager.LoadSceneAsync("Main Map");
-    }
-
-    void SwitchNameGen()
-    {
-        if(loadingScene)
+        switch (map)
         {
-            return;
+            case 0:
+                SceneManager.LoadSceneAsync("Fast Food Place");
+                break;
+            case 1:
+                SceneManager.LoadSceneAsync("Drive Thru");
+                break;
+            default:
+                break;
         }
-        document.rootVisualElement.Q<VisualElement>("MainMenu").style.display = DisplayStyle.None;
-        document.rootVisualElement.Q<VisualElement>("MenuGenerator").style.display = DisplayStyle.Flex;
     }
 
-    void SwitchMenu()
+    void SwitchMenu(int menu)
     {
         if (loadingScene)
         {
             return;
         }
-        document.rootVisualElement.Q<VisualElement>("MainMenu").style.display = DisplayStyle.Flex;
-        document.rootVisualElement.Q<VisualElement>("MenuGenerator").style.display = DisplayStyle.None;
+
+        VisualElement mainMenu = document.rootVisualElement.Q<VisualElement>("MainMenu");
+        mainMenu.style.display = DisplayStyle.None;
+        VisualElement menuGenerator = document.rootVisualElement.Q<VisualElement>("MenuGenerator");
+        menuGenerator.style.display = DisplayStyle.None;
+        VisualElement menuSettings = document.rootVisualElement.Q<VisualElement>("MenuSettings");
+        menuSettings.style.display = DisplayStyle.None;
+
+        switch (menu)
+        {
+            case 0:
+                mainMenu.style.display = DisplayStyle.Flex;
+                break;
+            case 1:
+                menuGenerator.style.display = DisplayStyle.Flex;
+                break;
+            case 2:
+                menuSettings.style.display = DisplayStyle.Flex;
+                break;
+            default:
+                break;
+        }
+
     }
 }

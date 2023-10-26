@@ -2,3 +2,35 @@
     min-width: 70px;
     min-height: 70px;
 }
+
+.titlescreenbuttons {
+    background-color: rgb(206, 94, 86);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    -unity-font-definition: url('project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&guid=cc1735a3c585aba4480bc03c8d93b029&type=3#PTMono-Regular');
+    color: rgb(255, 255, 255);
+    font-size: 40px;
+    -unity-text-align: upper-left;
+}
+
+.titlescreenboxes {
+    background-color: rgba(206, 94, 86, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    -unity-font-definition: url('project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&guid=cc1735a3c585aba4480bc03c8d93b029&type=3#PTMono-Regular');
+    color: rgb(255, 255, 255);
+    font-size: 40px;
+    -unity-text-align: upper-left;
+}
