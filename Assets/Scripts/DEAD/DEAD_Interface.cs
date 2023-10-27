@@ -25,6 +25,8 @@ public class DEAD_Interface : MonoBehaviour
     //Values
     bool playingShowtape;
     float currentTapeSpeed;
+    float exactTimePlayedTape;
+    float pausedTapeTime;
     bool autoRewind = true;
     LoadingState loadingState;
 
@@ -68,12 +70,38 @@ public class DEAD_Interface : MonoBehaviour
             return;
         }
 
+        //Stopping
+        if(!playingShowtape && exactTimePlayedTape >= 0)
+        {
+            exactTimePlayedTape = -1;
+            pausedTapeTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
+        }
+
         //Playback
         if (playingShowtape)
         {
+            //Exact Timer
+            if(exactTimePlayedTape <= 0)
+            {
+                exactTimePlayedTape = Time.time - pausedTapeTime;
+                pausedTapeTime = 0;
+            }
+
             //Time Elapsed
             float oldTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
-            float currentTimeElapsed = showtapeSlots[activeShowtapeSlot].currentTimeElapsed + (Time.deltaTime * currentTapeSpeed);
+
+            //Use accurate timing for forwards, use less accurate for reverse
+            float currentTimeElapsed;
+            if(Mathf.Sign(currentTapeSpeed) > 0)
+            {
+                currentTimeElapsed = (Time.time - exactTimePlayedTape) * currentTapeSpeed;
+            }
+            else
+            {
+                currentTimeElapsed = showtapeSlots[activeShowtapeSlot].currentTimeElapsed + (Time.deltaTime * currentTapeSpeed);
+            }
+
+
             if (currentTimeElapsed < 0)
             {
                 currentTimeElapsed = 0;

@@ -16,7 +16,9 @@
     -unity-font-definition: url('project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&guid=cc1735a3c585aba4480bc03c8d93b029&type=3#PTMono-Regular');
     color: rgb(255, 255, 255);
     font-size: 40px;
-    -unity-text-align: upper-left;
+    -unity-text-align: middle-center;
+    max-height: 70px;
+    flex-grow: 1;
 }
 
 .titlescreenboxes {
