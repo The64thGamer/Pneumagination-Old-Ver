@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: center; justify-content: flex-start; margin-top: 5px;">
+        <ui:Label tabindex="-1" text="Global Volume" display-tooltip-when-elided="true" style="min-width: 325px; align-items: center; align-self: center; flex-direction: row;" />
+        <ui:Slider show-input-field="true" high-value="100" value="100" name="GlobalVolume" style="align-items: center; flex-shrink: 1; flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,17 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Slider" src="project://database/Assets/UI/UXML/Slider.uxml?fileID=9197481963319205126&amp;guid=40b41ee321da2104c93f37f9a2c9c59a&amp;type=3#Slider" />
     <Style src="project://database/Assets/UI/USS/Test.uss?fileID=7433441132597879392&amp;guid=8188b2563d7b06e40b894faa1480da29&amp;type=3#Test" />
     <ui:GroupBox style="flex-grow: 1; flex-shrink: 1; flex-direction: row; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
-        <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/UI/Red%20Blueprint.png?fileID=2800000&amp;guid=5a3f372a4694c0040b579beec450a32f&amp;type=3#Red Blueprint&apos;); -unity-background-scale-mode: stretch-to-fill; min-width: auto; min-height: auto; flex-direction: row; -unity-slice-left: 45; -unity-slice-right: 45; -unity-slice-top: 45; -unity-slice-bottom: 45; max-width: 50%;">
-            <ui:VisualElement name="MainMenu" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
+        <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/UI/Red%20Blueprint.png?fileID=2800000&amp;guid=5a3f372a4694c0040b579beec450a32f&amp;type=3#Red Blueprint&apos;); -unity-background-scale-mode: scale-and-crop; min-width: auto; min-height: auto; flex-direction: row; -unity-slice-left: 45; -unity-slice-right: 45; -unity-slice-top: 45; -unity-slice-bottom: 45; max-width: 50%;">
+            <ui:VisualElement name="MainMenu" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none;">
                 <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: space-evenly;">
                     <ui:Button text="Load First Map" display-tooltip-when-elided="true" name="LoadFirstMap" class="titlescreenbuttons" />
                     <ui:Button text="Load Second Map" display-tooltip-when-elided="true" name="LoadSecondMap" class="titlescreenbuttons" />
                     <ui:Button text="Name Generator" display-tooltip-when-elided="true" name="NameGenerator" class="titlescreenbuttons" />
-                    <ui:Button text="Settings" display-tooltip-when-elided="true" name="Settings" class="titlescreenbuttons" style="display: none;" />
+                    <ui:Button text="Settings" display-tooltip-when-elided="true" name="Settings" class="titlescreenbuttons" style="display: flex;" />
                     <ui:Button text="Exit" display-tooltip-when-elided="true" name="Exit" class="titlescreenbuttons" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1;" />
-                <ui:Label tabindex="-1" text="Alpha 0.3, The 64th Gamer 2023" display-tooltip-when-elided="true" name="Label" style="font-size: 40px; -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;); color: rgb(255, 255, 255);" />
+                <ui:Label tabindex="-1" text="Alpha 0.4, The 64th Gamer 2023" display-tooltip-when-elided="true" name="Label" style="font-size: 40px; -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;); color: rgb(255, 255, 255);" />
             </ui:VisualElement>
             <ui:VisualElement name="MenuGenerator" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none; align-items: stretch;">
                 <ui:Label tabindex="-1" text="Name Generator" display-tooltip-when-elided="true" style="font-size: 40px; -unity-font-style: bold; -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;); color: rgb(255, 255, 255);" />
@@ -27,8 +28,11 @@
                     <ui:Label tabindex="-1" text="&quot;Generated Name&quot;" display-tooltip-when-elided="true" name="FinalName" style="font-size: 50px; -unity-text-align: upper-center; color: rgb(255, 255, 255); -unity-font-style: bold;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="MenuSettings" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none;">
-                <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: space-between;">
+            <ui:VisualElement name="MenuSettings" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
+                <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: flex-start; align-items: stretch;">
+                    <ui:VisualElement style="flex-grow: 0; align-items: auto; flex-direction: column; align-self: auto; justify-content: flex-start;">
+                        <ui:Instance template="Slider" name="Slider" />
+                    </ui:VisualElement>
                     <ui:Button text="Back" display-tooltip-when-elided="true" name="BackFromSettings" class="titlescreenbuttons" />
                 </ui:VisualElement>
             </ui:VisualElement>
