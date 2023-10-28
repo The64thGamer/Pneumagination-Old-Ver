@@ -40,7 +40,13 @@ public class DEAD_Window_Animatronic : Editor
 
         //Setup Animator Controller
         string assetPath = AssetDatabase.GetAssetPath(animator.runtimeAnimatorController);
-        AnimatorController controller = UnityEditor.Animations.AnimatorController.CreateAnimatorControllerAtPath(assetPath);
+        if (assetPath == "")
+        {
+            Debug.LogWarning("Asset Path Null");
+            return;
+        }
+        AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(assetPath);
+
 
         //Add Layers
         DEAD_Actuator[] actuators = dead_Animatronic.GetActuatorInfoCopy();
@@ -53,18 +59,15 @@ public class DEAD_Window_Animatronic : Editor
             newLayer.stateMachine = new AnimatorStateMachine();
             newLayer.stateMachine.name = newLayer.name;
             newLayer.stateMachine.hideFlags = HideFlags.HideInHierarchy;
-            newLayer.stateMachine.AddState(new AnimatorState()
-            {
-                name = actuators[i].actuationName,
-                speed = 0,
-                timeParameterActive = true,
-                timeParameter = uniqueName,
-                motion = actuators[i].animation,
-            }, Vector3.zero);
-            if (AssetDatabase.GetAssetPath(controller) != "")
-            {
-                AssetDatabase.AddObjectToAsset(newLayer.stateMachine, AssetDatabase.GetAssetPath(controller));
-            }
+            AnimatorState state = newLayer.stateMachine.AddState(actuators[i].actuationName);
+            state.name = actuators[i].actuationName;
+            state.speed = 0;
+            state.timeParameterActive = true;
+            state.timeParameter = uniqueName;
+            state.motion = actuators[i].animation;
+
+            AssetDatabase.AddObjectToAsset(state, assetPath);
+            AssetDatabase.AddObjectToAsset(newLayer.stateMachine, assetPath);
             newLayer.blendingMode = AnimatorLayerBlendingMode.Additive;
             newLayer.defaultWeight = 1f;
             controller.AddLayer(newLayer);
