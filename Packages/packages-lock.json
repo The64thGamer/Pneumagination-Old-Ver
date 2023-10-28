@@ -115,9 +115,9 @@
       }
     },
     "com.unity.render-pipelines.high-definition": {
-      "version": "15.0.6",
+      "version": "file:com.unity.render-pipelines.high-definition@15.0.6",
       "depth": 0,
-      "source": "builtin",
+      "source": "embedded",
       "dependencies": {
         "com.unity.mathematics": "1.2.4",
         "com.unity.collections": "1.4.0",
