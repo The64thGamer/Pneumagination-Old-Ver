@@ -42,7 +42,6 @@ public class DEAD_Window_Animatronic : Editor
         //Setup Animator Controller
         AnimatorController controller = AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(animator.runtimeAnimatorController), typeof(AnimatorController)) as AnimatorController;
 
-
         //Add Layers
         for (int i = 0; i < controller.layers.Length; i++)
         {
@@ -70,6 +69,8 @@ public class DEAD_Window_Animatronic : Editor
             state.motion = actuators[i].animation;
             newLayer.blendingMode = AnimatorLayerBlendingMode.Additive;
             newLayer.defaultWeight = 1f;
+            AssetDatabase.AddObjectToAsset(state, controller);
+            AssetDatabase.AddObjectToAsset(newLayer.stateMachine, controller);
 
             controller.AddLayer(newLayer);
             controller.AddParameter(uniqueName, AnimatorControllerParameterType.Float);
