@@ -43,14 +43,8 @@ public class DEAD_Window_Animatronic : Editor
         AnimatorController controller = AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(animator.runtimeAnimatorController), typeof(AnimatorController)) as AnimatorController;
 
         //Add Layers
-        for (int i = 0; i < controller.layers.Length; i++)
-        {
-            controller.RemoveLayer(i);
-        }
-        for (int i = 0; i < controller.parameters.Length; i++)
-        {
-            controller.RemoveParameter(i);
-        }
+        controller.layers = new AnimatorControllerLayer[0];
+        controller.parameters = new AnimatorControllerParameter[0];
 
         DEAD_Actuator[] actuators = dead_Animatronic.GetActuatorInfoCopy();
         for (int i = 0; i < actuators.Length; i++)
