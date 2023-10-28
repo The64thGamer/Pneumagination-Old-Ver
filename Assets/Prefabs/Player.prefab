@@ -63,6 +63,7 @@ GameObject:
   - component: {fileID: 7770876341089469749}
   - component: {fileID: 7346867020699984951}
   - component: {fileID: 3443166164764453272}
+  - component: {fileID: 3285997499659580579}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -363,6 +364,18 @@ MonoBehaviour:
         _enableDenoising: 1
         InjectionPointChecker: 0
         FinalOutputShader: {fileID: 0}
+--- !u!114 &3285997499659580579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529944901283763864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c174b0f8a2fe74a8ad6a68a2933460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3805736980352897171
 GameObject:
   m_ObjectHideFlags: 0

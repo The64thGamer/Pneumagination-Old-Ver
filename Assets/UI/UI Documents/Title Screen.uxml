@@ -29,26 +29,31 @@
             </ui:VisualElement>
             <ui:VisualElement name="MenuSettings" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
                 <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: flex-start; align-items: stretch;">
-                    <ui:VisualElement style="flex-grow: 0; align-items: stretch; flex-direction: column; align-self: auto; justify-content: flex-start;">
-                        <ui:DropdownField label="DLSS:" index="1" choices="Quality,Balanced,Max Performance,Ultra Performance, Off" focusable="false" name="DLSS" class="titlescreenbuttons" />
-                        <ui:DropdownField label="Renderer: " index="0" choices="Raytracing,H-Trace" focusable="false" name="Renderer" class="titlescreenbuttons" />
-                        <ui:VisualElement name="SampleCount" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
-                            <ui:Label tabindex="-1" text="Samples:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
-                            <ui:SliderInt label="&#10;" value="2" high-value="10" show-input-field="true" name="Slider" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
+                    <ui:ScrollView class="titlescreenboxes">
+                        <ui:VisualElement style="flex-grow: 0; align-items: stretch; flex-direction: column; align-self: auto; justify-content: flex-start;">
+                            <ui:DropdownField label="DLSS:" index="1" choices="Quality,Balanced,Max Performance,Ultra Performance, Off" focusable="false" name="DLSS" class="titlescreenbuttons" />
+                            <ui:Label tabindex="-1" text="DLSS provides upscaled rendering to improve performance." display-tooltip-when-elided="true" class="titlescreenboxes" style="font-size: 20px; overflow: hidden; white-space: normal;" />
+                            <ui:DropdownField label="Lighting:" index="1" choices="H-Trace,RT Performance,RT Quality" focusable="false" name="Renderer" class="titlescreenbuttons" />
+                            <ui:Label tabindex="-1" text="SSGI is optionally supported for lower-end cards, but is not the default look for play." display-tooltip-when-elided="true" class="titlescreenboxes" style="font-size: 20px; overflow: hidden; white-space: normal;" />
+                            <ui:DropdownField label="Reflections:" index="0" choices="RT Performance,RT Quality" focusable="false" name="Renderer" class="titlescreenbuttons" />
+                            <ui:VisualElement name="SampleCount" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
+                                <ui:Label tabindex="-1" text="Samples:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
+                                <ui:SliderInt label="&#10;" value="2" high-value="20" show-input-field="true" name="Slider" low-value="1" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
+                            </ui:VisualElement>
+                            <ui:Label tabindex="-1" text="Raytraced GI Sample Count. Each extra sample is very expensive." display-tooltip-when-elided="true" class="titlescreenboxes" style="font-size: 20px;" />
+                            <ui:VisualElement name="Bounces" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
+                                <ui:Label tabindex="-1" text="Bounces:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
+                                <ui:SliderInt label="&#10;" value="1" high-value="3" show-input-field="true" name="Slider" low-value="1" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
+                            </ui:VisualElement>
+                            <ui:Label tabindex="-1" text="Raytraced GI Bounces. Each extra bounce is very expensive." display-tooltip-when-elided="true" name="Label" class="titlescreenboxes" style="font-size: 20px;" />
+                            <ui:VisualElement name="ReflectionProbes" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
+                                <ui:Label tabindex="-1" text="Probe Timer:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
+                                <ui:SliderInt label="&#10;" value="30" high-value="60" show-input-field="true" name="Slider" low-value="1" inverted="true" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
+                            </ui:VisualElement>
+                            <ui:Label tabindex="-1" text="A timer for Reflection Probes to update. Each probe is randomly offset to update at different points in time within the set timer." display-tooltip-when-elided="true" name="Label" class="titlescreenboxes" style="font-size: 20px; overflow: hidden; white-space: normal;" />
                         </ui:VisualElement>
-                        <ui:Label tabindex="-1" text="Raytraced Sample Count. Each extra sample is very expensive." display-tooltip-when-elided="true" class="titlescreenboxes" style="font-size: 20px;" />
-                        <ui:VisualElement name="Bounces" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
-                            <ui:Label tabindex="-1" text="Bounces:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
-                            <ui:SliderInt label="&#10;" value="1" high-value="3" show-input-field="true" name="Slider" low-value="1" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
-                        </ui:VisualElement>
-                        <ui:Label tabindex="-1" text="Raytraced Bounces. Each extra bounce is very expensive." display-tooltip-when-elided="true" name="Label" class="titlescreenboxes" style="font-size: 20px;" />
-                        <ui:VisualElement name="ReflectionProbes" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
-                            <ui:Label tabindex="-1" text="Probe Timer:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
-                            <ui:SliderInt label="&#10;" value="60" high-value="60" show-input-field="true" name="Slider" low-value="1" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
-                        </ui:VisualElement>
-                        <ui:Label tabindex="-1" text="A timer for Reflection Probes to update. Each probe is randomly offset to update at different points in time within the set timer." display-tooltip-when-elided="true" name="Label" class="titlescreenboxes" style="font-size: 20px; overflow: hidden; white-space: normal;" />
-                    </ui:VisualElement>
-                    <ui:VisualElement style="flex-grow: 1; align-self: auto; flex-direction: column; align-items: auto; flex-shrink: 1; justify-content: flex-end;">
+                    </ui:ScrollView>
+                    <ui:VisualElement style="flex-grow: 1; align-self: auto; flex-direction: column; align-items: auto; flex-shrink: 1; justify-content: flex-end; min-height: 99px;">
                         <ui:Button text="Back" display-tooltip-when-elided="true" name="BackFromSettings" class="titlescreenbuttons" style="flex-grow: 1; flex-direction: row; flex-shrink: 0;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
