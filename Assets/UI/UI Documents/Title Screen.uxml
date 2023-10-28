@@ -30,11 +30,15 @@
             <ui:VisualElement name="MenuSettings" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
                 <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: flex-start; align-items: stretch;">
                     <ui:VisualElement style="flex-grow: 0; align-items: stretch; flex-direction: column; align-self: auto; justify-content: flex-start;">
-                        <ui:VisualElement name="Samples">
-                            <ui:VisualElement name="Container" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: center; justify-content: flex-start; margin-top: 5px;">
-                                <ui:Label tabindex="-1" text="Samples" display-tooltip-when-elided="true" name="Label" style="min-width: 325px; align-items: center; align-self: center; flex-direction: row;" />
-                                <ui:Slider show-input-field="true" high-value="100" value="100" name="Slider" style="align-items: center; flex-shrink: 1; flex-grow: 1;" />
-                            </ui:VisualElement>
+                        <ui:DropdownField label="DLSS:" index="1" choices="Quality,Balanced,Max Performance,Ultra Performance, Off" focusable="false" name="DLSS" class="titlescreenbuttons" />
+                        <ui:DropdownField label="Renderer: " index="0" choices="Raytracing,H-Trace" focusable="false" name="Renderer" class="titlescreenbuttons" />
+                        <ui:VisualElement name="SampleCount" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
+                            <ui:Label tabindex="-1" text="Samples:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
+                            <ui:SliderInt label="&#10;" value="2" high-value="10" show-input-field="true" name="Slider" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Bounces" class="titlescreenboxes" style="flex-grow: 1; flex-direction: row; align-self: auto; max-height: 292px; align-items: auto; justify-content: flex-start; margin-top: 5px;">
+                            <ui:Label tabindex="-1" text="Bounces:" display-tooltip-when-elided="true" name="Label" style="align-items: center; align-self: center; flex-direction: row; flex-shrink: 1; flex-grow: 1;" />
+                            <ui:SliderInt label="&#10;" value="1" high-value="3" show-input-field="true" name="Slider" low-value="1" style="flex-shrink: 1; flex-grow: 1; align-items: auto; flex-direction: row;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement style="flex-grow: 1; align-self: auto; flex-direction: column; align-items: auto; flex-shrink: 1; justify-content: flex-end;">
