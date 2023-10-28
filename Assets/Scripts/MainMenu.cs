@@ -61,8 +61,8 @@ public class MainMenu : MonoBehaviour
     {
         PlayerPrefs.SetInt(part1, 1);
 
-        PlayerPrefs.SetInt(dlssMode, 1);
-        PlayerPrefs.SetInt(lightingMode, 1);
+        PlayerPrefs.SetInt(dlssMode, 3);
+        PlayerPrefs.SetInt(lightingMode, 2);
         PlayerPrefs.SetInt(reflectionsMode, 0);
         PlayerPrefs.SetInt(sampleCount, 2);
         PlayerPrefs.SetInt(bounceCount, 1);
