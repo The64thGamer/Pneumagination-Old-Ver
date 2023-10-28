@@ -62,6 +62,7 @@ GameObject:
   - component: {fileID: 8059549140532217502}
   - component: {fileID: 7770876341089469749}
   - component: {fileID: 7346867020699984951}
+  - component: {fileID: 3443166164764453272}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -292,6 +293,76 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: a59dc18defe778745b000993a6375171, type: 2}
+--- !u!114 &3443166164764453272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529944901283763864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d6499a6bd256e47b859377446493a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  fadeRadius: 0
+  priority: 0
+  customPasses:
+  - rid: 3478923594841980928
+  injectionPoint: 4
+  m_TargetCamera: {fileID: 0}
+  useTargetCamera: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 3478923594841980928
+      type: {class: HTracePass, ns: HTrace, asm: Assembly-CSharp}
+      data:
+        m_Name: Custom Pass
+        enabled: 1
+        targetColorBuffer: 0
+        targetDepthBuffer: 0
+        clearFlags: 0
+        passFoldout: 0
+        m_Version: 0
+        _aoRadius: 0.5
+        _intensityAO: 0.25
+        _distributionPower: 3.2
+        _sliceCount: 1
+        _stepCount: 24
+        _thickness: 0.25
+        _denoiserRadius: 0.15
+        _fakeIntensity: 0.3
+        _intensitySO: 0.25
+        _denoiserSampleCount: 8
+        _detailPreservation: 0.8
+        _mainIntensity: 1
+        _fallbackIntensity: 1
+        _accumulationSpeed: 1
+        DenoiserIntensity: 1
+        ResolutionScale: 0
+        ThicknessMode: 1
+        FallbackMode: 0
+        NormalsMode: 1
+        DebugMode: 0
+        HTraceLayer:
+          serializedVersion: 2
+          m_Bits: 1
+        ThicknessLayer:
+          serializedVersion: 2
+          m_Bits: 0
+        CustomProbe: {fileID: 0}
+        StochasticThickness: 1
+        FullPrecision: 1
+        RecurrentBlur: 1
+        HistoryFilter: 0
+        DenoiseOcclusion: 1
+        _enableFallback: 1
+        _enableOcclusion: 1
+        _enableDenoising: 1
+        InjectionPointChecker: 0
+        FinalOutputShader: {fileID: 0}
 --- !u!1 &3805736980352897171
 GameObject:
   m_ObjectHideFlags: 0
