@@ -88,32 +88,32 @@ public struct DEAD_Actuator
     public string actuationName;
     public AnimationClip animation;
     public int dtuIndex;
-    public DEAD_Actuator_Type actuatorType;
+    [HideInInspector]public DEAD_Actuator_Type actuatorType;
     public bool invertedFlow;
 
     [Header("Lever Settings")]
-    public Transform fulcrumBone;
-    public Transform effortBone;
-    public Transform leverStartBone;
-    public Transform leverEndBone;
-    public DEAD_Lever_Weight[] leverWeights;
+    [HideInInspector] public Transform fulcrumBone;
+    [HideInInspector] public Transform effortBone;
+    [HideInInspector] public Transform leverStartBone;
+    [HideInInspector] public Transform leverEndBone;
+    [HideInInspector] public DEAD_Lever_Weight[] leverWeights;
 
     [Header("Pneumatic Settings")]
-    public float boreDiameterInch;
-    public float strokeLengthInch;
-    public float rodDiameterInch;
+    [HideInInspector] public float boreDiameterInch;
+    [HideInInspector] public float strokeLengthInch;
+    [HideInInspector] public float rodDiameterInch;
     [Range(0, 1)]
     public float airflowExtension;
     [Range(0, 1)]
     public float airflowRetraction;
-    public float airlineLengthFeet;
+    [HideInInspector] public float airlineLengthFeet;
 
 
     [Header("Stepper Motor / Servo Settings")]
-    public float minAngleDegrees;
-    public float maxAngleDegrees;
-    public AnimationCurve torqueChartNm;
-    public AnimationCurve speedChartRpm;
+    [HideInInspector] public float minAngleDegrees;
+    [HideInInspector] public float maxAngleDegrees;
+    [HideInInspector] public AnimationCurve torqueChartNm;
+    [HideInInspector] public AnimationCurve speedChartRpm;
 
 }
 
