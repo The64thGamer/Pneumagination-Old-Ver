@@ -30,6 +30,7 @@ public class DEAD_Window_Animatronic : Editor
 
     void UpdateAnimatorController()
     {
+
         //Check for empty Animator Controller
         Animator animator = dead_Animatronic.GetComponent<Animator>();
         if (animator.runtimeAnimatorController == null)
@@ -39,18 +40,20 @@ public class DEAD_Window_Animatronic : Editor
         }
 
         //Setup Animator Controller
-        string assetPath = AssetDatabase.GetAssetPath(animator.runtimeAnimatorController);
-        if (assetPath == "")
-        {
-            Debug.LogWarning("Asset Path Null");
-            return;
-        }
-        AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(assetPath);
+        AnimatorController controller = AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(animator.runtimeAnimatorController), typeof(AnimatorController)) as AnimatorController;
 
 
         //Add Layers
+        for (int i = 0; i < controller.layers.Length; i++)
+        {
+            controller.RemoveLayer(i);
+        }
+        for (int i = 0; i < controller.parameters.Length; i++)
+        {
+            controller.RemoveParameter(i);
+        }
+
         DEAD_Actuator[] actuators = dead_Animatronic.GetActuatorInfoCopy();
-        controller.RemoveLayer(0);
         for (int i = 0; i < actuators.Length; i++)
         {
             AnimatorControllerLayer newLayer = new AnimatorControllerLayer();
@@ -65,15 +68,15 @@ public class DEAD_Window_Animatronic : Editor
             state.timeParameterActive = true;
             state.timeParameter = uniqueName;
             state.motion = actuators[i].animation;
-
-            AssetDatabase.AddObjectToAsset(state, assetPath);
-            AssetDatabase.AddObjectToAsset(newLayer.stateMachine, assetPath);
             newLayer.blendingMode = AnimatorLayerBlendingMode.Additive;
             newLayer.defaultWeight = 1f;
+
             controller.AddLayer(newLayer);
             controller.AddParameter(uniqueName, AnimatorControllerParameterType.Float);
         }
 
-        animator.runtimeAnimatorController = controller;
+        EditorUtility.SetDirty(controller);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }
