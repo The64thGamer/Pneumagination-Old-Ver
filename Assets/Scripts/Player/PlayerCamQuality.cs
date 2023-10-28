@@ -6,13 +6,13 @@ using UnityEngine.Rendering;
 
 public class PlayerCamQuality : MonoBehaviour
 {
-    public void ApplyCamSettings()
+    public void Start()
     {
         //Objects
         HDAdditionalCameraData camData = this.GetComponent<HDAdditionalCameraData>();
         VolumeProfile volume = this.GetComponent<Volume>().profile;
-        GlobalIllumination ssgi = null;
-        ScreenSpaceReflection ssr = null;
+        GlobalIllumination ssgi;
+        ScreenSpaceReflection ssr;
 
         //Tryget
         volume.TryGet<GlobalIllumination>(out ssgi);
@@ -30,12 +30,12 @@ public class PlayerCamQuality : MonoBehaviour
             if (screenSpaceReflections == 0)
             {
                 ssr.tracing.value = RayCastingMode.RayTracing;
-                ssr.mode.value = RayTracingMode.Quality;
+                ssr.mode.value = RayTracingMode.Performance;
             }
             else
             {
                 ssr.tracing.value = RayCastingMode.RayTracing;
-                ssr.mode.value = RayTracingMode.Performance;
+                ssr.mode.value = RayTracingMode.Quality;
             }
         }
 
@@ -75,7 +75,23 @@ public class PlayerCamQuality : MonoBehaviour
         {
             camData.allowDeepLearningSuperSampling = true;
             camData.deepLearningSuperSamplingUseCustomQualitySettings = true;
-            camData.deepLearningSuperSamplingQuality = (uint)dlss;
+            switch (dlss)
+            {
+                case 1:
+                    camData.deepLearningSuperSamplingQuality = 3;
+                    break;
+                case 2:
+                    camData.deepLearningSuperSamplingQuality = 0;
+                    break;
+                case 3:
+                    camData.deepLearningSuperSamplingQuality = 1;
+                    break;
+                case 4:
+                    camData.deepLearningSuperSamplingQuality = 2;
+                    break;
+                default:
+                    break;
+            }
         }
 
         //Applying the frame setting mask back to the camera

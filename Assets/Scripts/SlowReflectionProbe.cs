@@ -9,7 +9,7 @@ public class SlowReflectionProbe : MonoBehaviour
     ReflectionProbe probe;
     void Start()
     {
-        reflectionTime = PlayerPrefs.GetInt("Settings: ReflectionProbeUpdates");
+        reflectionTime = PlayerPrefs.GetInt("Settings: Probe Timer");
         probe = this.GetComponent<ReflectionProbe>();
         if(reflectionTime == 0 || probe == null)
         {
