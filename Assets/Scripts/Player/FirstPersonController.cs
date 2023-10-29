@@ -137,21 +137,20 @@ namespace StarterAssets
                 GetPauseEscapeInputs();
                 UpdateFOV();
 
-                Vector3 flyPos = dataManager.GetWorldFlyingPosition();
                 float flyRadius = dataManager.GetWorldFlyingSphereSize();
 
                 if (Input.GetMouseButton(0))
                 {
                     currentFlyModePan -= _mainCamera.transform.up * Input.GetAxis("Mouse Y") * sensitivity;
                     currentFlyModePan -= _mainCamera.transform.right * Input.GetAxis("Mouse X") * sensitivity;
-                    if(Vector3.Distance(flyPos,currentFlyModePan) > flyRadius)
+                    if(Vector3.Distance(Vector3.zero,currentFlyModePan) > flyRadius)
                     {
-                        currentFlyModePan = (currentFlyModePan - flyPos).normalized;
+                        currentFlyModePan = (currentFlyModePan - Vector3.zero).normalized;
                         currentFlyModePan *= flyRadius;
                     }
                 }
 
-                _mainCamera.transform.position = flyPos + currentFlyModePan - (300 * _mainCamera.transform.forward);
+                _mainCamera.transform.position = Vector3.zero + currentFlyModePan - (300 * _mainCamera.transform.forward);
             }
 
             //Move
