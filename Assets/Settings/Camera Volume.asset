@@ -216,10 +216,10 @@ MonoBehaviour:
     m_Value: 2
   m_MinSmoothness:
     m_OverrideState: 1
-    m_Value: 0.407
+    m_Value: 0.438
   m_SmoothnessFadeStart:
     m_OverrideState: 1
-    m_Value: 0.692
+    m_Value: 0.528
   reflectSky:
     m_OverrideState: 0
     m_Value: 1
@@ -260,22 +260,22 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 32
   rayMiss:
-    m_OverrideState: 0
-    m_Value: 3
+    m_OverrideState: 1
+    m_Value: 1
   lastBounceFallbackHierarchy:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 3
   ambientProbeDimmer:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 0.1
   layerMask:
     m_OverrideState: 0
     m_Value:
       serializedVersion: 2
       m_Bits: 4294967295
   textureLodBias:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 2
   m_RayLength:
     m_OverrideState: 0
     m_Value: 50
@@ -293,7 +293,7 @@ MonoBehaviour:
     m_Value: 0
   mode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   m_FullResolution:
     m_OverrideState: 0
     m_Value: 0
