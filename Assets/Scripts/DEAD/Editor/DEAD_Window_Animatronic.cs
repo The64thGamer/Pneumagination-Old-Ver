@@ -30,7 +30,7 @@ public class DEAD_Window_Animatronic : Editor
 
     void UpdateAnimatorController()
     {
-
+        Debug.Log("Controller Updated");
         //Check for empty Animator Controller
         Animator animator = dead_Animatronic.GetComponent<Animator>();
         if (animator.runtimeAnimatorController == null)

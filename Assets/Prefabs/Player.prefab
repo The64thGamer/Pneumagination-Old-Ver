@@ -823,10 +823,10 @@ MonoBehaviour:
     flippedX: 0
   - icon: {fileID: 2800000, guid: 8f102b63a0352a24b9f27c520cf675f5, type: 3}
     flippedX: 1
-  - icon: {fileID: 0}
+  - icon: {fileID: 2800000, guid: 492ed8912671da54196c9d281818a0e5, type: 3}
     flippedX: 0
-  - icon: {fileID: 0}
-    flippedX: 0
+  - icon: {fileID: 2800000, guid: 492ed8912671da54196c9d281818a0e5, type: 3}
+    flippedX: 1
   - icon: {fileID: 0}
     flippedX: 0
   - icon: {fileID: 0}
