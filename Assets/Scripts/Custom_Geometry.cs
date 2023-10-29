@@ -7,11 +7,14 @@ public class Custom_Geometry : MonoBehaviour
     [SerializeField] MaterialType materialType;
     [SerializeField] MaterialLocation materialLocation;
     [SerializeField][Range(0, 1)] float grime;
+    [SerializeField] int materialNumber;
+    [SerializeField] Color color = Color.white; 
     float rain;
     float snow;
     float oldGrime = -1;
     float oldRain = -1;
     float oldSnow = -1;
+    Color oldColor;
 
     MeshRenderer meshRenderer;
     Data_Manager dataManager;
@@ -24,6 +27,12 @@ public class Custom_Geometry : MonoBehaviour
 
     private void Update()
     {
+        if(oldColor != color)
+        {
+            oldColor = color;
+            meshRenderer.material.SetColor("_Color", color);
+        }
+
         if (materialLocation == MaterialLocation.exterior)
         {
             rain = dataManager.GetCurrentRainValue();

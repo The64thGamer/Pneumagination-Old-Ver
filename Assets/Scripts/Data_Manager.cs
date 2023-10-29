@@ -6,8 +6,8 @@ public class Data_Manager : MonoBehaviour
 {
     [SerializeField] [Range(0,1)] float rainPercent = 0;
     [SerializeField][Range(0, 1)] float snowPercent = 0;
-    [SerializeField] Vector3 worldFlyingPosition;
     [SerializeField] float worldFlyingSphereSize;
+    [SerializeField] MapData mapData;
 
     public float GetCurrentRainValue()
     {
@@ -17,11 +17,6 @@ public class Data_Manager : MonoBehaviour
     public float GetCurrentSnowValue()
     {
         return snowPercent;
-    }
-
-    public Vector3 GetWorldFlyingPosition()
-    {
-        return worldFlyingPosition;
     }
 
     public float GetWorldFlyingSphereSize()
@@ -35,4 +30,38 @@ public struct DateTimeFloat
 {
     public UDateTime time;
     public float value;
+}
+
+
+[System.Serializable]
+public struct MapData
+{
+    public List<MapHistory> mapHistory;
+    public List<CustomGeometryData> geometryData;
+}
+
+[System.Serializable]
+public struct MapHistory
+{
+    public string change;
+    public UDateTime time;
+    public HistoricalEvent eventType;
+
+    public enum HistoricalEvent
+    {
+        locationNameChange,
+        locationOwnerChange,
+        buildingChange,
+        closure,
+        reopening,
+    }
+}
+
+[System.Serializable]
+public struct CustomGeometryData
+{
+    public string key;
+    public int material;
+    public Color color;
+    public float grime;
 }
