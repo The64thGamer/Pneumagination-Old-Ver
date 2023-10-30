@@ -306,6 +306,9 @@ new string[] {
         "Pinball",
         "Sports",
         "Fast Food",
+        "Deep Dish",
+        "Sliders",
+        "Waffles",
      }
    );
 
@@ -443,12 +446,26 @@ new string[] {
         "Nice",
         "Quaint",
         "Little",
+        "Original",
+        "Trash",
+        "Old",
+        "Vintage",
+        "Antique",
+        "Captain",
+        "Fisher",
+        "Hunting",
+        "Best",
+        "Old-School",
+        "Giant",
+        "Mini",
      }
    );
 
     static readonly ReadOnlyCollection<string> placePlaces = new ReadOnlyCollection<string>(
      new string[] {
         "Place",
+        "Pizzeria",
+        "Roadside Attraction",
         "Emporium",
         "Shop",
         "Theatre",
@@ -503,6 +520,16 @@ new string[] {
         "Sports Bar",
         "Eatery",
         "Town",
+        "Corner Store",
+        "Souvenir Shop",
+        "Pier",
+        "Camp",
+        "Harbor",
+        "Cabin",
+        "Motel",
+        "Hotel",
+        "Dock",
+        "& More",
      }
    );
 }
