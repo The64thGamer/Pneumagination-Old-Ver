@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2666.5374, g: 3062.3948, b: 3539.5005, a: 1}
+  m_IndirectSpecularColor: {r: 2665.9036, g: 3061.428, b: 3538.102, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -523,6 +523,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   document: {fileID: 1698966463}
+  worldButton: {fileID: 9197481963319205126, guid: fd353ff14db88234ebfafdeefddad024,
+    type: 3}
+  saveFileData:
+    firstName: 
+    lastName: 
+    money: 0
+    worldSeed: 0
+    currentMap: 0
+    timeFileStarted:
+      _dateTime: 1/1/0001 12:00:00 AM
+    timeElapsed: 0
 --- !u!1 &1774480166
 GameObject:
   m_ObjectHideFlags: 0

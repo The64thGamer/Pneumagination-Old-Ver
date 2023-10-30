@@ -42,7 +42,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="MenuSaveFiles" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
+            <ui:VisualElement name="MenuSaveFiles" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none;">
                 <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: flex-start; align-items: stretch;">
                     <ui:ScrollView class="titlescreenboxes" style="flex-grow: 1; align-items: stretch;">
                         <ui:VisualElement name="WorldContainer" style="flex-grow: 1; align-items: stretch; flex-direction: column; align-self: auto; justify-content: flex-start; background-color: rgb(174, 77, 68);" />
@@ -53,7 +53,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="MenuCreateWorld" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none;">
+            <ui:VisualElement name="MenuCreateWorld" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: flex;">
                 <ui:VisualElement style="flex-grow: 1; justify-content: flex-start; align-items: stretch; flex-direction: column;">
                     <ui:ScrollView class="titlescreenboxes" style="flex-grow: 1;">
                         <ui:VisualElement style="flex-grow: 1; align-items: stretch; flex-direction: column; align-self: auto; justify-content: flex-start; flex-shrink: 0;">

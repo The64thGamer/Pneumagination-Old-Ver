@@ -47,6 +47,16 @@ public static class Name_Generator
         }
     }
 
+
+    public static DateTime GenerateRandomDateRange(DateTime from, DateTime to)
+    {
+        var range = to - from;
+        System.Random rnd = new System.Random();
+        var randTimeSpan = new TimeSpan((long)(rnd.NextDouble() * range.Ticks));
+
+        return from + randTimeSpan;
+    }
+
     public static string GenerateLastName(int seed)
     {
         Random rnd = new Random(seed);

@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
@@ -118,22 +118,22 @@ public class MainMenu : MonoBehaviour
 
     void GenerateFirstName()
     {
-        document.rootVisualElement.Q<TextField>("FirstName").value = Name_Generator.GenerateFirstName(Random.Range(int.MinValue, int.MaxValue), Random.Range(0, 80));
+        document.rootVisualElement.Q<TextField>("FirstName").value = Name_Generator.GenerateFirstName(UnityEngine.Random.Range(int.MinValue, int.MaxValue), UnityEngine.Random.Range(0, 80));
     }
 
     void GenerateLastName()
     {
-        document.rootVisualElement.Q<TextField>("LastName").value = Name_Generator.GenerateLastName(Random.Range(int.MinValue, int.MaxValue));
+        document.rootVisualElement.Q<TextField>("LastName").value = Name_Generator.GenerateLastName(UnityEngine.Random.Range(int.MinValue, int.MaxValue));
     }
 
     void GenerateStoreName()
     {
-        document.rootVisualElement.Q<TextField>("StoreName").value = Name_Generator.GenerateLocationName(Random.Range(int.MinValue, int.MaxValue), document.rootVisualElement.Q<TextField>("FirstName").value, document.rootVisualElement.Q<TextField>("LastName").value);
+        document.rootVisualElement.Q<TextField>("StoreName").value = Name_Generator.GenerateLocationName(UnityEngine.Random.Range(int.MinValue, int.MaxValue), document.rootVisualElement.Q<TextField>("FirstName").value, document.rootVisualElement.Q<TextField>("LastName").value);
     }
 
     void GenerateRandomSeed()
     {
-        document.rootVisualElement.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
+        document.rootVisualElement.Q<TextField>("Seed").value = UnityEngine.Random.Range(int.MinValue, int.MaxValue).ToString();
     }
 
     void CreateWorld()
@@ -141,6 +141,9 @@ public class MainMenu : MonoBehaviour
         saveFileData = new SaveFileData();
         saveFileData.firstName = document.rootVisualElement.Q<TextField>("FirstName").value;
         saveFileData.lastName = document.rootVisualElement.Q<TextField>("LastName").value;
+        saveFileData.timeElapsed = 0;
+        saveFileData.timeFileStarted = new UDateTime();
+        saveFileData.timeFileStarted.dateTime = Name_Generator.GenerateRandomDateRange(new DateTime(1979,1,1), new DateTime(1979, 12, 31));
         int num;
         if (int.TryParse(document.rootVisualElement.Q<TextField>("Seed").value, out num))
         {
