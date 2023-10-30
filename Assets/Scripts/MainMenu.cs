@@ -253,6 +253,7 @@ public class MainMenu : MonoBehaviour
             myUI.Q<Label>("WorldInfo").text = "Seed: " + data.worldSeed;
             myUI.Q<Button>("Button").clicked += () => StartLoadedSave(e);
             myUI.Q<Button>("DuplicateButton").clicked += () => DuplicateSave(e);
+            myUI.Q<Button>("DeleteButton").clicked += () => DeleteSave(e);
 
             visList.Add(myUI);
             index++;
@@ -278,6 +279,30 @@ public class MainMenu : MonoBehaviour
         {
             AddNewWorldButtons();
         }
+    }
+
+    void DeleteSave(int slot)
+    {
+        string saveFilePath = Application.persistentDataPath + "/Saves/Save";;
+
+        if(!Directory.Exists(saveFilePath + slot.ToString()))
+        {
+            Debug.Log("File Directory Doesn't exist");
+            return;
+        }
+        Directory.Delete(saveFilePath + slot.ToString(),true);
+
+        int slotLength = PlayerPrefs.GetInt("SaveFilesLoaded");
+        if (slot != slotLength - 1)
+        {
+            for (int i = slot+1; i < slotLength; i++)
+            {
+                Directory.Move(saveFilePath + i.ToString(), saveFilePath + (i - 1).ToString());
+            }
+        }
+
+        AddNewWorldButtons();
+
     }
 
     void StartLoadedSave(int slot)
