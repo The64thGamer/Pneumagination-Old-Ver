@@ -82,7 +82,7 @@
                     </ui:ScrollView>
                     <ui:VisualElement style="flex-grow: 0; align-self: auto; flex-direction: row; align-items: auto; flex-shrink: 1; justify-content: flex-end; min-height: 99px;">
                         <ui:Button text="Back" display-tooltip-when-elided="true" name="BackFromCreateWorlds" class="titlescreenbuttons" style="flex-grow: 1; flex-direction: row; flex-shrink: 0;" />
-                        <ui:Button text="Start World" display-tooltip-when-elided="true" name="BackFromSettings" class="titlescreenbuttons" style="flex-grow: 1; flex-direction: row; flex-shrink: 0;" />
+                        <ui:Button text="Start World" display-tooltip-when-elided="true" name="StartWorld" class="titlescreenbuttons" style="flex-grow: 1; flex-direction: row; flex-shrink: 0;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
