@@ -65,7 +65,7 @@ public static class DEAD_Save_Load
         return newData;
     }
 
-    static bool WriteFile(string path, byte[] data)
+    public static bool WriteFile(string path, byte[] data)
     {
         bool retValue;
         try
@@ -84,7 +84,26 @@ public static class DEAD_Save_Load
         return retValue;
     }
 
-    static byte[] ReadFile(string path)
+    public static bool WriteFile(string path, string data)
+    {
+        bool retValue;
+        try
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            System.IO.File.WriteAllText(path, data);
+            retValue = true;
+        }
+        catch (System.Exception ex)
+        {
+            string ErrorMessages = "File Write Error\n" + ex.Message;
+            retValue = false;
+            Debug.LogError(ErrorMessages);
+        }
+        return retValue;
+    }
+
+    public static byte[] ReadFile(string path)
     {
         byte[] bytes = null;
         if (File.Exists(path))

@@ -163,30 +163,13 @@ public class MainMenu : MonoBehaviour
         //Update this when theres more save files
         PlayerPrefs.SetInt("CurrentSaveFile", PlayerPrefs.GetInt("SaveFilesLoaded"));
 
-        if (WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML()))
+        if (DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML()))
         {
             LoadMap();
         }
     }
 
-    bool WriteFile(string path, string data)
-    {
-        bool retValue;
-        try
-        {
-            if (!Directory.Exists(Path.GetDirectoryName(path)))
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-            System.IO.File.WriteAllText(path, data);
-            retValue = true;
-        }
-        catch (System.Exception ex)
-        {
-            string ErrorMessages = "File Write Error\n" + ex.Message;
-            retValue = false;
-            Debug.LogError(ErrorMessages);
-        }
-        return retValue;
-    }
+    
     void LoadMap()
     {
         loadingScene = true;
@@ -291,7 +274,7 @@ public class MainMenu : MonoBehaviour
             saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
         }
 
-        if (WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("SaveFilesLoaded") + "/SaveFile.xml", saveFileData.SerializeToXML()))
+        if (DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("SaveFilesLoaded") + "/SaveFile.xml", saveFileData.SerializeToXML()))
         {
             AddNewWorldButtons();
         }

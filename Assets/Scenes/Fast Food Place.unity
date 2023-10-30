@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3713.8755, g: 4230.5356, b: 4826.6333, a: 1}
+  m_IndirectSpecularColor: {r: 3713.77, g: 4230.274, b: 4826.571, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -161,9 +161,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 9
+  materialType: 8
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 3
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -2336,7 +2336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -2670,6 +2670,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1256567019}
+    - targetCorrespondingSourceObject: {fileID: -6126579026823712712, guid: 50b032af3e3f04146946d82d07095cf9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1256567020}
     - targetCorrespondingSourceObject: {fileID: -1206309533481162655, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       insertIndex: -1
@@ -2702,6 +2706,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1841937621}
+    - targetCorrespondingSourceObject: {fileID: -5055807814645588668, guid: 50b032af3e3f04146946d82d07095cf9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1841937622}
     - targetCorrespondingSourceObject: {fileID: -7889058448363120991, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       insertIndex: -1
@@ -2730,6 +2738,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 973325450}
+    - targetCorrespondingSourceObject: {fileID: -7175805530626525646, guid: 50b032af3e3f04146946d82d07095cf9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 973325451}
     - targetCorrespondingSourceObject: {fileID: 1804752101541350250, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       insertIndex: -1
@@ -2787,7 +2799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 5
+  materialType: 6
   materialLocation: 0
   materialColorType: 0
   grime: 0
@@ -3603,9 +3615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 6
+  materialType: 5
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 3
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -4093,9 +4105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 8
+  materialType: 7
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 3
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -4849,7 +4861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 2
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -4867,7 +4879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5070,7 +5082,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5088,7 +5100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5106,7 +5118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5124,7 +5136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5186,7 +5198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 2
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -6021,9 +6033,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 6
+  materialType: 5
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 3
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -6856,6 +6868,24 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4503503546537127940, guid: 50b032af3e3f04146946d82d07095cf9, type: 3}
+--- !u!114 &973325451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973325446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialType: 9
+  materialLocation: 0
+  materialColorType: 0
+  grime: 0
+  materialNumber: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1008399463
 GameObject:
   m_ObjectHideFlags: 0
@@ -8497,6 +8527,24 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2164292452754644575, guid: 50b032af3e3f04146946d82d07095cf9, type: 3}
+--- !u!114 &1256567020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256567015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialType: 6
+  materialLocation: 0
+  materialColorType: 3
+  grime: 0
+  materialNumber: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!64 &1273148270
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -9877,9 +9925,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 7
+  materialType: 6
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 3
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -10459,7 +10507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 10
+  materialType: 9
   materialLocation: 0
   materialColorType: 0
   grime: 0
@@ -10477,7 +10525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 10
+  materialType: 9
   materialLocation: 0
   materialColorType: 0
   grime: 0
@@ -10495,9 +10543,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 7
+  materialType: 6
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 3
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -10513,7 +10561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 10
+  materialType: 9
   materialLocation: 0
   materialColorType: 0
   grime: 0
@@ -10531,7 +10579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 10
+  materialType: 9
   materialLocation: 0
   materialColorType: 0
   grime: 0
@@ -11134,7 +11182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 2
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11152,7 +11200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11170,7 +11218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 1
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11188,7 +11236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 2
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11206,7 +11254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 2
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -12850,7 +12898,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: be4e30fa5d03a5742a216a885aa8c546, type: 2}
+      objectReference: {fileID: 2100000, guid: 4a87f1918b40dfe4bb6fcfbc95e735ca, type: 2}
     - target: {fileID: -4032225731971990118, guid: 42704b4a51fb1b64d8b4f2195fb79c5b,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -13073,9 +13121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialType: 6
+  materialType: 5
   materialLocation: 0
-  materialColorType: 0
+  materialColorType: 3
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -13910,6 +13958,24 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -253560146985921157, guid: 50b032af3e3f04146946d82d07095cf9, type: 3}
+--- !u!114 &1841937622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841937617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dfe5238aaffe164383b1407b57a331e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialType: 6
+  materialLocation: 0
+  materialColorType: 3
+  grime: 0
+  materialNumber: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1850779422
 GameObject:
   m_ObjectHideFlags: 0
@@ -14750,9 +14816,19 @@ MonoBehaviour:
     lastName: 
     money: 0
     worldSeed: 0
+    currentMap: 0
+    timeFileStarted:
+      _dateTime: 1/1/0001 12:00:00 AM
+    timeElapsed: 0
   mapData:
     mapHistory: []
     geometryData: []
+    startingColorPrimary: {r: 0, g: 0, b: 0, a: 0}
+    startingColorSecondary: {r: 0, g: 0, b: 0, a: 0}
+    startingColorTertiary: {r: 0, g: 0, b: 0, a: 0}
+    startingColorLight: {r: 0, g: 0, b: 0, a: 0}
+    startingColorDark: {r: 0, g: 0, b: 0, a: 0}
+  retryMap: 0
 --- !u!114 &1913721400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15630,7 +15706,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
-  materialColorType: 0
+  materialColorType: 2
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}

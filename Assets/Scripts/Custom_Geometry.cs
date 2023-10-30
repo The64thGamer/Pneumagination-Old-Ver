@@ -31,6 +31,39 @@ public class Custom_Geometry : MonoBehaviour
         dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
     }
 
+    public string GetKey()
+    {
+        return name;
+    }
+
+    public Color GetColor()
+    {
+        return color;
+    }
+    public void SetGrime(float value)
+    {
+        grime = value;
+    }
+    public void SetMaterial(int number)
+    {
+        materialNumber = number;
+    }
+
+    public int GetMaterial()
+    {
+        return materialNumber;
+    }
+
+    public MaterialColorType GetMaterialColorType()
+    {
+        return materialColorType;
+    }
+
+    public void SetColor(Color newColor)
+    {
+        color = newColor;
+    }
+
     private void Update()
     {
         if(oldColor != color)
@@ -69,12 +102,13 @@ public class Custom_Geometry : MonoBehaviour
         slantedRoof,
         flooring,
         road,
-        sidewalk,
         ceiling,
         concrete,
         plaster,
         plastic,
         earth,
+        vinyl,
+        metal,
     }
     public enum MaterialLocation
     {

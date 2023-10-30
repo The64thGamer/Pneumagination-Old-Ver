@@ -12,6 +12,7 @@ public class Data_Manager : MonoBehaviour
     [SerializeField] float worldFlyingSphereSize;
     [SerializeField] SaveFileData saveFileData;
     [SerializeField] MapData mapData;
+    [SerializeField] bool retryMap;
 
     private void Awake()
     {
@@ -40,14 +41,97 @@ public class Data_Manager : MonoBehaviour
         }
         else
         {
-            mapData = mapData.DeserializeFromXML(mapSavePath);
+            mapData = mapData.DeserializeFromXML(File.ReadAllText(mapSavePath));
         }
+        ApplyGeometryColorsAndSaveNewGeo();
+    }
+
+    private void Update()
+    {
+        if(retryMap)
+        {
+            retryMap = false;
+            GenerateNewRandomMapSaveData();
+            ApplyGeometryColorsAndSaveNewGeo();
+        }
+    }
+
+    void ApplyGeometryColorsAndSaveNewGeo()
+    {
+        Custom_Geometry[] customGeo = FindObjectsByType<Custom_Geometry>(FindObjectsSortMode.None);
+
+        for (int i = 0; i < customGeo.Length; i++)
+        {
+            int check = CheckMapDataForString(customGeo[i].GetKey());
+            if (check == -1)
+            {
+                Color setColor = Color.white;
+                switch (customGeo[i].GetMaterialColorType())
+                {
+                    case Custom_Geometry.MaterialColorType.primary:
+                        setColor = mapData.startingColorPrimary;
+                        break;
+                    case Custom_Geometry.MaterialColorType.secondary:
+                        setColor = mapData.startingColorSecondary;
+                        break;
+                    case Custom_Geometry.MaterialColorType.tertiary:
+                        setColor = mapData.startingColorTertiary;
+                        break;
+                    case Custom_Geometry.MaterialColorType.light:
+                        setColor = mapData.startingColorLight;
+                        break;
+                    case Custom_Geometry.MaterialColorType.dark:
+                        setColor = mapData.startingColorDark;
+                        break;
+                    default:
+                        break;
+                }
+                mapData.geometryData.Add(new CustomGeometryData()
+                {
+                    color = setColor,
+                    key = customGeo[i].GetKey(),
+                    material = customGeo[i].GetMaterial(),//This needs to be calculated randomly
+                    grime = Random.Range(0.0f, 1.0f),//This needs to be calculated randomly
+                });
+                check = mapData.geometryData.Count - 1;
+            }
+            customGeo[i].SetColor(mapData.geometryData[check].color);
+            customGeo[i].SetMaterial(mapData.geometryData[check].material);
+            customGeo[i].SetGrime(mapData.geometryData[check].grime);
+        }
+    }
+
+    int CheckMapDataForString(string key)
+    {
+        for (int i = 0; i < mapData.geometryData.Count; i++)
+        {
+            if (mapData.geometryData[i].key == key)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     void GenerateNewRandomMapSaveData()
     {
         mapData = new MapData();
-        mapData.mapHistory.Add(new MapHistory() { change = PlayerPrefs.GetString("CreateWorldName"), eventType = MapHistory.HistoricalEvent.locationNameChange, time = saveFileData.timeFileStarted });
+        mapData.mapHistory = new List<MapHistory>();
+        mapData.geometryData = new List<CustomGeometryData>();
+
+        mapData.mapHistory.Add(new MapHistory(){ 
+            change = PlayerPrefs.GetString("CreateWorldName"), 
+            eventType = MapHistory.HistoricalEvent.locationNameChange, 
+            time = saveFileData.timeFileStarted
+        });
+        Color[] palette = Name_Generator.GetRandomPalette(saveFileData.worldSeed);
+        mapData.startingColorPrimary = palette[0];
+        mapData.startingColorSecondary = palette[1];
+        mapData.startingColorTertiary = palette[2];
+        mapData.startingColorLight = palette[3];
+        mapData.startingColorDark = palette[4];
+
+        DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
     }
 
     public float GetCurrentRainValue()
@@ -110,6 +194,12 @@ public struct MapData
 {
     public List<MapHistory> mapHistory;
     public List<CustomGeometryData> geometryData;
+
+    public Color startingColorPrimary;
+    public Color startingColorSecondary;
+    public Color startingColorTertiary;
+    public Color startingColorLight;
+    public Color startingColorDark;
 
     public string SerializeToXML()
     {
