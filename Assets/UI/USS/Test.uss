@@ -143,3 +143,7 @@
 .unity-base-field:focus > .unity-base-field__label {
     color: rgb(255, 255, 255);
 }
+
+.unity-base-field__input:inactive {
+    color: rgb(255, 255, 255);
+}

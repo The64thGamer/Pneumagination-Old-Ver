@@ -35,14 +35,14 @@ public class MainMenu : MonoBehaviour
 
         //Save Files Menu
         document.rootVisualElement.Q<Button>("CreateWorld").clicked += () => SwitchMenu(3);
-        document.rootVisualElement.Q<Button>("BackFromWorlds").clicked += () => SwitchMenu(1);
+        document.rootVisualElement.Q<Button>("BackFromWorlds").clicked += () => SwitchMenu(0);
 
         //Create World Menu
         document.rootVisualElement.Q<Button>("FirstNameRandom").clicked += () => GenerateFirstName();
         document.rootVisualElement.Q<Button>("LastNameRandom").clicked += () => GenerateLastName();
         document.rootVisualElement.Q<Button>("SeedRandom").clicked += () => GenerateRandomSeed();
         document.rootVisualElement.Q<Button>("StoreNameRandom").clicked += () => GenerateStoreName();
-        document.rootVisualElement.Q<Button>("BackFromCreateWorlds").clicked += () => SwitchMenu(0);
+        document.rootVisualElement.Q<Button>("BackFromCreateWorlds").clicked += () => SwitchMenu(1);
 
         //Settings Menu
         document.rootVisualElement.Q<DropdownField>("DLSS").RegisterValueChangedCallback(SaveAllSettings);
