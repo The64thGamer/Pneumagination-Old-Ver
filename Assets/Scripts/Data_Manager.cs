@@ -46,7 +46,8 @@ public class Data_Manager : MonoBehaviour
 
     void GenerateNewRandomMapSaveData()
     {
-
+        mapData = new MapData();
+        mapData.mapHistory.Add(new MapHistory() { change = PlayerPrefs.GetString("CreateWorldName"), eventType = MapHistory.HistoricalEvent.locationNameChange, time = saveFileData.timeFileStarted });
     }
 
     public float GetCurrentRainValue()
@@ -82,6 +83,8 @@ public class SaveFileData
     public int money;
     public int worldSeed;
     public int currentMap;
+    public UDateTime timeFileStarted;
+    public float timeElapsed;
     public string SerializeToXML()
     {
         XmlSerializer serializer = new XmlSerializer(typeof(SaveFileData));

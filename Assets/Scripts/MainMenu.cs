@@ -150,6 +150,7 @@ public class MainMenu : MonoBehaviour
         {
             saveFileData.worldSeed = Animator.StringToHash(document.rootVisualElement.Q<TextField>("Seed").value);
         }
+        PlayerPrefs.SetString("CreateWorldName", document.rootVisualElement.Q<TextField>("StoreName").value);
         if (document.rootVisualElement.Q<Toggle>("UseHardMode").value)
         {
             saveFileData.currentMap = 1;
