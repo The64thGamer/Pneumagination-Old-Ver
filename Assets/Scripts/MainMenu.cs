@@ -35,7 +35,7 @@ public class MainMenu : MonoBehaviour
 
         //Save Files Menu
         document.rootVisualElement.Q<Button>("CreateWorld").clicked += () => SwitchMenu(3);
-        document.rootVisualElement.Q<Button>("BackFromWorlds").clicked += () => SwitchMenu(0);
+        document.rootVisualElement.Q<Button>("BackFromWorlds").clicked += () => SwitchMenu(1);
 
         //Create World Menu
         document.rootVisualElement.Q<Button>("FirstNameRandom").clicked += () => GenerateFirstName();
