@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
 {
     [Header("Menu")]
     [SerializeField] UIDocument document;
+    [SerializeField] VisualTreeAsset worldButton;
     [SerializeField] SaveFileData saveFileData;
 
     bool generateRandomName = true;
@@ -156,7 +157,7 @@ public class MainMenu : MonoBehaviour
         saveFileData.money = 1000;
 
         //Update this when theres more save files
-        PlayerPrefs.SetInt("CurrentSaveFile", 0);
+        PlayerPrefs.SetInt("CurrentSaveFile", PlayerPrefs.GetInt("SaveFilesLoaded"));
 
         if (WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML()))
         {
@@ -221,6 +222,7 @@ public class MainMenu : MonoBehaviour
                 break;
             case 1:
                 menuWorlds.style.display = DisplayStyle.Flex;
+                AddNewWorldButtons();
                 break;
             case 2:
                 menuSettings.style.display = DisplayStyle.Flex;
@@ -233,5 +235,97 @@ public class MainMenu : MonoBehaviour
                 break;
         }
 
+    }
+
+    void AddNewWorldButtons()
+    {
+        VisualElement visList = document.rootVisualElement.Q<VisualElement>("WorldContainer");
+
+        //Clear old children
+        List<VisualElement> children = new List<VisualElement>();
+        foreach (var child in visList.Children())
+        {
+            children.Add(child);
+        }
+        for (int i = 0; i < children.Count; i++)
+        {
+            visList.Remove(children[i]);
+        }
+
+        int index = 0;
+        while (true)
+        {
+            SaveFileData data = FindData(index);
+            if(data == null)
+            {
+                break;
+            }
+            TemplateContainer myUI = worldButton.Instantiate();
+            int e = index;
+            myUI.Q<Label>("WorldName").text = data.firstName + " " + data.lastName +"'s World";
+            myUI.Q<Label>("WorldInfo").text = "Seed: " + data.worldSeed;
+            myUI.Q<Button>("Button").clicked += () => StartLoadedSave(e);
+            myUI.Q<Button>("DuplicateButton").clicked += () => DuplicateSave(e);
+
+            visList.Add(myUI);
+            index++;
+        }
+        PlayerPrefs.SetInt("SaveFilesLoaded", index);
+
+    }
+
+    void DuplicateSave(int slot)
+    {
+        string saveFilePath = Application.persistentDataPath + "/Saves/Save" + slot + "/SaveFile.xml";
+
+        if (!File.Exists(saveFilePath))
+        {
+            return;
+        }
+        else
+        {
+            saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
+        }
+
+        if (WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("SaveFilesLoaded") + "/SaveFile.xml", saveFileData.SerializeToXML()))
+        {
+            AddNewWorldButtons();
+        }
+    }
+
+    void StartLoadedSave(int slot)
+    {
+        PlayerPrefs.SetInt("CurrentSaveFile", slot);
+
+        string saveFilePath = Application.persistentDataPath + "/Saves/Save" + slot + "/SaveFile.xml";
+
+        if (!File.Exists(saveFilePath))
+        {
+            return;
+        }
+        else
+        {
+            saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
+        }
+
+        if (saveFileData != null)
+        {
+            LoadMap();
+        }
+    }
+
+    SaveFileData FindData(int index)
+    {
+        string saveFilePath = Application.persistentDataPath + "/Saves/Save" + index + "/SaveFile.xml";
+
+        if (!File.Exists(saveFilePath))
+        {
+            return null;
+        }
+        else
+        {
+            saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
+        }
+        return saveFileData;
     }
 }

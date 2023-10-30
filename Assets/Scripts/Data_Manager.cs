@@ -27,6 +27,12 @@ public class Data_Manager : MonoBehaviour
             saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
         }
 
+        if(saveFileData == null)
+        {
+            Debug.LogError("You entered a map with a corrupt save file");
+            SceneManager.LoadScene(0);
+        }
+
         string mapSavePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml";
         if (!File.Exists(mapSavePath))
         {
@@ -69,7 +75,7 @@ public struct DateTimeFloat
 }
 
 [System.Serializable, XmlRoot("Save File Data")]
-public struct SaveFileData
+public class SaveFileData
 {
     public string firstName;
     public string lastName;
