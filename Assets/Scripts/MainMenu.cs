@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,7 @@ public class MainMenu : MonoBehaviour
 {
     [Header("Menu")]
     [SerializeField] UIDocument document;
+    [SerializeField] SaveFileData saveFileData;
 
     bool generateRandomName = true;
 
@@ -29,7 +31,7 @@ public class MainMenu : MonoBehaviour
         SwitchMenu(0);
 
         //Main Menu
-        document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1);;
+        document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1); ;
         document.rootVisualElement.Q<Button>("Settings").clicked += () => SwitchMenu(2);
         document.rootVisualElement.Q<Button>("Exit").clicked += () => Application.Quit();
 
@@ -43,6 +45,7 @@ public class MainMenu : MonoBehaviour
         document.rootVisualElement.Q<Button>("SeedRandom").clicked += () => GenerateRandomSeed();
         document.rootVisualElement.Q<Button>("StoreNameRandom").clicked += () => GenerateStoreName();
         document.rootVisualElement.Q<Button>("BackFromCreateWorlds").clicked += () => SwitchMenu(1);
+        document.rootVisualElement.Q<Button>("StartWorld").clicked += () => CreateWorld();
 
         //Settings Menu
         document.rootVisualElement.Q<DropdownField>("DLSS").RegisterValueChangedCallback(SaveAllSettings);
@@ -114,7 +117,7 @@ public class MainMenu : MonoBehaviour
 
     void GenerateFirstName()
     {
-        document.rootVisualElement.Q<TextField>("FirstName").value = Name_Generator.GenerateFirstName(Random.Range(int.MinValue,int.MaxValue), Random.Range(0, 80));
+        document.rootVisualElement.Q<TextField>("FirstName").value = Name_Generator.GenerateFirstName(Random.Range(int.MinValue, int.MaxValue), Random.Range(0, 80));
     }
 
     void GenerateLastName()
@@ -132,10 +135,57 @@ public class MainMenu : MonoBehaviour
         document.rootVisualElement.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
     }
 
-    void LoadMap(int map)
+    void CreateWorld()
+    {
+        saveFileData = new SaveFileData();
+        saveFileData.firstName = document.rootVisualElement.Q<TextField>("FirstName").value;
+        saveFileData.lastName = document.rootVisualElement.Q<TextField>("LastName").value;
+        int num;
+        if (int.TryParse(document.rootVisualElement.Q<TextField>("Seed").value, out num))
+        {
+            saveFileData.worldSeed = num;
+        }
+        else
+        {
+            saveFileData.worldSeed = Animator.StringToHash(document.rootVisualElement.Q<TextField>("Seed").value);
+        }
+        if (document.rootVisualElement.Q<Toggle>("UseHardMode").value)
+        {
+            saveFileData.currentMap = 1;
+        }
+        saveFileData.money = 1000;
+
+        //Update this when theres more save files
+        PlayerPrefs.SetInt("CurrentSaveFile", 0);
+
+        if (WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML()))
+        {
+            LoadMap();
+        }
+    }
+
+    bool WriteFile(string path, string data)
+    {
+        bool retValue;
+        try
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            System.IO.File.WriteAllText(path, data);
+            retValue = true;
+        }
+        catch (System.Exception ex)
+        {
+            string ErrorMessages = "File Write Error\n" + ex.Message;
+            retValue = false;
+            Debug.LogError(ErrorMessages);
+        }
+        return retValue;
+    }
+    void LoadMap()
     {
         loadingScene = true;
-        switch (map)
+        switch (saveFileData.currentMap)
         {
             case 0:
                 SceneManager.LoadSceneAsync("Fast Food Place");

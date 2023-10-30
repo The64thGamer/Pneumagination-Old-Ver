@@ -24,7 +24,7 @@ public class Data_Manager : MonoBehaviour
         }
         else
         {
-            saveFileData = saveFileData.DeserializeFromXML(saveFilePath);
+            saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
         }
 
         string mapSavePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml";
