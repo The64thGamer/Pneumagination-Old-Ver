@@ -27,29 +27,33 @@ public class MainMenu : MonoBehaviour
     {
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         SwitchMenu(0);
-        document.rootVisualElement.Q<Button>("LoadFirstMap").clicked += () => LoadMap(0);
-        document.rootVisualElement.Q<Button>("LoadSecondMap").clicked += () => LoadMap(1);
+
+        //Main Menu
+        document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1);;
         document.rootVisualElement.Q<Button>("Settings").clicked += () => SwitchMenu(2);
         document.rootVisualElement.Q<Button>("Exit").clicked += () => Application.Quit();
-        document.rootVisualElement.Q<Button>("NameGenerator").clicked += () => SwitchMenu(1);
-        document.rootVisualElement.Q<Button>("GenBusiness").clicked += () => GenerateName();
-        document.rootVisualElement.Q<Button>("BackButton").clicked += () => SwitchMenu(0);
-        document.rootVisualElement.Q<Button>("BackFromSettings").clicked += () => SwitchMenu(0);
-        document.rootVisualElement.Q<Toggle>("RandomNames").RegisterValueChangedCallback(ToggleRandomName);
 
-        //Settings
+        //Save Files Menu
+        document.rootVisualElement.Q<Button>("CreateWorld").clicked += () => SwitchMenu(3);
+        document.rootVisualElement.Q<Button>("BackFromWorlds").clicked += () => SwitchMenu(0);
+
+        //Create World Menu
+        document.rootVisualElement.Q<Button>("FirstNameRandom").clicked += () => GenerateFirstName();
+        document.rootVisualElement.Q<Button>("LastNameRandom").clicked += () => GenerateLastName();
+        document.rootVisualElement.Q<Button>("SeedRandom").clicked += () => GenerateRandomSeed();
+        document.rootVisualElement.Q<Button>("StoreNameRandom").clicked += () => GenerateStoreName();
+        document.rootVisualElement.Q<Button>("BackFromCreateWorlds").clicked += () => SwitchMenu(0);
+
+        //Settings Menu
         document.rootVisualElement.Q<DropdownField>("DLSS").RegisterValueChangedCallback(SaveAllSettings);
         document.rootVisualElement.Q<DropdownField>("Renderer").RegisterValueChangedCallback(SaveAllSettings);
         document.rootVisualElement.Q<VisualElement>("SampleCount").Q<SliderInt>("Slider").RegisterValueChangedCallback(SaveAllSettings);
         document.rootVisualElement.Q<VisualElement>("Bounces").Q<SliderInt>("Slider").RegisterValueChangedCallback(SaveAllSettings);
         document.rootVisualElement.Q<VisualElement>("ReflectionProbes").Q<SliderInt>("Slider").RegisterValueChangedCallback(SaveAllSettings);
+        document.rootVisualElement.Q<Button>("BackFromSettings").clicked += () => SwitchMenu(0);
 
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        int age = Random.Range(0, 80);
-        document.rootVisualElement.Q<TextField>("FirstName").value = Name_Generator.GenerateFirstName(seed, age);
-        document.rootVisualElement.Q<TextField>("LastName").value = Name_Generator.GenerateLastName(seed);
 
-        if(PlayerPrefs.GetInt(part1) == 0)
+        if (PlayerPrefs.GetInt(part1) == 0)
         {
             FirstTimeBootingSettings();
         }
@@ -107,24 +111,25 @@ public class MainMenu : MonoBehaviour
         generateRandomName = toggle.newValue;
     }
 
-    void GenerateName()
+
+    void GenerateFirstName()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        int age = Random.Range(0, 80);
-        if(document.rootVisualElement.Q<TextField>("FirstName").value == "")
-        {
-            document.rootVisualElement.Q<TextField>("FirstName").value = "???";
-        }
-        if (document.rootVisualElement.Q<TextField>("LastName").value == "")
-        {
-            document.rootVisualElement.Q<TextField>("LastName").value = "???";
-        }
-        if (generateRandomName)
-        {
-            document.rootVisualElement.Q<TextField>("FirstName").value = Name_Generator.GenerateFirstName(seed, age);
-            document.rootVisualElement.Q<TextField>("LastName").value = Name_Generator.GenerateLastName(seed);
-        }
-        document.rootVisualElement.Q<Label>("FinalName").text = "\"" + Name_Generator.GenerateLocationName(seed, document.rootVisualElement.Q<TextField>("FirstName").value, document.rootVisualElement.Q<TextField>("LastName").value) + "\"";
+        document.rootVisualElement.Q<TextField>("FirstName").value = Name_Generator.GenerateFirstName(Random.Range(int.MinValue,int.MaxValue), Random.Range(0, 80));
+    }
+
+    void GenerateLastName()
+    {
+        document.rootVisualElement.Q<TextField>("LastName").value = Name_Generator.GenerateLastName(Random.Range(int.MinValue, int.MaxValue));
+    }
+
+    void GenerateStoreName()
+    {
+        document.rootVisualElement.Q<TextField>("StoreName").value = Name_Generator.GenerateLocationName(Random.Range(int.MinValue, int.MaxValue), document.rootVisualElement.Q<TextField>("FirstName").value, document.rootVisualElement.Q<TextField>("LastName").value);
+    }
+
+    void GenerateRandomSeed()
+    {
+        document.rootVisualElement.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
     }
 
     void LoadMap(int map)
@@ -152,8 +157,10 @@ public class MainMenu : MonoBehaviour
 
         VisualElement mainMenu = document.rootVisualElement.Q<VisualElement>("MainMenu");
         mainMenu.style.display = DisplayStyle.None;
-        VisualElement menuGenerator = document.rootVisualElement.Q<VisualElement>("MenuGenerator");
-        menuGenerator.style.display = DisplayStyle.None;
+        VisualElement menuWorlds = document.rootVisualElement.Q<VisualElement>("MenuSaveFiles");
+        menuWorlds.style.display = DisplayStyle.None;
+        VisualElement menuCreateWorld = document.rootVisualElement.Q<VisualElement>("MenuCreateWorld");
+        menuCreateWorld.style.display = DisplayStyle.None;
         VisualElement menuSettings = document.rootVisualElement.Q<VisualElement>("MenuSettings");
         menuSettings.style.display = DisplayStyle.None;
 
@@ -163,10 +170,14 @@ public class MainMenu : MonoBehaviour
                 mainMenu.style.display = DisplayStyle.Flex;
                 break;
             case 1:
-                menuGenerator.style.display = DisplayStyle.Flex;
+                menuWorlds.style.display = DisplayStyle.Flex;
                 break;
             case 2:
                 menuSettings.style.display = DisplayStyle.Flex;
+                break;
+            case 3:
+                menuCreateWorld.style.display = DisplayStyle.Flex;
+                GenerateRandomSeed();
                 break;
             default:
                 break;

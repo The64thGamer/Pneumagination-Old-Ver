@@ -43,22 +43,6 @@
     -unity-text-align: upper-left;
 }
 
-.titlescreenboxes {
-    background-color: rgba(206, 94, 86, 0);
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    -unity-font-definition: url('project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&guid=cc1735a3c585aba4480bc03c8d93b029&type=3#PTMono-Regular');
-    color: rgb(255, 255, 255);
-    font-size: 40px;
-    -unity-text-align: upper-left;
-}
-
 .unity-base-slider__tracker {
     background-color: rgb(206, 94, 86);
     border-top-width: 4px;
@@ -76,15 +60,6 @@
     flex-direction: row;
     margin-top: -17.5px;
     height: 35px;
-}
-
-.unity-base-slider__input {
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-    flex-direction: row;
-    flex-grow: 1;
-    position: relative;
 }
 
 .unity-base-slider__text-field {
@@ -115,14 +90,56 @@
     background-color: rgb(255, 255, 255);
 }
 
+.titlescreenboxes {
+    background-color: rgba(206, 94, 86, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    -unity-font-definition: url('project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&guid=cc1735a3c585aba4480bc03c8d93b029&type=3#PTMono-Regular');
+    color: rgb(255, 255, 255);
+    font-size: 40px;
+    -unity-text-align: upper-left;
+}
+
 .unity-base-field__input {
     border-top-width: 0;
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgb(174, 77, 68);
     -unity-text-align: middle-center;
     align-self: center;
     align-items: center;
     min-height: 70px;
+}
+
+.unity-base-slider__input {
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-grow: 1;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-text-element:focus {
+    color: rgb(255, 255, 255);
+}
+
+.unity-label:focus {
+    color: rgb(255, 255, 255);
+}
+
+.unity-base-field:focus {
+    color: rgb(255, 255, 255);
+}
+
+.unity-base-field:focus > .unity-base-field__label {
+    color: rgb(255, 255, 255);
 }

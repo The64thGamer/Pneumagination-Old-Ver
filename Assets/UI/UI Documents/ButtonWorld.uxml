@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/Test.uss?fileID=7433441132597879392&amp;guid=8188b2563d7b06e40b894faa1480da29&amp;type=3#Test" />
+    <ui:VisualElement name="SaveFile" style="flex-grow: 1; flex-direction: row;">
+        <ui:Button display-tooltip-when-elided="true" name="Button" class="titlescreenbuttons" style="max-height: none; align-self: auto; align-items: stretch; justify-content: space-between;">
+            <ui:Label tabindex="-1" text="Test Save File Name" display-tooltip-when-elided="true" name="WorldName" style="-unity-text-align: middle-left; overflow: hidden; text-overflow: ellipsis;" />
+            <ui:Label tabindex="-1" text="Time: 1:00:00 Money: $100" display-tooltip-when-elided="true" name="WorldInfo" style="-unity-text-align: middle-right; font-size: 30px; overflow: hidden; text-overflow: ellipsis;" />
+        </ui:Button>
+        <ui:VisualElement name="OtherButtons" style="flex-grow: 0; min-width: 65px; justify-content: flex-start;">
+            <ui:Button display-tooltip-when-elided="true" name="DuplicateButton" class="titlescreenbuttons" style="max-height: none; flex-shrink: 1; background-image: url(&apos;project://database/Assets/UI/Icons/New%20File%20Icon.png?fileID=2800000&amp;guid=d0fc10bb632ff2d438c56b9d8f794441&amp;type=3#New File Icon&apos;); -unity-background-scale-mode: scale-to-fit; -unity-slice-left: 10; -unity-slice-top: 10; -unity-slice-right: 10; -unity-slice-bottom: 10; margin-bottom: 2.5px;" />
+            <ui:Button display-tooltip-when-elided="true" name="DeleteButton" class="titlescreenbuttons" style="max-height: none; flex-shrink: 1; -unity-slice-left: 10; -unity-slice-top: 10; -unity-slice-right: 10; -unity-slice-bottom: 10; -unity-background-scale-mode: scale-to-fit; background-image: url(&apos;project://database/Assets/UI/Icons/Trash%20Can.png?fileID=2800000&amp;guid=23a4d6a270f9ae64ab01aafe448e5eb7&amp;type=3#Trash Can&apos;); margin-top: 2.5px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

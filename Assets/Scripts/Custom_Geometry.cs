@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Custom_Geometry : MonoBehaviour
 {
+    [Header("Static Data")]
     [SerializeField] MaterialType materialType;
     [SerializeField] MaterialLocation materialLocation;
+    [SerializeField] MaterialColorType materialColorType;
+
+    [Header("Game Decided Data")]
     [SerializeField][Range(0, 1)] float grime;
+
+    [Header("Player Decided Data")]
     [SerializeField] int materialNumber;
     [SerializeField] Color color = Color.white; 
     float rain;
@@ -74,5 +80,14 @@ public class Custom_Geometry : MonoBehaviour
     {
         exterior,
         interior,
+    }
+
+    public enum MaterialColorType
+    {
+        primary,
+        secondary,
+        tertiary,
+        light,
+        dark,
     }
 }

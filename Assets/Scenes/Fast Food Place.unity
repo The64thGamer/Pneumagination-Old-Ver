@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3713.6196, g: 4230.0005, b: 4826.2036, a: 1}
+  m_IndirectSpecularColor: {r: 3713.8755, g: 4230.5356, b: 4826.6333, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -163,6 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 9
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -2335,6 +2336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -2769,6 +2771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 4
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -2786,6 +2789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 5
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -3601,6 +3605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 6
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -4090,6 +4095,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 8
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -4843,6 +4849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -4860,6 +4867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5062,6 +5070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5079,6 +5088,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5096,6 +5106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5113,6 +5124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 1
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5174,6 +5186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -5952,6 +5965,7 @@ MonoBehaviour:
   m_Script: {fileID: 1787309872}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Entries: []
 --- !u!4 &794460555
 Transform:
   m_ObjectHideFlags: 19
@@ -6009,6 +6023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 6
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -7019,6 +7034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 3
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -9863,6 +9879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 7
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -10444,6 +10461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 10
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -10461,6 +10479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 10
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -10478,6 +10497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 7
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -10495,6 +10515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 10
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -10512,6 +10533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 10
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11112,6 +11134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11129,6 +11152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11146,6 +11170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11163,6 +11188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11180,6 +11206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -11241,6 +11268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 3
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -12524,6 +12552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 2
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -13046,6 +13075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 6
   materialLocation: 0
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -14714,8 +14744,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rainPercent: 0
   snowPercent: 0
-  worldFlyingPosition: {x: 0, y: 0, z: 0}
   worldFlyingSphereSize: 120
+  saveFileData:
+    firstName: 
+    lastName: 
+    money: 0
+    worldSeed: 0
+  mapData:
+    mapHistory: []
+    geometryData: []
 --- !u!114 &1913721400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15593,6 +15630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 0
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -16230,6 +16268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   materialType: 3
   materialLocation: 1
+  materialColorType: 0
   grime: 0
   materialNumber: 0
   color: {r: 0, g: 0, b: 0, a: 0}
