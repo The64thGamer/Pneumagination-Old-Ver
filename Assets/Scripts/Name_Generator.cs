@@ -422,6 +422,17 @@ public static class Name_Generator
         "Beer",
         "Wine",
         "Fruit",
+        "Peanuts",
+        "Popcorn",
+        "Cotton Candy",
+        "Funnel Cake",
+        "Sausage",
+        "French Fries",
+        "Fair Food",
+        "Fried Pickles",
+        "Dumplings",
+        "Cookies",
+        "Brownies",
      }
    );
 
@@ -585,7 +596,23 @@ public static class Name_Generator
         "Explosive",
         "Flamin'",
         "Morning",
-        "Seasonal"
+        "Seasonal",
+        "Grilled",
+        "Steamed",
+        "Fried",
+        "Baked",
+        "Hand-Battered",
+        "Deep Fried",
+        "Hand Tossed",
+        "Microwave",
+        "Roasted",
+        "Simmered",
+        "Searing",
+        "Stir Fried",
+        "Stewed",
+        "Frozen",
+        "Fresh",
+        "Carbonated",
      }
    );
 
