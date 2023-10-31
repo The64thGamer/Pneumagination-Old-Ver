@@ -401,6 +401,7 @@ public static class Name_Generator
      new string[] {
         "Time",
         "Mystery",
+        "Australian",
         "Fresh",
         "Cooked",
         "Fun",
@@ -441,6 +442,7 @@ public static class Name_Generator
         "German",
         "French",
         "Dutch",
+        "European",
         "Danish",
         "Egyptian",
         "Finnish",
@@ -543,6 +545,14 @@ public static class Name_Generator
         "Old-School",
         "Giant",
         "Mini",
+        "Clean",
+        "Bargain",
+        "Roadside",
+        "Countryside",
+        "Hillside",
+        "Downtown",
+        "Inner City",
+        "Secret",
      }
    );
 
@@ -615,6 +625,11 @@ public static class Name_Generator
         "Hotel",
         "Dock",
         "& More",
+        "Flea Market",
+        "Thrift Store",
+        "Drug Store",
+        "Pharmacy",
+        "Venue",
      }
    );
 }
