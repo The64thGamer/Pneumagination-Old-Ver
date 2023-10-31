@@ -108,15 +108,16 @@ public static class Name_Generator
                     break;
                 case PartsofSpeech.noun:
                     hasUsedNoun = true;
-                    if (rnd.Next() % chanceOfStoppingAtNoun == 0)
-                    {
-                        breakOut = true;
-                        break;
-                    }
+
                     nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
                     if (rnd.Next() % chanceOfDoubleNoun == 0)
                     {
                         nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
+                    }
+                    if (rnd.Next() % chanceOfStoppingAtNoun == 0)
+                    {
+                        breakOut = true;
+                        break;
                     }
                     break;
                 case PartsofSpeech.adjective:
