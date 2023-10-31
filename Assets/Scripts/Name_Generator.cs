@@ -205,7 +205,7 @@ public static class Name_Generator
                 case PartsofSpeech.noun:
                     if (i > 0 && nameSections[i - 1] == PartsofSpeech.noun)
                     {
-                        fullName += placeNouns[rnd.Next() % placeNouns.Count] + " & ";
+                        fullName += " & ";
                     }
                     fullName += placeNouns[rnd.Next() % placeNouns.Count];
                     break;
