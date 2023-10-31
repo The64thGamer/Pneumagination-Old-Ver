@@ -112,6 +112,7 @@ public static class Name_Generator
                     if (rnd.Next() % chanceOfDoubleNoun == 0)
                     {
                         nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.noun }, rnd));
+                        doubleCheckIndex++;
                     }
                     nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
 
