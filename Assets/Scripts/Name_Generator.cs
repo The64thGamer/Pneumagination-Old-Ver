@@ -8,9 +8,11 @@ public static class Name_Generator
 {
     //Random Chances
     // If random == 0 then yes. rand(0,Random Chances);
-    const int chanceOfPossesive = 3;
     const int chanceOfUsingLastName = 2;
+    const int chanceOfPossesive = 3;
     const int chanceOfStoppingAtNoun = 4;
+    const int chanceOfDoubleNoun = 3;
+    const int chanceOfThe = 5;
 
     public static string GenerateFirstName(int seed, int age)
     {
@@ -112,6 +114,10 @@ public static class Name_Generator
                         break;
                     }
                     nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
+                    if (rnd.Next() % chanceOfDoubleNoun == 0)
+                    {
+                        nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
+                    }
                     break;
                 case PartsofSpeech.adjective:
                     adjectiveCount++;
@@ -151,6 +157,12 @@ public static class Name_Generator
         }
 
         string fullName = "";
+
+        if ((rnd.Next() % chanceOfThe) == 0)
+        {
+            fullName += "The ";
+        }
+
         for (int i = 0; i < nameSections.Count; i++)
         {
             if (i > 0)
@@ -188,6 +200,10 @@ public static class Name_Generator
                     }
                     break;
                 case PartsofSpeech.noun:
+                    if (i > 0 && nameSections[i - 1] == PartsofSpeech.noun)
+                    {
+                        fullName += placeNouns[rnd.Next() % placeNouns.Count] + " & ";
+                    }
                     fullName += placeNouns[rnd.Next() % placeNouns.Count];
                     break;
                 case PartsofSpeech.adjective:
@@ -209,7 +225,7 @@ public static class Name_Generator
         int number = UnityEngine.Random.Range(0, (randomColors.Count / 5)) * 5;
         for (int i = 0; i < colors.Length; i++)
         {
-            ColorUtility.TryParseHtmlString(randomColors[number + i],out colors[i]);
+            ColorUtility.TryParseHtmlString(randomColors[number + i], out colors[i]);
         }
         return colors;
     }
@@ -394,12 +410,22 @@ public static class Name_Generator
         "Deep Dish",
         "Sliders",
         "Waffles",
+        "Fireworks",
+        "Sundae",
+        "Slushie",
+        "Weenie",
+        "Cola",
+        "Cream Soda",
+        "Beer",
+        "Wine",
+        "Fruit",
      }
    );
 
     static readonly ReadOnlyCollection<string> placeAdjective = new ReadOnlyCollection<string>(
      new string[] {
         "Time",
+        "Fruity",
         "Mystery",
         "Australian",
         "Fresh",
@@ -553,6 +579,10 @@ public static class Name_Generator
         "Downtown",
         "Inner City",
         "Secret",
+        "Explosive",
+        "Flamin'",
+        "Morning",
+        "Seasonal"
      }
    );
 
@@ -630,6 +660,7 @@ public static class Name_Generator
         "Drug Store",
         "Pharmacy",
         "Venue",
+        "Parlor",
      }
    );
 }
