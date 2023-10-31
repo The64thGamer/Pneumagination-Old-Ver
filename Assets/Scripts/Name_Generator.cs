@@ -11,7 +11,7 @@ public static class Name_Generator
     const int chanceOfUsingLastName = 2;
     const int chanceOfPossesive = 3;
     const int chanceOfStoppingAtNoun = 4;
-    const int chanceOfDoubleNoun = 3;
+    const int chanceOfDoubleNoun = 5;
     const int chanceOfThe = 5;
 
     public static string GenerateFirstName(int seed, int age)
@@ -109,11 +109,12 @@ public static class Name_Generator
                 case PartsofSpeech.noun:
                     hasUsedNoun = true;
 
-                    nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
                     if (rnd.Next() % chanceOfDoubleNoun == 0)
                     {
-                        nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
+                        nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.noun }, rnd));
                     }
+                    nameSections.Add(GetRandomSection(new List<PartsofSpeech>() { PartsofSpeech.adjective, PartsofSpeech.place }, rnd));
+
                     if (rnd.Next() % chanceOfStoppingAtNoun == 0)
                     {
                         breakOut = true;
