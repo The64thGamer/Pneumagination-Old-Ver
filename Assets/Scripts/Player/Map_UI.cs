@@ -203,15 +203,17 @@ public class Map_UI : MonoBehaviour
         SetStreets(ref chunk, new int[4] { x, 0, 0 - 1, 0 - 1 }, new int[4] { y, 0 - 1, 0 - 1, 0 }, seed);
 
         //Reduce flood to actual roads
+        Vector2 anotherXY;
         for (uint i = 0; i < chunk.Length; i++)
         {
-            if (chunk[i] == 3 && !EvaluateIfStreet(GetXYFromIndex(i) + new Vector2(x * chunkSize, y * chunkSize), seed))
+            if (chunk[i] == 3 && (!EvaluateIfStreet(GetXYFromIndex(i) + new Vector2(x * chunkSize, y * chunkSize), seed)))
             {
                 chunk[i] = 0;
             }
         }
         return chunk;
     }
+
 
     void SetStreets(ref uint[] chunk, int[] x, int[] y, int seed)
     {
@@ -230,12 +232,12 @@ public class Map_UI : MonoBehaviour
                 check = GetXYFromIndex(FindVornoiOfChunk(x[0] + x[i], y[0] + y[i], seed)) + new Vector2((x[0] + x[i]) * chunkSize, (y[0] + y[i]) * chunkSize);
                 pt += GetXYFromIndex(FindVornoiOfChunk(x[0] + x[i], y[0] + y[i], seed)) + new Vector2(x[i] * chunkSize, y[i] * chunkSize);
             }
-            if (EvaluateIfPopulated(check,seed))
+            if (EvaluateIfPopulated(check, seed))
             {
                 isPopulated = true;
             }
         }
-        if(!isPopulated)
+        if (!isPopulated)
         {
             return;
         }
@@ -268,14 +270,31 @@ public class Map_UI : MonoBehaviour
         float x = Mathf.PerlinNoise1D((xy.x * 12731.00721323f) + (seed % 100000));
         float y = Mathf.PerlinNoise1D((xy.y * 14935.0032131f) + (seed % 100000));
 
+        bool isXStreet = false;
+        bool isYStreet = false;
+
         if (x > 0.4f && x < 0.5f)
         {
-            return true;
+            isXStreet = true;
         }
         if (y > 0.4f && y < 0.45f)
         {
+            isYStreet = true;
+        }
+
+        if(isXStreet && isYStreet && (xy.x % 2 == 0 || xy.y % 2 == 0))
+        {
             return true;
         }
+        if (isXStreet && !isYStreet && xy.x % 2 == 0)
+        {
+            return true;
+        }
+        if (isYStreet && !isXStreet && xy.y % 2 == 0)
+        {
+            return true;
+        }
+
         return false;
     }
 
