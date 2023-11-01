@@ -31,7 +31,7 @@ public class Map_UI : MonoBehaviour
 
     private void Update()
     {
-        if(regen)
+        if (regen)
         {
             regen = false;
             foreach (Transform child in map.transform)
@@ -197,60 +197,10 @@ public class Map_UI : MonoBehaviour
         }
 
         //Flood Fill Everything Needing Roads
-        Vector2 pt = Vector2.zero;
-        Vector2 vnXY = GetXYFromIndex(thisChunkVornoi);
-        for (int i = 0; i < 4; i++)
-        {
-            switch (i)
-            {
-                case 0:
-                    pt = (vnXY +
-                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y + 1, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x, y + 1, seed))) / 4;
-                    break;
-                case 1:
-                    pt = (vnXY +
-                          GetXYFromIndex(FindVornoiOfChunk(x, y + 1, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y + 1, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y, seed))) / 4;
-                    break;
-                case 2:
-                    pt = (vnXY +
-                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y - 1, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x, y - 1, seed))) / 4;
-                    break;
-                case 3:
-                    pt = (vnXY +
-                          GetXYFromIndex(FindVornoiOfChunk(x, y - 1, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y - 1, seed)) +
-                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y, seed))) / 4;
-                    break;
-                default:
-                    break;
-            }
-            pt = new Vector2(Mathf.Clamp(Mathf.Floor(pt.x), 0, chunkSize - 1), Mathf.Clamp(Mathf.Floor(pt.y), 0, chunkSize - 1));
-            Debug.Log(pt);
-            Stack<Vector2> pixels = new Stack<Vector2>();
-            pixels.Push(pt);
-
-            while (pixels.Count > 0)
-            {
-                Vector2 a = pixels.Pop();
-                if (a.x < chunkSize && a.x >= 0 && a.y < chunkSize && a.y >= 0)
-                {
-                    if (chunk[GetIndexFromXY(a)] == 0)
-                    {
-                        chunk[GetIndexFromXY(a)] = 3;
-                        pixels.Push(new Vector2(a.x - 1, a.y));
-                        pixels.Push(new Vector2(a.x + 1, a.y));
-                        pixels.Push(new Vector2(a.x, a.y - 1));
-                        pixels.Push(new Vector2(a.x, a.y + 1));
-                    }
-                }
-            }
-        }
+        SetStreets(ref chunk, new int[4] { x, 0 - 1, x - 1, 0 }, new int[4] { y, 0, 0 + 1, 0 + 1 }, seed);
+        SetStreets(ref chunk, new int[4] { x, 0, 0 + 1, 0 + 1 }, new int[4] { y, 0 + 1, 0 + 1, 0 }, seed);
+        SetStreets(ref chunk, new int[4] { x, 0 + 1, 0 + 1, 0 }, new int[4] { y, 0, 0 - 1, 0 - 1 }, seed);
+        SetStreets(ref chunk, new int[4] { x, 0, 0 - 1, 0 - 1 }, new int[4] { y, 0 - 1, 0 - 1, 0 }, seed);
 
         //Reduce flood to actual roads
         for (uint i = 0; i < chunk.Length; i++)
@@ -261,6 +211,44 @@ public class Map_UI : MonoBehaviour
             }
         }
         return chunk;
+    }
+
+    void SetStreets(ref uint[] chunk, int[] x, int[] y, int seed)
+    {
+        Vector2 pt = Vector2.zero;
+        for (int i = 0; i < x.Length; i++)
+        {
+            if (i == 0)
+            {
+                pt += GetXYFromIndex(FindVornoiOfChunk(x[0], y[0], seed));
+            }
+            else
+            {
+                pt += GetXYFromIndex(FindVornoiOfChunk(x[0] + x[i], y[0] + y[i], seed)) + new Vector2(x[i] * chunkSize, y[i] * chunkSize);
+            }
+        }
+        pt /= x.Length;
+
+        pt = new Vector2(Mathf.Clamp(Mathf.Floor(pt.x), 0, chunkSize - 1), Mathf.Clamp(Mathf.Floor(pt.y), 0, chunkSize - 1));
+        Debug.Log(pt);
+        Stack<Vector2> pixels = new Stack<Vector2>();
+        pixels.Push(pt);
+
+        while (pixels.Count > 0)
+        {
+            Vector2 a = pixels.Pop();
+            if (a.x < chunkSize && a.x >= 0 && a.y < chunkSize && a.y >= 0)
+            {
+                if (chunk[GetIndexFromXY(a)] == 0)
+                {
+                    chunk[GetIndexFromXY(a)] = 3;
+                    pixels.Push(new Vector2(a.x - 1, a.y));
+                    pixels.Push(new Vector2(a.x + 1, a.y));
+                    pixels.Push(new Vector2(a.x, a.y - 1));
+                    pixels.Push(new Vector2(a.x, a.y + 1));
+                }
+            }
+        }
     }
 
     bool EvaluateIfStreet(Vector2 xy, int seed)
@@ -305,9 +293,9 @@ public class Map_UI : MonoBehaviour
         return (uint)(Mathf.Floor(xy.x) + (chunkSize * Mathf.Floor(xy.y)));
     }
 
-    uint FindVornoiOfChunk(int x, int y, int seed)
+    uint FindVornoiOfChunk(int chunkX, int chunkY, int seed)
     {
-        Random rnd = new Random(seed ^ Animator.StringToHash(x.ToString() + y.ToString()));
+        Random rnd = new Random(seed ^ Animator.StringToHash(chunkX.ToString() + chunkY.ToString()));
 
         return (uint)rnd.Next() % chunkArrayLength;
     }
