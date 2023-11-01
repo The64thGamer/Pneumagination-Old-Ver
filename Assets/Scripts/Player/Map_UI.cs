@@ -110,7 +110,7 @@ public class Map_UI : MonoBehaviour
                         {
                             break;
                         }
-                        else if (path.x < chunkSize && path.y < chunkSize && path.x > 0 && path.y > 0)
+                        else if (path.x < chunkSize && path.y < chunkSize && path.x >= 0 && path.y >= 0)
                         {
                             chunk[GetIndexFromXY(path)] = 1;
                         }
@@ -202,7 +202,8 @@ public class Map_UI : MonoBehaviour
 
     uint FindVornoiOfChunk(int x, int y, int seed)
     {
-        Random rnd = new Random(seed ^ x ^ y);
+        Random rnd = new Random(seed ^ Animator.StringToHash(x.ToString() + y.ToString()));
+
         return (uint)rnd.Next() % chunkArrayLength;
     }
 
