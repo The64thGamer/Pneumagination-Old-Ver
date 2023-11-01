@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 4150.3716, g: 4722.1763, b: 5333.0786, a: 1}
+  m_IndirectSpecularColor: {r: 4153.11, g: 4724.766, b: 5335.3286, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4119,6 +4119,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2219712907563678121, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: deadInterface
+      value: 
+      objectReference: {fileID: 1913721400}
     - target: {fileID: 3805736980352897171, guid: 1c330a5dda1766344b18a150867e4570,
         type: 3}
       propertyPath: m_Name
@@ -4149,6 +4154,11 @@ PrefabInstance:
       propertyPath: editorMenu.m_Action.m_Name
       value: Editor Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 5715502732616384457, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: dataManager
+      value: 
+      objectReference: {fileID: 1913721398}
     - target: {fileID: 7198735824386820814, guid: 1c330a5dda1766344b18a150867e4570,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4811,6 +4821,7 @@ MonoBehaviour:
     startingColorTertiary: {r: 0, g: 0, b: 0, a: 0}
     startingColorLight: {r: 0, g: 0, b: 0, a: 0}
     startingColorDark: {r: 0, g: 0, b: 0, a: 0}
+  retryMap: 0
 --- !u!114 &1913721400
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3713.77, g: 4230.274, b: 4826.571, a: 1}
+  m_IndirectSpecularColor: {r: 3548.4976, g: 3818.5825, b: 3736.5981, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5977,7 +5977,6 @@ MonoBehaviour:
   m_Script: {fileID: 1787309872}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Entries: []
 --- !u!4 &794460555
 Transform:
   m_ObjectHideFlags: 19
@@ -17284,6 +17283,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2219712907563678121, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: deadInterface
+      value: 
+      objectReference: {fileID: 1913721400}
     - target: {fileID: 3443166164764453272, guid: 1c330a5dda1766344b18a150867e4570,
         type: 3}
       propertyPath: managedReferences[3478923594841980928].enabled
@@ -17305,6 +17309,11 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5555639428295138727, guid: 1c330a5dda1766344b18a150867e4570,
+        type: 3}
+      propertyPath: dataManager
+      value: 
+      objectReference: {fileID: 1913721398}
+    - target: {fileID: 5715502732616384457, guid: 1c330a5dda1766344b18a150867e4570,
         type: 3}
       propertyPath: dataManager
       value: 

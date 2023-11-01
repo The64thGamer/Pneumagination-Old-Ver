@@ -56,6 +56,11 @@ public class Data_Manager : MonoBehaviour
         }
     }
 
+    public int GetSeed()
+    {
+        return saveFileData.worldSeed;
+    }
+
     void ApplyGeometryColorsAndSaveNewGeo()
     {
         Custom_Geometry[] customGeo = FindObjectsByType<Custom_Geometry>(FindObjectsSortMode.None);
