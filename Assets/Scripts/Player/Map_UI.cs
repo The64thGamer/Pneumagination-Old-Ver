@@ -92,16 +92,39 @@ public class Map_UI : MonoBehaviour
             {
                 Vector2 vornoiPoint = GetXYFromIndex(FindVornoiOfChunk(x + xn, y + yn, seed)) + new Vector2(xn * chunkSize, yn * chunkSize);
                 Vector2 path = GetXYFromIndex(thisChunkVornoi);
+
+                bool reverseApply = false;
+                if(vornoiPoint.x < path.x)
+                {
+                    Vector2 temp = path;
+                    path = vornoiPoint;
+                    vornoiPoint = temp;
+                    reverseApply = true;
+                }
+
                 while (true)
                 {
-
-                    if (path.x >= chunkSize || path.y >= chunkSize || path.x < 0 || path.y < 0)
+                    if (reverseApply)
                     {
-                        break;
+                        if (path.x == vornoiPoint.x && path.y == vornoiPoint.y)
+                        {
+                            break;
+                        }
+                        else if (path.x < chunkSize && path.y < chunkSize && path.x > 0 && path.y > 0)
+                        {
+                            chunk[GetIndexFromXY(path)] = 1;
+                        }
                     }
                     else
                     {
-                        chunk[GetIndexFromXY(path)] = 1;
+                        if (path.x >= chunkSize || path.y >= chunkSize || path.x < 0 || path.y < 0)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            chunk[GetIndexFromXY(path)] = 1;
+                        }
                     }
 
                     if (vornoiPoint.x == path.x)
@@ -118,31 +141,7 @@ public class Map_UI : MonoBehaviour
                     else
                     {
                         float angle = CalculateSlope(path, vornoiPoint);
-                        if (vornoiPoint.x < path.x)
-                        {
-                            angle *= -1;
-                            if (angle == 1)
-                            {
-                                path += new Vector2(-1, 1);
-                            }
-                            else if (angle < 1 && angle > -1)
-                            {
-                                path += new Vector2(-1, 0);
-                            }
-                            else if (angle > 1)
-                            {
-                                path += new Vector2(0, 1);
-                            }
-                            else if (angle < -1)
-                            {
-                                path += new Vector2(0, -1);
-                            }
-                            else if (angle == -1)
-                            {
-                                path += new Vector2(-1, -1);
-                            }
-                        }
-                        else if (vornoiPoint.x > path.x)
+                        if (vornoiPoint.x > path.x)
                         {
                             if (angle == 1)
                             {
