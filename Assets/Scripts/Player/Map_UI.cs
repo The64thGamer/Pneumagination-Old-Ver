@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 using Random = System.Random;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 
 public class Map_UI : MonoBehaviour
 {
@@ -9,20 +9,43 @@ public class Map_UI : MonoBehaviour
     [SerializeField] Transform map;
     [SerializeField] Camera mapCam;
     [SerializeField] Sprite[] spriteSheet;
+    [SerializeField] float arbitraryX;
+    [SerializeField] float arbitraryY;
+    [SerializeField] bool regen;
 
     const int chunkSize = 64;
     const int chunkArrayLength = 4096;
+    const int chunksLoaded = 2;
 
     void Start()
     {
-        for (int y = -5; y < 6; y++)
+        for (int y = -chunksLoaded; y < chunksLoaded + 1; y++)
         {
-            for (int x = -5; x < 6; x++)
+            for (int x = -chunksLoaded; x < chunksLoaded + 1; x++)
             {
-                DisplayChunk(GenerateChunk(x, y, dataManager.GetSeed()),x,y);
+                DisplayChunk(GenerateChunk(x, y, dataManager.GetSeed()), x, y);
             }
         }
 
+    }
+
+    private void Update()
+    {
+        if(regen)
+        {
+            regen = false;
+            foreach (Transform child in map.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            for (int y = -chunksLoaded; y < chunksLoaded + 1; y++)
+            {
+                for (int x = -chunksLoaded; x < chunksLoaded + 1; x++)
+                {
+                    DisplayChunk(GenerateChunk(x, y, dataManager.GetSeed()), x, y);
+                }
+            }
+        }
     }
 
     private void LateUpdate()
@@ -46,7 +69,7 @@ public class Map_UI : MonoBehaviour
                     t.layer = 5;
                     t.transform.localEulerAngles = new Vector3(90, 0, 0);
                     t.transform.parent = map;
-                    t.transform.localPosition = new Vector3(x + (xChunk* chunkSize), 0, y + (yChunk * chunkSize));
+                    t.transform.localPosition = new Vector3(x + (xChunk * chunkSize), 0, y + (yChunk * chunkSize));
                     SpriteRenderer spr = t.AddComponent<SpriteRenderer>();
                     spr.sprite = spriteSheet[currentSprite - 1];
                     spr.color = c;
@@ -61,6 +84,7 @@ public class Map_UI : MonoBehaviour
         uint[] chunk = new uint[4096];
         uint thisChunkVornoi = FindVornoiOfChunk(x, y, seed);
 
+        //Highway Generation
         for (int i = 0; i < 4; i++)
         {
             int xn = 0;
@@ -94,7 +118,7 @@ public class Map_UI : MonoBehaviour
                 Vector2 path = GetXYFromIndex(thisChunkVornoi);
 
                 bool reverseApply = false;
-                if(vornoiPoint.x < path.x)
+                if (vornoiPoint.x < path.x)
                 {
                     Vector2 temp = path;
                     path = vornoiPoint;
@@ -171,7 +195,88 @@ public class Map_UI : MonoBehaviour
 
             }
         }
+
+        //Flood Fill Everything Needing Roads
+        Vector2 pt = Vector2.zero;
+        Vector2 vnXY = GetXYFromIndex(thisChunkVornoi);
+        for (int i = 0; i < 4; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    pt = (vnXY +
+                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y + 1, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x, y + 1, seed))) / 4;
+                    break;
+                case 1:
+                    pt = (vnXY +
+                          GetXYFromIndex(FindVornoiOfChunk(x, y + 1, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y + 1, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y, seed))) / 4;
+                    break;
+                case 2:
+                    pt = (vnXY +
+                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x + 1, y - 1, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x, y - 1, seed))) / 4;
+                    break;
+                case 3:
+                    pt = (vnXY +
+                          GetXYFromIndex(FindVornoiOfChunk(x, y - 1, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y - 1, seed)) +
+                          GetXYFromIndex(FindVornoiOfChunk(x - 1, y, seed))) / 4;
+                    break;
+                default:
+                    break;
+            }
+            pt = new Vector2(Mathf.Clamp(Mathf.Floor(pt.x), 0, chunkSize - 1), Mathf.Clamp(Mathf.Floor(pt.y), 0, chunkSize - 1));
+            Debug.Log(pt);
+            Stack<Vector2> pixels = new Stack<Vector2>();
+            pixels.Push(pt);
+
+            while (pixels.Count > 0)
+            {
+                Vector2 a = pixels.Pop();
+                if (a.x < chunkSize && a.x >= 0 && a.y < chunkSize && a.y >= 0)
+                {
+                    if (chunk[GetIndexFromXY(a)] == 0)
+                    {
+                        chunk[GetIndexFromXY(a)] = 3;
+                        pixels.Push(new Vector2(a.x - 1, a.y));
+                        pixels.Push(new Vector2(a.x + 1, a.y));
+                        pixels.Push(new Vector2(a.x, a.y - 1));
+                        pixels.Push(new Vector2(a.x, a.y + 1));
+                    }
+                }
+            }
+        }
+
+        //Reduce flood to actual roads
+        for (uint i = 0; i < chunk.Length; i++)
+        {
+            if (chunk[i] == 3 && !EvaluateIfStreet(GetXYFromIndex(i) + new Vector2(x * chunkSize, y * chunkSize), seed))
+            {
+                chunk[i] = 0;
+            }
+        }
         return chunk;
+    }
+
+    bool EvaluateIfStreet(Vector2 xy, int seed)
+    {
+        float x = Mathf.PerlinNoise1D((xy.x * 12731.00721323f) + (seed % 100000));
+        float y = Mathf.PerlinNoise1D((xy.y * 14935.0032131f) + (seed % 100000));
+
+        if (x > 0.4f && x < 0.45f)
+        {
+            return true;
+        }
+        if (y > 0.4f && y < 0.45f)
+        {
+            return true;
+        }
+        return false;
     }
 
     float CalculateSlope(Vector2 point1, Vector2 point2)
@@ -197,7 +302,7 @@ public class Map_UI : MonoBehaviour
 
     uint GetIndexFromXY(Vector2 xy)
     {
-        return (uint)(xy.x + (chunkSize * xy.y));
+        return (uint)(Mathf.Floor(xy.x) + (chunkSize * Mathf.Floor(xy.y)));
     }
 
     uint FindVornoiOfChunk(int x, int y, int seed)
@@ -208,3 +313,4 @@ public class Map_UI : MonoBehaviour
     }
 
 }
+

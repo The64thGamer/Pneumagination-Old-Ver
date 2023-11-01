@@ -277,7 +277,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 23
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1185,3 +1185,5 @@ MonoBehaviour:
   spriteSheet:
   - {fileID: 21300000, guid: e41f5396736b8b444bc991952d3603fb, type: 3}
   - {fileID: 21300000, guid: fe5f7be2ce4939143b7d375e8ba22164, type: 3}
+  - {fileID: 21300000, guid: 18df26a49e2c5d849a5111e5d1d7fd6f, type: 3}
+  - {fileID: 21300000, guid: cffb8d3267a6dfb4bb4dadea7f90ada5, type: 3}
