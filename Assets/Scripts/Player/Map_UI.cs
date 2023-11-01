@@ -15,7 +15,7 @@ public class Map_UI : MonoBehaviour
 
     const int chunkSize = 64;
     const int chunkArrayLength = 4096;
-    const int chunksLoaded = 2;
+    const int chunksLoaded = 3;
 
     void Start()
     {
@@ -216,16 +216,28 @@ public class Map_UI : MonoBehaviour
     void SetStreets(ref uint[] chunk, int[] x, int[] y, int seed)
     {
         Vector2 pt = Vector2.zero;
+        bool isPopulated = false;
         for (int i = 0; i < x.Length; i++)
         {
+            Vector2 check = Vector2.zero;
             if (i == 0)
             {
+                check = GetXYFromIndex(FindVornoiOfChunk(x[0], y[0], seed)) + new Vector2(x[0] * chunkSize, y[0] * chunkSize);
                 pt += GetXYFromIndex(FindVornoiOfChunk(x[0], y[0], seed));
             }
             else
             {
+                check = GetXYFromIndex(FindVornoiOfChunk(x[0] + x[i], y[0] + y[i], seed)) + new Vector2((x[0] + x[i]) * chunkSize, (y[0] + y[i]) * chunkSize);
                 pt += GetXYFromIndex(FindVornoiOfChunk(x[0] + x[i], y[0] + y[i], seed)) + new Vector2(x[i] * chunkSize, y[i] * chunkSize);
             }
+            if (EvaluateIfPopulated(check,seed))
+            {
+                isPopulated = true;
+            }
+        }
+        if(!isPopulated)
+        {
+            return;
         }
         pt /= x.Length;
 
@@ -256,7 +268,7 @@ public class Map_UI : MonoBehaviour
         float x = Mathf.PerlinNoise1D((xy.x * 12731.00721323f) + (seed % 100000));
         float y = Mathf.PerlinNoise1D((xy.y * 14935.0032131f) + (seed % 100000));
 
-        if (x > 0.4f && x < 0.45f)
+        if (x > 0.4f && x < 0.5f)
         {
             return true;
         }
@@ -264,6 +276,18 @@ public class Map_UI : MonoBehaviour
         {
             return true;
         }
+        return false;
+    }
+
+    bool EvaluateIfPopulated(Vector2 xy, int seed)
+    {
+        float pn = Mathf.PerlinNoise((xy.x * 0.01721323f) + (seed % 100000), ((xy.y * 0.0132131f) + (seed % 100000)));
+
+        if (pn > 0.7f && pn < 1)
+        {
+            return true;
+        }
+
         return false;
     }
 
