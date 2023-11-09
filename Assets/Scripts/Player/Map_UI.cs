@@ -203,7 +203,6 @@ public class Map_UI : MonoBehaviour
         SetStreets(ref chunk, new int[4] { x, 0, 0 - 1, 0 - 1 }, new int[4] { y, 0 - 1, 0 - 1, 0 }, seed);
 
         //Reduce flood to actual roads
-        Vector2 anotherXY;
         for (uint i = 0; i < chunk.Length; i++)
         {
             if (chunk[i] == 3 && (!EvaluateIfStreet(GetXYFromIndex(i) + new Vector2(x * chunkSize, y * chunkSize), seed)))
@@ -244,7 +243,6 @@ public class Map_UI : MonoBehaviour
         pt /= x.Length;
 
         pt = new Vector2(Mathf.Clamp(Mathf.Floor(pt.x), 0, chunkSize - 1), Mathf.Clamp(Mathf.Floor(pt.y), 0, chunkSize - 1));
-        Debug.Log(pt);
         Stack<Vector2> pixels = new Stack<Vector2>();
         pixels.Push(pt);
 

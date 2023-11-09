@@ -131,10 +131,8 @@ public class DEAD_Interface : MonoBehaviour
             showtapeSlots[activeShowtapeSlot].currentTimeElapsed = currentTimeElapsed;
             float newTime = showtapeSlots[activeShowtapeSlot].currentTimeElapsed;
 
-            bool swapTimesBack = false;
             if (newTime < oldTime)
             {
-                swapTimesBack = true;
                 float temp = oldTime;
                 oldTime = newTime;
                 newTime = temp;
@@ -264,7 +262,6 @@ public class DEAD_Interface : MonoBehaviour
             //Swap time back
             if (newTime < oldTime)
             {
-                swapTimesBack = false;
                 float temp = oldTime;
                 oldTime = newTime;
                 newTime = temp;
