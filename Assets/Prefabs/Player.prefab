@@ -578,7 +578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataManager: {fileID: 0}
-  playerUI: {fileID: 0}
+  playerUI: {fileID: 2219712907563678121}
   _mainCamera: {fileID: 6487522925483904757}
   camOffet: {fileID: 2556485762120783340}
   moveAxis:
