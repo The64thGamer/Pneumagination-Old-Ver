@@ -1,4 +1,4 @@
-using SFB;
+using SimpleFileBrowser;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,7 +52,7 @@ public class DEAD_Recorder : MonoBehaviour
 
     void DataSet(int index, float time, float value)
     {
-        if(index > dtuReplica.Length - 1)
+        if (index > dtuReplica.Length - 1)
         {
             return;
         }
@@ -82,7 +82,7 @@ public class DEAD_Recorder : MonoBehaviour
         {
             if (showtape.layers == null || showtape.layers.Length == 0)
             {
-                showtape.layers = new DEAD_Showtape_Layers[] { new DEAD_Showtape_Layers()};
+                showtape.layers = new DEAD_Showtape_Layers[] { new DEAD_Showtape_Layers() };
             }
 
             //Signals
@@ -111,6 +111,15 @@ public class DEAD_Recorder : MonoBehaviour
 
     void SaveTapeToFile()
     {
+        if (FileBrowser.IsOpen)
+        {
+            return;
+        }
+        StartCoroutine(SaveCoroutine());
+    }
+
+    IEnumerator SaveCoroutine()
+    {
         DEAD_Showtape showtape = deadInterface.GetShowtape(0);
 
         if (showtape != null)
@@ -119,10 +128,12 @@ public class DEAD_Recorder : MonoBehaviour
             showtape.timeLastUpdated.dateTime = DateTime.Now;
 
             //Save
-            string path = StandaloneFileBrowser.SaveFilePanel("Save Showtape File", "", "MyShowtape", new[] { new ExtensionFilter("Showtape Files", "showtape"), });
-            if (path != "")
+            FileBrowser.SetFilters(false, new FileBrowser.Filter("Showtape Files", ".showtape"));
+            yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Save Showtape File", "Save");
+
+            if (FileBrowser.Success && FileBrowser.Result != null && FileBrowser.Result.Length != 0)
             {
-                DEAD_Save_Load.SaveShowtape(path, showtape);
+                DEAD_Save_Load.SaveShowtape(FileBrowser.Result[0], showtape);
             }
         }
     }

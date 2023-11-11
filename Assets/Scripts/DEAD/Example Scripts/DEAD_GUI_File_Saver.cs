@@ -1,9 +1,10 @@
-using SFB;
+using SimpleFileBrowser;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class DEAD_GUI_File_Saver : MonoBehaviour
 {
@@ -70,26 +71,26 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
 
     void InjectAudioData()
     {
-        var extensions = new[] {new ExtensionFilter("Audio Files", "wav", "aiff", "mp3","wma"),};
-        string[] files = StandaloneFileBrowser.OpenFilePanel("Load Showtape Audio", "", extensions, false);
-        if (files != null && files.Length != 0)
+        if (FileBrowser.IsOpen)
         {
-            if (File.Exists(files[0]))
-            {
-                StartCoroutine(AudioDataCoroutine(files[0]));
-            }
+            return;
         }
+        StartCoroutine(InjectCoroutine());
     }
 
-    IEnumerator AudioDataCoroutine(string path)
+    IEnumerator InjectCoroutine()
     {
-        Debug.Log("Reading Audio");
-        yield return null;
-        byte[] filestream = File.ReadAllBytes(path);
-        Debug.Log("Audio Read");
-        yield return null;
-        showtape.audioClips = new DEAD_ByteArray[] { new DEAD_ByteArray() { fileName = Path.GetFileName(path), array = filestream } };
-        Debug.Log("Injected Into Showtape");
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Audio Files", "wav", "aiff", "mp3", "wma"));
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Load Showtape Audio", "Load");
+
+        if (FileBrowser.Success && FileBrowser.Result != null && FileBrowser.Result.Length != 0)
+        {
+            if (File.Exists(FileBrowser.Result[0]))
+            {
+                byte[] filestream = File.ReadAllBytes(FileBrowser.Result[0]);
+                showtape.audioClips = new DEAD_ByteArray[] { new DEAD_ByteArray() { fileName = Path.GetFileName(FileBrowser.Result[0]), array = filestream } };
+            }
+        }
     }
 
     void InjectIntoInterface()
@@ -116,6 +117,10 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
 
     void SaveFile(bool newFileDate)
     {
+        if (FileBrowser.IsOpen)
+        {
+            return;
+        }
         //Preload data
         showtape.name = name;
         showtape.author = author;
@@ -129,20 +134,30 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
         showtape.timeLastUpdated = new UDateTime() { dateTime = DateTime.Now };
 
         //Save
-        string path = StandaloneFileBrowser.SaveFilePanel("Save Showtape File", "", "MyShowtape", new[] { new ExtensionFilter("Showtape Files", "showtape"), });
-        if (path != "")
+
+        StartCoroutine(SaveCoroutine());
+    }
+
+    IEnumerator SaveCoroutine()
+    {
+        //Save
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Showtape Files", ".showtape"));
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Save Showtape File", "Save");
+
+        if (FileBrowser.Success && FileBrowser.Result != null && FileBrowser.Result.Length != 0)
         {
-            DEAD_Save_Load.SaveShowtape(path, showtape);
+            DEAD_Save_Load.SaveShowtape(FileBrowser.Result[0], showtape);
         }
     }
 
     void LoadFile()
     {
-        string[] files = StandaloneFileBrowser.OpenFilePanel("Load Showtape File", "", "showtape", false);
-        if(files != null && files.Length != 0)
+        if (FileBrowser.IsOpen)
         {
-            showtape = DEAD_Save_Load.LoadShowtape(files[0]);
+            return;
         }
+
+        StartCoroutine(LoadCoroutine());
 
         name = showtape.name;
         author = showtape.author;
@@ -153,5 +168,17 @@ public class DEAD_GUI_File_Saver : MonoBehaviour
         timeCreated = showtape.timeCreated;
         timeLastUpdated = showtape.timeLastUpdated;
 
+    }
+
+
+    IEnumerator LoadCoroutine()
+    {
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Showtape Files", ".showtape"));
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Load Showtape File", "Load");
+
+        if (FileBrowser.Success && FileBrowser.Result != null && FileBrowser.Result.Length != 0)
+        {
+            showtape = DEAD_Save_Load.LoadShowtape(FileBrowser.Result[0]);
+        }
     }
 }

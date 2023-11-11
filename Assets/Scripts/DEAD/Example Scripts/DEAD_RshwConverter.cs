@@ -1,4 +1,4 @@
-using SFB;
+using SimpleFileBrowser;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,6 +33,17 @@ public class DEAD_RshwConverter : MonoBehaviour
 
     void SaveFile(bool newFileDate)
     {
+        if (FileBrowser.IsOpen)
+        {
+            return;
+        }
+
+
+        StartCoroutine(SaveCoroutine(newFileDate));
+    }
+
+    IEnumerator SaveCoroutine(bool newFileDate)
+    {
         DEAD_Showtape showtape = deadInterface.GetShowtape(0);
         //Preload data
         if (newFileDate)
@@ -40,27 +51,37 @@ public class DEAD_RshwConverter : MonoBehaviour
             showtape.timeCreated = new UDateTime() { dateTime = DateTime.Now };
         }
         showtape.timeLastUpdated = new UDateTime() { dateTime = DateTime.Now };
-
         //Save
-        string path = StandaloneFileBrowser.SaveFilePanel("Save Showtape File", "", "MyShowtape", new[] { new ExtensionFilter("Showtape Files", "showtape"), });
-        if (path != "")
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Showtape Files", ".showtape"));
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Save Showtape File", "Save");
+
+        if (FileBrowser.Success && FileBrowser.Result != null && FileBrowser.Result.Length != 0)
         {
-            DEAD_Save_Load.SaveShowtape(path, showtape);
+            DEAD_Save_Load.SaveShowtape(FileBrowser.Result[0], showtape);
         }
     }
 
     void ConvertRshw()
     {
-        var extensions = new[] { new ExtensionFilter("RR Engine Showtapes", "cshw", "sshw", "rshw", "nshw","fshw", "tshw" , "mshw" )};
-        string[] files = StandaloneFileBrowser.OpenFilePanel("Load RR Engine Showtape File", "", extensions, false);
-        if (files != null && files.Length != 0)
+        if (FileBrowser.IsOpen)
+        {
+            return;
+        }
+        StartCoroutine(ConvertRshwCoroutine());
+    }
+    IEnumerator ConvertRshwCoroutine()
+    {
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("RR Engine Showtapes", ".cshw", ".sshw", ".rshw", ".nshw", ".fshw", ".tshw", ".mshw"));
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Load RR Engine Showtape File", "Load");
+
+        if (FileBrowser.Success && FileBrowser.Result != null && FileBrowser.Result.Length != 0)
         {
             rshwFormat oldShow;
-            oldShow = rshwFormat.ReadFromFile(files[0]);
+            oldShow = rshwFormat.ReadFromFile(FileBrowser.Result[0]);
 
             DEAD_Showtape showtape = new DEAD_Showtape();
 
-            string[] combined = Path.GetFileNameWithoutExtension(files[0]).Split(new string[] { " - " }, StringSplitOptions.None);
+            string[] combined = Path.GetFileNameWithoutExtension(FileBrowser.Result[0]).Split(new string[] { " - " }, StringSplitOptions.None);
             showtape.name = combined[0];
             if (combined.Length > 1)
             {
