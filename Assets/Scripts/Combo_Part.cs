@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Combo_Part : MonoBehaviour
 {
-    public string resourcesPath;
+    public uint index;
     public List<BendablePart> bendableParts;
     public ComboTag partTag;
     public ComboTag parentTag;
@@ -22,8 +22,7 @@ public class Combo_Part : MonoBehaviour
 [System.Serializable]
 public class BendablePart
 {
-    [Tooltip("Make name unique from other bendable parts this can be used with. This name is tagged in save files with the corresponding bend value.")]
-    public string uniqueBendName;
+    public string bendName;
     public string boneName;
     public Quaternion minPosition;
     public Quaternion maxPosition;
@@ -32,8 +31,8 @@ public class BendablePart
 [System.Serializable]
 public class Combo_Part_SaveFile
 {
-    public string resourcesPath;
-    public List<Combo_BendablePart_SaveFile> bendableParts;
+    public uint id;
+    public List<Combo_BendablePart_SaveFile> bendableSections;
 }
 [System.Serializable]
 public class Combo_BendablePart_SaveFile
