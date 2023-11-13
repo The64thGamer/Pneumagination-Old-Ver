@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class Combo_Part : MonoBehaviour
 {
-    public uint index;
     public List<BendablePart> bendableParts;
     public ComboTag partTag;
-    public ComboTag parentTag;
-    public List<ComboTag> childTags;
 
     public enum ComboTag
     {

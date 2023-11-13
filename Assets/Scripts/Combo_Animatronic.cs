@@ -4,18 +4,47 @@ using UnityEngine;
 
 public class Combo_Animatronic : MonoBehaviour
 {
-    public string playerGivenName;
-    public UDateTime creationDate;
-    public UDateTime lastCleanedDate;
+    [SerializeField] string playerGivenName;
+    [SerializeField] UDateTime creationDate;
+    [SerializeField] UDateTime lastCleanedDate;
+    [SerializeField] List<uint> partIds;
+
+    private void Start()
+    {
+        LoadData();
+    }
 
     public void LoadData()
     {
+        ClearAllParts();
+        List<uint> tempPartIds = partIds;
 
+        //First find the root body item
+        for (int i = 0; i < tempPartIds.Count; i++)
+        {
+            GameObject g = Resources.Load<GameObject>("Animatronics/Prefabs/" + tempPartIds[i]);
+            if (g.GetComponent<Combo_Part>().partTag == Combo_Part.ComboTag.body)
+            {
+                g = GameObject.Instantiate(g);
+                g.transform.parent = transform;
+                g.name = tempPartIds[i].ToString();
+                tempPartIds.RemoveAt(i);
+                break;
+            }
+        }
     }
 
     public void SaveData()
     {
 
+    }
+
+    void ClearAllParts()
+    {
+        foreach (GameObject child in transform)
+        {
+            Destroy(child);
+        }
     }
 
 
