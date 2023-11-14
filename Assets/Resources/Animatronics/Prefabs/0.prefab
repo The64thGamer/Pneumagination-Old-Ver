@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &659122098061466841
+--- !u!1001 &901509149329054079
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 1521829528259187298, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
       propertyPath: m_Name
-      value: Early Animatronic Body 1 Variant
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
@@ -21,7 +21,7 @@ PrefabInstance:
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
@@ -31,7 +31,7 @@ PrefabInstance:
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
@@ -41,7 +41,7 @@ PrefabInstance:
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
@@ -56,7 +56,7 @@ PrefabInstance:
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
@@ -70,28 +70,27 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1521829528259187298, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4091401259540044395}
+      addedObject: {fileID: 651025041718521605}
   m_SourcePrefab: {fileID: 100100000, guid: e1d55b0813aa5514886671dc787e114d, type: 3}
---- !u!1 &2034276740259811003 stripped
+--- !u!1 &1845440313008786205 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1521829528259187298, guid: e1d55b0813aa5514886671dc787e114d,
     type: 3}
-  m_PrefabInstance: {fileID: 659122098061466841}
+  m_PrefabInstance: {fileID: 901509149329054079}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4091401259540044395
+--- !u!114 &651025041718521605
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2034276740259811003}
+  m_GameObject: {fileID: 1845440313008786205}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3609f85199790d4ea7ea8ad3244d119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourcesPath: 
+  partName: Tilting Torso
   bendableParts: []
   partTag: 1
-  parentTag: 0
-  childTags: 020000000300000004000000
+  connectingBone: 
