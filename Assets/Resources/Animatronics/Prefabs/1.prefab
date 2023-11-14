@@ -176,9 +176,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deadActuators:
-  - actuationName: 
-    animation: {fileID: 0}
-    dtuIndex: 0
+  - actuationName: Arm Bend
+    animation: {fileID: -7329567338359567489, guid: dcc271fbec9067440801b9d87040c232,
+      type: 3}
+    dtuIndex: 9
     actuatorType: 0
     invertedFlow: 0
     fulcrumBone: {fileID: 0}
@@ -189,8 +190,8 @@ MonoBehaviour:
     boreDiameterInch: 0
     strokeLengthInch: 0
     rodDiameterInch: 0
-    airflowExtension: 0
-    airflowRetraction: 0
+    airflowExtension: 0.067
+    airflowRetraction: 0.088
     airlineLengthFeet: 0
     minAngleDegrees: 0
     maxAngleDegrees: 0
