@@ -78,6 +78,11 @@ public class DEAD_Animatronic : MonoBehaviour
     {
         return deadActuators;
     }
+
+    public void SetInterface(DEAD_Interface dead)
+    {
+        deadInterface = dead;
+    }
 }
 
 [System.Serializable]

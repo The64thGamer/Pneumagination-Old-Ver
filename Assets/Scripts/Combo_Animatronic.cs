@@ -8,6 +8,7 @@ public class Combo_Animatronic : MonoBehaviour
     [SerializeField] List<DEAD_Animatronic> animatronicParts;
     [SerializeField] Combo_Animatronic_SaveFile saveFile = new Combo_Animatronic_SaveFile();
     [SerializeField] bool debugRefreshAnimatronic;
+    [SerializeField] DEAD_Interface deadInterface;
 
     private void Start()
     {
@@ -90,6 +91,10 @@ public class Combo_Animatronic : MonoBehaviour
         if(freezePrevention < 0)
         {
             Debug.LogError("Some part of the animatronic couldn't find its bone");
+        }
+        for (int i = 0; i < animatronicParts.Count; i++)
+        {
+            animatronicParts[i].SetInterface(deadInterface);
         }
     }
 
