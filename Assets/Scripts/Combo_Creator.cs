@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -177,7 +179,9 @@ public class Combo_Creator : MonoBehaviour
             }
         }
         fakeparts.Add(new UI_Part_Holder() { id = id, tag = tag });
-        if (!fakeparts.All(tempParts.Contains))
+        tempParts.Sort();
+        fakeparts.Sort();
+        if (!tempParts.SequenceEqual(fakeparts))
         {
             comboAnimatronic.ReassignPartsFromUI(fakeparts);
             inPreview = true;
@@ -188,6 +192,7 @@ public class Combo_Creator : MonoBehaviour
     {
         if (inPreview)
         {
+            inPreview = false;
             comboAnimatronic.ReassignPartsFromUI(tempParts);
         }
     }
@@ -254,6 +259,8 @@ public class Combo_Creator : MonoBehaviour
 
     void AddPart(Combo_Part.ComboTag tag, uint id)
     {
+        List<UI_Part_Holder> fakeparts = new List<UI_Part_Holder>(tempParts);
+
         for (int i = 0; i < tempParts.Count; i++)
         {
             if (tempParts[i].tag == tag)
@@ -262,7 +269,15 @@ public class Combo_Creator : MonoBehaviour
             }
         }
         tempParts.Add(new UI_Part_Holder() { id = id, tag = tag });
-        comboAnimatronic.ReassignPartsFromUI(tempParts);
+
+
+        tempParts.Sort();
+        fakeparts.Sort();
+        if (!tempParts.SequenceEqual(fakeparts))
+        {
+            inPreview = false;
+            comboAnimatronic.ReassignPartsFromUI(tempParts);
+        }
 
         if (currentMenu == 0)
         {
@@ -285,6 +300,23 @@ public class UI_Part_Holder
 {
     public Combo_Part.ComboTag tag;
     public uint id;
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as UI_Part_Holder);
+    }
+    public bool Equals(UI_Part_Holder other)
+    {
+        if (other == null)
+            return false;
+
+        // Check for equality based on specific properties
+        return id == other.id;
+    }
+    public override int GetHashCode()
+    {
+        // Generate a hash code based on the properties used in Equals method
+        return HashCode.Combine(id);
+    }
 }
 
 
