@@ -27,10 +27,10 @@ public class Combo_Creator : MonoBehaviour
         document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 0;
 
         currentCompany = PlayerPrefs.GetInt("Game: Current Company");
-        SwitchMenu(0);
+        SwitchMenu(0,false);
     }
 
-    void SwitchMenu(int menu)
+    void SwitchMenu(int menu, bool iterateBackward)
     {
         VisualElement visList = document.rootVisualElement.Q<VisualElement>("ScrollBox");
 
@@ -44,17 +44,44 @@ public class Combo_Creator : MonoBehaviour
         {
             visList.Remove(children[i]);
         }
+
         List<Creator_Part> parts = null;
         Combo_Part.ComboTag tag = Combo_Part.ComboTag.none;
-        switch (menu)
+        bool check = false;
+        while (!check)
         {
-            case 0:
-                parts = GetPartsOfTag(Combo_Part.ComboTag.body);
-                tag = Combo_Part.ComboTag.body;
-                break;
-            default:
-                break;
+            switch (menu)
+            {
+                case 0:
+                    parts = GetPartsOfTag(Combo_Part.ComboTag.body);
+                    tag = Combo_Part.ComboTag.body;
+                    break;
+                default:
+                    break;
+            }
+            if(parts != null && parts.Count > 0)
+            {
+                check = true;
+            }
+            if(iterateBackward)
+            {
+                menu--;
+                if(menu < 0)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                menu++;
+                //100 just an arbitrary number
+                if(menu > 100)
+                {
+                    return;
+                }
+            }
         }
+
         for (int i = 0; i < parts.Count; i++)
         {
             Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + companies[currentCompany].parts[i].partId).GetComponent<Combo_Part>();
