@@ -5,6 +5,7 @@ using UnityEngine;
 public class Combo_Part : MonoBehaviour
 {
     public string partName;
+    public uint price;
     public List<BendablePart> bendableParts;
     public ComboTag partTag;
     public string connectingBone;

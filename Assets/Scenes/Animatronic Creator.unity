@@ -442,11 +442,7 @@ MonoBehaviour:
       _dateTime: 1/1/0001 12:00:00 AM
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
-    comboParts:
-    - id: 0
-      bendableSections: []
-    - id: 1
-      bendableSections: []
+    comboParts: []
   debugRefreshAnimatronic: 0
   deadInterface: {fileID: 1950746651}
 --- !u!4 &195720712
@@ -1227,6 +1223,24 @@ MonoBehaviour:
       childIds:
       - partId: 1
         childIds: []
+    - partId: 2
+      childIds: []
+  document: {fileID: 1698254731}
+  comboBox: {fileID: 9197481963319205126, guid: 01cfcb2963b3e1045946772a88329307,
+    type: 3}
+  comboButton: {fileID: 9197481963319205126, guid: 7b15bda893479064b847ca119ac015e0,
+    type: 3}
+  saveFileData:
+    firstName: 
+    lastName: 
+    money: 0
+    worldSeed: 0
+    currentMap: 0
+    timeFileStarted:
+      _dateTime: 1/1/0001 12:00:00 AM
+    timeElapsed: 0
+  tempParts: []
+  comboAnimatronic: {fileID: 195720711}
 --- !u!1 &1950746649
 GameObject:
   m_ObjectHideFlags: 0

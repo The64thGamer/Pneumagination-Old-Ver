@@ -221,6 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partName: Right Arm
+  price: 100
   bendableParts:
   - boneName: Arm
     minPosition: {x: 0, y: 0, z: -0.7071068, w: 0.7071067}

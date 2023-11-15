@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partName: Tilting Torso
+  price: 200
   bendableParts: []
   partTag: 1
   connectingBone: 

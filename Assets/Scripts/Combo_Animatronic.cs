@@ -23,6 +23,16 @@ public class Combo_Animatronic : MonoBehaviour
         }
     }
 
+    public void ReassignPartsFromUI(List<UI_Part_Holder> tempParts)
+    {
+        saveFile.comboParts = new List<Combo_Part_SaveFile>();
+        for (int i = 0; i < tempParts.Count; i++)
+        {
+            saveFile.comboParts.Add(new Combo_Part_SaveFile() { id = tempParts[i].id, bendableSections = new List<float>() });
+        }
+        RefreshAnimatronic();
+    }
+
     public void RefreshAnimatronic()
     {
         ClearAllParts();
