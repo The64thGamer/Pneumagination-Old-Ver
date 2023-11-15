@@ -21,17 +21,29 @@ public class Combo_Creator : MonoBehaviour
 
     int currentCompany;
     bool inPreview = false;
+    int currentMenu;
 
     private void Start()
     {
         document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 0;
 
+        document.rootVisualElement.Q<Button>("CategoryLeft").clicked += () => AddMenu(-1, true);
+        document.rootVisualElement.Q<Button>("CategoryRight").clicked += () => AddMenu(1, false);
+
+
         currentCompany = PlayerPrefs.GetInt("Game: Current Company");
         SwitchMenu(0,false);
+
+    }
+
+    void AddMenu(int add, bool iterateBackward)
+    {
+        SwitchMenu(currentMenu + add, iterateBackward);
     }
 
     void SwitchMenu(int menu, bool iterateBackward)
     {
+        currentMenu = menu;
         VisualElement visList = document.rootVisualElement.Q<VisualElement>("ScrollBox");
 
         //Clear old children
@@ -50,44 +62,69 @@ public class Combo_Creator : MonoBehaviour
         bool check = false;
         while (!check)
         {
-            switch (menu)
+            switch (currentMenu)
             {
                 case 0:
                     parts = GetPartsOfTag(Combo_Part.ComboTag.body);
                     tag = Combo_Part.ComboTag.body;
+                    document.rootVisualElement.Q<Label>("CategoryLabel").text = "Choose Body";
+                    break;
+                case 1:
+                    parts = GetPartsOfTag(Combo_Part.ComboTag.rightArm);
+                    tag = Combo_Part.ComboTag.rightArm;
+                    document.rootVisualElement.Q<Label>("CategoryLabel").text = "Choose Rt. Arm";
                     break;
                 default:
                     break;
             }
-            if(parts != null && parts.Count > 0)
+            if (parts != null && parts.Count > 0)
             {
                 check = true;
             }
-            if(iterateBackward)
-            {
-                menu--;
-                if(menu < 0)
-                {
-                    return;
-                }
-            }
             else
             {
-                menu++;
-                //100 just an arbitrary number
-                if(menu > 100)
+                if (iterateBackward)
                 {
-                    return;
+                    currentMenu--;
+                    if (currentMenu < 0)
+                    {
+                        currentMenu = 0;
+                    }
+                }
+                else
+                {
+                    currentMenu++;
+                    //100 just an arbitrary number
+                    if (currentMenu > 100)
+                    {
+                        currentMenu = 0;
+                    }
                 }
             }
         }
 
+        if(currentMenu == 0)
+        {
+            document.rootVisualElement.Q<Button>("CategoryLeft").style.visibility = Visibility.Hidden;
+            if(tempParts.Count == 0)
+            {
+                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
+
+            }
+        }
+        else
+        {
+            document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
+            document.rootVisualElement.Q<Button>("CategoryLeft").style.visibility = Visibility.Visible;
+        }
+
+
         for (int i = 0; i < parts.Count; i++)
         {
-            Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + companies[currentCompany].parts[i].partId).GetComponent<Combo_Part>();
+            Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + parts[i].partId).GetComponent<Combo_Part>();
             uint price = combo.price;
             string comboName = combo.partName;
-            Texture2D tex = Resources.Load<Texture2D>("Animatronics/Icons/" + companies[currentCompany].parts[i].partId);
+            Texture2D tex = Resources.Load<Texture2D>("Animatronics/Icons/" + parts[i].partId);
 
             VisualElement currentButton = comboButton.Instantiate();
             currentButton.Q<VisualElement>("Icon").style.backgroundImage = tex;
@@ -159,16 +196,60 @@ public class Combo_Creator : MonoBehaviour
     {
         List<Creator_Part> parts = new List<Creator_Part>();
 
-        for (int i = 0; i < companies[currentCompany].parts.Length; i++)
+        if (tag == Combo_Part.ComboTag.body)
         {
-            Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + companies[currentCompany].parts[i].partId).GetComponent<Combo_Part>();
-            if (combo.partTag == tag)
+            for (int i = 0; i < companies[currentCompany].parts.Length; i++)
             {
-                parts.Add(companies[currentCompany].parts[i]);
+                Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + companies[currentCompany].parts[i].partId).GetComponent<Combo_Part>();
+                if (combo.partTag == tag)
+                {
+                    parts.Add(companies[currentCompany].parts[i]);
+                }
             }
         }
+        else
+        {
+            List<Creator_Part> bodyParts = GetPartsOfTag(Combo_Part.ComboTag.body);
 
+            //Find used body part
+            for (int i = 0; i < bodyParts.Count; i++)
+            {
+                for (int e = 0; e < tempParts.Count; e++)
+                {
+                    if (bodyParts[i].partId == tempParts[e].id)
+                    {
+                        parts = RecursiveFindParts(bodyParts[i],tag);
+                        return parts;
+                    }
+                }
+            }
+        }
         return parts;
+    }
+
+    List<Creator_Part> RecursiveFindParts(Creator_Part part, Combo_Part.ComboTag tag)
+    {
+        List<Creator_Part> finalParts = new List<Creator_Part>();
+
+        Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + part.partId).GetComponent<Combo_Part>();
+        if (combo.partTag == tag)
+        {
+            finalParts.Add(part);
+        }
+
+        if (part.childIds == null || part.childIds.Length == 0)
+        {
+            return finalParts;
+        }
+        for (int i = 0; i < part.childIds.Length; i++)
+        {
+            List<Creator_Part> childParts = RecursiveFindParts(part.childIds[i],tag);
+            if (childParts != null)
+            {
+                finalParts.AddRange(childParts);
+            }
+        }
+        return finalParts;
     }
 
     void AddPart(Combo_Part.ComboTag tag, uint id)
@@ -182,6 +263,19 @@ public class Combo_Creator : MonoBehaviour
         }
         tempParts.Add(new UI_Part_Holder() { id = id, tag = tag });
         comboAnimatronic.ReassignPartsFromUI(tempParts);
+
+        if (currentMenu == 0)
+        {
+            if (tempParts.Count != 0)
+            {
+                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
+            }
+            else
+            {
+                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
+
+            }
+        }
     }
 }
 
