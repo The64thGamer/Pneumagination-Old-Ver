@@ -17,7 +17,6 @@ public class Combo_Creator : MonoBehaviour
     [SerializeField] List<UI_Part_Holder> tempParts = new List<UI_Part_Holder>();
     [SerializeField] Combo_Animatronic comboAnimatronic;
 
-    //TotalCost
     //TotalMoney
     //BackButton
 
@@ -35,6 +34,18 @@ public class Combo_Creator : MonoBehaviour
 
         currentCompany = PlayerPrefs.GetInt("Game: Current Company");
         SwitchMenu(0,false);
+        UpdateCost();
+    }
+
+    void UpdateCost()
+    {
+        uint price = 0;
+        for (int i = 0; i < tempParts.Count; i++)
+        {
+            Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + tempParts[i].id).GetComponent<Combo_Part>();
+            price += combo.price;
+        }
+        document.rootVisualElement.Q<Label>("TotalCost").text = "$" + price.ToString();
 
     }
 
@@ -260,15 +271,22 @@ public class Combo_Creator : MonoBehaviour
     {
         List<UI_Part_Holder> fakeparts = new List<UI_Part_Holder>(tempParts);
 
-        for (int i = 0; i < tempParts.Count; i++)
+        if (tag == Combo_Part.ComboTag.body)
         {
-            if (tempParts[i].tag == tag)
+            tempParts = new List<UI_Part_Holder>();
+        }
+        else
+        {
+            for (int i = 0; i < tempParts.Count; i++)
             {
-                tempParts.RemoveAt(i);
+                if (tempParts[i].tag == tag)
+                {
+                    tempParts.RemoveAt(i);
+                }
             }
         }
-        tempParts.Add(new UI_Part_Holder() { id = id, tag = tag });
 
+        tempParts.Add(new UI_Part_Holder() { id = id, tag = tag });
 
         if (!tempParts.OrderBy(x => x.id).SequenceEqual(fakeparts.OrderBy(x => x.id)))
         {
@@ -280,18 +298,20 @@ public class Combo_Creator : MonoBehaviour
             {
                 comboAnimatronic.ReassignPartsFromUI(tempParts);
             }
-        }
 
-        if (currentMenu == 0)
-        {
-            if (tempParts.Count != 0)
-            {
-                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
-            }
-            else
-            {
-                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
+            UpdateCost();
 
+            if (currentMenu == 0)
+            {
+                if (tempParts.Count != 0)
+                {
+                    document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
+                }
+                else
+                {
+                    document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
+
+                }
             }
         }
     }
