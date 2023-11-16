@@ -179,9 +179,8 @@ public class Combo_Creator : MonoBehaviour
             }
         }
         fakeparts.Add(new UI_Part_Holder() { id = id, tag = tag });
-        tempParts.Sort();
-        fakeparts.Sort();
-        if (!tempParts.SequenceEqual(fakeparts))
+
+        if (!tempParts.OrderBy(x => x.id).SequenceEqual(fakeparts.OrderBy(x => x.id)))
         {
             comboAnimatronic.ReassignPartsFromUI(fakeparts);
             inPreview = true;
@@ -271,12 +270,16 @@ public class Combo_Creator : MonoBehaviour
         tempParts.Add(new UI_Part_Holder() { id = id, tag = tag });
 
 
-        tempParts.Sort();
-        fakeparts.Sort();
-        if (!tempParts.SequenceEqual(fakeparts))
+        if (!tempParts.OrderBy(x => x.id).SequenceEqual(fakeparts.OrderBy(x => x.id)))
         {
-            inPreview = false;
-            comboAnimatronic.ReassignPartsFromUI(tempParts);
+            if (inPreview)
+            {
+                inPreview = false;
+            }
+            else
+            {
+                comboAnimatronic.ReassignPartsFromUI(tempParts);
+            }
         }
 
         if (currentMenu == 0)
