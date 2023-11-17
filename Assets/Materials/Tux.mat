@@ -321,7 +321,7 @@ Material:
     - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Palette_1: {r: 0, g: 0, b: 0, a: 1}
+    - _Palette_1: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
     - _Palette_2: {r: 1, g: 1, b: 1, a: 1}
     - _Palette_3: {r: 0.6313726, g: 0.6313726, b: 0.6313726, a: 1}
     - _Palette_4: {r: 0.9607844, g: 0.6627451, b: 0.078431375, a: 1}
