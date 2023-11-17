@@ -782,7 +782,8 @@ MonoBehaviour:
   Gravity: -15
   FallTimeout: 0.15
   _terminalVelocity: 180
-  sensitivity: 10
+  sensitivity: 0.08
+  sensitivityFly: 0.2
   maxYAngle: 89
   crouchCurve:
     serializedVersion: 2

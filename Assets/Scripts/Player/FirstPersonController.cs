@@ -38,6 +38,7 @@ namespace StarterAssets
         [SerializeField] float FallTimeout = 0.15f;
         [SerializeField] float _terminalVelocity = 180f;
         [SerializeField] float sensitivity = 10f;
+        [SerializeField] float sensitivityFly = 10f;
         [SerializeField] float maxYAngle = 95f;
         [SerializeField] AnimationCurve crouchCurve;
         [SerializeField] AnimationCurve fovCurve;
@@ -141,8 +142,8 @@ namespace StarterAssets
 
                 if (Input.GetMouseButton(0))
                 {
-                    currentFlyModePan -= _mainCamera.transform.up * Input.GetAxis("Mouse Y") * sensitivity;
-                    currentFlyModePan -= _mainCamera.transform.right * Input.GetAxis("Mouse X") * sensitivity;
+                    currentFlyModePan -= _mainCamera.transform.up * Input.GetAxis("Mouse Y") * sensitivityFly * Mathf.Min(fovFly, 70);
+                    currentFlyModePan -= _mainCamera.transform.right * Input.GetAxis("Mouse X") * sensitivityFly * Mathf.Min(fovFly, 70);
                     if(Vector3.Distance(Vector3.zero,currentFlyModePan) > flyRadius)
                     {
                         currentFlyModePan = (currentFlyModePan - Vector3.zero).normalized;
@@ -193,8 +194,8 @@ namespace StarterAssets
         {
             if (!inputFlyMenu || (inputFlyMenu && Input.GetMouseButton(1)))
             {
-                currentRotation.x += Input.GetAxis("Mouse X") * sensitivity;
-                currentRotation.y -= Input.GetAxis("Mouse Y") * sensitivity;
+                currentRotation.x += Input.GetAxis("Mouse X") * sensitivity * Mathf.Min(fov,70);
+                currentRotation.y -= Input.GetAxis("Mouse Y") * sensitivity * Mathf.Min(fov, 70);
             }
             currentRotation.x = Mathf.Repeat(currentRotation.x, 360);
             currentRotation.y = Mathf.Clamp(currentRotation.y, -maxYAngle, maxYAngle);
