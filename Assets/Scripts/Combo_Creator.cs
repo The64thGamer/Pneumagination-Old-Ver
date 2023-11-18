@@ -11,8 +11,8 @@ public class Combo_Creator : MonoBehaviour
     [SerializeField] Creator_Company[] companies;
     [Header("Menu")]
     [SerializeField] UIDocument document;
-    [SerializeField] VisualTreeAsset comboBox;
     [SerializeField] VisualTreeAsset comboButton;
+    [SerializeField] VisualTreeAsset comboSlider;
     [SerializeField] SaveFileData saveFileData;
     [SerializeField] List<UI_Part_Holder> tempParts = new List<UI_Part_Holder>();
     [SerializeField] Combo_Animatronic comboAnimatronic;
@@ -58,6 +58,9 @@ public class Combo_Creator : MonoBehaviour
     {
         currentMenu = menu;
         VisualElement visList = document.rootVisualElement.Q<VisualElement>("ScrollBox");
+        document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
+        document.rootVisualElement.Q<Button>("CategoryLeft").style.visibility = Visibility.Visible;
+
 
         //Clear old children
         List<VisualElement> children = new List<VisualElement>();
@@ -73,111 +76,168 @@ public class Combo_Creator : MonoBehaviour
         List<Creator_Part> parts = null;
         Combo_Part.ComboTag tag = Combo_Part.ComboTag.none;
         bool check = false;
+        //Find which page to display
         while (!check)
         {
             switch (currentMenu)
             {
                 case 0:
+                    document.rootVisualElement.Q<Button>("CategoryLeft").style.visibility = Visibility.Hidden;
+                    if (tempParts.Count == 0)
+                    {
+                        document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
+
+                    }
                     parts = GetPartsOfTag(Combo_Part.ComboTag.body);
                     tag = Combo_Part.ComboTag.body;
                     document.rootVisualElement.Q<Label>("CategoryLabel").text = "Choose Body";
                     break;
                 case 1:
+                    document.rootVisualElement.Q<Label>("CategoryLabel").text = "Customize Body";
+                    tag = Combo_Part.ComboTag.body;
+                    break;
+                case 2:
                     parts = GetPartsOfTag(Combo_Part.ComboTag.rightArm);
                     tag = Combo_Part.ComboTag.rightArm;
                     document.rootVisualElement.Q<Label>("CategoryLabel").text = "Choose Rt. Arm";
                     break;
+                case 100:
+                    check = true;
+                    document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
+                    break;
                 default:
                     break;
             }
-            if (parts != null && parts.Count > 0)
+            if (currentMenu % 2 == 0)
             {
-                check = true;
-            }
-            else
-            {
-                if (iterateBackward)
+                //Iterate for Parts List
+                if (parts != null && parts.Count > 0)
                 {
-                    currentMenu--;
-                    if (currentMenu < 0)
+                    check = true;
+                    //Create item boxes
+                    for (int i = 0; i < parts.Count; i++)
                     {
-                        currentMenu = 0;
+                        Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + parts[i].partId).GetComponent<Combo_Part>();
+                        uint price = combo.price;
+                        string comboName = combo.partName;
+                        Texture2D tex = Resources.Load<Texture2D>("Animatronics/Icons/" + parts[i].partId);
+
+                        VisualElement currentButton = comboButton.Instantiate();
+                        currentButton.Q<VisualElement>("Icon").style.backgroundImage = tex;
+                        currentButton.Q<Label>("Price").text = "$" + price.ToString();
+                        Button visButton = currentButton.Q<Button>("Button");
+                        uint partID = parts[i].partId;
+                        visButton.clicked += () => AddPart(tag, partID);
+                        visButton.RegisterCallback<MouseOverEvent>((type) =>
+                        {
+                            visButton.style.scale = Vector2.one * 0.95f;
+                            document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 1;
+                            FakeAddPart(tag, partID);
+                            document.rootVisualElement.Q<Label>("ItemPrice").text = "$" + price.ToString();
+                            document.rootVisualElement.Q<VisualElement>("PreviewIcon").style.backgroundImage = tex;
+
+                            string movements = "";
+
+                            DEAD_Actuator[] actuators = combo.GetComponent<DEAD_Animatronic>().GetActuatorInfoCopy();
+
+                            document.rootVisualElement.Q<Label>("ItemName").text = combo.partName;
+
+                            for (int i = 0; i < actuators.Length; i++)
+                            {
+                                movements += actuators[i].actuationName + "\n";
+                            }
+
+                            document.rootVisualElement.Q<Label>("Movements").text = movements;
+
+
+                        });
+                        visButton.RegisterCallback<MouseOutEvent>((type) =>
+                        {
+                            visButton.style.scale = Vector2.one;
+                            document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 0;
+                            FakeRemovePart();
+                        });
+                        visList.Add(currentButton);
                     }
                 }
                 else
                 {
-                    currentMenu++;
-                    //100 just an arbitrary number
-                    if (currentMenu > 100)
+                    if (iterateBackward)
                     {
-                        currentMenu = 0;
+                        currentMenu--;
+                        if (currentMenu < 0)
+                        {
+                            currentMenu = 0;
+                        }
+                    }
+                    else
+                    {
+                        currentMenu++;
+                        //100 just an arbitrary number
+                        if (currentMenu > 100)
+                        {
+                            currentMenu = 100;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Iterate for parts settings
+                for (int i = 0; i < tempParts.Count; i++)
+                {
+                    if (tempParts[i].tag == tag)
+                    {
+                        Combo_Part_SaveFile combo = comboAnimatronic.GetComponent<Combo_Animatronic>().SearchID(tempParts[i].id);
+                        if(combo.bendableSections != null && combo.bendableSections.Count > 0)
+                        {
+                            check = true;
+                            //Create item boxes
+                            for (int e = 0; e < combo.bendableSections.Count; e++)
+                            {
+                                float slider = combo.bendableSections[e];
+
+                                VisualElement currentButton = comboSlider.Instantiate();
+                                Slider sl = currentButton.Q<Slider>("Slider");
+                                sl.value = slider;
+                                sl.label = "Bend #" + e;
+
+                                int index = e;
+                                sl.RegisterValueChangedCallback(evt =>
+                                {
+                                    combo.bendableSections[e] = evt.newValue;
+                                    comboAnimatronic.RefreshAnimatronicCustomizations();
+                                });
+
+                                visList.Add(currentButton);
+                            }
+                        }
+                        break;
+                    }
+                }
+                if(!check)
+                {
+                    if (iterateBackward)
+                    {
+                        currentMenu--;
+                        if (currentMenu < 0)
+                        {
+                            currentMenu = 0;
+                        }
+                    }
+                    else
+                    {
+                        currentMenu++;
+                        //100 just an arbitrary number
+                        if (currentMenu > 100)
+                        {
+                            currentMenu = 100;
+                        }
                     }
                 }
             }
         }
-
-        if(currentMenu == 0)
-        {
-            document.rootVisualElement.Q<Button>("CategoryLeft").style.visibility = Visibility.Hidden;
-            if(tempParts.Count == 0)
-            {
-                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
-
-            }
-        }
-        else
-        {
-            document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
-            document.rootVisualElement.Q<Button>("CategoryLeft").style.visibility = Visibility.Visible;
-        }
-
-
-        for (int i = 0; i < parts.Count; i++)
-        {
-            Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + parts[i].partId).GetComponent<Combo_Part>();
-            uint price = combo.price;
-            string comboName = combo.partName;
-            Texture2D tex = Resources.Load<Texture2D>("Animatronics/Icons/" + parts[i].partId);
-
-            VisualElement currentButton = comboButton.Instantiate();
-            currentButton.Q<VisualElement>("Icon").style.backgroundImage = tex;
-            currentButton.Q<Label>("Price").text = "$" + price.ToString();
-            Button visButton = currentButton.Q<Button>("Button");
-            uint partID = parts[i].partId;
-            visButton.clicked += () => AddPart(tag, partID);
-            visButton.RegisterCallback<MouseOverEvent>((type) =>
-            {
-                visButton.style.scale = Vector2.one * 0.95f;
-                document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 1;
-                FakeAddPart(tag, partID);
-                document.rootVisualElement.Q<Label>("ItemPrice").text = "$" + price.ToString();
-                document.rootVisualElement.Q<VisualElement>("PreviewIcon").style.backgroundImage = tex;
-
-                string movements = "";
-
-                DEAD_Actuator[] actuators = combo.GetComponent<DEAD_Animatronic>().GetActuatorInfoCopy();
-
-                document.rootVisualElement.Q<Label>("ItemName").text = combo.partName;
-
-                for (int i = 0; i < actuators.Length; i++)
-                {
-                    movements += actuators[i].actuationName + "\n";
-                }
-
-                document.rootVisualElement.Q<Label>("Movements").text = movements;
-
-
-            });
-            visButton.RegisterCallback<MouseOutEvent>((type) =>
-            {
-                visButton.style.scale = Vector2.one;
-                document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 0;
-                FakeRemovePart();
-            });
-            visList.Add(currentButton);
-        }
     }
-
 
     void FakeAddPart(Combo_Part.ComboTag tag, uint id)
     {
