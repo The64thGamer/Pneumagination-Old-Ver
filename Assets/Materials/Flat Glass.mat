@@ -134,11 +134,11 @@ Material:
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 0
-    - _AlphaCutoff: 0.5
+    - _AlphaCutoff: 0
     - _AlphaCutoffEnable: 0
     - _AlphaCutoffPostpass: 0.5
     - _AlphaCutoffPrepass: 0.5
-    - _AlphaCutoffShadow: 0.5
+    - _AlphaCutoffShadow: 1
     - _AlphaDstBlend: 10
     - _AlphaRemapMax: 1
     - _AlphaRemapMin: 0
@@ -148,7 +148,7 @@ Material:
     - _CoatMask: 0
     - _CullMode: 2
     - _CullModeForward: 2
-    - _Cutoff: 0.5
+    - _Cutoff: 0
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -238,15 +238,15 @@ Material:
     - _UVDetail: 0
     - _UVEmissive: 0
     - _UseEmissiveIntensity: 0
-    - _UseShadowThreshold: 0
+    - _UseShadowThreshold: 1
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0}
+    - _BaseColor: {r: 0.49056596, g: 0.49056596, b: 0.49056596, a: 0.13333334}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.49056596, g: 0.49056596, b: 0.49056596, a: 0}
+    - _Color: {r: 0.49056596, g: 0.49056596, b: 0.49056596, a: 0.13333334}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
