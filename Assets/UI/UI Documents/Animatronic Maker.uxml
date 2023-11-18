@@ -12,7 +12,7 @@
                         <ui:Button name="CategoryRight" style="background-image: url(&apos;project://database/Assets/UI/Icons/Arrow%20Left.png?fileID=2800000&amp;guid=492ed8912671da54196c9d281818a0e5&amp;type=3#Arrow Left&apos;); background-color: rgba(255, 255, 255, 0); -unity-background-image-tint-color: rgb(27, 27, 27); max-width: 78px; min-height: 52px; border-left-color: rgb(27, 27, 27); border-right-color: rgb(27, 27, 27); border-top-color: rgb(27, 27, 27); border-bottom-color: rgb(27, 27, 27); -unity-background-scale-mode: scale-and-crop; scale: -1 1; max-height: 52px; min-width: 78px; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px;" />
                     </ui:VisualElement>
                     <ui:ScrollView mode="Vertical" style="flex-grow: 1; overflow: visible;">
-                        <ui:VisualElement name="ScrollBox" style="flex-grow: 1; flex-direction: row; align-items: flex-start;" />
+                        <ui:VisualElement name="ScrollBox" style="flex-grow: 1; flex-direction: row; align-items: flex-start; flex-wrap: wrap;" />
                     </ui:ScrollView>
                 </ui:VisualElement>
             </ui:VisualElement>

@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: 0; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-left-color: rgb(27, 27, 27); border-right-color: rgb(27, 27, 27); border-top-color: rgb(27, 27, 27); border-bottom-color: rgb(27, 27, 27);">
-        <ui:Slider label="Slider" value="42" high-value="100" name="Slider" style="-unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;); font-size: 12px;" />
+    <ui:VisualElement style="flex-grow: 0; border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-left-color: rgb(27, 27, 27); border-right-color: rgb(27, 27, 27); border-top-color: rgb(27, 27, 27); border-bottom-color: rgb(27, 27, 27); min-width: 546px;">
+        <ui:Slider label="Slider" value="0" high-value="1" name="Slider" style="-unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;); font-size: 24px;" />
     </ui:VisualElement>
 </ui:UXML>

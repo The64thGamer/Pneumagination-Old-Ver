@@ -1226,9 +1226,9 @@ MonoBehaviour:
     - partId: 2
       childIds: []
   document: {fileID: 1698254731}
-  comboBox: {fileID: 9197481963319205126, guid: 01cfcb2963b3e1045946772a88329307,
-    type: 3}
   comboButton: {fileID: 9197481963319205126, guid: 7b15bda893479064b847ca119ac015e0,
+    type: 3}
+  comboSlider: {fileID: 9197481963319205126, guid: a135a05866cd20641a08735214675e6f,
     type: 3}
   saveFileData:
     firstName: 

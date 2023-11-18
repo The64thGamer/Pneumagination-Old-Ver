@@ -101,7 +101,12 @@ public class Combo_Creator : MonoBehaviour
                     tag = Combo_Part.ComboTag.rightArm;
                     document.rootVisualElement.Q<Label>("CategoryLabel").text = "Choose Rt. Arm";
                     break;
+                case 3:
+                    document.rootVisualElement.Q<Label>("CategoryLabel").text = "Customize Rt. Arm";
+                    tag = Combo_Part.ComboTag.rightArm;
+                    break;
                 case 100:
+                    document.rootVisualElement.Q<Label>("CategoryLabel").text = "Purchase";
                     check = true;
                     document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
                     break;
@@ -188,13 +193,17 @@ public class Combo_Creator : MonoBehaviour
                 {
                     if (tempParts[i].tag == tag)
                     {
+                        Debug.Log("Found");
                         Combo_Part_SaveFile combo = comboAnimatronic.GetComponent<Combo_Animatronic>().SearchID(tempParts[i].id);
                         if(combo.bendableSections != null && combo.bendableSections.Count > 0)
                         {
+                            Debug.Log("Double Found");
                             check = true;
                             //Create item boxes
                             for (int e = 0; e < combo.bendableSections.Count; e++)
                             {
+                                Debug.Log("Triple Found " + e);
+
                                 float slider = combo.bendableSections[e];
 
                                 VisualElement currentButton = comboSlider.Instantiate();
@@ -205,14 +214,14 @@ public class Combo_Creator : MonoBehaviour
                                 int index = e;
                                 sl.RegisterValueChangedCallback(evt =>
                                 {
-                                    combo.bendableSections[e] = evt.newValue;
+                                    combo.bendableSections[index] = evt.newValue;
                                     comboAnimatronic.RefreshAnimatronicCustomizations();
                                 });
 
                                 visList.Add(currentButton);
                             }
+                            break;
                         }
-                        break;
                     }
                 }
                 if(!check)
