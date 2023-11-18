@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Manual</title>
+    <link rel="stylesheet" href="../Manual Pages/style.css">
+</head>
+<body>
+<div class="article-logo"><img src="../Images/FullTallRender.png" alt="Your Image"></div>
+
+<div class="article-header">
+<h1>DEAD_RshwConverter.cs</h1>
+<div class="article-container">
+ 
+    <h3 id="-warning-rshw-and-equivalent-files-use-the-deprecated-binaryformatter-library-which-is-now-deemed-as-a-vulnerable-format-for-attacks-make-sure-you-are-loading-these-from-a-trusted-source-">[WARNING: .rshw and equivalent files use the deprecated BinaryFormatter library, which is now deemed as a vulnerable format for attacks. Make sure you are loading these from a trusted source.]</h3>
+    <p><i><strong>DEAD_RshwConverter.cs</strong></i> is a DEAD Engine example script for converting showtapes from the RR Engine to the DEAD Engine.</p>
+    <p>This script is only usable through the Unity Editor.</p>
+    <h2 id="setting-up">Setting Up</h2>
+    <p>The script requires  a <A HREF="DEAD_Interface.html">DEAD_Interface.cs</A> be present and appended to the script in the editor.</p>
+    <p>Upon hitting play the &quot;ConvertRshwAndInjectIntoInterface&quot; bool can be pressed in the inspector. This will prompt the user to select a compatible RR Engine file. After selecting a file it will attempt to be processed and injected into the DEAD_Interface script.</p>
+    <p>Pressing the &quot;saveFile&quot; bool will save the new showtape as a file through a prompt.</p>
+    <h2 id="conversion-process">Conversion Process</h2>
+    <p>RR Engine file extensions are typically labeled .cshw, .sshw, .rshw, .nshw, .fshw, .tshw, and .mshw. None of the different extensions have any different file format and are simply to denote their stage type.</p>
+    <p>Be aware that RR Engine files are inherently unsafe, and to only attempt to convert them from trusted sources or ones you have made yourself from a non-modified RR Engine executable.</p>
+    <p>Be aware that some strange audio types may not convert properly when doing this, and may have to be replaced by a different file format. Programming signals should convert just fine however.</p>
+    <p>RR Engine files originally were titled and authored by their file name, signified by a dash (Showtape Name - Author.rshw). These parameters are saved into the internal Show Name and Author metadata of the new file format, allowing files to be named seperately.</p>
+    
+    
+</div>
+</div>
+</body>
+</html>
