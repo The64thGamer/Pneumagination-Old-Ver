@@ -209,7 +209,7 @@ public class Combo_Creator : MonoBehaviour
                                 VisualElement currentButton = comboSlider.Instantiate();
                                 Slider sl = currentButton.Q<Slider>("Slider");
                                 sl.value = slider;
-                                sl.label = "Bend #" + e;
+                                sl.label = "Bend #" + (e+1);
 
                                 int index = e;
                                 sl.RegisterValueChangedCallback(evt =>
