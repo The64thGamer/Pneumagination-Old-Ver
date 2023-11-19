@@ -158,7 +158,7 @@ public class MainMenu : MonoBehaviour
         {
             saveFileData.currentMap = 1;
         }
-        saveFileData.money = 1000;
+        saveFileData.money = 100000;
 
         //Update this when theres more save files
         PlayerPrefs.SetInt("CurrentSaveFile", PlayerPrefs.GetInt("SaveFilesLoaded"));
