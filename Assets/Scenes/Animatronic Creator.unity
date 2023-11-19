@@ -435,6 +435,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animatronicParts: []
   saveFile:
+    objectHash: 0
+    yetToBePlaced: 0
     playerGivenName: 
     creationDate:
       _dateTime: 1/1/0001 12:00:00 AM
@@ -443,7 +445,6 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
     comboParts: []
-  debugRefreshAnimatronic: 0
   deadInterface: {fileID: 1950746651}
 --- !u!4 &195720712
 Transform:
@@ -1118,7 +1119,7 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.5
+    width: 0.55
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -1185,7 +1186,7 @@ MonoBehaviour:
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: 77a4971259f20814382abb2d7be98e00, type: 2}
+  m_PanelSettings: {fileID: 11400000, guid: 018b78e4345d4014989f30e6cb18c7ea, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: b0298697a72c4c648a3acae25746c4d8,
     type: 3}
@@ -1241,6 +1242,15 @@ MonoBehaviour:
     timeFileStarted:
       _dateTime: 1/1/0001 12:00:00 AM
     timeElapsed: 0
+  mapData:
+    mapHistory: []
+    geometryData: []
+    animatronics: []
+    startingColorPrimary: {r: 0, g: 0, b: 0, a: 0}
+    startingColorSecondary: {r: 0, g: 0, b: 0, a: 0}
+    startingColorTertiary: {r: 0, g: 0, b: 0, a: 0}
+    startingColorLight: {r: 0, g: 0, b: 0, a: 0}
+    startingColorDark: {r: 0, g: 0, b: 0, a: 0}
   tempParts: []
   comboAnimatronic: {fileID: 195720711}
 --- !u!1 &1950746649
