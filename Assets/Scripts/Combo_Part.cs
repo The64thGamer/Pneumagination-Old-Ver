@@ -66,6 +66,7 @@ public class BendablePart
 public class Combo_Part_SaveFile
 {
     public uint id;
+    public List<int> actuatorDTUIndexes;
     [Range(0,1)]
     public List<float> bendableSections;
 }

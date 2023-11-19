@@ -124,8 +124,19 @@ public class Data_Manager : MonoBehaviour
             customGeo[i].SetMaterial(mapData.geometryData[check].material);
             customGeo[i].SetGrime(mapData.geometryData[check].grime);
         }
+        int currentDTUIndex = 0;
         for (int i = 0; i < mapData.animatronics.Count; i++)
         {
+            //Hacky DTU index system
+            for (int e = 0; e < mapData.animatronics[i].comboParts.Count; e++)
+            {
+                for (int j = 0; j < mapData.animatronics[i].comboParts[e].actuatorDTUIndexes.Count; j++)
+                {
+                    mapData.animatronics[i].comboParts[e].actuatorDTUIndexes[j] = currentDTUIndex;
+                    currentDTUIndex++;
+                }
+            }
+            //Setup
             GameObject animatronic = GameObject.Instantiate(new GameObject());
             animatronic.name = mapData.animatronics[i].objectHash.ToString();
             if (mapData.animatronics[i].yetToBePlaced)

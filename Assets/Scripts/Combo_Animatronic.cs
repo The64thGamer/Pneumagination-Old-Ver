@@ -78,12 +78,7 @@ public class Combo_Animatronic : MonoBehaviour
             GameObject g = Resources.Load<GameObject>("Animatronics/Prefabs/" + tempPartIds[i]);
             if (g.GetComponent<Combo_Part>().partTag == Combo_Part.ComboTag.body)
             {
-                g = GameObject.Instantiate(g, transform);
-                animatronicParts.Add(g.GetComponent<DEAD_Animatronic>());
-                g.transform.localPosition = Vector3.zero;
-                g.transform.localRotation = Quaternion.identity;
-                g.name = tempPartIds[i].ToString();
-                tempPartIds.RemoveAt(i);
+                SetUpNewPart(transform, g, tempPartIds, i, i,1);
                 break;
             }
         }
@@ -99,26 +94,7 @@ public class Combo_Animatronic : MonoBehaviour
                 Transform t = RecursiveFindChild(animatronicParts[i].transform, boneName);
                 if (t != null)
                 {
-                    g = GameObject.Instantiate(g, t);
-                    animatronicParts.Add(g.GetComponent<DEAD_Animatronic>());
-                    g.transform.localRotation = Quaternion.identity;
-                    g.transform.localPosition = Vector3.zero;
-                    g.transform.localScale = Vector3.one / 100;
-                    g.name = tempPartIds[i].ToString();
-
-                    //Part Customization
-                    Combo_Part c = g.GetComponent<Combo_Part>();
-                    int partId = SearchForComboPartID(tempPartIds[index]);
-                    for (int e = 0; e < c.bendableParts.Count; e++)
-                    {
-                        if (saveFile.comboParts[partId].bendableSections.Count - 1 < e)
-                        {
-                            saveFile.comboParts[partId].bendableSections.Add(0);
-                        }
-                        c.SetBend(e, saveFile.comboParts[partId].bendableSections[e]);
-                    }
-
-                    tempPartIds.RemoveAt(index);
+                    SetUpNewPart(t, g, tempPartIds, index, i,.01f);
                     break;
                 }
             }
@@ -136,6 +112,44 @@ public class Combo_Animatronic : MonoBehaviour
         {
             animatronicParts[i].SetInterface(deadInterface);
         }
+    }
+
+    void SetUpNewPart(Transform t, GameObject g, List<uint> tempPartIds, int index, int i, float scale)
+    {
+        g = GameObject.Instantiate(g, t);
+        animatronicParts.Add(g.GetComponent<DEAD_Animatronic>());
+        g.transform.localRotation = Quaternion.identity;
+        g.transform.localPosition = Vector3.zero;
+        g.transform.localScale = Vector3.one * scale;
+        g.name = tempPartIds[i].ToString();
+
+        //Part Customization
+        Combo_Part c = g.GetComponent<Combo_Part>();
+        int partId = SearchForComboPartID(tempPartIds[index]);
+        for (int e = 0; e < c.bendableParts.Count; e++)
+        {
+            if (saveFile.comboParts[partId].bendableSections.Count - 1 < e)
+            {
+                saveFile.comboParts[partId].bendableSections.Add(0);
+            }
+            c.SetBend(e, saveFile.comboParts[partId].bendableSections[e]);
+        }
+
+        DEAD_Actuator[] an = g.GetComponent<DEAD_Animatronic>().GetActuatorInfoCopy();
+        if (saveFile.comboParts[partId].actuatorDTUIndexes == null)
+        {
+            saveFile.comboParts[partId].actuatorDTUIndexes = new List<int>();
+        }
+        for (int e = 0; e < an.Length; e++)
+        {
+            if (saveFile.comboParts[partId].actuatorDTUIndexes.Count - 1 < e)
+            {
+                saveFile.comboParts[partId].actuatorDTUIndexes.Add(-1);
+            }
+            an[e].dtuIndex = saveFile.comboParts[partId].actuatorDTUIndexes[e];
+        }
+
+        tempPartIds.RemoveAt(index);
     }
 
     public Combo_Part_SaveFile SearchID(uint id)

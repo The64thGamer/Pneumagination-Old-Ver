@@ -265,6 +265,12 @@ public class Player_UI : MonoBehaviour
         viewer.style.translate = new StyleTranslate() { value = new Translate(0, Mathf.Lerp(112, 0, uiMove.Evaluate(viewerPosition))) };
     }
 
+    public void SetNewHotbarIcons(HotKeyIcons[] icons)
+    {
+        hotkeyIcons = icons;
+        UpdateHotbarIcons();
+    }
+
     void UpdateHotbarIcons()
     {
         for (int i = 0; i < hotBarVisualElements.Length; i++)
@@ -513,7 +519,7 @@ public class Player_UI : MonoBehaviour
 }
 
 [System.Serializable]
-struct HotKeyIcons
+public struct HotKeyIcons
 {
     public Texture2D icon;
     public bool flippedX;
