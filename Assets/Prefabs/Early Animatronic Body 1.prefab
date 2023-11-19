@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: abf59ed6aeb5170499cf02ed09a8a924,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.854
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abf59ed6aeb5170499cf02ed09a8a924,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.826
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abf59ed6aeb5170499cf02ed09a8a924,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.534
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abf59ed6aeb5170499cf02ed09a8a924,
         type: 3}
@@ -83,6 +83,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8466604061751847704}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: abf59ed6aeb5170499cf02ed09a8a924,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1510136577139414692}
     - targetCorrespondingSourceObject: {fileID: -3045166899182835718, guid: abf59ed6aeb5170499cf02ed09a8a924,
         type: 3}
       insertIndex: -1
@@ -250,6 +254,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.18041778, y: 0.15350616, z: 0.19754314}
   m_Center: {x: -0.18471181, y: 0.15168387, z: 0}
+--- !u!114 &1510136577139414692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521829528259187298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3609f85199790d4ea7ea8ad3244d119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partName: Tilting Torso
+  price: 200
+  bendableParts: []
+  partTag: 1
+  connectingBone: 
 --- !u!1 &5504123201090095305 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3045166899182835718, guid: abf59ed6aeb5170499cf02ed09a8a924,

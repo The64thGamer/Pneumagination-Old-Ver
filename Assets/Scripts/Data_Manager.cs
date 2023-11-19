@@ -130,6 +130,7 @@ public class Data_Manager : MonoBehaviour
                 animatronic.transform.rotation = mapData.animatronics[i].rotation;
             }
             animatronic.AddComponent<Rigidbody>();
+            animatronic.AddComponent<PhysicsObject>();
             Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
             combo.InsertDeadInterface(this.GetComponent<DEAD_Interface>());
             combo.ReassignFullSaveFile(mapData.animatronics[i]);

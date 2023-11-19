@@ -8,10 +8,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1290554384989970689, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1521829528259187298, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
       propertyPath: m_Name
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521829528259187298, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2185740364850563288, guid: e1d55b0813aa5514886671dc787e114d,
         type: 3}
@@ -63,35 +73,63 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2825178313706696178, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832964841133975454, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932847770701697662, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2958034766682189687, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243939530967418532, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370716797057838344, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5504123201090095305, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6229985789689231379, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6717368189569015377, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7426897089939523445, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8996725605379301467, guid: e1d55b0813aa5514886671dc787e114d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1521829528259187298, guid: e1d55b0813aa5514886671dc787e114d,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 651025041718521605}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1d55b0813aa5514886671dc787e114d, type: 3}
---- !u!1 &1845440313008786205 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1521829528259187298, guid: e1d55b0813aa5514886671dc787e114d,
-    type: 3}
-  m_PrefabInstance: {fileID: 901509149329054079}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &651025041718521605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1845440313008786205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3609f85199790d4ea7ea8ad3244d119, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  partName: Tilting Torso
-  price: 200
-  bendableParts: []
-  partTag: 1
-  connectingBone: 
