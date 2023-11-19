@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class Player_UI : MonoBehaviour
@@ -12,6 +13,7 @@ public class Player_UI : MonoBehaviour
     [Header("Menu")]
     [SerializeField] UIDocument document;
     [SerializeField] DEAD_Interface deadInterface;
+    [SerializeField] Data_Manager dataManager;
     [SerializeField] FirstPersonController controller;
 
     [Header("Animation Curves")]
@@ -55,9 +57,15 @@ public class Player_UI : MonoBehaviour
 
     void OnEnable()
     {
+        dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
         document.rootVisualElement.Q<Button>("LoadShow").clicked += () => LoadFile();
         document.rootVisualElement.Q<Button>("SaveShow").clicked += () => SaveFile();
         document.rootVisualElement.Q<Button>("ShowInfo").clicked += () => StartCoroutine(VisualizeShowInfoPopup(Convert.ToBoolean(showInfoPopupPosition)));
+        document.rootVisualElement.Q<Button>("Shop").clicked += () => 
+        {
+            dataManager.SaveAllFiles();
+            SceneManager.LoadScene("Animatronic Creator"); 
+        };
         document.rootVisualElement.Q<Button>("ClearAllData").clicked += () => CreateNewShowtape(false);
         document.rootVisualElement.Q<Button>("EditScreenBack").clicked += () => StartCoroutine(VisualizeShowInfoPopup(true));
         document.rootVisualElement.Q<Button>("BrowseAudio").clicked += () => InjectAudioData();

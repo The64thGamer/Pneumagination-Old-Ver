@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.Ports;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -30,7 +31,7 @@ public class Combo_Animatronic : MonoBehaviour
         saveFile.comboParts = new List<Combo_Part_SaveFile>();
         for (int i = 0; i < tempParts.Count; i++)
         {
-            saveFile.comboParts.Add(new Combo_Part_SaveFile() { id = tempParts[i].id, bendableSections = new List<float>() });
+            saveFile.comboParts.Add(new Combo_Part_SaveFile() { id = tempParts[i].id, bendableSections = new List<float>(), actuatorDTUIndexes = tempParts[i].DTUIndexes });
         }
         RefreshAnimatronic();
     }
@@ -44,6 +45,7 @@ public class Combo_Animatronic : MonoBehaviour
     public void RefreshAnimatronicCustomizations()
     {
         Combo_Part[] parts = this.GetComponentsInChildren<Combo_Part>();
+        DEAD_Animatronic an;
         for (int e = 0; e < parts.Length; e++)
         {
             int id = 0;
@@ -58,6 +60,25 @@ public class Combo_Animatronic : MonoBehaviour
             for (int i = 0; i < parts[e].bendableParts.Count; i++)
             {
                 parts[e].SetBend(i, saveFile.comboParts[id].bendableSections[i]);
+            }
+            an = parts[e].GetComponent<DEAD_Animatronic>();
+
+            if (saveFile.comboParts[id].actuatorDTUIndexes != null)
+            {
+                int count = an.GetActuatorCount();
+                if (saveFile.comboParts[id].actuatorDTUIndexes.Count > count)
+                {
+                    int newCount = saveFile.comboParts[id].actuatorDTUIndexes.Count - count;
+                    saveFile.comboParts[id].actuatorDTUIndexes.RemoveRange(count, newCount);
+                }
+                for (int i = 0; i < count; i++)
+                {
+                    if (saveFile.comboParts[id].actuatorDTUIndexes.Count - 1 < i)
+                    {
+                        saveFile.comboParts[id].actuatorDTUIndexes.Add(-1);
+                    }
+                    an.SetDTUIndex(i, saveFile.comboParts[id].actuatorDTUIndexes[i]);
+                }
             }
 
         }
@@ -78,7 +99,7 @@ public class Combo_Animatronic : MonoBehaviour
             GameObject g = Resources.Load<GameObject>("Animatronics/Prefabs/" + tempPartIds[i]);
             if (g.GetComponent<Combo_Part>().partTag == Combo_Part.ComboTag.body)
             {
-                SetUpNewPart(transform, g, tempPartIds, i, i,1);
+                SetUpNewPart(transform, g, tempPartIds, i, i, 1);
                 break;
             }
         }
@@ -94,7 +115,7 @@ public class Combo_Animatronic : MonoBehaviour
                 Transform t = RecursiveFindChild(animatronicParts[i].transform, boneName);
                 if (t != null)
                 {
-                    SetUpNewPart(t, g, tempPartIds, index, i,.01f);
+                    SetUpNewPart(t, g, tempPartIds, index, i, .01f);
                     break;
                 }
             }
@@ -125,28 +146,34 @@ public class Combo_Animatronic : MonoBehaviour
 
         //Part Customization
         Combo_Part c = g.GetComponent<Combo_Part>();
-        int partId = SearchForComboPartID(tempPartIds[index]);
+        int id = SearchForComboPartID(tempPartIds[index]);
         for (int e = 0; e < c.bendableParts.Count; e++)
         {
-            if (saveFile.comboParts[partId].bendableSections.Count - 1 < e)
+            if (saveFile.comboParts[id].bendableSections.Count - 1 < e)
             {
-                saveFile.comboParts[partId].bendableSections.Add(0);
+                saveFile.comboParts[id].bendableSections.Add(0);
             }
-            c.SetBend(e, saveFile.comboParts[partId].bendableSections[e]);
+            c.SetBend(e, saveFile.comboParts[id].bendableSections[e]);
         }
 
-        DEAD_Actuator[] an = g.GetComponent<DEAD_Animatronic>().GetActuatorInfoCopy();
-        if (saveFile.comboParts[partId].actuatorDTUIndexes == null)
+        DEAD_Animatronic an = g.GetComponent<DEAD_Animatronic>();
+
+        if (saveFile.comboParts[id].actuatorDTUIndexes != null)
         {
-            saveFile.comboParts[partId].actuatorDTUIndexes = new List<int>();
-        }
-        for (int e = 0; e < an.Length; e++)
-        {
-            if (saveFile.comboParts[partId].actuatorDTUIndexes.Count - 1 < e)
+            int count = an.GetActuatorCount();
+            if (saveFile.comboParts[id].actuatorDTUIndexes.Count > count)
             {
-                saveFile.comboParts[partId].actuatorDTUIndexes.Add(-1);
+                int newCount = saveFile.comboParts[id].actuatorDTUIndexes.Count - count;
+                saveFile.comboParts[id].actuatorDTUIndexes.RemoveRange(count, newCount);
             }
-            an[e].dtuIndex = saveFile.comboParts[partId].actuatorDTUIndexes[e];
+            for (int j = 0; j < count; j++)
+            {
+                if (saveFile.comboParts[id].actuatorDTUIndexes.Count - 1 < j)
+                {
+                    saveFile.comboParts[id].actuatorDTUIndexes.Add(-1);
+                }
+                an.SetDTUIndex(j, saveFile.comboParts[id].actuatorDTUIndexes[j]);
+            }
         }
 
         tempPartIds.RemoveAt(index);

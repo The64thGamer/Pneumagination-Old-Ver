@@ -19,6 +19,7 @@ public class DEAD_Animatronic : MonoBehaviour
         ResetHashes();
     }
 
+
     void ResetHashes()
     {
         animatorHashes = new int[deadActuators.Length];
@@ -82,6 +83,20 @@ public class DEAD_Animatronic : MonoBehaviour
     public void SetInterface(DEAD_Interface dead)
     {
         deadInterface = dead;
+    }
+
+    public int GetActuatorCount()
+    {
+        if(deadActuators == null)
+        {
+            return 0;
+        }
+        return deadActuators.Length;
+    }
+
+    public void SetDTUIndex(int index, int DTU)
+    {
+        deadActuators[index].dtuIndex = DTU;
     }
 }
 

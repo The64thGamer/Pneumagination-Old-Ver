@@ -29,6 +29,9 @@ public class Combo_Creator : MonoBehaviour
     bool inPreview = false;
     int currentMenu;
 
+    //Consts
+    const int maxPossibleAnimatronicMovements = 20;
+
     private void Start()
     {
         string saveFilePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml";
@@ -332,7 +335,7 @@ public class Combo_Creator : MonoBehaviour
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML());
 
-        SceneManager.LoadSceneAsync(SaveFileData.GetMap(saveFileData.currentMap));
+        SceneManager.LoadScene(SaveFileData.GetMap(saveFileData.currentMap));
     }
 
     void FakeAddPart(Combo_Part.ComboTag tag, uint id)
@@ -345,7 +348,12 @@ public class Combo_Creator : MonoBehaviour
                 fakeparts.RemoveAt(i);
             }
         }
-        fakeparts.Add(new UI_Part_Holder() { id = id, tag = tag });
+        List<int> randoList = new List<int>();
+        for (int i = 0; i < maxPossibleAnimatronicMovements; i++)
+        {
+            randoList.Add(Random.Range(0, 127));
+        }
+        fakeparts.Add(new UI_Part_Holder() { id = id, tag = tag, DTUIndexes = randoList });
 
         if (!tempParts.OrderBy(x => x.id).SequenceEqual(fakeparts.OrderBy(x => x.id)))
         {
@@ -441,8 +449,12 @@ public class Combo_Creator : MonoBehaviour
                 }
             }
         }
-
-        tempParts.Add(new UI_Part_Holder() { id = id, tag = tag });
+        List<int> randoList = new List<int>();
+        for (int i = 0; i < maxPossibleAnimatronicMovements; i++)
+        {
+            randoList.Add(Random.Range(0, 127));
+        }
+        tempParts.Add(new UI_Part_Holder() { id = id, tag = tag, DTUIndexes = randoList });
 
         if (!tempParts.OrderBy(x => x.id).SequenceEqual(fakeparts.OrderBy(x => x.id)))
         {
@@ -479,6 +491,7 @@ public class UI_Part_Holder
 {
     public Combo_Part.ComboTag tag;
     public uint id;
+    public List<int> DTUIndexes;
     public override bool Equals(object obj)
     {
         return Equals(obj as UI_Part_Holder);

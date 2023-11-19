@@ -29,7 +29,7 @@ public class Data_Manager : MonoBehaviour
             saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
         }
 
-        if(saveFileData == null)
+        if (saveFileData == null)
         {
             Debug.LogError("You entered a map with a corrupt save file");
             SceneManager.LoadScene(0);
@@ -49,7 +49,7 @@ public class Data_Manager : MonoBehaviour
 
     private void Update()
     {
-        if(retryMap)
+        if (retryMap)
         {
             retryMap = false;
             GenerateNewRandomMapSaveData();
@@ -60,11 +60,16 @@ public class Data_Manager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        SaveAllFiles();
+    }
+
+    public void SaveAllFiles()
+    {
         GameObject g;
         for (int i = 0; i < mapData.animatronics.Count; i++)
         {
             g = GameObject.Find(mapData.animatronics[i].objectHash.ToString());
-            if(g != null)
+            if (g != null)
             {
                 mapData.animatronics[i].position = g.transform.position;
                 mapData.animatronics[i].rotation = g.transform.rotation;
@@ -125,39 +130,41 @@ public class Data_Manager : MonoBehaviour
             customGeo[i].SetGrime(mapData.geometryData[check].grime);
         }
         int currentDTUIndex = 0;
-        for (int i = 0; i < mapData.animatronics.Count; i++)
+        if (mapData.animatronics != null)
         {
-            //Hacky DTU index system
-            for (int e = 0; e < mapData.animatronics[i].comboParts.Count; e++)
+            for (int i = 0; i < mapData.animatronics.Count; i++)
             {
-                for (int j = 0; j < mapData.animatronics[i].comboParts[e].actuatorDTUIndexes.Count; j++)
+                //Hacky DTU index system
+                for (int e = 0; e < mapData.animatronics[i].comboParts.Count; e++)
                 {
-                    mapData.animatronics[i].comboParts[e].actuatorDTUIndexes[j] = currentDTUIndex;
-                    currentDTUIndex++;
+                    for (int j = 0; j < mapData.animatronics[i].comboParts[e].actuatorDTUIndexes.Count; j++)
+                    {
+                        mapData.animatronics[i].comboParts[e].actuatorDTUIndexes[j] = currentDTUIndex;
+                        currentDTUIndex++;
+                    }
                 }
+                //Setup
+                GameObject animatronic = GameObject.Instantiate(new GameObject());
+                animatronic.name = mapData.animatronics[i].objectHash.ToString();
+                if (mapData.animatronics[i].yetToBePlaced)
+                {
+                    animatronic.transform.position = mapAnimatronicPlacementSpot;
+                    mapData.animatronics[i].yetToBePlaced = false;
+                    addedNewGeoData = true;
+                }
+                else
+                {
+                    animatronic.transform.position = mapData.animatronics[i].position;
+                    animatronic.transform.rotation = mapData.animatronics[i].rotation;
+                }
+                animatronic.AddComponent<Rigidbody>();
+                animatronic.AddComponent<PhysicsObject>();
+                Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
+                combo.InsertDeadInterface(this.GetComponent<DEAD_Interface>());
+                combo.ReassignFullSaveFile(mapData.animatronics[i]);
             }
-            //Setup
-            GameObject animatronic = GameObject.Instantiate(new GameObject());
-            animatronic.name = mapData.animatronics[i].objectHash.ToString();
-            if (mapData.animatronics[i].yetToBePlaced)
-            {
-                animatronic.transform.position = mapAnimatronicPlacementSpot;
-                mapData.animatronics[i].yetToBePlaced = false;
-                addedNewGeoData = true;
-            }
-            else
-            {
-                animatronic.transform.position = mapData.animatronics[i].position;
-                animatronic.transform.rotation = mapData.animatronics[i].rotation;
-            }
-            animatronic.AddComponent<Rigidbody>();
-            animatronic.AddComponent<PhysicsObject>();
-            Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
-            combo.InsertDeadInterface(this.GetComponent<DEAD_Interface>());
-            combo.ReassignFullSaveFile(mapData.animatronics[i]);
         }
-
-        if(addedNewGeoData)
+        if (addedNewGeoData)
         {
             DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
         }
@@ -181,9 +188,10 @@ public class Data_Manager : MonoBehaviour
         mapData.mapHistory = new List<MapHistory>();
         mapData.geometryData = new List<CustomGeometryData>();
 
-        mapData.mapHistory.Add(new MapHistory(){ 
-            change = PlayerPrefs.GetString("CreateWorldName"), 
-            eventType = MapHistory.HistoricalEvent.locationNameChange, 
+        mapData.mapHistory.Add(new MapHistory()
+        {
+            change = PlayerPrefs.GetString("CreateWorldName"),
+            eventType = MapHistory.HistoricalEvent.locationNameChange,
             time = saveFileData.timeFileStarted
         });
         Color[] palette = Name_Generator.GetRandomPalette(saveFileData.worldSeed);
