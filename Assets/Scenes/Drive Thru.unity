@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 4150.6177, g: 4722.614, b: 5333.821, a: 1}
+  m_IndirectSpecularColor: {r: 4148.2954, g: 4719.696, b: 5328.985, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4892,6 +4892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rainPercent: 0
   snowPercent: 0
+  mapAnimatronicPlacementSpot: {x: 0, y: 0, z: -11.13}
   worldFlyingSphereSize: 60
   saveFileData:
     firstName: 
@@ -4905,6 +4906,7 @@ MonoBehaviour:
   mapData:
     mapHistory: []
     geometryData: []
+    animatronics: []
     startingColorPrimary: {r: 0, g: 0, b: 0, a: 0}
     startingColorSecondary: {r: 0, g: 0, b: 0, a: 0}
     startingColorTertiary: {r: 0, g: 0, b: 0, a: 0}

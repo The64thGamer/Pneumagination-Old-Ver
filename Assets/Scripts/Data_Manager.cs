@@ -9,6 +9,7 @@ public class Data_Manager : MonoBehaviour
 {
     [SerializeField][Range(0, 1)] float rainPercent = 0;
     [SerializeField][Range(0, 1)] float snowPercent = 0;
+    [SerializeField] Vector3 mapAnimatronicPlacementSpot;
     [SerializeField] float worldFlyingSphereSize;
     [SerializeField] SaveFileData saveFileData;
     [SerializeField] MapData mapData;
@@ -43,7 +44,7 @@ public class Data_Manager : MonoBehaviour
         {
             mapData = mapData.DeserializeFromXML(File.ReadAllText(mapSavePath));
         }
-        ApplyGeometryColorsAndSaveNewGeo();
+        ApplySaveFileValuesToScene();
     }
 
     private void Update()
@@ -52,7 +53,7 @@ public class Data_Manager : MonoBehaviour
         {
             retryMap = false;
             GenerateNewRandomMapSaveData();
-            ApplyGeometryColorsAndSaveNewGeo();
+            ApplySaveFileValuesToScene();
         }
         saveFileData.timeElapsed += Time.deltaTime;
     }
@@ -68,7 +69,7 @@ public class Data_Manager : MonoBehaviour
         return saveFileData.worldSeed;
     }
 
-    void ApplyGeometryColorsAndSaveNewGeo()
+    void ApplySaveFileValuesToScene()
     {
         Custom_Geometry[] customGeo = FindObjectsByType<Custom_Geometry>(FindObjectsSortMode.None);
 
@@ -113,6 +114,27 @@ public class Data_Manager : MonoBehaviour
             customGeo[i].SetMaterial(mapData.geometryData[check].material);
             customGeo[i].SetGrime(mapData.geometryData[check].grime);
         }
+        for (int i = 0; i < mapData.animatronics.Count; i++)
+        {
+            GameObject animatronic = GameObject.Instantiate(new GameObject());
+            animatronic.name = mapData.animatronics[i].objectHash.ToString();
+            if (mapData.animatronics[i].yetToBePlaced)
+            {
+                animatronic.transform.position = mapAnimatronicPlacementSpot;
+                mapData.animatronics[i].yetToBePlaced = false;
+                addedNewGeoData = true;
+            }
+            else
+            {
+                animatronic.transform.position = mapData.animatronics[i].position;
+                animatronic.transform.rotation = mapData.animatronics[i].rotation;
+            }
+            animatronic.AddComponent<Rigidbody>();
+            Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
+            combo.InsertDeadInterface(this.GetComponent<DEAD_Interface>());
+            combo.ReassignFullSaveFile(mapData.animatronics[i]);
+        }
+
         if(addedNewGeoData)
         {
             DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());

@@ -9,6 +9,7 @@ using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class Combo_Creator : MonoBehaviour
 {
@@ -324,6 +325,8 @@ public class Combo_Creator : MonoBehaviour
         Combo_Animatronic_SaveFile save = comboAnimatronic.GetSaveFileData();
         save.creationDate = saveFileData.timeFileStarted.dateTime.AddSeconds(saveFileData.timeElapsed);
         save.lastCleanedDate = save.creationDate;
+        save.yetToBePlaced = true;
+        save.objectHash = Random.Range(int.MinValue, int.MaxValue);
         mapData.animatronics.Add(save);
 
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());

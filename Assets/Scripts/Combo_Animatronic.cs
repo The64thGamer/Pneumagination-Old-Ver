@@ -8,25 +8,21 @@ public class Combo_Animatronic : MonoBehaviour
 {
     [SerializeField] List<DEAD_Animatronic> animatronicParts;
     [SerializeField] Combo_Animatronic_SaveFile saveFile = new Combo_Animatronic_SaveFile();
-    [SerializeField] bool debugRefreshAnimatronic;
     [SerializeField] DEAD_Interface deadInterface;
 
     private void Start()
     {
         RefreshAnimatronic();
     }
-    private void Update()
-    {
-        if (debugRefreshAnimatronic)
-        {
-            debugRefreshAnimatronic = false;
-            RefreshAnimatronic();
-        }
-    }
 
     public Combo_Animatronic_SaveFile GetSaveFileData()
     {
         return saveFile;
+    }
+
+    public void InsertDeadInterface(DEAD_Interface inter)
+    {
+        deadInterface = inter;
     }
 
     public void ReassignPartsFromUI(List<UI_Part_Holder> tempParts)
@@ -36,6 +32,12 @@ public class Combo_Animatronic : MonoBehaviour
         {
             saveFile.comboParts.Add(new Combo_Part_SaveFile() { id = tempParts[i].id, bendableSections = new List<float>() });
         }
+        RefreshAnimatronic();
+    }
+
+    public void ReassignFullSaveFile(Combo_Animatronic_SaveFile file)
+    {
+        saveFile = file;
         RefreshAnimatronic();
     }
 
@@ -209,6 +211,8 @@ public class Combo_Animatronic : MonoBehaviour
 [System.Serializable]
 public class Combo_Animatronic_SaveFile
 {
+    public int objectHash;
+    public bool yetToBePlaced;
     public string playerGivenName;
     public UDateTime creationDate;
     public UDateTime lastCleanedDate;
