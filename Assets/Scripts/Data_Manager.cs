@@ -60,6 +60,16 @@ public class Data_Manager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        GameObject g;
+        for (int i = 0; i < mapData.animatronics.Count; i++)
+        {
+            g = GameObject.Find(mapData.animatronics[i].objectHash.ToString());
+            if(g != null)
+            {
+                mapData.animatronics[i].position = g.transform.position;
+                mapData.animatronics[i].rotation = g.transform.rotation;
+            }
+        }
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML());
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
     }

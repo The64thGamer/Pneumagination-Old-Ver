@@ -162,7 +162,7 @@ public class PlayerInteractions : MonoBehaviour
                     rigid.isKinematic = false;
                 }
             }
-            if (lookObject.layer == currentlyPickingUpLayer)
+            if (pickupRB.gameObject.layer == currentlyPickingUpLayer)
             {
                 //Layer
                 pickupRB.gameObject.layer = pickupLayer;
@@ -180,7 +180,7 @@ public class PlayerInteractions : MonoBehaviour
         if (lookObject.layer == pickupLayer || lookObject.layer == currentlyPickingUpLayer)
         {
             lookObject = lookObject.transform.root.gameObject;
-            holdingRotation = lookObject.transform.eulerAngles;
+            fixedRot = lookObject.transform.eulerAngles;
             physicsObject = lookObject.GetComponentInChildren<PhysicsObject>();
             currentlyPickedUpObject = lookObject;
             pickupRB = currentlyPickedUpObject.GetComponent<Rigidbody>();
