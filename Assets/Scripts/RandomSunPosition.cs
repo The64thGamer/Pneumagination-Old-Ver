@@ -11,7 +11,7 @@ public class RandomSunPosition : MonoBehaviour
 
     void Start()
     {
-        timeOfDay = Random.Range(0.41f * 86400, 0.58f * 86400);
+        timeOfDay = Random.Range(0.21f * 86400, 0.58f * 86400);
         randomPitch = Random.Range(0.0f, 360.0f);
     }
 
