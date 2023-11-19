@@ -321,7 +321,10 @@ public class Combo_Creator : MonoBehaviour
         {
             mapData.animatronics = new List<Combo_Animatronic_SaveFile>();
         }
-        mapData.animatronics.Add(comboAnimatronic.GetSaveFileData());
+        Combo_Animatronic_SaveFile save = comboAnimatronic.GetSaveFileData();
+        save.creationDate = saveFileData.timeFileStarted.dateTime.AddSeconds(saveFileData.timeElapsed);
+        save.lastCleanedDate = save.creationDate;
+        mapData.animatronics.Add(save);
 
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
 

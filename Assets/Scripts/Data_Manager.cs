@@ -54,6 +54,13 @@ public class Data_Manager : MonoBehaviour
             GenerateNewRandomMapSaveData();
             ApplyGeometryColorsAndSaveNewGeo();
         }
+        saveFileData.timeElapsed += Time.deltaTime;
+    }
+
+    private void OnApplicationQuit()
+    {
+        DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML());
+        DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
     }
 
     public int GetSeed()
@@ -109,7 +116,6 @@ public class Data_Manager : MonoBehaviour
         if(addedNewGeoData)
         {
             DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
-
         }
     }
 
