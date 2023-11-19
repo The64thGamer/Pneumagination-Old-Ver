@@ -65,6 +65,7 @@ public class Data_Manager : MonoBehaviour
     {
         Custom_Geometry[] customGeo = FindObjectsByType<Custom_Geometry>(FindObjectsSortMode.None);
 
+        bool addedNewGeoData = false;
         for (int i = 0; i < customGeo.Length; i++)
         {
             int check = CheckMapDataForString(customGeo[i].GetKey());
@@ -98,14 +99,18 @@ public class Data_Manager : MonoBehaviour
                     material = customGeo[i].GetMaterial(),//This needs to be calculated randomly
                     grime = Random.Range(0.0f, 1.0f),//This needs to be calculated randomly
                 });
+                addedNewGeoData = true;
                 check = mapData.geometryData.Count - 1;
             }
             customGeo[i].SetColor(mapData.geometryData[check].color);
             customGeo[i].SetMaterial(mapData.geometryData[check].material);
             customGeo[i].SetGrime(mapData.geometryData[check].grime);
         }
+        if(addedNewGeoData)
+        {
+            DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
 
-        DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
+        }
     }
 
     int CheckMapDataForString(string key)
@@ -192,6 +197,19 @@ public class SaveFileData
         using (System.IO.StringReader reader = new System.IO.StringReader(xml))
         {
             return (SaveFileData)serializer.Deserialize(reader);
+        }
+    }
+
+    public static string GetMap(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                return "Fast Food Place";
+            case 1:
+                return "Drive Thru";
+            default:
+                return "";
         }
     }
 }
