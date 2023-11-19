@@ -104,6 +104,8 @@ public class Data_Manager : MonoBehaviour
             customGeo[i].SetMaterial(mapData.geometryData[check].material);
             customGeo[i].SetGrime(mapData.geometryData[check].grime);
         }
+
+        DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
     }
 
     int CheckMapDataForString(string key)
@@ -199,6 +201,7 @@ public struct MapData
 {
     public List<MapHistory> mapHistory;
     public List<CustomGeometryData> geometryData;
+    public List<Combo_Animatronic_SaveFile> animatronics;
 
     public Color startingColorPrimary;
     public Color startingColorSecondary;
