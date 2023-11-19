@@ -330,6 +330,7 @@ public class Combo_Creator : MonoBehaviour
         mapData.animatronics.Add(save);
 
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
+        DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML());
 
         SceneManager.LoadSceneAsync(SaveFileData.GetMap(saveFileData.currentMap));
     }
