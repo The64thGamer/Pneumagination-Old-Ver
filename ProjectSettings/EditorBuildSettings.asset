@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Drive Thru.unity
     guid: d43470eec60017d4e9d936b90b376519
+  - enabled: 1
+    path: Assets/Scenes/Animatronic Creator.unity
+    guid: 9953ca07ab0141c43b281a24dfe866e2
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

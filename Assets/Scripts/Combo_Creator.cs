@@ -61,9 +61,9 @@ public class Combo_Creator : MonoBehaviour
         {
             mapData = mapData.DeserializeFromXML(File.ReadAllText(mapSavePath));
         }
-
+        document.rootVisualElement.Q<Label>("TotalMoney").text = "$" + saveFileData.money;
         document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 0;
-
+        document.rootVisualElement.Q<Button>("BackButton").clicked += () => SceneManager.LoadScene(SaveFileData.GetMap(saveFileData.currentMap));
         document.rootVisualElement.Q<Button>("CategoryLeft").clicked += () => AddMenu(-1, true);
         document.rootVisualElement.Q<Button>("CategoryRight").clicked += () => AddMenu(1, false);
         comboAnimatronic.SetName("???");
