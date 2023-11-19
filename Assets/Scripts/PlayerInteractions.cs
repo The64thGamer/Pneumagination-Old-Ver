@@ -65,7 +65,15 @@ public class PlayerInteractions : MonoBehaviour
             lookObject = null;
         }
 
-
+        if (currentlyPickedUpObject != null)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                holdingRotation.x += Input.GetAxis("Mouse X") * 1.5f;
+                holdingRotation.y += Input.GetAxis("Mouse Y") * -1.5f;
+                fixedRot = new Vector3(holdingRotation.y, holdingRotation.x, 0);
+            }
+        }
 
         //if we press the button of choice
         if (Input.GetMouseButtonDown(1))
@@ -128,7 +136,7 @@ public class PlayerInteractions : MonoBehaviour
         }
         currentDist = 0;
         //Freeze
-        if(pickupRB != null)
+        if (pickupRB != null)
         {
             Component[] rigids = pickupRB.GetComponentsInChildren(typeof(Rigidbody), true);
             foreach (Rigidbody rig in rigids)
@@ -172,10 +180,11 @@ public class PlayerInteractions : MonoBehaviour
         if (lookObject.layer == pickupLayer || lookObject.layer == currentlyPickingUpLayer)
         {
             lookObject = lookObject.transform.root.gameObject;
+            holdingRotation = lookObject.transform.eulerAngles;
             physicsObject = lookObject.GetComponentInChildren<PhysicsObject>();
             currentlyPickedUpObject = lookObject;
             pickupRB = currentlyPickedUpObject.GetComponent<Rigidbody>();
-            if(pickupRB == null)
+            if (pickupRB == null)
             {
                 pickupRB = currentlyPickedUpObject.GetComponentInChildren<Rigidbody>();
             }
@@ -207,30 +216,6 @@ public class PlayerInteractions : MonoBehaviour
                     transrights.gameObject.layer = currentlyPickingUpLayer;
                 }
             }
-        }
-    }
-
-    public bool PickupCheck(bool freezed)
-    {
-        freeze = freezed;
-        //Pickups
-        if (currentlyPickedUpObject != null)
-        {
-            fixedRot = new Vector3(holdingRotation.y, holdingRotation.x, 0);
-            if (Input.GetMouseButton(2))
-            {
-                holdingRotation.x += Input.GetAxis("Mouse X") * 1.5f;
-                holdingRotation.y += Input.GetAxis("Mouse Y") * -1.5f;
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
-        {
-            return true;
         }
     }
 
