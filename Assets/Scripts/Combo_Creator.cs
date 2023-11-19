@@ -2,8 +2,12 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Ports;
 using System.Linq;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class Combo_Creator : MonoBehaviour
@@ -13,12 +17,12 @@ public class Combo_Creator : MonoBehaviour
     [SerializeField] UIDocument document;
     [SerializeField] VisualTreeAsset comboButton;
     [SerializeField] VisualTreeAsset comboSlider;
+    [SerializeField] VisualTreeAsset comboPurchase;
     [SerializeField] SaveFileData saveFileData;
+    [SerializeField] MapData mapData;
+
     [SerializeField] List<UI_Part_Holder> tempParts = new List<UI_Part_Holder>();
     [SerializeField] Combo_Animatronic comboAnimatronic;
-
-    //TotalMoney
-    //BackButton
 
     int currentCompany;
     bool inPreview = false;
@@ -26,12 +30,41 @@ public class Combo_Creator : MonoBehaviour
 
     private void Start()
     {
+        string saveFilePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml";
+
+        if (!File.Exists(saveFilePath))
+        {
+            Debug.LogError("You entered the creator without a save file");
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
+        }
+
+        if (saveFileData == null)
+        {
+            Debug.LogError("You entered a map with a corrupt save file");
+            SceneManager.LoadScene(0);
+        }
+
+        string mapSavePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml";
+        if (!File.Exists(mapSavePath))
+        {
+            Debug.LogError("You entered the creator without a destination map save file");
+        }
+        else
+        {
+            mapData = mapData.DeserializeFromXML(File.ReadAllText(mapSavePath));
+        }
+
         document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 0;
 
         document.rootVisualElement.Q<Button>("CategoryLeft").clicked += () => AddMenu(-1, true);
         document.rootVisualElement.Q<Button>("CategoryRight").clicked += () => AddMenu(1, false);
+        comboAnimatronic.SetName("???");
 
-
+        document.rootVisualElement.Q<Label>("TotalCost").text = "$" + GetTotalCost().ToString();
         currentCompany = PlayerPrefs.GetInt("Game: Current Company");
         SwitchMenu(0,false);
         UpdateCost();
@@ -39,14 +72,30 @@ public class Combo_Creator : MonoBehaviour
 
     void UpdateCost()
     {
+        uint cost = GetTotalCost();
+        Label costLabel = document.rootVisualElement.Q<Label>("TotalCost");
+        costLabel.text = "$" + cost.ToString();
+
+        if(cost > saveFileData.money)
+        {
+            costLabel.style.color = Color.red;
+        }
+        else
+        {
+            //This needs to be fixed to not be exactly black
+            costLabel.style.color = new Color(0.11764705882352941f, 0.12941176470588237f, 0.11764705882352941f,1);
+        }
+    }
+
+    uint GetTotalCost()
+    {
         uint price = 0;
         for (int i = 0; i < tempParts.Count; i++)
         {
             Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + tempParts[i].id).GetComponent<Combo_Part>();
             price += combo.price;
         }
-        document.rootVisualElement.Q<Label>("TotalCost").text = "$" + price.ToString();
-
+        return price;
     }
 
     void AddMenu(int add, bool iterateBackward)
@@ -107,8 +156,23 @@ public class Combo_Creator : MonoBehaviour
                     break;
                 case 100:
                     document.rootVisualElement.Q<Label>("CategoryLabel").text = "Purchase";
-                    check = true;
                     document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
+
+                    VisualElement currentPurchase = comboPurchase.Instantiate();
+                    TextField textField = currentPurchase.Q<TextField>("CharName");
+                    textField.value = comboAnimatronic.GetName();
+                    textField.RegisterValueChangedCallback(evt =>
+                    {
+                        comboAnimatronic.SetName(evt.newValue);
+                    });
+
+                    Button buyButton = currentPurchase.Q<Button>("Purchase");
+                    buyButton.text = "Purchase ($" + GetTotalCost().ToString() + ")";
+                    buyButton.clicked += () => SaveAnimatronicToFile();
+
+                    currentPurchase.Q<Label>("BotInfo").text = "Total Movements: " + comboAnimatronic.GetNumberOfMovements().ToString();
+                    visList.Add(currentPurchase);
+                    check = true;
                     break;
                 default:
                     break;
@@ -193,17 +257,13 @@ public class Combo_Creator : MonoBehaviour
                 {
                     if (tempParts[i].tag == tag)
                     {
-                        Debug.Log("Found");
                         Combo_Part_SaveFile combo = comboAnimatronic.GetComponent<Combo_Animatronic>().SearchID(tempParts[i].id);
                         if(combo.bendableSections != null && combo.bendableSections.Count > 0)
                         {
-                            Debug.Log("Double Found");
                             check = true;
                             //Create item boxes
                             for (int e = 0; e < combo.bendableSections.Count; e++)
                             {
-                                Debug.Log("Triple Found " + e);
-
                                 float slider = combo.bendableSections[e];
 
                                 VisualElement currentButton = comboSlider.Instantiate();
@@ -246,6 +306,26 @@ public class Combo_Creator : MonoBehaviour
                 }
             }
         }
+    }
+
+    void SaveAnimatronicToFile()
+    {
+        int cost = (int)GetTotalCost();
+        if (cost > saveFileData.money)
+        {
+            return;
+        }
+
+        saveFileData.money -= cost;
+        if(mapData.animatronics == null)
+        {
+            mapData.animatronics = new List<Combo_Animatronic_SaveFile>();
+        }
+        mapData.animatronics.Add(comboAnimatronic.GetSaveFileData());
+
+        DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
+
+        SceneManager.LoadSceneAsync(SaveFileData.GetMap(saveFileData.currentMap));
     }
 
     void FakeAddPart(Combo_Part.ComboTag tag, uint id)

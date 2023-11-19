@@ -173,17 +173,7 @@ public class MainMenu : MonoBehaviour
     void LoadMap()
     {
         loadingScene = true;
-        switch (saveFileData.currentMap)
-        {
-            case 0:
-                SceneManager.LoadSceneAsync("Fast Food Place");
-                break;
-            case 1:
-                SceneManager.LoadSceneAsync("Drive Thru");
-                break;
-            default:
-                break;
-        }
+        SceneManager.LoadSceneAsync(SaveFileData.GetMap(saveFileData.currentMap));
     }
 
     void SwitchMenu(int menu)

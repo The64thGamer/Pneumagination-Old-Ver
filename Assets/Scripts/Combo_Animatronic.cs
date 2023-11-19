@@ -24,6 +24,11 @@ public class Combo_Animatronic : MonoBehaviour
         }
     }
 
+    public Combo_Animatronic_SaveFile GetSaveFileData()
+    {
+        return saveFile;
+    }
+
     public void ReassignPartsFromUI(List<UI_Part_Holder> tempParts)
     {
         saveFile.comboParts = new List<Combo_Part_SaveFile>();
@@ -168,9 +173,25 @@ public class Combo_Animatronic : MonoBehaviour
         return null;
     }
 
-    public void SaveData()
+    public string GetName()
     {
+        return saveFile.playerGivenName;
+    }
 
+    public void SetName(string newName)
+    {
+        saveFile.playerGivenName = newName;
+    }
+
+    public int GetNumberOfMovements()
+    {
+        DEAD_Animatronic[] parts = this.GetComponentsInChildren<DEAD_Animatronic>();
+        int totalMovements = 0;
+        for (int i = 0; i < parts.Length; i++)
+        {
+            totalMovements += parts[i].GetActuatorInfoCopy().Length;
+        }
+        return totalMovements;
     }
 
     void ClearAllParts()
