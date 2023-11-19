@@ -55,15 +55,15 @@ public class Player_UI : MonoBehaviour
     const float hotBarKeyminSize = 0.8f;
     const float hotBarKeyYOffset = 10f;
 
+
     void OnEnable()
     {
-        dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
         document.rootVisualElement.Q<Button>("LoadShow").clicked += () => LoadFile();
         document.rootVisualElement.Q<Button>("SaveShow").clicked += () => SaveFile();
         document.rootVisualElement.Q<Button>("ShowInfo").clicked += () => StartCoroutine(VisualizeShowInfoPopup(Convert.ToBoolean(showInfoPopupPosition)));
         document.rootVisualElement.Q<Button>("Shop").clicked += () => 
         {
-            dataManager.SaveAllFiles();
+            GameObject.Find("Data Manager").GetComponent<Data_Manager>().SaveAllFiles();
             SceneManager.LoadScene("Animatronic Creator"); 
         };
         document.rootVisualElement.Q<Button>("ClearAllData").clicked += () => CreateNewShowtape(false);
@@ -94,6 +94,8 @@ public class Player_UI : MonoBehaviour
 
     private void Start()
     {
+        dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
+
         for (int i = 0; i < hotBarVisualElements.Length; i++)
         {
             hotBarVisualElements[i] = document.rootVisualElement.Q<VisualElement>("Hotbar" + i);
