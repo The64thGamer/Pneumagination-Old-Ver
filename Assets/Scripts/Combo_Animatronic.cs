@@ -56,17 +56,8 @@ public class Combo_Animatronic : MonoBehaviour
             if (saveFile.comboParts[id].actuatorDTUIndexes != null)
             {
                 int count = an.GetActuatorCount();
-                if (saveFile.comboParts[id].actuatorDTUIndexes.Count > count)
-                {
-                    int newCount = saveFile.comboParts[id].actuatorDTUIndexes.Count - count;
-                    saveFile.comboParts[id].actuatorDTUIndexes.RemoveRange(count, newCount);
-                }
                 for (int i = 0; i < count; i++)
                 {
-                    if (saveFile.comboParts[id].actuatorDTUIndexes.Count - 1 < i)
-                    {
-                        saveFile.comboParts[id].actuatorDTUIndexes.Add(-1);
-                    }
                     an.SetDTUIndex(i, saveFile.comboParts[id].actuatorDTUIndexes[i]);
                 }
             }
@@ -147,17 +138,8 @@ public class Combo_Animatronic : MonoBehaviour
         if (saveFile.comboParts[id].actuatorDTUIndexes != null)
         {
             int count = an.GetActuatorCount();
-            if (saveFile.comboParts[id].actuatorDTUIndexes.Count > count)
-            {
-                int newCount = saveFile.comboParts[id].actuatorDTUIndexes.Count - count;
-                saveFile.comboParts[id].actuatorDTUIndexes.RemoveRange(count, newCount);
-            }
             for (int j = 0; j < count; j++)
             {
-                if (saveFile.comboParts[id].actuatorDTUIndexes.Count - 1 < j)
-                {
-                    saveFile.comboParts[id].actuatorDTUIndexes.Add(-1);
-                }
                 an.SetDTUIndex(j, saveFile.comboParts[id].actuatorDTUIndexes[j]);
             }
         }

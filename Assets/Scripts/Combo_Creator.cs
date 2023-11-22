@@ -365,8 +365,12 @@ public class Combo_Creator : MonoBehaviour
         {
             randoList.Add(Random.Range(0, 127));
         }
-
-        comboAnimatronic.GetSaveFileData().comboParts.Add(new Combo_Part_SaveFile() { id = id, tag = tag, actuatorDTUIndexes = randoList, bendableSections = new List<float>(combo.GetComponent<Combo_Part>().bendableParts.Count) });
+        List<float> bends = new List<float>();
+        for (int i = 0; i < combo.GetComponent<Combo_Part>().bendableParts.Count; i++)
+        {
+            bends.Add(0);
+        }
+        comboAnimatronic.GetSaveFileData().comboParts.Add(new Combo_Part_SaveFile() { id = id, tag = tag, actuatorDTUIndexes = randoList, bendableSections = bends });
 
         if (!tempCheck.OrderBy(x => x.id).SequenceEqual(comboAnimatronic.GetSaveFileData().comboParts.OrderBy(x => x.id)))
         {
@@ -486,8 +490,12 @@ public class Combo_Creator : MonoBehaviour
         {
             randoList.Add(Random.Range(0, 127));
         }
-
-        comboAnimatronic.GetSaveFileData().comboParts.Add(new Combo_Part_SaveFile() { id = id, tag = tag, actuatorDTUIndexes = randoList, bendableSections = new List<float>(combo.GetComponent<Combo_Part>().bendableParts.Count) });
+        List<float> bends = new List<float>();
+        for (int i = 0; i < combo.GetComponent<Combo_Part>().bendableParts.Count; i++)
+        {
+            bends.Add(0);
+        }
+        comboAnimatronic.GetSaveFileData().comboParts.Add(new Combo_Part_SaveFile() { id = id, tag = tag, actuatorDTUIndexes = randoList, bendableSections = bends });
 
         UpdateCost();
 
