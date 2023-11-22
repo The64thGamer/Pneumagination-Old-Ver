@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Combo_Part;
 
 public class Combo_Part : MonoBehaviour
 {
@@ -69,4 +71,23 @@ public class Combo_Part_SaveFile
     public List<int> actuatorDTUIndexes;
     [Range(0,1)]
     public List<float> bendableSections;
+    public ComboTag tag;
+
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as Combo_Part_SaveFile);
+    }
+    public bool Equals(Combo_Part_SaveFile other)
+    {
+        if (other == null)
+            return false;
+
+        // Check for equality based on specific properties
+        return id == other.id;
+    }
+    public override int GetHashCode()
+    {
+        // Generate a hash code based on the properties used in Equals method
+        return HashCode.Combine(id);
+    }
 }

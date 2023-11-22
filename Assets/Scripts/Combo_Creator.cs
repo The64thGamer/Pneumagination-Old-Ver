@@ -21,16 +21,13 @@ public class Combo_Creator : MonoBehaviour
     [SerializeField] VisualTreeAsset comboPurchase;
     [SerializeField] SaveFileData saveFileData;
     [SerializeField] MapData mapData;
-
-    [SerializeField] List<UI_Part_Holder> tempParts = new List<UI_Part_Holder>();
     [SerializeField] Combo_Animatronic comboAnimatronic;
+    Combo_Part_SaveFile heldPart = null;
 
     int currentCompany;
-    bool inPreview = false;
+    int inPreview = -1;
     int currentMenu;
 
-    //Consts
-    const int maxPossibleAnimatronicMovements = 20;
 
     private void Start()
     {
@@ -70,33 +67,32 @@ public class Combo_Creator : MonoBehaviour
 
         document.rootVisualElement.Q<Label>("TotalCost").text = "$" + GetTotalCost().ToString();
         currentCompany = PlayerPrefs.GetInt("Game: Current Company");
-        SwitchMenu(0,false);
+        SwitchMenu(0, false);
         UpdateCost();
     }
-
     void UpdateCost()
     {
         uint cost = GetTotalCost();
         Label costLabel = document.rootVisualElement.Q<Label>("TotalCost");
         costLabel.text = "$" + cost.ToString();
 
-        if(cost > saveFileData.money)
+        if (cost > saveFileData.money)
         {
             costLabel.style.color = Color.red;
         }
         else
         {
             //This needs to be fixed to not be exactly black
-            costLabel.style.color = new Color(0.11764705882352941f, 0.12941176470588237f, 0.11764705882352941f,1);
+            costLabel.style.color = new Color(0.11764705882352941f, 0.12941176470588237f, 0.11764705882352941f, 1);
         }
     }
 
     uint GetTotalCost()
     {
         uint price = 0;
-        for (int i = 0; i < tempParts.Count; i++)
+        for (int i = 0; i < comboAnimatronic.GetSaveFileData().comboParts.Count; i++)
         {
-            Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + tempParts[i].id).GetComponent<Combo_Part>();
+            Combo_Part combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + comboAnimatronic.GetSaveFileData().comboParts[i].id).GetComponent<Combo_Part>();
             price += combo.price;
         }
         return price;
@@ -136,7 +132,7 @@ public class Combo_Creator : MonoBehaviour
             {
                 case 0:
                     document.rootVisualElement.Q<Button>("CategoryLeft").style.visibility = Visibility.Hidden;
-                    if (tempParts.Count == 0)
+                    if (comboAnimatronic.GetSaveFileData().comboParts.Count == 0)
                     {
                         document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
 
@@ -157,6 +153,15 @@ public class Combo_Creator : MonoBehaviour
                 case 3:
                     document.rootVisualElement.Q<Label>("CategoryLabel").text = "Customize Rt. Arm";
                     tag = Combo_Part.ComboTag.rightArm;
+                    break;
+                case 4:
+                    parts = GetPartsOfTag(Combo_Part.ComboTag.leftArm);
+                    tag = Combo_Part.ComboTag.leftArm;
+                    document.rootVisualElement.Q<Label>("CategoryLabel").text = "Choose Lt. Arm";
+                    break;
+                case 5:
+                    document.rootVisualElement.Q<Label>("CategoryLabel").text = "Customize Lt. Arm";
+                    tag = Combo_Part.ComboTag.leftArm;
                     break;
                 case 100:
                     document.rootVisualElement.Q<Label>("CategoryLabel").text = "Purchase";
@@ -200,12 +205,13 @@ public class Combo_Creator : MonoBehaviour
                         currentButton.Q<Label>("Price").text = "$" + price.ToString();
                         Button visButton = currentButton.Q<Button>("Button");
                         uint partID = parts[i].partId;
-                        visButton.clicked += () => AddPart(tag, partID);
+                        Combo_Part.ComboTag newTag = tag;
+                        visButton.clicked += () => AddPart(newTag, partID);
                         visButton.RegisterCallback<MouseOverEvent>((type) =>
                         {
                             visButton.style.scale = Vector2.one * 0.95f;
                             document.rootVisualElement.Q<VisualElement>("ItemPreview").style.opacity = 1;
-                            FakeAddPart(tag, partID);
+                            FakeAddPart(newTag, partID);
                             document.rootVisualElement.Q<Label>("ItemPrice").text = "$" + price.ToString();
                             document.rootVisualElement.Q<VisualElement>("PreviewIcon").style.backgroundImage = tex;
 
@@ -257,12 +263,12 @@ public class Combo_Creator : MonoBehaviour
             else
             {
                 //Iterate for parts settings
-                for (int i = 0; i < tempParts.Count; i++)
+                for (int i = 0; i < comboAnimatronic.GetSaveFileData().comboParts.Count; i++)
                 {
-                    if (tempParts[i].tag == tag)
+                    if (comboAnimatronic.GetSaveFileData().comboParts[i].tag == tag)
                     {
-                        Combo_Part_SaveFile combo = comboAnimatronic.GetComponent<Combo_Animatronic>().SearchID(tempParts[i].id);
-                        if(combo.bendableSections != null && combo.bendableSections.Count > 0)
+                        Combo_Part_SaveFile combo = comboAnimatronic.SearchSaveFileID(comboAnimatronic.GetSaveFileData().comboParts[i].id);
+                        if (combo.bendableSections != null && combo.bendableSections.Count > 0)
                         {
                             check = true;
                             //Create item boxes
@@ -273,7 +279,7 @@ public class Combo_Creator : MonoBehaviour
                                 VisualElement currentButton = comboSlider.Instantiate();
                                 Slider sl = currentButton.Q<Slider>("Slider");
                                 sl.value = slider;
-                                sl.label = "Bend #" + (e+1);
+                                sl.label = "Bend #" + (e + 1);
 
                                 int index = e;
                                 sl.RegisterValueChangedCallback(evt =>
@@ -288,7 +294,7 @@ public class Combo_Creator : MonoBehaviour
                         }
                     }
                 }
-                if(!check)
+                if (!check)
                 {
                     if (iterateBackward)
                     {
@@ -321,7 +327,7 @@ public class Combo_Creator : MonoBehaviour
         }
 
         saveFileData.money -= cost;
-        if(mapData.animatronics == null)
+        if (mapData.animatronics == null)
         {
             mapData.animatronics = new List<Combo_Animatronic_SaveFile>();
         }
@@ -340,34 +346,51 @@ public class Combo_Creator : MonoBehaviour
 
     void FakeAddPart(Combo_Part.ComboTag tag, uint id)
     {
-        List<UI_Part_Holder> fakeparts = new List<UI_Part_Holder>(tempParts);
-        for (int i = 0; i < fakeparts.Count; i++)
+        if (inPreview > -1)
         {
-            if (fakeparts[i].tag == tag)
+            return;
+        }
+        List<Combo_Part_SaveFile> tempCheck = new List<Combo_Part_SaveFile>(comboAnimatronic.GetSaveFileData().comboParts);
+        for (int i = 0; i < comboAnimatronic.GetSaveFileData().comboParts.Count; i++)
+        {
+            if (comboAnimatronic.GetSaveFileData().comboParts[i].tag == tag)
             {
-                fakeparts.RemoveAt(i);
+                heldPart = comboAnimatronic.GetSaveFileData().comboParts[i];
+                comboAnimatronic.GetSaveFileData().comboParts.RemoveAt(i);
             }
         }
         List<int> randoList = new List<int>();
-        for (int i = 0; i < maxPossibleAnimatronicMovements; i++)
+        DEAD_Animatronic combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + id).GetComponent<DEAD_Animatronic>();
+        for (int i = 0; i < combo.GetDTUIndexes().Length; i++)
         {
             randoList.Add(Random.Range(0, 127));
         }
-        fakeparts.Add(new UI_Part_Holder() { id = id, tag = tag, DTUIndexes = randoList });
 
-        if (!tempParts.OrderBy(x => x.id).SequenceEqual(fakeparts.OrderBy(x => x.id)))
+        comboAnimatronic.GetSaveFileData().comboParts.Add(new Combo_Part_SaveFile() { id = id, tag = tag, actuatorDTUIndexes = randoList, bendableSections = new List<float>(combo.GetComponent<Combo_Part>().bendableParts.Count) });
+
+        if (!tempCheck.OrderBy(x => x.id).SequenceEqual(comboAnimatronic.GetSaveFileData().comboParts.OrderBy(x => x.id)))
         {
-            comboAnimatronic.ReassignPartsFromUI(fakeparts);
-            inPreview = true;
+            comboAnimatronic.RefreshAnimatronic();
+            inPreview = comboAnimatronic.GetSaveFileData().comboParts.Count - 1;
+        }
+        else
+        {
+            heldPart = null;
         }
     }
 
     void FakeRemovePart()
     {
-        if (inPreview)
+        if (inPreview > -1)
         {
-            inPreview = false;
-            comboAnimatronic.ReassignPartsFromUI(tempParts);
+            comboAnimatronic.GetSaveFileData().comboParts.RemoveAt(inPreview);
+            inPreview = -1;
+            if (heldPart != null)
+            {
+                comboAnimatronic.GetSaveFileData().comboParts.Add(heldPart);
+                heldPart = null;
+            }
+            comboAnimatronic.RefreshAnimatronic();
         }
     }
 
@@ -393,11 +416,11 @@ public class Combo_Creator : MonoBehaviour
             //Find used body part
             for (int i = 0; i < bodyParts.Count; i++)
             {
-                for (int e = 0; e < tempParts.Count; e++)
+                for (int e = 0; e < comboAnimatronic.GetSaveFileData().comboParts.Count; e++)
                 {
-                    if (bodyParts[i].partId == tempParts[e].id)
+                    if (bodyParts[i].partId == comboAnimatronic.GetSaveFileData().comboParts[e].id)
                     {
-                        parts = RecursiveFindParts(bodyParts[i],tag);
+                        parts = RecursiveFindParts(bodyParts[i], tag);
                         return parts;
                     }
                 }
@@ -422,7 +445,7 @@ public class Combo_Creator : MonoBehaviour
         }
         for (int i = 0; i < part.childIds.Length; i++)
         {
-            List<Creator_Part> childParts = RecursiveFindParts(part.childIds[i],tag);
+            List<Creator_Part> childParts = RecursiveFindParts(part.childIds[i], tag);
             if (childParts != null)
             {
                 finalParts.AddRange(childParts);
@@ -433,81 +456,53 @@ public class Combo_Creator : MonoBehaviour
 
     void AddPart(Combo_Part.ComboTag tag, uint id)
     {
-        List<UI_Part_Holder> fakeparts = new List<UI_Part_Holder>(tempParts);
-
-        if (tag == Combo_Part.ComboTag.body)
+        if (inPreview > -1)
         {
-            tempParts = new List<UI_Part_Holder>();
+            inPreview = -1;
+            heldPart = null;
         }
         else
         {
-            for (int i = 0; i < tempParts.Count; i++)
+            return;
+        }
+
+        if (tag == Combo_Part.ComboTag.body)
+        {
+            comboAnimatronic.GetSaveFileData().comboParts = new List<Combo_Part_SaveFile>();
+        }
+        else
+        {
+            for (int i = 0; i < comboAnimatronic.GetSaveFileData().comboParts.Count; i++)
             {
-                if (tempParts[i].tag == tag)
+                if (comboAnimatronic.GetSaveFileData().comboParts[i].tag == tag)
                 {
-                    tempParts.RemoveAt(i);
+                    comboAnimatronic.GetSaveFileData().comboParts.RemoveAt(i);
                 }
             }
         }
         List<int> randoList = new List<int>();
-        for (int i = 0; i < maxPossibleAnimatronicMovements; i++)
+        DEAD_Animatronic combo = Resources.Load<GameObject>("Animatronics/Prefabs/" + id).GetComponent<DEAD_Animatronic>();
+        for (int i = 0; i < combo.GetDTUIndexes().Length; i++)
         {
             randoList.Add(Random.Range(0, 127));
         }
-        tempParts.Add(new UI_Part_Holder() { id = id, tag = tag, DTUIndexes = randoList });
 
-        if (!tempParts.OrderBy(x => x.id).SequenceEqual(fakeparts.OrderBy(x => x.id)))
+        comboAnimatronic.GetSaveFileData().comboParts.Add(new Combo_Part_SaveFile() { id = id, tag = tag, actuatorDTUIndexes = randoList, bendableSections = new List<float>(combo.GetComponent<Combo_Part>().bendableParts.Count) });
+
+        UpdateCost();
+
+        if (currentMenu == 0)
         {
-            if (inPreview)
+            if (comboAnimatronic.GetSaveFileData().comboParts.Count != 0)
             {
-                inPreview = false;
+                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
             }
             else
             {
-                comboAnimatronic.ReassignPartsFromUI(tempParts);
-            }
+                document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
 
-            UpdateCost();
-
-            if (currentMenu == 0)
-            {
-                if (tempParts.Count != 0)
-                {
-                    document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Visible;
-                }
-                else
-                {
-                    document.rootVisualElement.Q<Button>("CategoryRight").style.visibility = Visibility.Hidden;
-
-                }
             }
         }
-    }
-}
-
-
-[System.Serializable]
-public class UI_Part_Holder
-{
-    public Combo_Part.ComboTag tag;
-    public uint id;
-    public List<int> DTUIndexes;
-    public override bool Equals(object obj)
-    {
-        return Equals(obj as UI_Part_Holder);
-    }
-    public bool Equals(UI_Part_Holder other)
-    {
-        if (other == null)
-            return false;
-
-        // Check for equality based on specific properties
-        return id == other.id;
-    }
-    public override int GetHashCode()
-    {
-        // Generate a hash code based on the properties used in Equals method
-        return HashCode.Combine(id);
     }
 }
 

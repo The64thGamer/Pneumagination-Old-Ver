@@ -1224,6 +1224,8 @@ MonoBehaviour:
       childIds:
       - partId: 1
         childIds: []
+      - partId: 3
+        childIds: []
     - partId: 2
       childIds: []
   document: {fileID: 1698254731}

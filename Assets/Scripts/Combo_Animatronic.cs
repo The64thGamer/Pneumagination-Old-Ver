@@ -26,16 +26,6 @@ public class Combo_Animatronic : MonoBehaviour
         deadInterface = inter;
     }
 
-    public void ReassignPartsFromUI(List<UI_Part_Holder> tempParts)
-    {
-        saveFile.comboParts = new List<Combo_Part_SaveFile>();
-        for (int i = 0; i < tempParts.Count; i++)
-        {
-            saveFile.comboParts.Add(new Combo_Part_SaveFile() { id = tempParts[i].id, bendableSections = new List<float>(), actuatorDTUIndexes = tempParts[i].DTUIndexes });
-        }
-        RefreshAnimatronic();
-    }
-
     public void ReassignFullSaveFile(Combo_Animatronic_SaveFile file)
     {
         saveFile = file;
@@ -57,7 +47,7 @@ public class Combo_Animatronic : MonoBehaviour
                     break;
                 }
             }
-            for (int i = 0; i < parts[e].bendableParts.Count; i++)
+            for (int i = 0; i < saveFile.comboParts[id].bendableSections.Count; i++)
             {
                 parts[e].SetBend(i, saveFile.comboParts[id].bendableSections[i]);
             }
@@ -147,12 +137,8 @@ public class Combo_Animatronic : MonoBehaviour
         //Part Customization
         Combo_Part c = g.GetComponent<Combo_Part>();
         int id = SearchForComboPartID(tempPartIds[index]);
-        for (int e = 0; e < c.bendableParts.Count; e++)
+        for (int e = 0; e < saveFile.comboParts[id].bendableSections.Count; e++)
         {
-            if (saveFile.comboParts[id].bendableSections.Count - 1 < e)
-            {
-                saveFile.comboParts[id].bendableSections.Add(0);
-            }
             c.SetBend(e, saveFile.comboParts[id].bendableSections[e]);
         }
 
@@ -179,7 +165,7 @@ public class Combo_Animatronic : MonoBehaviour
         tempPartIds.RemoveAt(index);
     }
 
-    public Combo_Part_SaveFile SearchID(uint id)
+    public Combo_Part_SaveFile SearchSaveFileID(uint id)
     {
         return saveFile.comboParts[SearchForComboPartID(id)];
     }
