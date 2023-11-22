@@ -278,12 +278,13 @@ public class Combo_Creator : MonoBehaviour
 
                                 VisualElement currentButton = comboSlider.Instantiate();
                                 Slider sl = currentButton.Q<Slider>("Slider");
-                                sl.value = slider;
+                                sl.SetValueWithoutNotify(slider);
                                 sl.label = "Bend #" + (e + 1);
 
                                 int index = e;
                                 sl.RegisterValueChangedCallback(evt =>
                                 {
+                                    Debug.Log(evt.newValue);
                                     combo.bendableSections[index] = evt.newValue;
                                     comboAnimatronic.RefreshAnimatronicCustomizations();
                                 });

@@ -38,15 +38,8 @@ public class Combo_Animatronic : MonoBehaviour
         DEAD_Animatronic an;
         for (int e = 0; e < parts.Length; e++)
         {
-            int id = 0;
-            for (int i = 0; i < saveFile.comboParts.Count; i++)
-            {
-                if (Convert.ToInt32(parts[e].name) == saveFile.comboParts[i].id)
-                {
-                    id = i;
-                    break;
-                }
-            }
+            int id = SearchForComboPartID(Convert.ToUInt32(parts[e].name));
+
             for (int i = 0; i < saveFile.comboParts[id].bendableSections.Count; i++)
             {
                 parts[e].SetBend(i, saveFile.comboParts[id].bendableSections[i]);
