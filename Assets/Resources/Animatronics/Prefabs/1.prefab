@@ -175,15 +175,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dcc271fbec9067440801b9d87040c232,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8534141057151107812}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dcc271fbec9067440801b9d87040c232,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 211758748524607148}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dcc271fbec9067440801b9d87040c232,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 117689299970084941}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dcc271fbec9067440801b9d87040c232,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8534141057151107812}
     - targetCorrespondingSourceObject: {fileID: 1483586926179156235, guid: dcc271fbec9067440801b9d87040c232,
         type: 3}
       insertIndex: -1
@@ -315,6 +315,32 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8218518361814110944}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8534141057151107812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9137631269381320625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3609f85199790d4ea7ea8ad3244d119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partName: Right Arm
+  price: 100
+  bendableParts:
+  - boneName: Arm
+    minPosition: {x: 0, y: 0, z: -0.7071068, w: 0.7071067}
+    maxPosition: {x: -0.6998379, y: -0.6998379, z: -0.10112807, w: 0.10112792}
+  - boneName: Shoulder Rotate
+    minPosition: {x: -0.7071068, y: 0.000000015454313, z: -0.000000015454312, w: 0.7071067}
+    maxPosition: {x: -0.42450285, y: 0.00000004470349, z: 0.0000001192093, w: 0.9054266}
+  - boneName: Arm Rotate
+    minPosition: {x: 0, y: -0.67425054, z: 0, w: 0.73850274}
+    maxPosition: {x: 0.000000029802319, y: 0.19900283, z: 0.00000002235174, w: 0.97999895}
+  partTag: 3
+  connectingBone: R Arm Attatchment
 --- !u!95 &211758748524607148
 Animator:
   serializedVersion: 7
@@ -382,29 +408,3 @@ MonoBehaviour:
       m_PostInfinity: 0
       m_RotationOrder: 0
   deadInterface: {fileID: 0}
---- !u!114 &8534141057151107812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9137631269381320625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3609f85199790d4ea7ea8ad3244d119, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  partName: Right Arm
-  price: 100
-  bendableParts:
-  - boneName: Arm
-    minPosition: {x: 0, y: 0, z: -0.7071068, w: 0.7071067}
-    maxPosition: {x: -0.6998379, y: -0.6998379, z: -0.10112807, w: 0.10112792}
-  - boneName: Shoulder Rotate
-    minPosition: {x: -0.7071068, y: 0.000000015454313, z: -0.000000015454312, w: 0.7071067}
-    maxPosition: {x: -0.42450285, y: 0.00000004470349, z: 0.0000001192093, w: 0.9054266}
-  - boneName: Arm Rotate
-    minPosition: {x: 0, y: -0.67425054, z: 0, w: 0.73850274}
-    maxPosition: {x: 0.000000029802319, y: 0.19900283, z: 0.00000002235174, w: 0.97999895}
-  partTag: 3
-  connectingBone: R Arm Attatchment

@@ -281,11 +281,11 @@ public class Combo_Creator : MonoBehaviour
                                 sl.SetValueWithoutNotify(slider);
                                 sl.label = "Bend #" + (e + 1);
 
+                                uint indexID = comboAnimatronic.GetSaveFileData().comboParts[i].id;
                                 int index = e;
                                 sl.RegisterValueChangedCallback(evt =>
                                 {
-                                    Debug.Log(evt.newValue);
-                                    combo.bendableSections[index] = evt.newValue;
+                                    comboAnimatronic.SearchSaveFileID(indexID).bendableSections[index] = evt.newValue;
                                     comboAnimatronic.RefreshAnimatronicCustomizations();
                                 });
 
