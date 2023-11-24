@@ -59,15 +59,15 @@ namespace StarterAssets
         Vector2 lastRegularCamRotation;
 
         //Inputs
-        public bool inputJump;
-        public bool inputCrouch;
-        public bool inputCrouchAlreadyPressed;
-        public bool inputEditorMenu;
-        public bool inputEditorMenuAlreadyPressed;
-        public bool inputRun;
-        public bool inputFlyMenu;
-        public bool inputFlyMenuAlreadyPressed;
-        public Vector2 inputMovement;
+         bool inputJump;
+         bool inputCrouch;
+         bool inputCrouchAlreadyPressed;
+         bool inputEditorMenu;
+         bool inputEditorMenuAlreadyPressed;
+         bool inputRun;
+         bool inputFlyMenu;
+         bool inputFlyMenuAlreadyPressed;
+         Vector2 inputMovement;
 
 
         private void Awake()

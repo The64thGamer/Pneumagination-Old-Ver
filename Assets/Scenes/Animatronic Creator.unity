@@ -1253,7 +1253,6 @@ MonoBehaviour:
     startingColorTertiary: {r: 0, g: 0, b: 0, a: 0}
     startingColorLight: {r: 0, g: 0, b: 0, a: 0}
     startingColorDark: {r: 0, g: 0, b: 0, a: 0}
-  tempParts: []
   comboAnimatronic: {fileID: 195720711}
 --- !u!1 &1950746649
 GameObject:

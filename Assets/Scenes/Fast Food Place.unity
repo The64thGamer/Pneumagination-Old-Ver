@@ -39,7 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3347.9976, g: 3792.9497, b: 4354.6646, a: 1}
+  m_IndirectSpecularColor: {r: 3349.1519, g: 3794.9087, b: 4356.9536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2935,17 +2935,17 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ae670a956cb1b7e46b51267f073b7aa1, type: 2}
+      objectReference: {fileID: 2100000, guid: 53054208f1817bc448db11d3dc3e9af7, type: 2}
     - target: {fileID: -2769577256678117079, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 300c151a17b92674b9c3c769e60daed6, type: 2}
+      objectReference: {fileID: 2100000, guid: a2a5d38299fc4eb4197b506ed03f2899, type: 2}
     - target: {fileID: -1995960742180547240, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 300c151a17b92674b9c3c769e60daed6, type: 2}
+      objectReference: {fileID: 2100000, guid: a2a5d38299fc4eb4197b506ed03f2899, type: 2}
     - target: {fileID: -1206309533481162655, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2970,7 +2970,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 300c151a17b92674b9c3c769e60daed6, type: 2}
+      objectReference: {fileID: 2100000, guid: a2a5d38299fc4eb4197b506ed03f2899, type: 2}
     - target: {fileID: 1378922297957006227, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2980,7 +2980,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 300c151a17b92674b9c3c769e60daed6, type: 2}
+      objectReference: {fileID: 2100000, guid: a2a5d38299fc4eb4197b506ed03f2899, type: 2}
     - target: {fileID: 1804752101541350250, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2990,12 +2990,12 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 9f1e0b8841c39e34cbddc4929608e8eb, type: 2}
+      objectReference: {fileID: 2100000, guid: efbbc80c01058ac4a8ef76d7815d19e4, type: 2}
     - target: {fileID: 2803138036367434984, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 300c151a17b92674b9c3c769e60daed6, type: 2}
+      objectReference: {fileID: 2100000, guid: a2a5d38299fc4eb4197b506ed03f2899, type: 2}
     - target: {fileID: 6710022936868996304, guid: 50b032af3e3f04146946d82d07095cf9,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -11075,7 +11075,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b8890ed816e088643b41b0d92830c32d, type: 2}
+      objectReference: {fileID: 2100000, guid: 66866b3907fa7c24285f0967969ae1b1, type: 2}
     - target: {fileID: -6747443069241468228, guid: 17b5c2547d677f5489b13d2ab922782b,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -11095,7 +11095,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b8890ed816e088643b41b0d92830c32d, type: 2}
+      objectReference: {fileID: 2100000, guid: 66866b3907fa7c24285f0967969ae1b1, type: 2}
     - target: {fileID: -4841176561207276113, guid: 17b5c2547d677f5489b13d2ab922782b,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
