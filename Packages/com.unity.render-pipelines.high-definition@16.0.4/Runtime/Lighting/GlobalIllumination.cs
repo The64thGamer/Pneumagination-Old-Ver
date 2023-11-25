@@ -207,7 +207,7 @@ namespace UnityEngine.Rendering.HighDefinition
         }
         [SerializeField, FormerlySerializedAs("clampValue")]
         [Tooltip("Controls the clamp of intensity.")]
-        private ClampedFloatParameter m_ClampValue = new ClampedFloatParameter(1.0f, 0.001f, 10.0f);
+        private ClampedFloatParameter m_ClampValue = new ClampedFloatParameter(1.0f, 0.001f, 1000.0f);
 
         /// <summary>
         /// Controls which version of the effect should be used.
