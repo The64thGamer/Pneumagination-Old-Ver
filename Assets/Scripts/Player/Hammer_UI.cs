@@ -11,10 +11,10 @@ public class Hammer_UI : MonoBehaviour
 {
     [SerializeField] LineRenderer lineRend;
     [SerializeField] FirstPersonController fpc;
-
+ 
     MeshFilter currentMesh;
     MeshCollider currentCollider;
-    List<int> currentVertexes;
+    List<int> currentVertexes = new List<int>();
     bool isSelected;
     const float minVertexDistance = 0.1f;
     const float minLineDistance = 0.1f;
@@ -23,24 +23,38 @@ public class Hammer_UI : MonoBehaviour
     Color highlightColor = new Color(1, 0.86666666666f, 0);
     Color selectColor = new Color(0, 1, 0.29803921568f);
 
+    private void Start()
+    {
+        RenderLines(false);
+    }
+
     private void Update()
     {
-        if (!fpc.CheckifPlayerInMenu())
+        if (Input.GetMouseButtonDown(0))
         {
-            isSelected = false;
-            SelectPoint();
+            RenderLines(!isSelected);
         }
-        else
+        if (Input.GetMouseButtonDown(1))
         {
-            if (Input.GetMouseButton(0))
+            RenderLines(!isSelected);
+
+            if (isSelected && currentMesh != null)
             {
-                isSelected = true;
-                lineRend.startColor = selectColor;
-                lineRend.endColor = selectColor;
+                currentVertexes = new List<int>();
+                for (int i = 0; i < currentMesh.mesh.vertices.Length; i++)
+                {
+                    currentVertexes.Add(i);
+                }
+                RenderLines(isSelected);
             }
         }
+        if (!isSelected)
+        {
+            SelectPoint();
+        }
 
-        if (isSelected)
+
+        if (isSelected && currentVertexes.Count > 0)
         {
             Vector3 translate = Vector3.zero;
 
@@ -130,8 +144,7 @@ public class Hammer_UI : MonoBehaviour
 
                 if (pointCloseness <= minVertexDistance)
                 {
-                    lineRend.startWidth = vertexUIWidth;
-                    lineRend.endWidth = vertexUIWidth;
+
                     lineRend.positionCount = 2;
                     lineRend.SetPositions(new Vector3[] {
                             hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[closestVertex]),
@@ -218,16 +231,7 @@ public class Hammer_UI : MonoBehaviour
                                 currentVertexes.Add(meshFilter.mesh.triangles[i+2]);
                             }
                         }
-
-                        lineRend.startWidth = edgeUIWidth;
-                        lineRend.endWidth = edgeUIWidth;
-                        lineRend.positionCount = currentVertexes.Count;
-                        for (int i = 0; i < currentVertexes.Count; i++)
-                        {
-                            lineRend.SetPosition(i,hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[currentVertexes[i]]));
-                        }
-                        lineRend.startColor = highlightColor;
-                        lineRend.endColor = highlightColor;
+                        RenderLines(false);
                     }
                 }
             }
@@ -240,6 +244,55 @@ public class Hammer_UI : MonoBehaviour
             lineRend.positionCount = 0;
         }
     }
+    void RenderLines(bool on)
+    {
+        if(currentMesh == null)
+        {
+            isSelected = false;
+            lineRend.positionCount = 0;
+            return;
+        }
+
+        isSelected = on;
+        if (on)
+        {
+            lineRend.startColor = selectColor;
+            lineRend.endColor = selectColor;
+        }
+        else
+        {
+            lineRend.startColor = highlightColor;
+            lineRend.endColor = highlightColor;
+        }
+
+        bool selection;
+        if(currentMesh.mesh.vertices[currentVertexes[0]].Equals(currentMesh.mesh.vertices[currentVertexes[1]]))
+        {
+            selection = true;
+        }
+        else
+        {
+            selection = false;
+        }
+
+        if (selection)
+        {
+            lineRend.startWidth = vertexUIWidth;
+            lineRend.endWidth = vertexUIWidth;
+        }
+        else
+        {
+            lineRend.startWidth = edgeUIWidth;
+            lineRend.endWidth = edgeUIWidth;
+        }
+
+        lineRend.positionCount = currentVertexes.Count;
+        for (int i = 0; i < currentVertexes.Count; i++)
+        {
+            lineRend.SetPosition(i, currentMesh.transform.TransformPoint(currentMesh.mesh.vertices[currentVertexes[i]]));
+        }
+    }
+
     Vector3 NearestPointOnFiniteLine(Vector3 origin, Vector3 end, Vector3 point)
     {
         Vector3 line_direction = end - origin;
