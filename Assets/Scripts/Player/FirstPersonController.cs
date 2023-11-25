@@ -69,6 +69,9 @@ namespace StarterAssets
          bool inputFlyMenuAlreadyPressed;
          Vector2 inputMovement;
 
+        //Extra Passes
+        bool disableFOV;
+
 
         private void Awake()
         {
@@ -204,26 +207,32 @@ namespace StarterAssets
             //Fov
             if (inputFlyMenu)
             {
-                if (fovUp.action.IsPressed())
+                if (!disableFOV)
                 {
-                    fovFlyAdder = -1.0f;
-                }
-                if (fovDown.action.IsPressed())
-                {
-                    fovFlyAdder = 1.0f;
+                    if (fovUp.action.IsPressed())
+                    {
+                        fovFlyAdder = -1.0f;
+                    }
+                    if (fovDown.action.IsPressed())
+                    {
+                        fovFlyAdder = 1.0f;
+                    }
                 }
                 fovFly = Mathf.Clamp(Mathf.Lerp(fovFly, fovFly + (fovFlyAdder), fovCurve.Evaluate(Mathf.Abs(fovFlyAdder))), 0.2f, 40f);
                 fovFlyAdder = Mathf.Clamp01(Mathf.Abs(fovFlyAdder) - (Time.deltaTime * 10f)) * Mathf.Sign(fovFlyAdder);
             }
             else
             {
-                if (fovUp.action.IsPressed())
+                if (!disableFOV)
                 {
-                    fovAdder = -1.0f;
-                }
-                if (fovDown.action.IsPressed())
-                {
-                    fovAdder = 1.0f;
+                    if (fovUp.action.IsPressed())
+                    {
+                        fovAdder = -1.0f;
+                    }
+                    if (fovDown.action.IsPressed())
+                    {
+                        fovAdder = 1.0f;
+                    }
                 }
                 fov = Mathf.Clamp(Mathf.Lerp(fov, fov + (fovAdder / 2.0f), fovCurve.Evaluate(Mathf.Abs(fovAdder))), 1.0f, 120f);
                 fovAdder = Mathf.Clamp01(Mathf.Abs(fovAdder) - (Time.deltaTime * 1.5f)) * Mathf.Sign(fovAdder);
@@ -472,6 +481,10 @@ namespace StarterAssets
             return inputEditorMenu;
         }
 
+        public void SetFOV(bool on)
+        {
+            disableFOV = !on;
+        }
     }
 
 

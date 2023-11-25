@@ -254,6 +254,7 @@ public class Hammer_UI : MonoBehaviour
         }
 
         isSelected = on;
+        fpc.SetFOV(!on);
         if (on)
         {
             lineRend.startColor = selectColor;
