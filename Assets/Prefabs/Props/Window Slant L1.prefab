@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 9024913729193581827}
   - component: {fileID: 1925657900047240765}
   - component: {fileID: 6480939682133457781}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Window Slant L1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1526238882787981149
 Transform:
@@ -59,6 +59,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

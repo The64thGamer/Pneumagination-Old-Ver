@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 3332816168920048176}
   - component: {fileID: 7586310510732129021}
   - component: {fileID: 486248546506328959}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RC LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3332816168920048176
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   - component: {fileID: 4159564403452150802}
   - component: {fileID: 3060734153095969417}
   - component: {fileID: 2275239011439334055}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RC LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4159564403452150802
 Transform:
@@ -141,6 +143,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -177,12 +181,12 @@ GameObject:
   - component: {fileID: 1047937207293895499}
   - component: {fileID: 2285248140747471711}
   - component: {fileID: 5920262257420594834}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RC LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1047937207293895499
 Transform:
@@ -224,6 +228,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -263,12 +269,12 @@ GameObject:
   - component: {fileID: 8855119982172558174}
   - component: {fileID: 1960754774834656652}
   - component: {fileID: 2453027554471285164}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Chair Rigid Space
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2283349308056680887
 Transform:

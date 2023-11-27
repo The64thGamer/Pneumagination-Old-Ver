@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5027335940360196323}
   - component: {fileID: 2151395494462265759}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LightBase Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5027335940360196323
 Transform:
@@ -68,12 +68,12 @@ GameObject:
   - component: {fileID: 934063020691686718}
   - component: {fileID: 1517074336425601174}
   - component: {fileID: 567935538941805162}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Long LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &934063020691686718
 Transform:
@@ -115,6 +115,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -151,12 +153,12 @@ GameObject:
   - component: {fileID: 5506680637790962216}
   - component: {fileID: 6572358732594551153}
   - component: {fileID: 1801569574936475889}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Long LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5506680637790962216
 Transform:
@@ -198,6 +200,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

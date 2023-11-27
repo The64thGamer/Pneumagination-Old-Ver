@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 132392993242782980}
   - component: {fileID: 7559191197733232045}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LightBase Curve
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &132392993242782980
 Transform:
@@ -68,12 +68,12 @@ GameObject:
   - component: {fileID: 5199881743451401213}
   - component: {fileID: 1514083835013503016}
   - component: {fileID: 6849751908384003918}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Curve LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5199881743451401213
 Transform:
@@ -115,6 +115,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -151,12 +153,12 @@ GameObject:
   - component: {fileID: 4909627572910499359}
   - component: {fileID: 8304150195211733455}
   - component: {fileID: 2586947959939829451}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Curve LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4909627572910499359
 Transform:
@@ -198,6 +200,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

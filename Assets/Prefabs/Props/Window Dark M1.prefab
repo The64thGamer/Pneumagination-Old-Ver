@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 7005194030483774854}
   - component: {fileID: 4057862028368979770}
   - component: {fileID: 3891587009993038511}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Window Dark M1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2262448642406103553
 Transform:
@@ -59,6 +59,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

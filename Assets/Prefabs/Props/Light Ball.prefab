@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 2659141413679484167}
   - component: {fileID: 3480669857551386377}
   - component: {fileID: 6548282151239862466}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ball LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2659141413679484167
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -93,12 +95,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4559406301770597028}
   - component: {fileID: 2868053973519187318}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Light Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4559406301770597028
 Transform:
@@ -156,12 +158,12 @@ GameObject:
   - component: {fileID: 4665273109327870772}
   - component: {fileID: 4991506311940289538}
   - component: {fileID: 6509547564602375584}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ball LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4665273109327870772
 Transform:
@@ -203,6 +205,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -240,12 +244,12 @@ GameObject:
   - component: {fileID: 1137916059848327625}
   - component: {fileID: 4075256084730362247}
   - component: {fileID: 1805889525048423061}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ball LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3285041092728127025
 Transform:
@@ -287,6 +291,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

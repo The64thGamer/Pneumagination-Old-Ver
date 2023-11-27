@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 4085259565317867103}
   - component: {fileID: 6817674577402642152}
   - component: {fileID: 2505042898674823687}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hoop LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4085259565317867103
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -93,12 +95,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2196549301614874273}
   - component: {fileID: 6586201995521084926}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LightBase Hoop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2196549301614874273
 Transform:
@@ -151,12 +153,12 @@ GameObject:
   - component: {fileID: 4282355417736169072}
   - component: {fileID: 7219688775816444376}
   - component: {fileID: 8326073648319032857}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hoop LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4282355417736169072
 Transform:
@@ -198,6 +200,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

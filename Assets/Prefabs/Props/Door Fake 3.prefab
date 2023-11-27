@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3475606698454062606}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Door Fake 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3475606698454062606
 Transform:
@@ -44,12 +44,12 @@ GameObject:
   - component: {fileID: 7977987324533791928}
   - component: {fileID: 5306899371249989337}
   - component: {fileID: 4104429287440663818}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Door Fake 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4808679696407374901
 Transform:
@@ -91,6 +91,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

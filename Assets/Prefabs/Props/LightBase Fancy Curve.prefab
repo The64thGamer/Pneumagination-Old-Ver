@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 8339842967255941386}
   - component: {fileID: 8756968538780788409}
   - component: {fileID: 5511601431583137816}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fancy LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8339842967255941386
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   - component: {fileID: 3853421270632165485}
   - component: {fileID: 6868159099320241028}
   - component: {fileID: 3069189467267930920}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fancy LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3853421270632165485
 Transform:
@@ -141,6 +143,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -176,12 +180,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6692882457546095964}
   - component: {fileID: 2620520195259102877}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LightBase Fancy Curve
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &6692882457546095964
 Transform:

@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 1803585279930496050}
   - component: {fileID: 7761092282382248755}
   - component: {fileID: 3833429597700239768}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cubicle LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1803585279930496050
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   - component: {fileID: 4951290187217726310}
   - component: {fileID: 3270690901899683783}
   - component: {fileID: 1239229595288031195}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cubicle Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4951290187217726310
 Transform:
@@ -173,12 +175,12 @@ GameObject:
   - component: {fileID: 3578215704652534848}
   - component: {fileID: 61668059326593926}
   - component: {fileID: 35224314944805832}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cubicle LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3578215704652534848
 Transform:
@@ -220,6 +222,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

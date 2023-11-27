@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5426976456862424190}
   - component: {fileID: 8193218530239538436}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Light Ceiling Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5426976456862424190
 Transform:
@@ -68,12 +68,12 @@ GameObject:
   - component: {fileID: 7424345590346477658}
   - component: {fileID: 8981107238707620873}
   - component: {fileID: 4604845039783661996}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hole Light LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &7424345590346477658
 Transform:
@@ -115,6 +115,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -151,12 +153,12 @@ GameObject:
   - component: {fileID: 2999483391056015849}
   - component: {fileID: 4575424797950463822}
   - component: {fileID: 1846551763313947503}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hole Light LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2999483391056015849
 Transform:
@@ -198,6 +200,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

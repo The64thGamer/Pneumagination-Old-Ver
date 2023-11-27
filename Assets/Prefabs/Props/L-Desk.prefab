@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 1090303262453854076}
   - component: {fileID: 6277714052503531932}
   - component: {fileID: 547699529317070673}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: L Desk LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1090303262453854076
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   - component: {fileID: 489478605595408517}
   - component: {fileID: 4172125642834467507}
   - component: {fileID: 195961033746714503}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: L Desk LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &489478605595408517
 Transform:
@@ -141,6 +143,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -182,12 +186,12 @@ GameObject:
   - component: {fileID: 3422313297383584835}
   - component: {fileID: 7072518444972545365}
   - component: {fileID: 1702373728200025017}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: L-Desk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1207190874343517242
 Transform:

@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 9142274620478502375}
   - component: {fileID: 3335096612076103916}
   - component: {fileID: 6317210204629480873}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LC LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &9142274620478502375
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   - component: {fileID: 6618933064428150657}
   - component: {fileID: 4834647392516790833}
   - component: {fileID: 4541500203626580457}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LC LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &6618933064428150657
 Transform:
@@ -141,6 +143,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -181,12 +185,12 @@ GameObject:
   - component: {fileID: 8100164009624687742}
   - component: {fileID: 970487521462760722}
   - component: {fileID: 8893419823353551746}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Chair Striped
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3563141334300974786
 Transform:
@@ -349,12 +353,12 @@ GameObject:
   - component: {fileID: 8430881557233073394}
   - component: {fileID: 3794887420031957278}
   - component: {fileID: 7564675648501183213}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LC LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8430881557233073394
 Transform:
@@ -396,6 +400,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

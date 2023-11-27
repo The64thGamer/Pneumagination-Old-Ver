@@ -14,12 +14,12 @@ GameObject:
   - component: {fileID: 3092257883709351549}
   - component: {fileID: 5287153550853743618}
   - component: {fileID: 3627691802981251073}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Desk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1284071266844768878
 Transform:
@@ -156,12 +156,12 @@ GameObject:
   - component: {fileID: 7163166619141571200}
   - component: {fileID: 7444364296760938404}
   - component: {fileID: 7617645586715579769}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Desk LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &7163166619141571200
 Transform:
@@ -203,6 +203,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -239,12 +241,12 @@ GameObject:
   - component: {fileID: 5621087421478711243}
   - component: {fileID: 3138962880008052235}
   - component: {fileID: 2067540067751386390}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Desk LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5621087421478711243
 Transform:
@@ -286,6 +288,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

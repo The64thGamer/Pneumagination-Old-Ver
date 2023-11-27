@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 5804452287475157990}
   - component: {fileID: 8773965554132718801}
   - component: {fileID: 7051995617039837504}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Multiplane LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5804452287475157990
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4388350223690507343}
   - component: {fileID: 8075389741093834016}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Multiplane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4388350223690507343
 Transform:
@@ -157,12 +159,12 @@ GameObject:
   - component: {fileID: 8956138260508307947}
   - component: {fileID: 6399758223233876528}
   - component: {fileID: 8114855119593670893}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Multiplane LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8956138260508307947
 Transform:
@@ -204,6 +206,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -241,12 +245,12 @@ GameObject:
   - component: {fileID: 5849971498441990077}
   - component: {fileID: 7151173917702115935}
   - component: {fileID: 583400670051317720}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Multiplane LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5849971498441990077
 Transform:
@@ -288,6 +292,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

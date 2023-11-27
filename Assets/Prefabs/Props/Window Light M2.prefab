@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 7897057770057403909}
   - component: {fileID: 7632965540789193411}
   - component: {fileID: 841473450288105075}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Window Light M2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5671866354851235383
 Transform:
@@ -59,6 +59,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

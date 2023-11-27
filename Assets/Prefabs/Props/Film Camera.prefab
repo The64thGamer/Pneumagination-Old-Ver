@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 1977873430464637936}
   - component: {fileID: 6037182210638122311}
   - component: {fileID: 8651559356679126844}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1977873430464637936
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   - component: {fileID: 2155415231653181221}
   - component: {fileID: 488446695864741294}
   - component: {fileID: 5122292109223247888}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2155415231653181221
 Transform:
@@ -141,6 +143,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -178,12 +182,12 @@ GameObject:
   - component: {fileID: 3201691882138309398}
   - component: {fileID: 4239840395198897305}
   - component: {fileID: 7896959726481542671}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Film Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5028710596617399614
 Transform:
@@ -283,12 +287,12 @@ GameObject:
   - component: {fileID: 4808661884963818886}
   - component: {fileID: 5395220940739388860}
   - component: {fileID: 6180688878455670346}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4808661884963818886
 Transform:
@@ -330,6 +334,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

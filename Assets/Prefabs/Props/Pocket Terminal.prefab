@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5178959240563383787}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pocket Terminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5178959240563383787
 Transform:
@@ -44,12 +44,12 @@ GameObject:
   - component: {fileID: 361837343574945792}
   - component: {fileID: 6142745688280643434}
   - component: {fileID: 5630095565606008482}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8140248460481236392
 Transform:
@@ -91,6 +91,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

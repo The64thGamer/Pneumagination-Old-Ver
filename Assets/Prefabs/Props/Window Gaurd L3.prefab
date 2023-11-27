@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 6131878239456943147}
   - component: {fileID: 2262033835108946497}
   - component: {fileID: 6406584946352781858}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Window Gaurd L3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5872797287773333467
 Transform:
@@ -59,6 +59,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

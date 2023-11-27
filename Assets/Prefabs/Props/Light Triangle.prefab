@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 3067936063478696274}
   - component: {fileID: 6327295864082789228}
   - component: {fileID: 3363397983686927547}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Triangle LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3067936063478696274
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -93,12 +95,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4252586432305761966}
   - component: {fileID: 5164963612823240803}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Light Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4252586432305761966
 Transform:
@@ -157,12 +159,12 @@ GameObject:
   - component: {fileID: 7417433280669355319}
   - component: {fileID: 3935292078505837073}
   - component: {fileID: 8974309727362122037}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Triangle LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4489804980477887653
 Transform:
@@ -204,6 +206,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -261,12 +265,12 @@ GameObject:
   - component: {fileID: 4317616522904053307}
   - component: {fileID: 6202929303125862391}
   - component: {fileID: 5633390470570219849}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Triangle LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4317616522904053307
 Transform:
@@ -308,6 +312,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

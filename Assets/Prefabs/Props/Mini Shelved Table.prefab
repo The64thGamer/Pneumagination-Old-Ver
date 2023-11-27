@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 333999464487691224}
   - component: {fileID: 8452966138025787030}
   - component: {fileID: 2524748280743864821}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mini Shelved Table LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &333999464487691224
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -102,12 +104,12 @@ GameObject:
   - component: {fileID: 7427176354122320020}
   - component: {fileID: 328198427617216640}
   - component: {fileID: 6276798852785158611}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mini Shelved Table
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8552692206777288841
 Transform:
@@ -349,12 +351,12 @@ GameObject:
   - component: {fileID: 8026987565788315953}
   - component: {fileID: 8644986003877481965}
   - component: {fileID: 7657340583368642816}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mini Shelved Table LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8026987565788315953
 Transform:
@@ -396,6 +398,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

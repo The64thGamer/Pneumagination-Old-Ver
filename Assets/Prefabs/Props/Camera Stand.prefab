@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 8704135797278710367}
   - component: {fileID: 6446878124816574799}
   - component: {fileID: 8786363699916689339}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera Stand LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8704135797278710367
 Transform:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,12 +96,12 @@ GameObject:
   - component: {fileID: 8265414869149038834}
   - component: {fileID: 5013078233063816253}
   - component: {fileID: 7411097538384572019}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera Stand LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8265414869149038834
 Transform:
@@ -141,6 +143,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -177,12 +181,12 @@ GameObject:
   - component: {fileID: 7870249012858302534}
   - component: {fileID: 8643509729750638716}
   - component: {fileID: 7355832790802394615}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera Stand LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &7870249012858302534
 Transform:
@@ -224,6 +228,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -262,12 +268,12 @@ GameObject:
   - component: {fileID: 301712429592754552}
   - component: {fileID: 3893373403229034067}
   - component: {fileID: 1013771817096553819}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera Stand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4070645863128073165
 Transform:
