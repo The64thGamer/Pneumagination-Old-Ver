@@ -163,40 +163,44 @@ public class Hammer_UI : MonoBehaviour
                     int closestEdgeb = -1;
                     int closestEdgec = -1;
                     pointCloseness = float.MaxValue;
-                    for (int i = 0; i < meshFilter.mesh.triangles.Length; i = i + 3)
+
+
+                    //Edge 0
+                    float distance = Vector3.Distance(NearestPointOnFiniteLine(hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3]]), hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3 + 1]]), hit.point), hit.point);
+                    if (distance < pointCloseness)
                     {
-                        //Edge 0
-                        float distance = Vector3.Distance(NearestPointOnFiniteLine(hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[i]]), hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[i + 1]]), hit.point), hit.point);
-                        if (distance < pointCloseness)
-                        {
-                            pointCloseness = distance;
-                            closestEdgea = i;
-                            closestEdgeb = i + 1;
-                            closestEdgec = i + 2;
-                        }
-                        //Edge 1
-                        distance = Vector3.Distance(NearestPointOnFiniteLine(hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[i + 1]]), hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[i + 2]]), hit.point), hit.point);
-                        if (distance < pointCloseness)
-                        {
-                            pointCloseness = distance;
-                            closestEdgea = i + 1;
-                            closestEdgeb = i + 2;
-                            closestEdgec = i;
-                        }
-                        //Edge 2
-                        distance = Vector3.Distance(NearestPointOnFiniteLine(hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[i + 2]]), hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[i]]), hit.point), hit.point);
-                        if (distance < pointCloseness)
-                        {
-                            pointCloseness = distance;
-                            closestEdgea = i + 2;
-                            closestEdgeb = i;
-                            closestEdgec = i + 1;
-                        }
+                        pointCloseness = distance;
+                        closestEdgea = hit.triangleIndex * 3;
+                        closestEdgeb = hit.triangleIndex * 3 + 1;
+                        closestEdgec = hit.triangleIndex * 3 + 2;
                     }
+                    //Edge 1
+                    distance = Vector3.Distance(NearestPointOnFiniteLine(hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3 + 1]]), hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3 + 2]]), hit.point), hit.point);
+                    if (distance < pointCloseness)
+                    {
+                        pointCloseness = distance;
+                        closestEdgea = hit.triangleIndex * 3 + 1;
+                        closestEdgeb = hit.triangleIndex * 3 + 2;
+                        closestEdgec = hit.triangleIndex * 3;
+                    }
+                    //Edge 2
+                    distance = Vector3.Distance(NearestPointOnFiniteLine(hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3 + 2]]), hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3]]), hit.point), hit.point);
+                    if (distance < pointCloseness)
+                    {
+                        pointCloseness = distance;
+                        closestEdgea = hit.triangleIndex * 3 + 2;
+                        closestEdgeb = hit.triangleIndex * 3;
+                        closestEdgec = hit.triangleIndex * 3 + 1;
+                    }
+
+
                     if (pointCloseness <= minLineDistance)
                     {
-                        currentVertexes.Add(meshFilter.mesh.triangles[closestEdgea]);
-                        currentVertexes.Add(meshFilter.mesh.triangles[closestEdgeb]);
+                        currentVertexes = new List<int>
+                        {
+                            meshFilter.mesh.triangles[closestEdgea],
+                            meshFilter.mesh.triangles[closestEdgeb]
+                        };
                     }
                     else
                     {
