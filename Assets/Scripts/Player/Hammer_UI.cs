@@ -20,6 +20,7 @@ public class Hammer_UI : MonoBehaviour
     const float minLineDistance = 0.1f;
     const float edgeUIWidth = 0.025f;
     const float vertexUIWidth = 0.1f;
+    const float maxPickingDistance = 10.0f;
     Color highlightColor = new Color(1, 0.86666666666f, 0);
     Color selectColor = new Color(0, 1, 0.29803921568f);
 
@@ -121,11 +122,11 @@ public class Hammer_UI : MonoBehaviour
         RaycastHit hit;
         Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
-        if (Physics.Raycast(ray, out hit, 10.0f))
+        if (Physics.Raycast(ray, out hit, maxPickingDistance))
         {
             MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter>();
 
-            if (meshFilter != null)
+            if (meshFilter != null && hit.transform.tag == "Buildable Block")
             {
                 currentMesh = meshFilter;
                 currentCollider = hit.collider.GetComponent<MeshCollider>();
