@@ -180,8 +180,8 @@ public class PlayerInteractions : MonoBehaviour
         if (lookObject.layer == pickupLayer || lookObject.layer == currentlyPickingUpLayer)
         {
             lookObject = lookObject.transform.root.gameObject;
-            fixedRot = lookObject.transform.eulerAngles;
             physicsObject = lookObject.GetComponentInChildren<PhysicsObject>();
+            fixedRot = lookObject.transform.eulerAngles;
             currentlyPickedUpObject = lookObject;
             pickupRB = currentlyPickedUpObject.GetComponent<Rigidbody>();
             if (pickupRB == null)

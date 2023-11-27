@@ -5,15 +5,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Hammer_UI : MonoBehaviour
 {
-    [SerializeField] LineRenderer lineRend;
     [SerializeField] FirstPersonController fpc;
- 
+    [SerializeField] UIDocument document;
+
     MeshFilter currentMesh;
     MeshCollider currentCollider;
+    Texture2D texture;
+    List<Vector2> previousDrawnPixels;
     List<int> currentVertexes = new List<int>();
     bool isSelected;
     const float minVertexDistance = 0.1f;
@@ -23,30 +27,42 @@ public class Hammer_UI : MonoBehaviour
     const float maxPickingDistance = 10.0f;
     Color highlightColor = new Color(1, 0.86666666666f, 0);
     Color selectColor = new Color(0, 1, 0.29803921568f);
+    Color lineColor;
 
     private void Start()
     {
-        RenderLines(false);
+        previousDrawnPixels = new List<Vector2>();
+        texture = new Texture2D(Screen.width, Screen.height);
+        //Clear texture
+        for (int x = 0; x < texture.width; x++)
+        {
+            for (int y = 0; y < texture.height; y++)
+            {
+                texture.SetPixel(x, y, Color.clear);
+            }
+        }
+        document.rootVisualElement.Q<VisualElement>("Vis").style.backgroundImage = texture;
+        ApplyRenderState(false);
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            RenderLines(!isSelected);
+            ApplyRenderState(!isSelected);
         }
         if (Input.GetMouseButtonDown(1))
         {
-            RenderLines(!isSelected);
+            ApplyRenderState(!isSelected);
 
             if (isSelected && currentMesh != null)
             {
                 currentVertexes = new List<int>();
-                for (int i = 0; i < currentMesh.mesh.vertices.Length; i++)
+                for (int i = 0; i < currentMesh.mesh.triangles.Length; i++)
                 {
-                    currentVertexes.Add(i);
+                    currentVertexes.Add(currentMesh.mesh.triangles[i]);
                 }
-                RenderLines(isSelected);
+                ApplyRenderState(isSelected);
             }
         }
         if (!isSelected)
@@ -108,12 +124,6 @@ public class Hammer_UI : MonoBehaviour
                 currentCollider.sharedMesh = null;
                 currentCollider.sharedMesh = currentMesh.mesh;
 
-                lineRend.positionCount = Mathf.Max(2,currentVertexes.Count);
-                for (int i = 0; i < Mathf.Max(2, currentVertexes.Count); i++)
-                {
-                    int index = Mathf.Min(i, currentVertexes.Count - 1);
-                    lineRend.SetPosition(i, currentMesh.transform.TransformPoint(currentMesh.mesh.vertices[currentVertexes[index]]));
-                }
             }
         }
     }
@@ -145,15 +155,7 @@ public class Hammer_UI : MonoBehaviour
 
                 if (pointCloseness <= minVertexDistance)
                 {
-
-                    lineRend.positionCount = 2;
-                    lineRend.SetPositions(new Vector3[] {
-                            hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[closestVertex]),
-                            hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[closestVertex]),
-                        });
-                    currentVertexes = new List<int>{ closestVertex };
-                    lineRend.startColor = highlightColor;
-                    lineRend.endColor = highlightColor;
+                    currentVertexes = new List<int> { closestVertex };
                 }
                 else
                 {
@@ -193,16 +195,8 @@ public class Hammer_UI : MonoBehaviour
                     }
                     if (pointCloseness <= minLineDistance)
                     {
-                        lineRend.startWidth = edgeUIWidth;
-                        lineRend.endWidth = edgeUIWidth;
-                        lineRend.positionCount = 2;
-                        lineRend.SetPositions(new Vector3[] {
-                            hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[closestEdgea]]),
-                            hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[closestEdgeb]]),
-                        });
-                        currentVertexes = new List<int> { meshFilter.mesh.triangles[closestEdgea], meshFilter.mesh.triangles[closestEdgeb] };
-                        lineRend.startColor = highlightColor;
-                        lineRend.endColor = highlightColor;
+                        currentVertexes.Add(meshFilter.mesh.triangles[closestEdgea]);
+                        currentVertexes.Add(meshFilter.mesh.triangles[closestEdgeb]);
                     }
                     else
                     {
@@ -222,17 +216,17 @@ public class Hammer_UI : MonoBehaviour
                         {
                             plane = new Plane(
                                 meshFilter.mesh.vertices[meshFilter.mesh.triangles[i]],
-                                meshFilter.mesh.vertices[meshFilter.mesh.triangles[i+1]],
-                                meshFilter.mesh.vertices[meshFilter.mesh.triangles[i+2]]
+                                meshFilter.mesh.vertices[meshFilter.mesh.triangles[i + 1]],
+                                meshFilter.mesh.vertices[meshFilter.mesh.triangles[i + 2]]
                                 );
-                            if(plane.normal == norm)
+                            if (plane.normal == norm)
                             {
                                 currentVertexes.Add(meshFilter.mesh.triangles[i]);
-                                currentVertexes.Add(meshFilter.mesh.triangles[i+1]);
-                                currentVertexes.Add(meshFilter.mesh.triangles[i+2]);
+                                currentVertexes.Add(meshFilter.mesh.triangles[i + 1]);
+                                currentVertexes.Add(meshFilter.mesh.triangles[i + 2]);
                             }
                         }
-                        RenderLines(false);
+                        ApplyRenderState(false);
                     }
                 }
             }
@@ -242,15 +236,22 @@ public class Hammer_UI : MonoBehaviour
             currentMesh = null;
             currentCollider = null;
             currentVertexes = new List<int>();
-            lineRend.positionCount = 0;
         }
     }
-    void RenderLines(bool on)
+
+    private void LateUpdate()
     {
-        if(currentMesh == null)
+        RenderLines();
+    }
+
+    void ApplyRenderState(bool on)
+    {
+        lineColor = highlightColor;
+
+        if (currentMesh == null)
         {
             isSelected = false;
-            lineRend.positionCount = 0;
+            currentVertexes = new List<int>();
             return;
         }
 
@@ -258,40 +259,100 @@ public class Hammer_UI : MonoBehaviour
         fpc.SetFOV(!on);
         if (on)
         {
-            lineRend.startColor = selectColor;
-            lineRend.endColor = selectColor;
+            lineColor = selectColor;
+        }
+    }
+
+    void RenderLines()
+    {
+        //Clear texture
+        for (int i = 0; i < previousDrawnPixels.Count; i++)
+        {
+            texture.SetPixel((int)previousDrawnPixels[i].x, (int)previousDrawnPixels[i].y, Color.clear);
+        }
+        previousDrawnPixels.Clear();
+
+        if (currentVertexes.Count == 1)
+        {
+            Vector3 screenPosa = Camera.main.WorldToScreenPoint(currentMesh.transform.TransformPoint(currentMesh.mesh.vertices[currentVertexes[0]]));
+            DrawCircle(lineColor, (int)screenPosa.x, (int)screenPosa.y, 5);
         }
         else
         {
-            lineRend.startColor = highlightColor;
-            lineRend.endColor = highlightColor;
+            for (int i = 0; i < currentVertexes.Count; i++)
+            {
+                if (i + 1 >= currentVertexes.Count)
+                {
+                    break;
+                }
+                Vector3 screenPosa = Camera.main.WorldToScreenPoint(currentMesh.transform.TransformPoint(currentMesh.mesh.vertices[currentVertexes[i]]));
+                Vector3 screenPosb = Camera.main.WorldToScreenPoint(currentMesh.transform.TransformPoint(currentMesh.mesh.vertices[currentVertexes[i + 1]]));
+                if (screenPosa.z > 0 && screenPosb.z > 0)
+                {
+                    DrawLine(screenPosa, screenPosb, lineColor);
+                }
+            }
         }
+        texture.Apply();
 
-        bool selection;
-        if(currentMesh.mesh.vertices[currentVertexes[0]].Equals(currentMesh.mesh.vertices[currentVertexes[1]]))
-        {
-            selection = true;
-        }
-        else
-        {
-            selection = false;
-        }
+    }
+    void DrawCircle(Color color, int x, int y, int radius = 3)
+    {
+        float rSquared = radius * radius;
 
-        if (selection)
+        for (int u = x - radius; u < x + radius + 1; u++)
         {
-            lineRend.startWidth = vertexUIWidth;
-            lineRend.endWidth = vertexUIWidth;
+            for (int v = y - radius; v < y + radius + 1; v++)
+            {
+                if ((x - u) * (x - u) + (y - v) * (y - v) < rSquared)
+                {
+                    if (u > 0 && u < texture.width && v > 0 && v < texture.height)
+                    {
+                        texture.SetPixel(u, v, color);
+                        previousDrawnPixels.Add(new Vector2(u, v));
+                    }
+                }
+            }
         }
-        else
+    }
+    void DrawLine(Vector2 start, Vector2 end, Color32 color)
+    {
+        int w = (int)(end.x - start.x);
+        int h = (int)(end.y - start.y);
+        int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+        if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
+        if (h < 0) dy1 = -1; else if (h > 0) dy1 = 1;
+        if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
+        int longest = Math.Abs(w);
+        int shortest = Math.Abs(h);
+        if (!(longest > shortest))
         {
-            lineRend.startWidth = edgeUIWidth;
-            lineRend.endWidth = edgeUIWidth;
+            longest = Math.Abs(h);
+            shortest = Math.Abs(w);
+            if (h < 0) dy2 = -1; else if (h > 0) dy2 = 1;
+            dx2 = 0;
         }
+        int numerator = longest >> 1;
+        for (int i = 0; i <= longest; i++)
+        {
+            if (start.x > 0 && start.x < texture.width && start.y > 0 && start.y < texture.height)
+            {
+                texture.SetPixel((int)start.x, (int)start.y, color);
+                previousDrawnPixels.Add(new Vector2(start.x, start.y));
+            }
 
-        lineRend.positionCount = currentVertexes.Count;
-        for (int i = 0; i < currentVertexes.Count; i++)
-        {
-            lineRend.SetPosition(i, currentMesh.transform.TransformPoint(currentMesh.mesh.vertices[currentVertexes[i]]));
+            numerator += shortest;
+            if (!(numerator < longest))
+            {
+                numerator -= longest;
+                start.x += dx1;
+                start.y += dy1;
+            }
+            else
+            {
+                start.x += dx2;
+                start.y += dy2;
+            }
         }
     }
 
