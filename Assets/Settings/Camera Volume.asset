@@ -18,7 +18,7 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 11.02
+    m_Value: 12.2
   intensity:
     m_OverrideState: 0
     m_Value: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
   active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 0
   meteringMode:
     m_OverrideState: 1
     m_Value: 2
@@ -330,7 +330,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 12.120495
+    m_Value: 14
   compensation:
     m_OverrideState: 0
     m_Value: 0

@@ -24,14 +24,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Computer Class
-  m_Shader: {fileID: -6465566751694194690, guid: 8d079c324c697114c82dbedbece05483,
+  m_Shader: {fileID: -6465566751694194690, guid: a0d5affa1328c2c46a308ae09a2d4540,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _DISABLE_SSR_TRANSPARENT
-  m_InvalidKeywords:
   - _DYNAMICISM_X_AXIS
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
