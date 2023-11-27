@@ -24,14 +24,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Computer Class
-  m_Shader: {fileID: -6465566751694194690, guid: a0d5affa1328c2c46a308ae09a2d4540,
+  m_Shader: {fileID: -6465566751694194690, guid: 8d079c324c697114c82dbedbece05483,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _DISABLE_SSR_TRANSPARENT
+  m_InvalidKeywords:
   - _DYNAMICISM_X_AXIS
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -73,6 +73,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emissive:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -124,11 +128,27 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_08a3990ab3e64ce8905ca96ed3167e9b_Out_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 5b9dd1de68fde5346ab4bb6b8fc24427, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_100eccf31f0945d1945ef217221b8830_Out_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 5b9dd1de68fde5346ab4bb6b8fc24427, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_2218e3e025ab4ea98fbd218abce66506_Out_0_Texture2D:
         m_Texture: {fileID: 2800000, guid: 5b9dd1de68fde5346ab4bb6b8fc24427, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_2a448923c16243a291bb075e371158a9_Out_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 5b9dd1de68fde5346ab4bb6b8fc24427, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_35c15cf430d24ab1ba55fccd9e6998ad_Out_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 5b9dd1de68fde5346ab4bb6b8fc24427, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_86b2ed7a014341648e7bee60fe919f10_Out_0_Texture2D:
         m_Texture: {fileID: 2800000, guid: 5b9dd1de68fde5346ab4bb6b8fc24427, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -181,6 +201,7 @@ Material:
     - _DstBlend: 0
     - _DstBlend2: 0
     - _DstBlendAlpha: 0
+    - _Emissiveness: 0
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _EnvironmentReflections: 1
@@ -227,6 +248,7 @@ Material:
     - _StencilWriteMaskDistortionVec: 4
     - _StencilWriteMaskGBuffer: 15
     - _StencilWriteMaskMV: 41
+    - _Strength: 1
     - _SupportDecals: 1
     - _Surface: 0
     - _SurfaceType: 0
