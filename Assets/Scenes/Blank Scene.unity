@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3522.1646, g: 3998.3052, b: 4578.735, a: 1}
+  m_IndirectSpecularColor: {r: 3522.0337, g: 3998.0981, b: 4578.4614, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4274,9 +4274,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deadInterface: {fileID: 1913721400}
+  lights:
+  - {fileID: 853405928}
+  emissiveMeshes:
+  - {fileID: 1558183078}
   dtuIndex: 0
   invertedFlow: 0
-  intensity: 11111111
+  lightIntensity: 1111111
+  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  emissionIntensity: 22
+  emissionTint: {r: 1, g: 1, b: 1, a: 1}
   onCurve:
     serializedVersion: 2
     m_Curve:
@@ -4327,7 +4334,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   turnOffTime: 0.1
-  doesLoop: 1
+  doesLoop: 0
   loopCurve:
     serializedVersion: 2
     m_Curve:
@@ -4506,12 +4513,12 @@ Light:
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 116038000
-  m_Range: 8.71
+  m_Range: 28.89
   m_SpotAngle: 64.09625
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -4563,13 +4570,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 853405925}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 9.76, y: 5.81, z: -28.24}
+  m_LocalRotation: {x: 0.9431937, y: 0, z: 0, w: 0.33224353}
+  m_LocalPosition: {x: 9.76, y: 6.38, z: -15.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 141.19, y: 0, z: 0}
 --- !u!1 &854294661
 GameObject:
   m_ObjectHideFlags: 0
@@ -8186,6 +8193,12 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!23 &1558183078 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6667701086331402078, guid: 3a68b681a562ace4783d8325ee61387b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1328050815}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1567269484
 GameObject:
   m_ObjectHideFlags: 0

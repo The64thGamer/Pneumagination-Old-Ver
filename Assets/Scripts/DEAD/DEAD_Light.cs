@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
@@ -10,12 +11,19 @@ public class DEAD_Light : MonoBehaviour
 {
     [SerializeField] DEAD_Interface deadInterface;
 
+    [Header("Objects")]
+    [SerializeField] List<Light> lights;
+    [SerializeField] List<MeshRenderer> emissiveMeshes;
+
     [Header("Signal")]
-    public int dtuIndex;
-    public bool invertedFlow;
+    [SerializeField] int dtuIndex;
+    [SerializeField] bool invertedFlow;
 
     [Header("Light Properties")]
-    public float intensity;
+    [SerializeField] float lightIntensity = 1;
+    [SerializeField] Color lightColor = Color.white;
+    [SerializeField] float emissionIntensity = 1;
+    [SerializeField] Color emissionTint = Color.white;
 
     [Header("Light Curves")]
     [SerializeField] AnimationCurve onCurve;
@@ -28,16 +36,10 @@ public class DEAD_Light : MonoBehaviour
     [SerializeField] AnimationCurve loopCurve;
     [SerializeField] float loopTime;
 
-    Light light;
 
     bool currentState;
     float currentStateTimer;
     bool inLoopState;
-
-    private void Start()
-    {
-        light = this.GetComponent<Light>();
-    }
 
     private void Update()
     {
@@ -65,7 +67,7 @@ public class DEAD_Light : MonoBehaviour
             inLoopState = false;
         }
 
-        float finalIntensity = light.intensity;
+        float finalIntensity = 0;
         if (!inLoopState)
         {
             if (currentState)
@@ -78,21 +80,32 @@ public class DEAD_Light : MonoBehaviour
                 }
                 else
                 {
-                    finalIntensity = onCurve.Evaluate(finalIntensity) * intensity;
+                    finalIntensity = onCurve.Evaluate(finalIntensity);
                 }
             }
             else
             {
-                finalIntensity = offCurve.Evaluate(currentStateTimer / turnOffTime) * intensity;
+                finalIntensity = offCurve.Evaluate(currentStateTimer / turnOffTime);
 
             }
         }
 
         if (inLoopState && doesLoop)
         {
-            finalIntensity = loopCurve.Evaluate(Mathf.Repeat(currentStateTimer / loopTime,1)) * intensity;
+            finalIntensity = loopCurve.Evaluate(Mathf.Repeat(currentStateTimer / loopTime,1));
         }
 
-        light.intensity = finalIntensity;
+        for (int i = 0; i < lights.Count; i++)
+        {
+            lights[i].color = lightColor;
+            lights[i].intensity = finalIntensity * lightIntensity;
+        }
+        for (int i = 0; i < emissiveMeshes.Count; i++)
+        {
+            for (int e = 0; e < emissiveMeshes[i].materials.Length; e++)
+            {
+                emissiveMeshes[i].materials[e].SetColor("_EmissiveColor", emissionTint * (finalIntensity * emissionIntensity)); 
+            }
+        }
     }
 }
