@@ -263,9 +263,7 @@ public class SaveFileData
         switch (id)
         {
             case 0:
-                return "Fast Food Place";
-            case 1:
-                return "Drive Thru";
+                return "Blank Scene";
             default:
                 return "";
         }
