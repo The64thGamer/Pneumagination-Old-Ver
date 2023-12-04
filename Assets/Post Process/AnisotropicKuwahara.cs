@@ -101,7 +101,7 @@ public sealed class AnisotropicKuwahara : CustomPostProcessVolumeComponent, IPos
         HDUtils.DrawFullScreen(cmd, kuwaharaMat, destination, shaderPassId: 0);
     }
 
-
+    /*
     Texture2D _MainTex, _TFM;
     Vector4 _MainTex_TexelSize;
     int _KernelSize, _N, _Size;
@@ -245,7 +245,7 @@ public sealed class AnisotropicKuwahara : CustomPostProcessVolumeComponent, IPos
                     float[] w = new float[8];
                     float z, vxx, vyy;
 
-                    /* Calculate Polynomial Weights */
+                    // Calculate Polynomial Weights
                     vxx = zeta - eta * v.x * v.x;
                     vyy = zeta - eta * v.y * v.y;
                     z = Mathf.Max(0, v.y + vxx);
@@ -302,4 +302,5 @@ public sealed class AnisotropicKuwahara : CustomPostProcessVolumeComponent, IPos
         output = output / output.w;
         return new Vector4(Mathf.Min(1, output.x), Mathf.Min(1, output.y), Mathf.Min(1, output.z), Mathf.Min(1, output.w));
     }
+    */
 }

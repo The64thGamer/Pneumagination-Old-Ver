@@ -520,7 +520,7 @@ MonoBehaviour:
     m_Value: 2
   sharpness:
     m_OverrideState: 1
-    m_Value: 8
+    m_Value: 6.5
   hardness:
     m_OverrideState: 1
     m_Value: 8
