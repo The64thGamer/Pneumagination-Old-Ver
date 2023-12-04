@@ -75,6 +75,10 @@ public class Data_Manager : MonoBehaviour
                 mapData.animatronics[i].rotation = g.transform.rotation;
             }
         }
+        for (int i = 0; i < mapData.geometryData.Count; i++)
+        {
+
+        }
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML());
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
     }
@@ -91,7 +95,7 @@ public class Data_Manager : MonoBehaviour
         bool addedNewGeoData = false;
         for (int i = 0; i < customGeo.Length; i++)
         {
-            int check = CheckMapDataForString(customGeo[i].GetKey());
+            int check = CheckMapDataForObjectHash(customGeo[i].GetObjectHash());
             if (check == -1)
             {
                 Color setColor = Color.white;
@@ -115,19 +119,25 @@ public class Data_Manager : MonoBehaviour
                     default:
                         break;
                 }
-                mapData.geometryData.Add(new CustomGeometryData()
+                mapData.geometryData.Add(new CustomPropData()
                 {
-                    color = setColor,
-                    key = customGeo[i].GetKey(),
-                    material = customGeo[i].GetMaterial(),//This needs to be calculated randomly
-                    grime = Random.Range(0.0f, 1.0f),//This needs to be calculated randomly
+                    colorA = setColor,
+                    colorB = setColor,
+                    colorC = setColor,
+                    colorD = setColor,
+                    objectHash = customGeo[i].GetObjectHash(),
+                    position = customGeo[i].transform.position,
+                    rotation = customGeo[i].transform.rotation,
                 });
                 addedNewGeoData = true;
                 check = mapData.geometryData.Count - 1;
             }
-            customGeo[i].SetColor(mapData.geometryData[check].color);
-            customGeo[i].SetMaterial(mapData.geometryData[check].material);
-            customGeo[i].SetGrime(mapData.geometryData[check].grime);
+            customGeo[i].SetColorA(mapData.geometryData[check].colorA);
+            customGeo[i].SetColorB(mapData.geometryData[check].colorB);
+            customGeo[i].SetColorC(mapData.geometryData[check].colorC);
+            customGeo[i].SetColorD(mapData.geometryData[check].colorD);
+            customGeo[i].transform.position = mapData.geometryData[check].position;
+            customGeo[i].transform.rotation = mapData.geometryData[check].rotation;
         }
         int currentDTUIndex = 0;
         if (mapData.animatronics != null)
@@ -170,11 +180,11 @@ public class Data_Manager : MonoBehaviour
         }
     }
 
-    int CheckMapDataForString(string key)
+    int CheckMapDataForObjectHash(string objectHash)
     {
         for (int i = 0; i < mapData.geometryData.Count; i++)
         {
-            if (mapData.geometryData[i].key == key)
+            if (mapData.geometryData[i].objectHash == objectHash)
             {
                 return i;
             }
@@ -186,7 +196,7 @@ public class Data_Manager : MonoBehaviour
     {
         mapData = new MapData();
         mapData.mapHistory = new List<MapHistory>();
-        mapData.geometryData = new List<CustomGeometryData>();
+        mapData.geometryData = new List<CustomPropData>();
 
         mapData.mapHistory.Add(new MapHistory()
         {
@@ -274,7 +284,7 @@ public class SaveFileData
 public struct MapData
 {
     public List<MapHistory> mapHistory;
-    public List<CustomGeometryData> geometryData;
+    public List<CustomPropData> geometryData;
     public List<Combo_Animatronic_SaveFile> animatronics;
 
     public Color startingColorPrimary;
@@ -321,10 +331,13 @@ public struct MapHistory
 }
 
 [System.Serializable]
-public struct CustomGeometryData
+public struct CustomPropData
 {
-    public string key;
-    public int material;
-    public Color color;
-    public float grime;
+    public string objectHash;
+    public Color colorA;
+    public Color colorB;
+    public Color colorC;
+    public Color colorD;
+    public Vector3 position;
+    public Quaternion rotation;
 }
