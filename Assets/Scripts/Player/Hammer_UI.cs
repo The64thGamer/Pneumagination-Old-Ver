@@ -119,11 +119,27 @@ public class Hammer_UI : MonoBehaviour
                     vertices[newVertexes[i]] += currentMesh.transform.InverseTransformPoint(currentMesh.transform.position + translate);
                 }
 
-                currentMesh.mesh.vertices = vertices;
-                currentMesh.mesh.RecalculateBounds();
-                currentCollider.sharedMesh = null;
-                currentCollider.sharedMesh = currentMesh.mesh;
+                //Double check Size
+                Vector3 minSize = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
+                Vector3 maxSize = new Vector3(float.MinValue,float.MinValue,float.MinValue);
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    if (vertices[i].x > maxSize.x) { maxSize.x = vertices[i].x; }
+                    if (vertices[i].y > maxSize.y) { maxSize.y = vertices[i].y; }
+                    if (vertices[i].z > maxSize.z) { maxSize.z = vertices[i].z; }
 
+                    if (vertices[i].x < minSize.x) { minSize.x = vertices[i].x; }
+                    if (vertices[i].y < minSize.y) { minSize.y = vertices[i].y; }
+                    if (vertices[i].z < minSize.z) { minSize.z = vertices[i].z; }
+                }
+                if(!Mathf.Approximately(0,Math.Abs(minSize.x - maxSize.x)) && !Mathf.Approximately(0, Math.Abs(minSize.y - maxSize.y)) && !Mathf.Approximately(0, Math.Abs(minSize.z - maxSize.z)))
+                {
+                    //Apply
+                    currentMesh.mesh.vertices = vertices;
+                    currentMesh.mesh.RecalculateBounds();
+                    currentCollider.sharedMesh = null;
+                    currentCollider.sharedMesh = currentMesh.mesh;
+                }
             }
         }
     }
