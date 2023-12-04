@@ -552,6 +552,43 @@ MonoBehaviour:
   screenFadeDistance:
     m_OverrideState: 1
     m_Value: 0.1
+--- !u!114 &-5092322703597629253
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4fcb45c05798b478782db4f761c26c, type: 3}
+  m_Name: Oultine
+  m_EditorClassIdentifier: 
+  active: 1
+  kernelSize:
+    m_OverrideState: 1
+    m_Value: 2
+  sharpness:
+    m_OverrideState: 1
+    m_Value: 8
+  hardness:
+    m_OverrideState: 1
+    m_Value: 8
+  alpha:
+    m_OverrideState: 1
+    m_Value: 1
+  zeroCrossing:
+    m_OverrideState: 1
+    m_Value: 0.58
+  useZeta:
+    m_OverrideState: 1
+    m_Value: 0
+  zeta:
+    m_OverrideState: 1
+    m_Value: 1
+  passes:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &-4865529003747240848
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1062,6 +1099,24 @@ MonoBehaviour:
   - {fileID: -1950944249396579983}
   - {fileID: -3521591437690499173}
   - {fileID: -2019210444023465190}
+  - {fileID: -5092322703597629253}
+  - {fileID: 130885317307744013}
+--- !u!114 &130885317307744013
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2ec1119ec277b34daa88a2fef06db3a, type: 3}
+  m_Name: NewPostProcessVolume
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &240880575204750404
 MonoBehaviour:
   m_ObjectHideFlags: 3
