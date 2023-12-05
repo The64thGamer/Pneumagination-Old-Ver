@@ -16,7 +16,6 @@ public class Custom_Geometry : MonoBehaviour
     [SerializeField] Color colorD = Color.white;
     float rain;
     float snow;
-    float oldGrime = -1;
     float oldRain = -1;
     float oldSnow = -1;
     Color oldColorA;
@@ -24,12 +23,12 @@ public class Custom_Geometry : MonoBehaviour
     Color oldColorC;
     Color oldColorD;
 
-    MeshRenderer meshRenderer;
+    MeshRenderer[] meshRenderers;
     Data_Manager dataManager;
 
     private void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderers = GetComponentsInChildren<MeshRenderer>();
         dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
         int hashName;
         if(!int.TryParse(name,out hashName))
@@ -87,22 +86,34 @@ public class Custom_Geometry : MonoBehaviour
         if (oldColorA != colorA)
         {
             oldColorA = colorA;
-            meshRenderer.material.SetColor("_ColorA", colorA);
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                meshRenderers[i].material.SetColor("_ColorA", colorA);
+            }
         }
         if (oldColorB != colorB)
         {
             oldColorB = colorB;
-            meshRenderer.material.SetColor("_ColorB", colorB);
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                meshRenderers[i].material.SetColor("_ColorB", colorA);
+            }
         }
         if (oldColorC != colorC)
         {
             oldColorC = colorC;
-            meshRenderer.material.SetColor("_ColorC", colorC);
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                meshRenderers[i].material.SetColor("_ColorC", colorA);
+            }
         }
         if (oldColorD != colorD)
         {
             oldColorD = colorD;
-            meshRenderer.material.SetColor("_ColorD", colorD);
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                meshRenderers[i].material.SetColor("_ColorD", colorA);
+            }
         }
 
         if (materialLocation == MaterialLocation.exterior)
@@ -112,12 +123,18 @@ public class Custom_Geometry : MonoBehaviour
             if (oldRain != rain)
             {
                 oldRain = rain;
-                meshRenderer.material.SetFloat("_Rain", rain);
+                for (int i = 0; i < meshRenderers.Length; i++)
+                {
+                    meshRenderers[i].material.SetFloat("_Rain", rain);
+                }
             }
             if (oldSnow != snow)
             {
                 oldSnow = snow;
-                meshRenderer.material.SetFloat("_Snow", snow);
+                for (int i = 0; i < meshRenderers.Length; i++)
+                {
+                    meshRenderers[i].material.SetFloat("_Snow", snow);
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Data_Manager : MonoBehaviour
 {
@@ -75,9 +76,28 @@ public class Data_Manager : MonoBehaviour
                 mapData.animatronics[i].rotation = g.transform.rotation;
             }
         }
-        for (int i = 0; i < mapData.geometryData.Count; i++)
+        for (int i = 0; i < mapData.propData.Count; i++)
         {
-
+            g = GameObject.Find(mapData.propData[i].objectHash.ToString());
+            if (g != null)
+            {
+                mapData.propData[i].position = g.transform.position;
+                mapData.propData[i].rotation = g.transform.rotation;
+            }
+        }
+        for (int i = 0; i < mapData.brushData.Count; i++)
+        {
+            g = GameObject.Find(mapData.brushData[i].objectHash.ToString());
+            if (g != null)
+            {
+                MeshFilter r = g.GetComponent<MeshFilter>();
+                if (r != null)
+                {
+                    mapData.brushData[i].vertices = r.mesh.vertices;
+                    mapData.brushData[i].position = g.transform.position;
+                    mapData.brushData[i].rotation = g.transform.rotation;
+                }
+            }
         }
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml", saveFileData.SerializeToXML());
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
@@ -90,55 +110,20 @@ public class Data_Manager : MonoBehaviour
 
     void ApplySaveFileValuesToScene()
     {
-        Custom_Geometry[] customGeo = FindObjectsByType<Custom_Geometry>(FindObjectsSortMode.None);
-
         bool addedNewGeoData = false;
-        for (int i = 0; i < customGeo.Length; i++)
+        //Brushes
+        if (mapData.brushData != null)
         {
-            int check = CheckMapDataForObjectHash(customGeo[i].GetObjectHash());
-            if (check == -1)
+            for (int i = 0; i < mapData.brushData.Count; i++)
             {
-                Color setColor = Color.white;
-                switch (customGeo[i].GetMaterialColorType())
-                {
-                    case Custom_Geometry.MaterialColorType.primary:
-                        setColor = mapData.startingColorPrimary;
-                        break;
-                    case Custom_Geometry.MaterialColorType.secondary:
-                        setColor = mapData.startingColorSecondary;
-                        break;
-                    case Custom_Geometry.MaterialColorType.tertiary:
-                        setColor = mapData.startingColorTertiary;
-                        break;
-                    case Custom_Geometry.MaterialColorType.light:
-                        setColor = mapData.startingColorLight;
-                        break;
-                    case Custom_Geometry.MaterialColorType.dark:
-                        setColor = mapData.startingColorDark;
-                        break;
-                    default:
-                        break;
-                }
-                mapData.geometryData.Add(new CustomPropData()
-                {
-                    colorA = setColor,
-                    colorB = setColor,
-                    colorC = setColor,
-                    colorD = setColor,
-                    objectHash = customGeo[i].GetObjectHash(),
-                    position = customGeo[i].transform.position,
-                    rotation = customGeo[i].transform.rotation,
-                });
-                addedNewGeoData = true;
-                check = mapData.geometryData.Count - 1;
+                //Setup
+                GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
+                brush.name = mapData.brushData[i].objectHash.ToString();
+                brush.GetComponent<MeshFilter>().mesh.vertices = mapData.brushData[i].vertices;
             }
-            customGeo[i].SetColorA(mapData.geometryData[check].colorA);
-            customGeo[i].SetColorB(mapData.geometryData[check].colorB);
-            customGeo[i].SetColorC(mapData.geometryData[check].colorC);
-            customGeo[i].SetColorD(mapData.geometryData[check].colorD);
-            customGeo[i].transform.position = mapData.geometryData[check].position;
-            customGeo[i].transform.rotation = mapData.geometryData[check].rotation;
         }
+
+        //Animatronics
         int currentDTUIndex = 0;
         if (mapData.animatronics != null)
         {
@@ -180,23 +165,11 @@ public class Data_Manager : MonoBehaviour
         }
     }
 
-    int CheckMapDataForObjectHash(string objectHash)
-    {
-        for (int i = 0; i < mapData.geometryData.Count; i++)
-        {
-            if (mapData.geometryData[i].objectHash == objectHash)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     void GenerateNewRandomMapSaveData()
     {
         mapData = new MapData();
         mapData.mapHistory = new List<MapHistory>();
-        mapData.geometryData = new List<CustomPropData>();
+        mapData.propData = new List<CustomPropData>();
 
         mapData.mapHistory.Add(new MapHistory()
         {
@@ -229,7 +202,32 @@ public class Data_Manager : MonoBehaviour
         return worldFlyingSphereSize;
     }
 
+    public void GenerateNewBrush(BrushType brushType, Vector3 position)
+    {
+        string hash = Random.Range(int.MinValue, int.MaxValue).ToString();
+        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
+        brush.name = hash;
+        brush.transform.position = position;
+        CustomBrushData data = new CustomBrushData()
+        {
+            brushType = BrushType.block,
+            objectHash = hash,
+            colorA = Color.white,
+            colorB = Color.white,
+            colorC = Color.white,
+            colorD = Color.white,
+            material = 0,
+            vertices = brush.GetComponent<MeshFilter>().mesh.vertices,
+            position = brush.transform.position,
+            rotation = brush.transform.rotation,
+        };
+        mapData.brushData.Add(data);
+    }
 
+    public void AssignNewProp(CustomPropData data)
+    {
+        mapData.propData.Add(data);
+    }
 }
 
 [System.Serializable]
@@ -281,10 +279,11 @@ public class SaveFileData
 }
 
 [System.Serializable]
-public struct MapData
+public class MapData
 {
     public List<MapHistory> mapHistory;
-    public List<CustomPropData> geometryData;
+    public List<CustomPropData> propData;
+    public List<CustomBrushData> brushData;
     public List<Combo_Animatronic_SaveFile> animatronics;
 
     public Color startingColorPrimary;
@@ -314,7 +313,7 @@ public struct MapData
 }
 
 [System.Serializable]
-public struct MapHistory
+public class MapHistory
 {
     public string change;
     public UDateTime time;
@@ -331,7 +330,7 @@ public struct MapHistory
 }
 
 [System.Serializable]
-public struct CustomPropData
+public class CustomPropData
 {
     public string objectHash;
     public Color colorA;
@@ -340,4 +339,24 @@ public struct CustomPropData
     public Color colorD;
     public Vector3 position;
     public Quaternion rotation;
+}
+
+[System.Serializable]
+public class CustomBrushData
+{
+    public BrushType brushType;
+    public string objectHash;
+    public Color colorA;
+    public Color colorB;
+    public Color colorC;
+    public Color colorD;
+    public uint material;
+    public Vector3[] vertices;
+    public Vector3 position;
+    public Quaternion rotation;
+}
+
+public enum BrushType
+{
+    block,
 }
