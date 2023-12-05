@@ -81,6 +81,7 @@ public class Hammer_UI : MonoBehaviour
             currentMesh = null;
             currentCollider = null;
             currentVertexes = new List<int>();
+            isSelected = false;
         }
         if (!isSelected)
         {
