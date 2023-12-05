@@ -119,7 +119,12 @@ public class Data_Manager : MonoBehaviour
                 //Setup
                 GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
                 brush.name = mapData.brushData[i].objectHash.ToString();
-                brush.GetComponent<MeshFilter>().mesh.vertices = mapData.brushData[i].vertices;
+                MeshFilter filter = brush.GetComponent<MeshFilter>();
+                filter.mesh.vertices = mapData.brushData[i].vertices;
+                filter.mesh.RecalculateBounds();
+                MeshCollider collider = brush.GetComponent<MeshCollider>();
+                collider.sharedMesh = null;
+                collider.sharedMesh = filter.mesh;
             }
         }
 
