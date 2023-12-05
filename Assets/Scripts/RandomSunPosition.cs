@@ -30,13 +30,11 @@ public class RandomSunPosition : MonoBehaviour
             moon.shadows = LightShadows.Soft;
 
         }
-        if (time % 360 <= 186 && time % 360 >= 354 && nightMode)
+        if (time % 360 <= 186 || time % 360 >= 354 && nightMode)
         {
             nightMode = false;
             moon.shadows = LightShadows.None;
             sun.shadows = LightShadows.Soft;
-
-
         }
 
         sun.transform.localRotation = Quaternion.Euler(time, randomPitch, 0);
