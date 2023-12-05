@@ -1,8 +1,8 @@
 ﻿using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 namespace StarterAssets
 {
@@ -77,6 +77,7 @@ namespace StarterAssets
 
         private void Awake()
         {
+            SwitchUIs(new InputAction.CallbackContext());
             _controller = GetComponent<CharacterController>();
 
             height = PlayerPrefs.GetFloat("Settings: PlayerHeight");
@@ -113,8 +114,20 @@ namespace StarterAssets
 
         void SwitchUIs(InputAction.CallbackContext context)
         {
-            editorUI.gameObject.SetActive(!editorUI.gameObject.activeSelf);
-            hammerUI.gameObject.SetActive(!hammerUI.gameObject.activeSelf);
+            if(editorUI.enabled)
+            {
+                editorUI.enabled = false;
+                editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                hammerUI.enabled = true;
+                hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
+            }
+            else
+            {
+                editorUI.enabled = true;
+                editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
+                hammerUI.enabled = false;
+                hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+            }
         }
 
         void Update()
