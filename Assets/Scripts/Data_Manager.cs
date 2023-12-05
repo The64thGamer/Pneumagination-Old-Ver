@@ -118,6 +118,8 @@ public class Data_Manager : MonoBehaviour
             {
                 //Setup
                 GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
+                brush.transform.position = mapData.brushData[i].position;
+                brush.transform.rotation = mapData.brushData[i].rotation;
                 brush.name = mapData.brushData[i].objectHash.ToString();
                 MeshFilter filter = brush.GetComponent<MeshFilter>();
                 filter.mesh.vertices = mapData.brushData[i].vertices;
