@@ -177,6 +177,7 @@ public class Data_Manager : MonoBehaviour
         mapData = new MapData();
         mapData.mapHistory = new List<MapHistory>();
         mapData.propData = new List<CustomPropData>();
+        mapData.brushData = new List<CustomBrushData>();
 
         mapData.mapHistory.Add(new MapHistory()
         {
@@ -229,6 +230,18 @@ public class Data_Manager : MonoBehaviour
             rotation = brush.transform.rotation,
         };
         mapData.brushData.Add(data);
+    }
+
+    public void RemoveBrushSaveData(string hashCode)
+    {
+        for (int i = 0; i < mapData.brushData.Count; i++)
+        {
+            if (mapData.brushData[i].objectHash == hashCode)
+            {
+                mapData.brushData.RemoveAt(i);
+                break;
+            }
+        }
     }
 
     public void AssignNewProp(CustomPropData data)

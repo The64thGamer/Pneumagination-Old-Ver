@@ -74,6 +74,14 @@ public class Hammer_UI : MonoBehaviour
         {
             CreateNewBrush();
         }
+        if (Input.GetKeyDown(KeyCode.X) && isSelected && currentVertexes.Count > 0)
+        {
+            dataManager.RemoveBrushSaveData(currentMesh.name);
+            Destroy(currentMesh.gameObject);
+            currentMesh = null;
+            currentCollider = null;
+            currentVertexes = new List<int>();
+        }
         if (!isSelected)
         {
             SelectPoint();
