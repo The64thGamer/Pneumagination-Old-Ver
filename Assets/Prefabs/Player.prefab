@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2142441607898849174
 Transform:
   m_ObjectHideFlags: 0
@@ -582,7 +582,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataManager: {fileID: 0}
-  playerUI: {fileID: 2219712907563678121}
+  editorUI: {fileID: 2219712907563678121}
+  hammerUI: {fileID: 7675325787711145775}
   _mainCamera: {fileID: 6487522925483904757}
   camOffet: {fileID: 2556485762120783340}
   moveAxis:
@@ -689,7 +690,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: b6b12ad6-d8a2-47c0-98e2-6e8efd414dbc
-        m_Path: <Keyboard>/tab
+        m_Path: <Keyboard>/e
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -769,11 +770,31 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: 143f8e16-7713-4524-bb3c-cfc22779b42d
-        m_Path: <Keyboard>/backquote
+        m_Path: <Keyboard>/tab
         m_Interactions: 
         m_Processors: 
         m_Groups: 
         m_Action: Fly Menu
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  switchMenus:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Switch Menus
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 14050daf-917f-4b89-be8a-80c1496cc812
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 2c20506b-38ea-485c-8ec2-ba95a62802a5
+        m_Path: <Keyboard>/q
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Switch Menus
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
@@ -938,7 +959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8945279535777526672
 Transform:
   m_ObjectHideFlags: 0

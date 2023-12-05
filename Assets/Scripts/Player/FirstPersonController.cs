@@ -12,7 +12,8 @@ namespace StarterAssets
 
         [Header("Objects")]
         [SerializeField] Data_Manager dataManager;
-        [SerializeField] Player_UI playerUI;
+        [SerializeField] Player_UI editorUI;
+        [SerializeField] Hammer_UI hammerUI;
         [SerializeField] Camera _mainCamera;
         [SerializeField] Transform camOffet;
 
@@ -25,6 +26,7 @@ namespace StarterAssets
         [SerializeField] InputActionProperty fovUp;
         [SerializeField] InputActionProperty fovDown;
         [SerializeField] InputActionProperty flyMenu;
+        [SerializeField] InputActionProperty switchMenus;
 
 
         [Header("Stats")]
@@ -67,7 +69,7 @@ namespace StarterAssets
          bool inputRun;
          bool inputFlyMenu;
          bool inputFlyMenuAlreadyPressed;
-         Vector2 inputMovement;
+        Vector2 inputMovement;
 
         //Extra Passes
         bool disableFOV;
@@ -105,11 +107,20 @@ namespace StarterAssets
             fovUp.action?.Enable();
             fovDown.action?.Enable();
             flyMenu.action?.Enable();
+            switchMenus.action?.Enable();
+            switchMenus.action.started += SwitchUIs;
+        }
+
+        void SwitchUIs(InputAction.CallbackContext context)
+        {
+            editorUI.gameObject.SetActive(!editorUI.gameObject.activeSelf);
+            hammerUI.gameObject.SetActive(!hammerUI.gameObject.activeSelf);
         }
 
         void Update()
         {
             if (_controller == null) { return; }
+
 
             //Menu
             if (!inputFlyMenu)
@@ -389,7 +400,7 @@ namespace StarterAssets
                 inputEditorMenuAlreadyPressed = true;
                 if (inputEditorMenu)
                 {
-                    inputEditorMenu = !playerUI.CheckIfCanExitMenu();
+                    inputEditorMenu = !editorUI.CheckIfCanExitMenu();
                 }
                 else
                 {
@@ -420,7 +431,7 @@ namespace StarterAssets
                 inputFlyMenuAlreadyPressed = true;
                 if (inputFlyMenu)
                 {
-                    inputFlyMenu = !playerUI.CheckIfCanExitMenu();
+                    inputFlyMenu = !editorUI.CheckIfCanExitMenu();
                 }
                 else
                 {
