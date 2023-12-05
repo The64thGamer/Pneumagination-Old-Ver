@@ -8,11 +8,15 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI;
+using Random = UnityEngine.Random;
 
 public class Hammer_UI : MonoBehaviour
 {
     [SerializeField] FirstPersonController fpc;
     [SerializeField] UIDocument document;
+
+    Data_Manager dataManager;
 
     MeshFilter currentMesh;
     MeshCollider currentCollider;
@@ -31,6 +35,7 @@ public class Hammer_UI : MonoBehaviour
 
     private void Start()
     {
+        dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
         previousDrawnPixels = new List<Vector2>();
         texture = new Texture2D(Screen.width, Screen.height);
         //Clear texture
@@ -64,6 +69,10 @@ public class Hammer_UI : MonoBehaviour
                 }
                 ApplyRenderState(isSelected);
             }
+        }
+        if (Input.GetMouseButtonDown(2))
+        {
+            CreateNewBrush();
         }
         if (!isSelected)
         {
@@ -120,8 +129,8 @@ public class Hammer_UI : MonoBehaviour
                 }
 
                 //Double check Size
-                Vector3 minSize = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
-                Vector3 maxSize = new Vector3(float.MinValue,float.MinValue,float.MinValue);
+                Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+                Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
                 for (int i = 0; i < vertices.Length; i++)
                 {
                     if (vertices[i].x > maxSize.x) { maxSize.x = vertices[i].x; }
@@ -132,7 +141,7 @@ public class Hammer_UI : MonoBehaviour
                     if (vertices[i].y < minSize.y) { minSize.y = vertices[i].y; }
                     if (vertices[i].z < minSize.z) { minSize.z = vertices[i].z; }
                 }
-                if(!Mathf.Approximately(0,Math.Abs(minSize.x - maxSize.x)) && !Mathf.Approximately(0, Math.Abs(minSize.y - maxSize.y)) && !Mathf.Approximately(0, Math.Abs(minSize.z - maxSize.z)))
+                if (!Mathf.Approximately(0, Math.Abs(minSize.x - maxSize.x)) && !Mathf.Approximately(0, Math.Abs(minSize.y - maxSize.y)) && !Mathf.Approximately(0, Math.Abs(minSize.z - maxSize.z)))
                 {
                     //Apply
                     currentMesh.mesh.vertices = vertices;
@@ -385,4 +394,15 @@ public class Hammer_UI : MonoBehaviour
         return origin + line_direction * project_length;
     }
 
+    void CreateNewBrush()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+
+        if (Physics.Raycast(ray, out hit, maxPickingDistance))
+        {
+            Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
+            dataManager.GenerateNewBrush(BrushType.block, objectPos);
+        }
+    }
 }
