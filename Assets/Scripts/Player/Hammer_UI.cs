@@ -8,7 +8,6 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
 using Random = UnityEngine.Random;
 
 public class Hammer_UI : MonoBehaviour

@@ -4,7 +4,6 @@ using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Data_Manager : MonoBehaviour
 {
