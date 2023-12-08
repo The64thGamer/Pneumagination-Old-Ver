@@ -310,6 +310,11 @@ public class Hammer_UI : MonoBehaviour
             texture.SetPixel((int)previousDrawnPixels[i].x, (int)previousDrawnPixels[i].y, Color.clear);
         }
         previousDrawnPixels.Clear();
+        if(currentMesh == null)
+        {
+            texture.Apply();
+            return;
+        }
 
         if (currentVertexes.Count == 1)
         {
