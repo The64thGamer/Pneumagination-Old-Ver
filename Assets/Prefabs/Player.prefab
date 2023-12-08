@@ -989,6 +989,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fpc: {fileID: 5555639428295138727}
   document: {fileID: 6634138815085280750}
+  pointerMask:
+    serializedVersion: 2
+    m_Bits: 1025
 --- !u!114 &6634138815085280750
 MonoBehaviour:
   m_ObjectHideFlags: 0

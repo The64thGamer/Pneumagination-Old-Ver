@@ -15,6 +15,7 @@ public class Hammer_UI : MonoBehaviour
 {
     [SerializeField] FirstPersonController fpc;
     [SerializeField] UIDocument document;
+    [SerializeField] LayerMask pointerMask;
 
     Data_Manager dataManager;
 
@@ -166,7 +167,7 @@ public class Hammer_UI : MonoBehaviour
         RaycastHit hit;
         Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
-        if (Physics.Raycast(ray, out hit, maxPickingDistance))
+        if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
         {
             MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter>();
 
@@ -408,7 +409,7 @@ public class Hammer_UI : MonoBehaviour
         RaycastHit hit;
         Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
-        if (Physics.Raycast(ray, out hit, maxPickingDistance))
+        if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
         {
             Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
             dataManager.GenerateNewBrush(BrushType.block, objectPos);
