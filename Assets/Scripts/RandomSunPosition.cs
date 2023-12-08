@@ -22,15 +22,19 @@ public class RandomSunPosition : MonoBehaviour
     {
         timeOfDay = (timeOfDay + Time.deltaTime * timeMultiplier) % 86400;
         float time = ((timeOfDay / 86400) * 360f) - 90;
-
-        if(time % 360 > 186 && time % 360 < 354 && !nightMode)
+        float altTime = time;
+        while(altTime < 0)
+        {
+            altTime = 360 + altTime;
+        }
+        altTime = altTime % 360;
+        if (altTime > 186 && altTime < 354 && !nightMode)
         {
             nightMode = true;
             sun.shadows = LightShadows.None;
             moon.shadows = LightShadows.Soft;
-
         }
-        if (time % 360 <= 186 || time % 360 >= 354 && nightMode)
+        if (altTime <= 186 || altTime >= 354 && nightMode)
         {
             nightMode = false;
             moon.shadows = LightShadows.None;
