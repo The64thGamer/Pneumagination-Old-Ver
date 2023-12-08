@@ -80,7 +80,6 @@ public class Hammer_UI : MonoBehaviour
                 {
                     CreateNewBrush();
                 }
-                DisableSelection();
                 break;
             case 1:
                 ApplyRenderState(isSelected);
@@ -132,7 +131,6 @@ public class Hammer_UI : MonoBehaviour
                 }
                 break;
             default:
-                DisableSelection();
                 break;
         }
 
@@ -502,5 +500,6 @@ public class Hammer_UI : MonoBehaviour
         hotBarVisualElements[number].Q<Label>().style.color = paperBackColor;
         hotBarVisualElements[number].Q<Label>().style.unityTextOutlineColor = paperTextColor;
         currentMode = number;
+        DisableSelection();
     }
 }
