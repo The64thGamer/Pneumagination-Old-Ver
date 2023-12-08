@@ -65,6 +65,11 @@ public class Data_Manager : MonoBehaviour
 
     public void SaveAllFiles()
     {
+        //Check nulls
+        if (mapData.animatronics == null) { mapData.animatronics = new List<Combo_Animatronic_SaveFile>(); }
+        if (mapData.brushData == null) { mapData.brushData = new List<CustomBrushData>(); }
+        if (mapData.propData == null) { mapData.propData = new List<CustomPropData>(); }
+
         GameObject g;
         for (int i = 0; i < mapData.animatronics.Count; i++)
         {
