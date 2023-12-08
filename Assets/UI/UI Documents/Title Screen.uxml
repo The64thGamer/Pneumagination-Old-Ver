@@ -9,7 +9,7 @@
                     <ui:Button text="Exit" display-tooltip-when-elided="true" name="Exit" class="titlescreenbuttons" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1;" />
-                <ui:Label tabindex="-1" text="Alpha 0.6, The 64th Gamer 2023" display-tooltip-when-elided="true" name="Label" focusable="false" style="font-size: 40px; -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;); color: rgb(255, 255, 255);" />
+                <ui:Label tabindex="-1" text="Alpha 0.7, The 64th Gamer 2023" display-tooltip-when-elided="true" name="Label" focusable="false" style="font-size: 40px; -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/PTMono-Regular.ttf?fileID=12800000&amp;guid=cc1735a3c585aba4480bc03c8d93b029&amp;type=3#PTMono-Regular&apos;); color: rgb(255, 255, 255);" />
             </ui:VisualElement>
             <ui:VisualElement name="MenuSettings" style="flex-grow: 1; margin-top: 60px; margin-right: 60px; margin-bottom: 60px; margin-left: 60px; display: none;">
                 <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: flex-start; align-items: stretch;">
