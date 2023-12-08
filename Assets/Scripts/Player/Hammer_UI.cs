@@ -105,7 +105,21 @@ public class Hammer_UI : MonoBehaviour
                 SelectPoint();
                 break;
             case 4:
+                SelectPoint();
                 ApplyRenderState(isSelected);
+
+                if (currentMesh != null)
+                {
+                    if (currentVertexes.Count < currentMesh.mesh.triangles.Length)
+                    {
+                        currentVertexes = new List<int>();
+                        for (int i = 0; i < currentMesh.mesh.triangles.Length; i++)
+                        {
+                            currentVertexes.Add(currentMesh.mesh.triangles[i]);
+                        }
+                        ApplyRenderState(isSelected);
+                    }
+                }
                 if (Input.GetMouseButtonDown(0))
                 {
                     ApplyRenderState(!isSelected);
@@ -116,7 +130,6 @@ public class Hammer_UI : MonoBehaviour
                     Destroy(currentMesh.gameObject);
                     DisableSelection();
                 }
-                SelectPoint();
                 break;
             default:
                 DisableSelection();
