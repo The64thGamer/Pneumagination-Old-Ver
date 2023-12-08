@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using static UnityEditor.Rendering.FilterWindow;
+using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(AudioSource))]
 public class MainMenu : MonoBehaviour
 {
     [Header("Menu")]
@@ -13,8 +17,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] VisualTreeAsset worldButton;
     [SerializeField] SaveFileData saveFileData;
 
-    bool generateRandomName = true;
+    AudioSource au;
 
+    bool generateRandomName = true;
     bool loadingScene;
 
     //Const
@@ -28,11 +33,16 @@ public class MainMenu : MonoBehaviour
 
     void OnEnable()
     {
+        au = this.GetComponent<AudioSource>();
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         SwitchMenu(0);
 
+        RegisterButtonHovers(document.rootVisualElement);
+
+
+
         //Main Menu
-        document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1); ;
+        document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1);
         document.rootVisualElement.Q<Button>("Settings").clicked += () => SwitchMenu(2);
         document.rootVisualElement.Q<Button>("Exit").clicked += () => Application.Quit();
 
@@ -143,7 +153,7 @@ public class MainMenu : MonoBehaviour
         saveFileData.lastName = document.rootVisualElement.Q<TextField>("LastName").value;
         saveFileData.timeElapsed = 0;
         saveFileData.timeFileStarted = new UDateTime();
-        saveFileData.timeFileStarted.dateTime = Name_Generator.GenerateRandomDateRange(new DateTime(1979,1,1), new DateTime(1979, 12, 31));
+        saveFileData.timeFileStarted.dateTime = Name_Generator.GenerateRandomDateRange(new DateTime(1979, 1, 1), new DateTime(1979, 12, 31));
         int num;
         if (int.TryParse(document.rootVisualElement.Q<TextField>("Seed").value, out num))
         {
@@ -169,7 +179,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    
+
     void LoadMap()
     {
         loadingScene = true;
@@ -233,18 +243,18 @@ public class MainMenu : MonoBehaviour
         while (true)
         {
             SaveFileData data = FindData(index);
-            if(data == null)
+            if (data == null)
             {
                 break;
             }
             TemplateContainer myUI = worldButton.Instantiate();
             int e = index;
-            myUI.Q<Label>("WorldName").text = data.firstName + " " + data.lastName +"'s World";
+            myUI.Q<Label>("WorldName").text = data.firstName + " " + data.lastName + "'s World";
             myUI.Q<Label>("WorldInfo").text = "Seed: " + data.worldSeed;
             myUI.Q<Button>("Button").clicked += () => StartLoadedSave(e);
             myUI.Q<Button>("DuplicateButton").clicked += () => DuplicateSave(e);
             myUI.Q<Button>("DeleteButton").clicked += () => DeleteSave(e);
-
+            RegisterButtonHovers(myUI);
             visList.Add(myUI);
             index++;
         }
@@ -273,19 +283,19 @@ public class MainMenu : MonoBehaviour
 
     void DeleteSave(int slot)
     {
-        string saveFilePath = Application.persistentDataPath + "/Saves/Save";;
+        string saveFilePath = Application.persistentDataPath + "/Saves/Save"; ;
 
-        if(!Directory.Exists(saveFilePath + slot.ToString()))
+        if (!Directory.Exists(saveFilePath + slot.ToString()))
         {
             Debug.Log("File Directory Doesn't exist");
             return;
         }
-        Directory.Delete(saveFilePath + slot.ToString(),true);
+        Directory.Delete(saveFilePath + slot.ToString(), true);
 
         int slotLength = PlayerPrefs.GetInt("SaveFilesLoaded");
         if (slot != slotLength - 1)
         {
-            for (int i = slot+1; i < slotLength; i++)
+            for (int i = slot + 1; i < slotLength; i++)
             {
                 Directory.Move(saveFilePath + i.ToString(), saveFilePath + (i - 1).ToString());
             }
@@ -329,5 +339,29 @@ public class MainMenu : MonoBehaviour
             saveFileData = saveFileData.DeserializeFromXML(File.ReadAllText(saveFilePath));
         }
         return saveFileData;
+    }
+
+    void RegisterButtonHovers(VisualElement element)
+    {
+        List<Button> buttons = element.Query<Button>().ToList();
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            Button b = buttons[i];
+            b.RegisterCallback<MouseEnterEvent>(evt =>
+            {
+                au.PlayOneShot(Resources.Load<AudioClip>("Sounds/Menu/Pencil Stroke " + Random.Range(0, 21)), 0.5f);
+                b.style.borderTopWidth = 8;
+                b.style.borderRightWidth = 8;
+                b.style.borderLeftWidth = 8;
+                b.style.borderBottomWidth = 8;
+            });
+            b.RegisterCallback<MouseLeaveEvent>(evt =>
+            {
+                b.style.borderTopWidth = 4;
+                b.style.borderRightWidth = 4;
+                b.style.borderLeftWidth = 4;
+                b.style.borderBottomWidth = 4;
+            });
+        }
     }
 }
