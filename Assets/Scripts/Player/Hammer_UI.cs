@@ -18,21 +18,25 @@ public class Hammer_UI : MonoBehaviour
     [SerializeField] LayerMask pointerMask;
 
     Data_Manager dataManager;
-
+    VisualElement[] hotBarVisualElements = new VisualElement[10];
     MeshFilter currentMesh;
     MeshCollider currentCollider;
     Texture2D texture;
     List<Vector2> previousDrawnPixels;
     List<int> currentVertexes = new List<int>();
     bool isSelected;
+    Color lineColor;
+    int currentMode;
+
+    //Consts
     const float minVertexDistance = 0.1f;
     const float minLineDistance = 0.1f;
-    const float edgeUIWidth = 0.025f;
-    const float vertexUIWidth = 0.1f;
     const float maxPickingDistance = 10.0f;
     Color highlightColor = new Color(1, 0.86666666666f, 0);
     Color selectColor = new Color(0, 1, 0.29803921568f);
-    Color lineColor;
+    Color paperTextColor = new Color(0.11764705882352941f, 0.12941176470588237f, 0.11764705882352941f);
+    Color paperBackColor = new Color(0.9490196078431372f, 0.9372549019607843f, 0.8941176470588236f);
+
 
     private void Start()
     {
@@ -49,44 +53,74 @@ public class Hammer_UI : MonoBehaviour
         }
         document.rootVisualElement.Q<VisualElement>("Vis").style.backgroundImage = texture;
         ApplyRenderState(false);
+        for (int i = 0; i < hotBarVisualElements.Length; i++)
+        {
+            hotBarVisualElements[i] = document.rootVisualElement.Q<VisualElement>("Hotbar" + i);
+        }
+        PressHotbarKey(0, true);
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            ApplyRenderState(!isSelected);
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            ApplyRenderState(!isSelected);
+        PressHotbarKey(0, Input.GetKey(KeyCode.Alpha1));
+        PressHotbarKey(1, Input.GetKey(KeyCode.Alpha2));
+        PressHotbarKey(2, Input.GetKey(KeyCode.Alpha3));
+        PressHotbarKey(3, Input.GetKey(KeyCode.Alpha4));
+        PressHotbarKey(4, Input.GetKey(KeyCode.Alpha5));
+        PressHotbarKey(5, Input.GetKey(KeyCode.Alpha6));
+        PressHotbarKey(6, Input.GetKey(KeyCode.Alpha7));
+        PressHotbarKey(7, Input.GetKey(KeyCode.Alpha8));
+        PressHotbarKey(8, Input.GetKey(KeyCode.Alpha9));
+        PressHotbarKey(9, Input.GetKey(KeyCode.Alpha0));
 
-            if (isSelected && currentMesh != null)
-            {
-                currentVertexes = new List<int>();
-                for (int i = 0; i < currentMesh.mesh.triangles.Length; i++)
+        switch (currentMode)
+        {
+            case 0:
+                if (Input.GetMouseButtonDown(0))
                 {
-                    currentVertexes.Add(currentMesh.mesh.triangles[i]);
+                    CreateNewBrush();
                 }
+                DisableSelection();
+                break;
+            case 1:
                 ApplyRenderState(isSelected);
-            }
-        }
-        if (Input.GetMouseButtonDown(2))
-        {
-            CreateNewBrush();
-        }
-        if (Input.GetKeyDown(KeyCode.X) && isSelected && currentVertexes.Count > 0)
-        {
-            dataManager.RemoveBrushSaveData(currentMesh.name);
-            Destroy(currentMesh.gameObject);
-            currentMesh = null;
-            currentCollider = null;
-            currentVertexes = new List<int>();
-            isSelected = false;
-        }
-        if (!isSelected)
-        {
-            SelectPoint();
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ApplyRenderState(!isSelected);
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    ApplyRenderState(!isSelected);
+
+                    if (isSelected && currentMesh != null)
+                    {
+                        currentVertexes = new List<int>();
+                        for (int i = 0; i < currentMesh.mesh.triangles.Length; i++)
+                        {
+                            currentVertexes.Add(currentMesh.mesh.triangles[i]);
+                        }
+                        ApplyRenderState(isSelected);
+                    }
+                }
+                SelectPoint();
+                break;
+            case 4:
+                ApplyRenderState(isSelected);
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ApplyRenderState(!isSelected);
+                }
+                if (isSelected && currentVertexes.Count > 0)
+                {
+                    dataManager.RemoveBrushSaveData(currentMesh.name);
+                    Destroy(currentMesh.gameObject);
+                    DisableSelection();
+                }
+                SelectPoint();
+                break;
+            default:
+                DisableSelection();
+                break;
         }
 
 
@@ -164,6 +198,11 @@ public class Hammer_UI : MonoBehaviour
     }
     void SelectPoint()
     {
+        if(isSelected)
+        {
+            return;
+        }
+
         RaycastHit hit;
         Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
@@ -199,7 +238,6 @@ public class Hammer_UI : MonoBehaviour
                     int closestEdgec = -1;
                     pointCloseness = float.MaxValue;
 
-
                     //Edge 0
                     float distance = Vector3.Distance(NearestPointOnFiniteLine(hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3]]), hit.collider.transform.TransformPoint(meshFilter.mesh.vertices[meshFilter.mesh.triangles[hit.triangleIndex * 3 + 1]]), hit.point), hit.point);
                     if (distance < pointCloseness)
@@ -227,7 +265,6 @@ public class Hammer_UI : MonoBehaviour
                         closestEdgeb = hit.triangleIndex * 3;
                         closestEdgec = hit.triangleIndex * 3 + 1;
                     }
-
 
                     if (pointCloseness <= minLineDistance)
                     {
@@ -272,9 +309,7 @@ public class Hammer_UI : MonoBehaviour
         }
         else
         {
-            currentMesh = null;
-            currentCollider = null;
-            currentVertexes = new List<int>();
+            DisableSelection();
         }
     }
 
@@ -285,7 +320,14 @@ public class Hammer_UI : MonoBehaviour
 
     void ApplyRenderState(bool on)
     {
-        lineColor = highlightColor;
+        if(currentMode == 4)
+        {
+            lineColor = Color.red;
+        }
+        else
+        {
+            lineColor = highlightColor;
+        }
 
         if (currentMesh == null)
         {
@@ -419,5 +461,33 @@ public class Hammer_UI : MonoBehaviour
             Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
             dataManager.GenerateNewBrush(BrushType.block, objectPos);
         }
+    }
+
+    void DisableSelection()
+    {
+        currentMesh = null;
+        currentCollider = null;
+        currentVertexes = new List<int>();
+        isSelected = false;
+    }
+
+    void PressHotbarKey(int number, bool down)
+    {
+        if (!down)
+        {
+            return;
+        }
+        for (int i = 0; i < hotBarVisualElements.Length; i++)
+        {
+            hotBarVisualElements[i].Q<VisualElement>("Icon").style.backgroundColor = paperBackColor;
+            hotBarVisualElements[i].Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = paperTextColor;
+            hotBarVisualElements[i].Q<Label>().style.color = paperTextColor;
+            hotBarVisualElements[i].Q<Label>().style.unityTextOutlineColor = paperBackColor;
+        }
+        hotBarVisualElements[number].Q<VisualElement>("Icon").style.backgroundColor = paperTextColor;
+        hotBarVisualElements[number].Q<VisualElement>("Icon").style.unityBackgroundImageTintColor = paperBackColor;
+        hotBarVisualElements[number].Q<Label>().style.color = paperBackColor;
+        hotBarVisualElements[number].Q<Label>().style.unityTextOutlineColor = paperTextColor;
+        currentMode = number;
     }
 }

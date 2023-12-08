@@ -13,7 +13,6 @@ public class Player_UI : MonoBehaviour
     [Header("Menu")]
     [SerializeField] UIDocument document;
     [SerializeField] DEAD_Interface deadInterface;
-    [SerializeField] Data_Manager dataManager;
     [SerializeField] FirstPersonController controller;
 
     [Header("Animation Curves")]
@@ -94,8 +93,6 @@ public class Player_UI : MonoBehaviour
 
     private void Start()
     {
-        dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
-
         for (int i = 0; i < hotBarVisualElements.Length; i++)
         {
             hotBarVisualElements[i] = document.rootVisualElement.Q<VisualElement>("Hotbar" + i);
