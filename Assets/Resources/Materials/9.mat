@@ -36,7 +36,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wood Painted Light
+  m_Name: 9
   m_Shader: {fileID: -6465566751694194690, guid: 8d079c324c697114c82dbedbece05483,
     type: 3}
   m_Parent: {fileID: 0}

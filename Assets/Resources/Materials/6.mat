@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wood Painted Dark
+  m_Name: 6
   m_Shader: {fileID: -6465566751694194690, guid: 8d079c324c697114c82dbedbece05483,
     type: 3}
   m_Parent: {fileID: 0}
@@ -47,7 +47,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Base:
-        m_Texture: {fileID: 2800000, guid: ebc94b385b986464db373e8ac5fd94b9, type: 3}
+        m_Texture: {fileID: 2800000, guid: fbee971216d70d54b9068aba4f177136, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -87,11 +87,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MixMap:
-        m_Texture: {fileID: 2800000, guid: ff0ab422c1864534d92b1197f5409d32, type: 3}
+        m_Texture: {fileID: 2800000, guid: 773e6dd9a43899b40a37b88a809d8667, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
-        m_Texture: {fileID: 2800000, guid: b9369e76dac6b5a4fa06052f355ceca2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2ffecdac081f79149901ea5e87e2bce1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -99,7 +99,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PaletteMap:
-        m_Texture: {fileID: 2800000, guid: 0f7ffd968c8b5524b9a45acef69c2d7d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7279349c79d9eb14e8b05fb8617f1cff, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -198,10 +198,10 @@ Material:
     - _OcclusionStrength: 1
     - _OpaqueCullMode: 2
     - _PALETTE: 0
-    - _Palette1: 6
-    - _Palette2: 1
-    - _Palette3: 1
-    - _Palette4: 1
+    - _Palette1: 9
+    - _Palette2: 9
+    - _Palette3: 9
+    - _Palette4: 2
     - _Parallax: 0.005
     - _PerPixelSorting: 0
     - _QueueControl: 0
@@ -228,7 +228,7 @@ Material:
     - _StencilWriteMaskDistortionVec: 4
     - _StencilWriteMaskGBuffer: 15
     - _StencilWriteMaskMV: 41
-    - _Strength: 1
+    - _Strength: 0.53
     - _SupportDecals: 1
     - _Surface: 0
     - _SurfaceType: 0
@@ -251,13 +251,13 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &4112822261378230542
+--- !u!114 &5393106936113927380
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

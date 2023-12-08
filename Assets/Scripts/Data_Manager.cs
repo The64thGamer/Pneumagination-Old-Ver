@@ -96,6 +96,21 @@ public class Data_Manager : MonoBehaviour
                     mapData.brushData[i].vertices = r.mesh.vertices;
                     mapData.brushData[i].position = g.transform.position;
                     mapData.brushData[i].rotation = g.transform.rotation;
+
+                    MeshRenderer mr = g.GetComponent<MeshRenderer>();
+                    Material[] mats = mr.materials;
+                    mapData.brushData[i].materials = new uint[mats.Length];
+                    for (int e = 0; e < mats.Length; e++)
+                    {
+                        uint matname = 0;
+                        string originalName = mats[e].name;
+                        if (originalName.Contains(" (Instance)"))
+                        {
+                            originalName = originalName.Replace(" (Instance)", "").Trim();
+                        }
+                        uint.TryParse(originalName, out matname);
+                        mapData.brushData[i].materials[e] = matname;
+                    }
                 }
             }
         }
@@ -121,12 +136,28 @@ public class Data_Manager : MonoBehaviour
                 brush.transform.position = mapData.brushData[i].position;
                 brush.transform.rotation = mapData.brushData[i].rotation;
                 brush.name = mapData.brushData[i].objectHash.ToString();
+
                 MeshFilter filter = brush.GetComponent<MeshFilter>();
                 filter.mesh.vertices = mapData.brushData[i].vertices;
                 filter.mesh.RecalculateBounds();
+
                 MeshCollider collider = brush.GetComponent<MeshCollider>();
                 collider.sharedMesh = null;
                 collider.sharedMesh = filter.mesh;
+
+                if (mapData.brushData[i].materials != null)
+                {
+                    MeshRenderer renderer = brush.GetComponent<MeshRenderer>();
+                    Material[] materials = renderer.materials;
+                    for (int e = 0; e < mapData.brushData[i].materials.Length; e++)
+                    {
+                        if (mapData.brushData[i].materials[e] != 0)
+                        {
+                            materials[e] = Resources.Load<Material>("Materials/" + mapData.brushData[i].materials[e]);
+                        }
+                    }
+                    renderer.materials = materials;
+                }
             }
         }
 
@@ -224,7 +255,7 @@ public class Data_Manager : MonoBehaviour
             colorB = Color.white,
             colorC = Color.white,
             colorD = Color.white,
-            material = 0,
+            materials = new uint[0],
             vertices = brush.GetComponent<MeshFilter>().mesh.vertices,
             position = brush.transform.position,
             rotation = brush.transform.rotation,
@@ -370,7 +401,7 @@ public class CustomBrushData
     public Color colorB;
     public Color colorC;
     public Color colorD;
-    public uint material;
+    public uint[] materials;
     public Vector3[] vertices;
     public Vector3 position;
     public Quaternion rotation;

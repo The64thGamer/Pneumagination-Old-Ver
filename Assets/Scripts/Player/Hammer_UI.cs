@@ -27,8 +27,10 @@ public class Hammer_UI : MonoBehaviour
     bool isSelected;
     Color lineColor;
     int currentMode;
+    int currentMaterial;
 
     //Consts
+    const int maxMaterialSlots = 8;
     const float minVertexDistance = 0.1f;
     const float minLineDistance = 0.1f;
     const float maxPickingDistance = 10.0f;
@@ -102,6 +104,16 @@ public class Hammer_UI : MonoBehaviour
                     }
                 }
                 SelectPoint();
+                break;
+            case 2:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ApplyMaterialToBrushFace();
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    currentMaterial = (currentMaterial + 1) % maxMaterialSlots;
+                }
                 break;
             case 4:
                 SelectPoint();
@@ -209,7 +221,7 @@ public class Hammer_UI : MonoBehaviour
     }
     void SelectPoint()
     {
-        if(isSelected)
+        if (isSelected)
         {
             return;
         }
@@ -331,7 +343,7 @@ public class Hammer_UI : MonoBehaviour
 
     void ApplyRenderState(bool on)
     {
-        if(currentMode == 4)
+        if (currentMode == 4)
         {
             lineColor = Color.red;
         }
@@ -363,7 +375,7 @@ public class Hammer_UI : MonoBehaviour
             texture.SetPixel((int)previousDrawnPixels[i].x, (int)previousDrawnPixels[i].y, Color.clear);
         }
         previousDrawnPixels.Clear();
-        if(currentMesh == null)
+        if (currentMesh == null)
         {
             texture.Apply();
             return;
@@ -501,5 +513,41 @@ public class Hammer_UI : MonoBehaviour
         hotBarVisualElements[number].Q<Label>().style.unityTextOutlineColor = paperTextColor;
         currentMode = number;
         DisableSelection();
+    }
+
+    int GetSubMeshIndex(int triangleIndex)
+    {
+        int triangleCounter = 0;
+        for (int subMeshIndex = 0; subMeshIndex < currentMesh.mesh.subMeshCount; subMeshIndex++)
+        {
+            var indexCount = currentMesh.mesh.GetSubMesh(subMeshIndex).indexCount;
+            triangleCounter += indexCount / 3;
+            if (triangleIndex < triangleCounter)
+            {
+                return subMeshIndex;
+            }
+        }
+        Debug.LogError($"Failed to find triangle with index {triangleIndex} in mesh '{currentMesh.mesh.name}'. Total triangle count: {triangleCounter}", currentMesh.mesh);
+        return 0;
+    }
+
+    void ApplyMaterialToBrushFace()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+
+        if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
+        {
+            MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter>();
+
+            if (meshFilter != null && hit.transform.tag == "Buildable Block")
+            {
+                currentMesh = meshFilter;
+                MeshRenderer rend = currentMesh.GetComponent<MeshRenderer>();
+                Material[] materials = rend.materials;
+                materials[GetSubMeshIndex(hit.triangleIndex)] = Resources.Load<Material>("Materials/" + currentMaterial);
+                rend.materials = materials;
+            }
+        }
     }
 }
