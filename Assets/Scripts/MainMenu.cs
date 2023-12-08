@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using static UnityEditor.Rendering.FilterWindow;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(AudioSource))]
@@ -44,7 +45,9 @@ public class MainMenu : MonoBehaviour
         //Main Menu
         document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1);
         document.rootVisualElement.Q<Button>("Settings").clicked += () => SwitchMenu(2);
+        document.rootVisualElement.Q<Button>("Manual").clicked += () => Application.OpenURL(Application.dataPath + "/Pneumagination_Data/StreamingAssets");
         document.rootVisualElement.Q<Button>("Exit").clicked += () => Application.Quit();
+
 
         //Save Files Menu
         document.rootVisualElement.Q<Button>("CreateWorld").clicked += () => SwitchMenu(3);
@@ -362,6 +365,7 @@ public class MainMenu : MonoBehaviour
                 b.style.borderLeftWidth = 4;
                 b.style.borderBottomWidth = 4;
             });
+            b.clicked += () => au.PlayOneShot(Resources.Load<AudioClip>("Sounds/Menu/Pen Flick"), 0.75f);
         }
     }
 }

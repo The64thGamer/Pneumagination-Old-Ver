@@ -6,6 +6,7 @@
                 <ui:VisualElement name="VisualElement" style="flex-grow: 0; justify-content: flex-start; align-items: auto;">
                     <ui:Button text="Load World" display-tooltip-when-elided="true" name="LoadWorlds" class="titlescreenbuttons" />
                     <ui:Button text="Settings" display-tooltip-when-elided="true" name="Settings" class="titlescreenbuttons" style="display: flex;" />
+                    <ui:Button text="Manual" display-tooltip-when-elided="true" name="Manual" class="titlescreenbuttons" style="display: flex;" />
                     <ui:Button text="Exit" display-tooltip-when-elided="true" name="Exit" class="titlescreenbuttons" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1;" />
@@ -66,7 +67,7 @@
                             </ui:TextField>
                             <ui:Label tabindex="-1" text="World" display-tooltip-when-elided="true" />
                             <ui:TextField picking-mode="Ignore" label="Seed        " name="Seed" focusable="true" select-all-on-focus="false" class="titlescreenbuttons" style="-unity-text-align: middle-left;">
-                                <ui:Button display-tooltip-when-elided="true" name="SeedRandom" style="flex-grow: 1; flex-shrink: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(206, 94, 86); background-image: url(&apos;project://database/Assets/UI/Icons/Dice.png?fileID=2800000&amp;guid=03e5b5501ab8a4a4c89f30b7e6cbf1e1&amp;type=3#Dice&apos;); -unity-background-scale-mode: scale-to-fit; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 4px; flex-direction: column; align-items: auto; min-height: 62px; max-width: 62px; -unity-slice-left: 10; -unity-slice-top: 7; -unity-slice-right: 5; -unity-slice-bottom: 7; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); translate: 0 20px; justify-content: flex-start;" />
+                                <ui:Button display-tooltip-when-elided="true" name="SeedRandom" style="flex-grow: 1; flex-shrink: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(206, 94, 86); background-image: url(&apos;project://database/Assets/UI/Icons/Dice.png?fileID=2800000&amp;guid=03e5b5501ab8a4a4c89f30b7e6cbf1e1&amp;type=3#Dice&apos;); -unity-background-scale-mode: scale-to-fit; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 4px; flex-direction: column; align-items: auto; min-height: 62px; max-width: 62px; -unity-slice-left: 10; -unity-slice-top: 7; -unity-slice-right: 5; -unity-slice-bottom: 7; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); translate: 0 20px; justify-content: flex-start;" />
                             </ui:TextField>
                             <ui:Label tabindex="-1" text="First Map" display-tooltip-when-elided="true" />
                             <ui:VisualElement style="flex-grow: 1; margin-top: 10px; margin-bottom: 10px;">
