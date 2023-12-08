@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2142441607898849174}
   - component: {fileID: 8330134844258451920}
   - component: {fileID: 2219712907563678121}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Editor UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8384591124310748032}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 7346867020699984951}
   - component: {fileID: 3443166164764453272}
   - component: {fileID: 3285997499659580579}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 5555639428295138727}
   - component: {fileID: 2662667457579806043}
   - component: {fileID: 4603869923550929080}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -919,7 +919,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2556485762120783340}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Camera Offset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -953,7 +953,7 @@ GameObject:
   - component: {fileID: 8945279535777526672}
   - component: {fileID: 7675325787711145775}
   - component: {fileID: 6634138815085280750}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Hammer UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,7 +1017,7 @@ GameObject:
   - component: {fileID: 3829733014449321891}
   - component: {fileID: 8550631515773891685}
   - component: {fileID: 6733296528690113035}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1231,7 +1231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7874998015469329143}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1264,7 +1264,7 @@ GameObject:
   - component: {fileID: 7431471167877657130}
   - component: {fileID: 6754048969876082398}
   - component: {fileID: 5715502732616384457}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Map UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
