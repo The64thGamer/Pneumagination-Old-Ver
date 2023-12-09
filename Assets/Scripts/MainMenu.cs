@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(AudioSource))]
@@ -41,7 +43,7 @@ public class MainMenu : MonoBehaviour
         //Main Menu
         document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1);
         document.rootVisualElement.Q<Button>("Settings").clicked += () => SwitchMenu(2);
-        document.rootVisualElement.Q<Button>("Manual").clicked += () => Application.OpenURL(Application.dataPath + "/Pneumagination_Data/StreamingAssets");
+        document.rootVisualElement.Q<Button>("Manual").clicked += () => Process.Start("explorer.exe", (Application.dataPath + "/StreamingAssets/").Replace(@"/", @"\"));
         document.rootVisualElement.Q<Button>("Exit").clicked += () => Application.Quit();
 
 
