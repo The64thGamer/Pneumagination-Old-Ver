@@ -43,7 +43,6 @@ public class MainMenu : MonoBehaviour
         //Main Menu
         document.rootVisualElement.Q<Button>("LoadWorlds").clicked += () => SwitchMenu(1);
         document.rootVisualElement.Q<Button>("Settings").clicked += () => SwitchMenu(2);
-        document.rootVisualElement.Q<Button>("Manual").clicked += () => Process.Start("explorer.exe", (Application.dataPath + "/StreamingAssets/").Replace(@"/", @"\"));
         document.rootVisualElement.Q<Button>("Exit").clicked += () => Application.Quit();
 
 

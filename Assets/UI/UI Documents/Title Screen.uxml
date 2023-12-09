@@ -6,7 +6,6 @@
                 <ui:VisualElement name="VisualElement" style="flex-grow: 0; justify-content: flex-start; align-items: auto;">
                     <ui:Button text="Load World" display-tooltip-when-elided="true" name="LoadWorlds" class="titlescreenbuttons" />
                     <ui:Button text="Settings" display-tooltip-when-elided="true" name="Settings" class="titlescreenbuttons" style="display: flex;" />
-                    <ui:Button text="Manual" display-tooltip-when-elided="true" name="Manual" class="titlescreenbuttons" style="display: flex;" />
                     <ui:Button text="Exit" display-tooltip-when-elided="true" name="Exit" class="titlescreenbuttons" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1;" />
