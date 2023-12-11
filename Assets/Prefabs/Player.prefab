@@ -987,6 +987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpc: {fileID: 5555639428295138727}
+  playerInteractions: {fileID: 4603869923550929080}
   document: {fileID: 6634138815085280750}
   pointerMask:
     serializedVersion: 2

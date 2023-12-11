@@ -16,7 +16,6 @@ public class Hammer_UI : MonoBehaviour
     [SerializeField] PlayerInteractions playerInteractions;
     [SerializeField] UIDocument document;
     [SerializeField] LayerMask pointerMask;
-    [SerializeField] LayerMask propMask;
     [SerializeField] Color[] paintColors;
 
 
@@ -164,6 +163,19 @@ public class Hammer_UI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     ApplyRenderState(!isSelected);
+                    if (!isSelected)
+                    {
+                        RaycastHit hit;
+                        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+
+                        if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
+                        {
+                            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickup"))
+                            {
+                                Destroy(hit.collider.gameObject);
+                            }
+                        }
+                    }
                 }
                 if (isSelected && currentVertexes.Count > 0)
                 {
@@ -588,7 +600,7 @@ public class Hammer_UI : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickup"))
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickup") || hit.collider.gameObject.tag == "Buildable Block")
             {
                 string chosenPalette = "";
                 switch (currentPropLayerSelected)
