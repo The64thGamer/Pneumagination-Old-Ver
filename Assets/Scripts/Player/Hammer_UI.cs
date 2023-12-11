@@ -22,12 +22,17 @@ public class Hammer_UI : MonoBehaviour
     //Data
     Data_Manager dataManager;
     VisualElement[] hotBarVisualElements = new VisualElement[10];
+    Texture2D texture;
+    RaycastHit hit;
+    Ray ray;
+
+    //Current Stuff
     MeshFilter currentMesh;
     MeshCollider currentCollider;
-    Texture2D texture;
     List<Vector2> previousDrawnPixels;
     List<int> currentVertexes = new List<int>();
     Color lineColor;
+    GameObject currentCreatedItem;
 
     //States
     bool isSelected;
@@ -84,13 +89,32 @@ public class Hammer_UI : MonoBehaviour
         PressHotbarKey(8, Input.GetKey(KeyCode.Alpha9));
         PressHotbarKey(9, Input.GetKey(KeyCode.Alpha0));
 
+        if((currentMode != 0 || currentMode != 5) && currentCreatedItem != null)
+        {
+            Destroy(currentCreatedItem.gameObject);
+        }
+
         switch (currentMode)
         {
             case 0:
                 playerInteractions.enabled = false;
+                ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+
+                if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
+                {
+                    Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
+                    if (currentCreatedItem == null)
+                    {
+                        currentCreatedItem = dataManager.GenerateNewBrush(BrushType.block, objectPos);
+                    }
+                    else
+                    {
+                        currentCreatedItem.transform.position = objectPos;
+                    }
+                }
                 if (Input.GetMouseButtonDown(0))
                 {
-                    CreateNewBrush();
+                    currentCreatedItem = null;
                 }
                 break;
             case 1:
@@ -165,8 +189,7 @@ public class Hammer_UI : MonoBehaviour
                     ApplyRenderState(!isSelected);
                     if (!isSelected)
                     {
-                        RaycastHit hit;
-                        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+                        ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
                         if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
                         {
@@ -268,8 +291,7 @@ public class Hammer_UI : MonoBehaviour
             return;
         }
 
-        RaycastHit hit;
-        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+        ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
         if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
         {
@@ -516,18 +538,6 @@ public class Hammer_UI : MonoBehaviour
         return origin + line_direction * project_length;
     }
 
-    void CreateNewBrush()
-    {
-        RaycastHit hit;
-        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
-
-        if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
-        {
-            Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
-            dataManager.GenerateNewBrush(BrushType.block, objectPos);
-        }
-    }
-
     void DisableSelection()
     {
         currentMesh = null;
@@ -575,8 +585,7 @@ public class Hammer_UI : MonoBehaviour
 
     void ApplyMaterialToBrushFace()
     {
-        RaycastHit hit;
-        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+        ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
         if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
         {
@@ -595,8 +604,7 @@ public class Hammer_UI : MonoBehaviour
 
     void PaintProp()
     {
-        RaycastHit hit;
-        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+        ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
 
         if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
         {

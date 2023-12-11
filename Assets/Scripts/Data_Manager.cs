@@ -245,7 +245,7 @@ public class Data_Manager : MonoBehaviour
         return worldFlyingSphereSize;
     }
 
-    public void GenerateNewBrush(BrushType brushType, Vector3 position)
+    public GameObject GenerateNewBrush(BrushType brushType, Vector3 position)
     {
         string hash = Random.Range(int.MinValue, int.MaxValue).ToString();
         GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
@@ -265,6 +265,7 @@ public class Data_Manager : MonoBehaviour
             rotation = brush.transform.rotation,
         };
         mapData.brushData.Add(data);
+        return brush;
     }
 
     public void RemoveBrushSaveData(string hashCode)
