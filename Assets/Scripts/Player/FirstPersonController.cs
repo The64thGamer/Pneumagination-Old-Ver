@@ -14,6 +14,7 @@ namespace StarterAssets
         [SerializeField] Data_Manager dataManager;
         [SerializeField] Player_UI editorUI;
         [SerializeField] Hammer_UI hammerUI;
+        [SerializeField] PlayerInteractions playerInteractions;
         [SerializeField] Camera _mainCamera;
         [SerializeField] Transform camOffet;
 
@@ -74,6 +75,8 @@ namespace StarterAssets
         //Extra Passes
         bool disableFOV;
 
+        int currentmenu;
+
 
         private void Awake()
         {
@@ -114,19 +117,29 @@ namespace StarterAssets
 
         void SwitchUIs(InputAction.CallbackContext context)
         {
-            if(editorUI.enabled)
+            currentmenu = (currentmenu + 1) % 3;
+            switch (currentmenu)
             {
-                editorUI.enabled = false;
-                editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
-                hammerUI.enabled = true;
-                hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
-            }
-            else
-            {
-                editorUI.enabled = true;
-                editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
-                hammerUI.enabled = false;
-                hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                case 0:
+                    editorUI.enabled = false;
+                    editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    hammerUI.enabled = true;
+                    hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
+                    break;
+                case 1:
+                    editorUI.enabled = true;
+                    editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
+                    hammerUI.enabled = false;
+                    hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    break;
+                case 2:
+                    editorUI.enabled = false;
+                    editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    hammerUI.enabled = false;
+                    hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    break;
+                default:
+                    break;
             }
         }
 
