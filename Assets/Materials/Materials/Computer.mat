@@ -254,6 +254,11 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissiveColor: {r: 1, g: 1, b: 1, a: 0}
+    - _Palette_1: {r: 1, g: 1, b: 1, a: 1}
+    - _Palette_2: {r: 0.75471693, g: 0.75471693, b: 0.75471693, a: 1}
+    - _Palette_3: {r: 0.40566036, g: 0.40566036, b: 0.40566036, a: 1}
+    - _Palette_4: {r: 0.22641507, g: 0.22641507, b: 0.22641507, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

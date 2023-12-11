@@ -15,7 +15,10 @@ public class Hammer_UI : MonoBehaviour
     [SerializeField] FirstPersonController fpc;
     [SerializeField] UIDocument document;
     [SerializeField] LayerMask pointerMask;
+    [SerializeField] LayerMask propMask;
+    [SerializeField] Color[] paintColors;
 
+    //Data
     Data_Manager dataManager;
     VisualElement[] hotBarVisualElements = new VisualElement[10];
     MeshFilter currentMesh;
@@ -23,10 +26,14 @@ public class Hammer_UI : MonoBehaviour
     Texture2D texture;
     List<Vector2> previousDrawnPixels;
     List<int> currentVertexes = new List<int>();
-    bool isSelected;
     Color lineColor;
+
+    //States
+    bool isSelected;
     int currentMode;
     int currentMaterial;
+    int currentPropLayerSelected;
+    int currentPropColor;
 
     //Consts
     const int maxMaterialSlots = 11;
@@ -59,6 +66,7 @@ public class Hammer_UI : MonoBehaviour
             hotBarVisualElements[i] = document.rootVisualElement.Q<VisualElement>("Hotbar" + i);
         }
         PressHotbarKey(0, true);
+        document.rootVisualElement.Q<VisualElement>("Paint").style.unityBackgroundImageTintColor = paintColors[currentPropColor];
     }
 
     private void Update()
@@ -112,6 +120,21 @@ public class Hammer_UI : MonoBehaviour
                 if (Input.GetMouseButtonDown(1))
                 {
                     currentMaterial = (currentMaterial + 1) % maxMaterialSlots;
+                }
+                break;
+            case 3:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    PaintProp();
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    currentPropLayerSelected = (currentPropLayerSelected + 1) % 4;
+                }
+                if (Input.GetMouseButtonDown(2))
+                {
+                    currentPropColor = (currentPropColor + 1) % paintColors.Length;
+                    document.rootVisualElement.Q<VisualElement>("Paint").style.unityBackgroundImageTintColor = paintColors[currentPropColor];
                 }
                 break;
             case 4:
@@ -546,6 +569,44 @@ public class Hammer_UI : MonoBehaviour
                 Material[] materials = rend.materials;
                 materials[GetSubMeshIndex(hit.triangleIndex)] = Resources.Load<Material>("Materials/" + currentMaterial);
                 rend.materials = materials;
+            }
+        }
+    }
+
+    void PaintProp()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+
+        if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickup"))
+            {
+                MeshRenderer rend = hit.collider.GetComponent<MeshRenderer>();
+                Material[] mats = rend.materials;
+                string chosenPalette = "";
+                switch (currentPropLayerSelected)
+                {
+                    case 0:
+                        chosenPalette = "_Palette_1";
+                        break;
+                    case 1:
+                        chosenPalette = "_Palette_2";
+                        break;
+                    case 2:
+                        chosenPalette = "_Palette_3";
+                        break;
+                    case 3:
+                        chosenPalette = "_Palette_4";
+                        break;
+                    default:
+                        break;
+                }
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    mats[i].SetColor(chosenPalette, paintColors[currentPropColor]);
+                }
+                rend.materials = mats;
             }
         }
     }
