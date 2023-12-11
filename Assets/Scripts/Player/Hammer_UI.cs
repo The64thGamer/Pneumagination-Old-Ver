@@ -89,8 +89,9 @@ public class Hammer_UI : MonoBehaviour
         PressHotbarKey(8, Input.GetKey(KeyCode.Alpha9));
         PressHotbarKey(9, Input.GetKey(KeyCode.Alpha0));
 
-        if((currentMode != 0 || currentMode != 5) && currentCreatedItem != null)
+        if((currentMode != 0 && currentMode != 5) && currentCreatedItem != null)
         {
+            dataManager.RemoveBrushSaveData(currentCreatedItem.name);
             Destroy(currentCreatedItem.gameObject);
         }
 
@@ -102,6 +103,7 @@ public class Hammer_UI : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
                 {
+
                     Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
                     if (currentCreatedItem == null)
                     {
@@ -109,7 +111,10 @@ public class Hammer_UI : MonoBehaviour
                     }
                     else
                     {
-                        currentCreatedItem.transform.position = objectPos;
+                        if (hit.collider.gameObject != currentCreatedItem)
+                        {
+                            currentCreatedItem.transform.position = objectPos;
+                        }
                     }
                 }
                 if (Input.GetMouseButtonDown(0))
