@@ -582,8 +582,6 @@ public class Hammer_UI : MonoBehaviour
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickup"))
             {
-                MeshRenderer rend = hit.collider.GetComponent<MeshRenderer>();
-                Material[] mats = rend.materials;
                 string chosenPalette = "";
                 switch (currentPropLayerSelected)
                 {
@@ -602,11 +600,18 @@ public class Hammer_UI : MonoBehaviour
                     default:
                         break;
                 }
-                for (int i = 0; i < mats.Length; i++)
+
+                MeshRenderer[] rend = hit.collider.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < rend.Length; i++)
                 {
-                    mats[i].SetColor(chosenPalette, paintColors[currentPropColor]);
+                    Material[] mats = rend[i].materials;
+                    for (int e = 0; e < mats.Length; i++)
+                    {
+                        mats[e].SetColor(chosenPalette, paintColors[currentPropColor]);
+                    }
+                    rend[i].SetMaterials(mats.ToList());
                 }
-                rend.materials = mats;
+
             }
         }
     }
