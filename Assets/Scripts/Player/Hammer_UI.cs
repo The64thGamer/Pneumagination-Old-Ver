@@ -605,7 +605,7 @@ public class Hammer_UI : MonoBehaviour
                 for (int i = 0; i < rend.Length; i++)
                 {
                     Material[] mats = rend[i].materials;
-                    for (int e = 0; e < mats.Length; i++)
+                    for (int e = 0; e < mats.Length; e++)
                     {
                         mats[e].SetColor(chosenPalette, paintColors[currentPropColor]);
                     }
