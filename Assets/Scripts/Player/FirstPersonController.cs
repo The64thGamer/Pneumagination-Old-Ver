@@ -14,7 +14,6 @@ namespace StarterAssets
         [SerializeField] Data_Manager dataManager;
         [SerializeField] Player_UI editorUI;
         [SerializeField] Hammer_UI hammerUI;
-        [SerializeField] PlayerInteractions playerInteractions;
         [SerializeField] Camera _mainCamera;
         [SerializeField] Transform camOffet;
 

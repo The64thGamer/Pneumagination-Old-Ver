@@ -13,10 +13,12 @@ using Random = UnityEngine.Random;
 public class Hammer_UI : MonoBehaviour
 {
     [SerializeField] FirstPersonController fpc;
+    [SerializeField] PlayerInteractions playerInteractions;
     [SerializeField] UIDocument document;
     [SerializeField] LayerMask pointerMask;
     [SerializeField] LayerMask propMask;
     [SerializeField] Color[] paintColors;
+
 
     //Data
     Data_Manager dataManager;
@@ -48,6 +50,7 @@ public class Hammer_UI : MonoBehaviour
 
     private void Start()
     {
+        playerInteractions.enabled = false;
         dataManager = GameObject.Find("Data Manager").GetComponent<Data_Manager>();
         previousDrawnPixels = new List<Vector2>();
         texture = new Texture2D(Screen.width, Screen.height);
@@ -85,12 +88,14 @@ public class Hammer_UI : MonoBehaviour
         switch (currentMode)
         {
             case 0:
+                playerInteractions.enabled = false;
                 if (Input.GetMouseButtonDown(0))
                 {
                     CreateNewBrush();
                 }
                 break;
             case 1:
+                playerInteractions.enabled = true;
                 ApplyRenderState(isSelected);
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -113,6 +118,7 @@ public class Hammer_UI : MonoBehaviour
                 SelectPoint();
                 break;
             case 2:
+                playerInteractions.enabled = false;
                 if (Input.GetMouseButtonDown(0))
                 {
                     ApplyMaterialToBrushFace();
@@ -123,6 +129,7 @@ public class Hammer_UI : MonoBehaviour
                 }
                 break;
             case 3:
+                playerInteractions.enabled = false;
                 if (Input.GetMouseButtonDown(0))
                 {
                     PaintProp();
@@ -138,6 +145,7 @@ public class Hammer_UI : MonoBehaviour
                 }
                 break;
             case 4:
+                playerInteractions.enabled = false;
                 SelectPoint();
                 ApplyRenderState(isSelected);
 
