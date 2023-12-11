@@ -349,7 +349,7 @@ public class MainMenu : MonoBehaviour
             Button b = buttons[i];
             b.RegisterCallback<MouseEnterEvent>(evt =>
             {
-                au.PlayOneShot(Resources.Load<AudioClip>("Sounds/Menu/Pencil Stroke " + Random.Range(0, 21)), 0.5f);
+                au.PlayOneShot(Resources.Load<AudioClip>("Sounds/Menu/Pencil Stroke " + Random.Range(0, 21)), 0.3f);
                 b.style.borderTopWidth = 8;
                 b.style.borderRightWidth = 8;
                 b.style.borderLeftWidth = 8;
@@ -362,7 +362,7 @@ public class MainMenu : MonoBehaviour
                 b.style.borderLeftWidth = 4;
                 b.style.borderBottomWidth = 4;
             });
-            b.clicked += () => au.PlayOneShot(Resources.Load<AudioClip>("Sounds/Menu/Pen Flick"), 0.75f);
+            b.clicked += () => au.PlayOneShot(Resources.Load<AudioClip>("Sounds/Menu/Pen Flick"), 0.5f);
         }
     }
 }
