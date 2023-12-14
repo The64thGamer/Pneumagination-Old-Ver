@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Manual</title>
+    <link rel="stylesheet" href="../Manual Pages/style.css">
+</head>
+<body>
+    <a href="../Pneumagination Manual.html" class="article-logo">
+        <img src="../Images/FullTallRender.png" alt="Logo">
+      </a>
+<div class="article-header">
+<h1>Game Design Doc</h1>
+<div class="article-container">
+
+    <p><em>This is a general game design document for Pneumagination as it goes through development. All aspects of this document are subject to change, are not promises that they will be implemented into the game, and are to simply reflect the current planning and mindset of development.</em></p>
+    <h1 id="summary">Summary</h1>
+    <p>Pneumagination is a sandbox animatronics and attractions simulator. The player creates and runs novelty entertainment stores to earn money. Money can be used to decorate their establishment, purchase new attractions, or buy available land to expand their business.</p>
+    <p>At night when their businesses have closed, strange encounters with people, creatures, other phenomena can happen. These can lead to acquiring special items and tools, or negatively impact store performance the following day.</p>
+    <p>An infinitely generated map is available for the player to explore- full of businesses, land, and abandoned locations. Players can play risky and loot from places for special items and building materials, or visit rival locations to see the best practices for getting them shut down. Some locations may hold rare events, and strange encounters may happen when sneaking around at night.</p>
+    <h1 id="gameplay-systems">Gameplay Systems</h1>
+    <ul>
+    <li>Catalogues<ul>
+    <li>Players have access to a variety of item shops through the catalogues UI. Players can unlock any catalogue one at a time through leveling up. Some critical item catalogues will be automatically unlocked at the start.</li>
+    </ul>
+    </li>
+    <li>Animatronics<ul>
+    <li>Sets of animatronics will be available in their own catalogues. Buying an animatronic will take you to a customization screen where you can change all aspects of an animatronic mech and its cosmetics. Animatronics require air pressure and a control mechanism to function.</li>
+    </ul>
+    </li>
+    <li>Items<ul>
+    <li>Items are 3D objects that can be purchased through catalogues or obtained in the world and are placeable within your map. Items can either be decorative or provide a useful function. They can also have up to 4 custom colors applied.</li>
+    </ul>
+    </li>
+    <li>Frames<ul>
+    <li>Frames are simple 3D meshes that make up player-made and premade locations in the game. They start with a blank surface but can be customized to look like any material. Frames can only be obtained by scavenging them off of other locations in the map.</li>
+    </ul>
+    </li>
+    <li>Surfaces<ul>
+    <li>Surfaces are textures that can be applied to Frames, and are collected in the same manner as Frames. Surfaces can have up to 4 custom colors applied.</li>
+    </ul>
+    </li>
+    <li>Paints<ul>
+    <li>Paints are single colors that can be applied to Items and Frames to customize their look. They can be obtained through scavenging locations in the map.</li>
+    </ul>
+    </li>
+    <li>Wires<ul>
+    <li>Wires are placeable 3D objects used to connect controlling and controllable Items. Wires can have any number of bends in them and be any length.</li>
+    </ul>
+    </li>
+    <li>Wirable Items<ul>
+    <li>Any electrically powered item can be wired to other items to change their behavior. E.g. light switch to control lights, computer to control animatronic show, or a time sensor to control street lamps. Any input can control any output. Items can be adjusted to either change when any signal is sent, or when a specific string/int event is fired. Items can listen for multiple different inputs- such as animatronics controlling each movement with a different event. Only one wire is needed in these cases however.</li>
+    </ul>
+    </li>
+    <li>Player Generated Content<ul>
+    <li>Players will be able to import audio and video files into the game for use in showtapes, attractions, and general store use.</li>
+    </ul>
+    </li>
+    <li>Day/Night Cycle<ul>
+    <li>A full day will last 20 minutes. Players can choose at any time to open or close the store- but general customers will stop showing up by night.</li>
+    </ul>
+    </li>
+    <li>Map System<ul>
+    <li>Each plot of land on the map is only loaded when inside it. Leaving your location for the day will mean it will be closed during that time and you will earn nothing. Having multiple businesses on different plots of land will require you choose which to be on to keep open.</li>
+    </ul>
+    </li>
+    <li>Guests<ul>
+    <li>Guests are the customers going to your businesses to purchase items, eat food, and watch entertainment. They can arrive in vehicles, on bikes, or by walking up to your establishment. Guests may arrive in groups and will talk to each other if they sit down somewhere. Guests will rate their experience on the novelty and interest alignment of your location, which may have them return later.</li>
+    </ul>
+    </li>
+    <li>Strangers<ul>
+    <li>Strangers are after-hours visitors to your location. These can be harmless, hostile, helpful, or any mix depending on circumstance. Strangers may be normal citizens, ethereal beings, aliens, or other freaky creatures. If your store is locked down you can choose to ignore the Strangers and focus on other things- or try to open up and see what happens. Interactions may substantially change daytime or afterhours activity.</li>
+    </ul>
+    </li>
+    <li>Alien Technology<ul>
+    <li>While technology will generally stick to the available sophistication of 1979, after-hours encounters with alien Strangers may lead to peculiar, desirable technology falling into your hands. This could be placeable wormholes to teleport around your map, or high-PSI hydraulic replacements for your air compressor that&#39;s fueled by your guests&#39; blood.</li>
+    </ul>
+    </li>
+    </ul>
+    
+    
+    
+
+</div>
+</div>
+</body>
+</html>
