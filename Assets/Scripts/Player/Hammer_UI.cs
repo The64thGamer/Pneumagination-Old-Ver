@@ -32,7 +32,8 @@ public class Hammer_UI : MonoBehaviour
     List<Vector2> previousDrawnPixels;
     List<int> currentVertexes = new List<int>();
     Color lineColor;
-    GameObject currentCreatedItem;
+    GameObject currentCreatedBrush;
+    GameObject currentCreatedProp;
 
     //States
     bool isSelected;
@@ -40,6 +41,7 @@ public class Hammer_UI : MonoBehaviour
     int currentMaterial;
     int currentPropLayerSelected;
     int currentPropColor;
+    int currentProp;
 
     //Consts
     const int maxMaterialSlots = 11;
@@ -89,10 +91,17 @@ public class Hammer_UI : MonoBehaviour
         PressHotbarKey(8, Input.GetKey(KeyCode.Alpha9));
         PressHotbarKey(9, Input.GetKey(KeyCode.Alpha0));
 
-        if((currentMode != 0 && currentMode != 5) && currentCreatedItem != null)
+        if(currentMode != 0 && currentCreatedBrush != null)
         {
-            dataManager.RemoveBrushSaveData(currentCreatedItem.name);
-            Destroy(currentCreatedItem.gameObject);
+            dataManager.RemoveBrushSaveData(currentCreatedBrush.name);
+            Destroy(currentCreatedBrush.gameObject);
+        }
+
+        if (currentMode != 5 && currentCreatedProp != null)
+        {
+            //FIX
+            dataManager.RemovePropSaveData(currentCreatedProp.name);
+            Destroy(currentCreatedProp.gameObject);
         }
 
         switch (currentMode)
@@ -105,21 +114,21 @@ public class Hammer_UI : MonoBehaviour
                 {
 
                     Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
-                    if (currentCreatedItem == null)
+                    if (currentCreatedBrush == null)
                     {
-                        currentCreatedItem = dataManager.GenerateNewBrush(BrushType.block, objectPos);
+                        currentCreatedBrush = dataManager.GenerateNewBrush(BrushType.block, objectPos);
                     }
                     else
                     {
-                        if (hit.collider.gameObject != currentCreatedItem)
+                        if (hit.collider.gameObject != currentCreatedBrush)
                         {
-                            currentCreatedItem.transform.position = objectPos;
+                            currentCreatedBrush.transform.position = objectPos;
                         }
                     }
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
-                    currentCreatedItem = null;
+                    currentCreatedBrush = null;
                 }
                 break;
             case 1:
@@ -200,6 +209,7 @@ public class Hammer_UI : MonoBehaviour
                         {
                             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pickup"))
                             {
+                                dataManager.RemovePropSaveData(hit.collider.gameObject.name);
                                 Destroy(hit.collider.gameObject);
                             }
                         }
@@ -210,6 +220,31 @@ public class Hammer_UI : MonoBehaviour
                     dataManager.RemoveBrushSaveData(currentMesh.name);
                     Destroy(currentMesh.gameObject);
                     DisableSelection();
+                }
+                break;
+            case 5:
+                playerInteractions.enabled = false;
+                ray = new Ray() { origin = Camera.main.transform.position, direction = Camera.main.transform.forward };
+
+                if (Physics.Raycast(ray, out hit, maxPickingDistance, pointerMask))
+                {
+
+                    Vector3 objectPos = new Vector3(Mathf.Round(hit.point.x * 2) / 2, Mathf.Round(hit.point.y * 2) / 2, Mathf.Round(hit.point.z * 2) / 2);
+                    if (currentCreatedProp == null)
+                    {
+                        currentCreatedProp = dataManager.GenerateNewProp(currentProp, objectPos);
+                    }
+                    else
+                    {
+                        if (hit.collider.gameObject != currentCreatedProp)
+                        {
+                            currentCreatedProp.transform.position = objectPos;
+                        }
+                    }
+                }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    currentCreatedProp = null;
                 }
                 break;
             default:

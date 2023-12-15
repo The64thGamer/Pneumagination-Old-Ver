@@ -268,6 +268,27 @@ public class Data_Manager : MonoBehaviour
         return brush;
     }
 
+    public GameObject GenerateNewProp(int index, Vector3 position)
+    {
+        string hash = Random.Range(int.MinValue, int.MaxValue).ToString();
+        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + index));
+        brush.name = hash;
+        brush.transform.position = position;
+        CustomPropData data = new CustomPropData()
+        {
+            index = index,
+            objectHash = hash,
+            colorA = Color.white,
+            colorB = Color.white,
+            colorC = Color.white,
+            colorD = Color.white,
+            position = brush.transform.position,
+            rotation = brush.transform.rotation,
+        };
+        mapData.propData.Add(data);
+        return brush;
+    }
+
     public void RemoveBrushSaveData(string hashCode)
     {
         for (int i = 0; i < mapData.brushData.Count; i++)
@@ -275,6 +296,18 @@ public class Data_Manager : MonoBehaviour
             if (mapData.brushData[i].objectHash == hashCode)
             {
                 mapData.brushData.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
+    public void RemovePropSaveData(string hashCode)
+    {
+        for (int i = 0; i < mapData.propData.Count; i++)
+        {
+            if (mapData.propData[i].objectHash == hashCode)
+            {
+                mapData.propData.RemoveAt(i);
                 break;
             }
         }
@@ -389,6 +422,7 @@ public class MapHistory
 public class CustomPropData
 {
     public string objectHash;
+    public int index;
     public Color colorA;
     public Color colorB;
     public Color colorC;
