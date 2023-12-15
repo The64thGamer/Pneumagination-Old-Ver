@@ -91,7 +91,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 73f905a13519a4c4a9ed731b6ab126c0,
         type: 3}
       propertyPath: m_Name
-      value: Terminal Variant
+      value: 47
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 73f905a13519a4c4a9ed731b6ab126c0,
         type: 3}
@@ -211,7 +211,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

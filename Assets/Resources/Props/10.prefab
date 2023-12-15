@@ -91,7 +91,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 36456596c5ddd374eaef4f8264b1a9af,
         type: 3}
       propertyPath: m_Name
-      value: Disk Drive Variant
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 36456596c5ddd374eaef4f8264b1a9af,
         type: 3}
@@ -236,7 +236,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
