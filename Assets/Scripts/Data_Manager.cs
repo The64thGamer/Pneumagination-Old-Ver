@@ -165,6 +165,19 @@ public class Data_Manager : MonoBehaviour
             }
         }
 
+        //Brushes
+        if (mapData.propData != null)
+        {
+            for (int i = 0; i < mapData.propData.Count; i++)
+            {
+                //Setup
+                GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + mapData.propData[i].index));
+                brush.transform.position = mapData.propData[i].position;
+                brush.transform.rotation = mapData.propData[i].rotation;
+                brush.name = mapData.propData[i].objectHash.ToString();
+            }
+        }
+
         //Animatronics
         int currentDTUIndex = 0;
         if (mapData.animatronics != null)
