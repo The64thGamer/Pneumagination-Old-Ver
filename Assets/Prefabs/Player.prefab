@@ -903,7 +903,7 @@ MonoBehaviour:
   pickupParent: {fileID: 7874998015469329143}
   pickupParentLook: {fileID: 0}
   currentlyPickedUpObject: {fileID: 0}
-  freeze: 0
+  freeze: 1
   minSpeed: 10
   maxSpeed: 3333
   maxDistance: 10
@@ -990,9 +990,6 @@ MonoBehaviour:
   playerInteractions: {fileID: 4603869923550929080}
   document: {fileID: 6634138815085280750}
   pointerMask:
-    serializedVersion: 2
-    m_Bits: 1025
-  propMask:
     serializedVersion: 2
     m_Bits: 1025
   paintColors:
