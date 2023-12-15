@@ -45,6 +45,7 @@ public class Hammer_UI : MonoBehaviour
 
     //Consts
     const int maxMaterialSlots = 11;
+    const int maxPropSlots = 50;
     const float minVertexDistance = 0.1f;
     const float minLineDistance = 0.1f;
     const float maxPickingDistance = 10.0f;
@@ -245,6 +246,15 @@ public class Hammer_UI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     currentCreatedProp = null;
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    if(currentCreatedProp != null)
+                    {
+                        dataManager.RemovePropSaveData(currentCreatedProp.name);
+                        Destroy(currentCreatedProp.gameObject);
+                    }
+                    currentProp = (currentProp + 1) % maxPropSlots;
                 }
                 break;
             default:
