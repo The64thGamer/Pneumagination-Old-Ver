@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 136420636809367407}
   - component: {fileID: 8349600356512627476}
   - component: {fileID: 7378638813487050300}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Circle Light LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 7455308517113855620}
   - component: {fileID: 4009172252337853012}
   - component: {fileID: 6073925853175040178}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Circle Light LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 6660928250238146057}
   - component: {fileID: 9167999994789032654}
   - component: {fileID: 1222633008144947575}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 6082412583489309411}
   - component: {fileID: 4128966207404344577}
   - component: {fileID: 3244940334132639578}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Circle Light LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

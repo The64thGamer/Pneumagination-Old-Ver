@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5030931528666587042}
   - component: {fileID: 1479280069289651974}
   - component: {fileID: 7160928745560090625}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 122231028529094254}
   - component: {fileID: 3760612074147851024}
   - component: {fileID: 5945467106864847941}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cubicle LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 7304193910854376883}
   - component: {fileID: 6396489882661517288}
   - component: {fileID: 653983545995872325}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cubicle LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

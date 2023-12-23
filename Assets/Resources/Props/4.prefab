@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3379793733603890895}
   - component: {fileID: 8443712004634539757}
   - component: {fileID: 5188298148081751308}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: LC LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 3594754788209545701}
   - component: {fileID: 3303758456766344909}
   - component: {fileID: 6852396229385370223}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: LC LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 6249309313214917851}
   - component: {fileID: 6553264785821586612}
   - component: {fileID: 2002352613913853761}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: LC LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 3885283773476995411}
   - component: {fileID: 8330015512162214224}
   - component: {fileID: 4071515648219956915}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}

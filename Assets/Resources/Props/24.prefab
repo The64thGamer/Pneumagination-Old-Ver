@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 914664874424247289}
   - component: {fileID: 7945902639231137588}
   - component: {fileID: 7481145676932686643}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Mesh LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 5565370460544146606}
   - component: {fileID: 2846969534269667985}
   - component: {fileID: 920827561942009875}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cone Spotlight LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 6005771428641409700}
   - component: {fileID: 8875952005297433137}
   - component: {fileID: 8839690918477912149}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Mesh LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 1065028557284908848}
   - component: {fileID: 3962102900892657679}
   - component: {fileID: 1178334168838742282}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cone Spotlight LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 6234471190703776151}
   - component: {fileID: 4401815600505044382}
   - component: {fileID: 9101095540448449259}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cone Spotlight LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,7 @@ GameObject:
   - component: {fileID: 4986043134635562110}
   - component: {fileID: 3323017022567305457}
   - component: {fileID: 8545232625903558852}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Mesh LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -570,7 +570,7 @@ GameObject:
   - component: {fileID: 8448745114563227047}
   - component: {fileID: 1764095437917103907}
   - component: {fileID: 5520841075094277396}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 24
   m_TagString: Untagged
   m_Icon: {fileID: 0}

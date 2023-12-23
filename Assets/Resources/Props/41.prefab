@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2885377522406040411}
   - component: {fileID: 6269575449404075011}
   - component: {fileID: 3284342070778187556}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Shelved Table LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5869797946826787608}
   - component: {fileID: 6650638890509141301}
   - component: {fileID: 7641048872113964645}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Shelved Table LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 5068161154895897590}
   - component: {fileID: 3548710450449939860}
   - component: {fileID: 4196068544027633145}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 41
   m_TagString: Untagged
   m_Icon: {fileID: 0}

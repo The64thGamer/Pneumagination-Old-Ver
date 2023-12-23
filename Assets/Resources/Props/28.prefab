@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 887723222839566709}
   - component: {fileID: 2976923348780894412}
   - component: {fileID: 7343491866810415923}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Warehouse LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 3684109120114178887}
   - component: {fileID: 8951287464150831070}
   - component: {fileID: 8657263022095449625}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Warehouse LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 5975333208406270313}
   - component: {fileID: 4267305989400892346}
   - component: {fileID: 1862045068668049317}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Warehouse LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 2286566214504403534}
   - component: {fileID: 3035834381647725111}
   - component: {fileID: 6404470340641551655}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 28
   m_TagString: Untagged
   m_Icon: {fileID: 0}

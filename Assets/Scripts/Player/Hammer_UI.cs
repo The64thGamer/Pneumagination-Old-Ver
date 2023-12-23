@@ -44,6 +44,7 @@ public class Hammer_UI : MonoBehaviour
     int currentProp;
 
     //Consts
+    const int pickupLayer = 10;
     const int maxMaterialSlots = 11;
     const int maxPropSlots = 51;
     const float minVertexDistance = 0.1f;
@@ -254,6 +255,12 @@ public class Hammer_UI : MonoBehaviour
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
+                    currentCreatedProp.gameObject.layer = pickupLayer;
+                    Component[] transforms = currentCreatedProp.GetComponentsInChildren(typeof(Transform), true);
+                    foreach (Transform transrights in transforms)
+                    {
+                        transrights.gameObject.layer = pickupLayer;
+                    }
                     currentCreatedProp = null;
                 }
                 if (Input.mouseScrollDelta.y > 0)

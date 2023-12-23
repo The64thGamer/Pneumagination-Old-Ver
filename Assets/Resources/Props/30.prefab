@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 922864331343703279}
   - component: {fileID: 7880217635220599326}
   - component: {fileID: 6719781622696657755}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Curve LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 3332373315762486247}
   - component: {fileID: 3418041139007654500}
   - component: {fileID: 3990595765648488700}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Curve LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 8158838764585495836}
   - component: {fileID: 2822024305195402397}
   - component: {fileID: 4868069479245920454}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 30
   m_TagString: Untagged
   m_Icon: {fileID: 0}

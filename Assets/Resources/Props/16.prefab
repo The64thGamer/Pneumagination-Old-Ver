@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1830720569798429357}
   - component: {fileID: 5020565958003578598}
   - component: {fileID: 6574372891563010023}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Camera LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2955098155924374433}
   - component: {fileID: 8459949846700558164}
   - component: {fileID: 3168988197902162668}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Camera LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 7173394805625554451}
   - component: {fileID: 8961502094749808233}
   - component: {fileID: 6366129560149482781}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 3399985583347829698}
   - component: {fileID: 7471531348032729234}
   - component: {fileID: 85629333765297939}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Camera LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

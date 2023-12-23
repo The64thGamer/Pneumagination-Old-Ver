@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3378160048979479027}
   - component: {fileID: 8278193849177771056}
   - component: {fileID: 1245117937044100832}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Fancy LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 4009086770679611263}
   - component: {fileID: 1062688928329512447}
   - component: {fileID: 91973476885049011}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 31
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 5574477234879383263}
   - component: {fileID: 8619593867358479210}
   - component: {fileID: 382880719050717111}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Fancy LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

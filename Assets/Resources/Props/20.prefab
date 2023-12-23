@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2144617919686562165}
   - component: {fileID: 5293311764806028426}
   - component: {fileID: 5069527452099585180}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cone LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 7821679473698064733}
   - component: {fileID: 6548427295720286348}
   - component: {fileID: 2549109106810061354}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 1235091839344484452}
   - component: {fileID: 8621384159244964556}
   - component: {fileID: 8448666028743336382}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cone LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 4807114029425903667}
   - component: {fileID: 7430393210551185641}
   - component: {fileID: 2360974707907158535}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cone LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8599358605618726208}
   - component: {fileID: 939807461955331533}
   - component: {fileID: 647240226119422356}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: WideC LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 7357294544758376495}
   - component: {fileID: 5490705689742402137}
   - component: {fileID: 8035015765568851691}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: WideC LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 3873425107321067149}
   - component: {fileID: 8299139568488295110}
   - component: {fileID: 4396477186966147686}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: WideC LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 2759470266609606685}
   - component: {fileID: 5029897617576021546}
   - component: {fileID: 3052992570971824527}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 29
   m_TagString: Untagged
   m_Icon: {fileID: 0}

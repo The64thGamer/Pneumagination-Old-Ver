@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6740527613320379123}
   - component: {fileID: 7150642251677320015}
   - component: {fileID: 8898722089786297001}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Door Fake 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 1011728566587188129}
   - component: {fileID: 3538267945489844868}
   - component: {fileID: 8524050113417081193}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}

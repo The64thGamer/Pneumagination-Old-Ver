@@ -15,6 +15,9 @@ public class Data_Manager : MonoBehaviour
     [SerializeField] MapData mapData;
     [SerializeField] bool retryMap;
 
+    //Consts
+    const int pickupLayer = 10;
+
     private void Awake()
     {
         string saveFilePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml";
@@ -175,6 +178,12 @@ public class Data_Manager : MonoBehaviour
                 brush.transform.position = mapData.propData[i].position;
                 brush.transform.rotation = mapData.propData[i].rotation;
                 brush.name = mapData.propData[i].objectHash.ToString();
+                brush.gameObject.layer = pickupLayer;
+                Component[] transforms = brush.GetComponentsInChildren(typeof(Transform), true);
+                foreach (Transform transrights in transforms)
+                {
+                    transrights.gameObject.layer = pickupLayer;
+                }
             }
         }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6716364773569239445}
   - component: {fileID: 329299003181520320}
   - component: {fileID: 3086602261522653849}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Double Street Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 6236573249273006303}
   - component: {fileID: 3469193036299364145}
   - component: {fileID: 2976650674663328770}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 43
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 2363175536276749387}
   - component: {fileID: 1569228307929485244}
   - component: {fileID: 348115867263429692}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: LOD1.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 3604951715217833088}
   - component: {fileID: 4436378672222883160}
   - component: {fileID: 3934600465718895209}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: LOD3.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 8699330771033104409}
   - component: {fileID: 3990902332919383133}
   - component: {fileID: 5168638644555992304}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: LOD2.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

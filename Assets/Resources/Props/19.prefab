@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4391140549159804500}
   - component: {fileID: 1219531863638865718}
   - component: {fileID: 8899482711014090757}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Hole Light LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 4378541320577897946}
   - component: {fileID: 2568007457147690326}
   - component: {fileID: 438053340537755308}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 4449798198675813855}
   - component: {fileID: 8234958247290336094}
   - component: {fileID: 1606978896670158225}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Hole Light LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

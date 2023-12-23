@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3467127892736795135}
   - component: {fileID: 937673424942461298}
   - component: {fileID: 5510007936129570926}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Hoop LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6649782877034673372}
   - component: {fileID: 6988501736004634810}
   - component: {fileID: 4909248738642308475}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Hoop LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 8892502891848756949}
   - component: {fileID: 3978289746506135653}
   - component: {fileID: 7919119008143259240}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: 32
   m_TagString: Untagged
   m_Icon: {fileID: 0}
