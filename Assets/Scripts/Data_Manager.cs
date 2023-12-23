@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -88,8 +89,15 @@ public class Data_Manager : MonoBehaviour
             g = GameObject.Find(mapData.propData[i].objectHash.ToString());
             if (g != null)
             {
+                MeshRenderer rend = g.GetComponentInChildren<MeshRenderer>();
+                Material[] mats = rend.materials;
+
                 mapData.propData[i].position = g.transform.position;
                 mapData.propData[i].rotation = g.transform.rotation;
+                mapData.propData[i].colorA = mats[0].GetColor("_Palette_1");
+                mapData.propData[i].colorB = mats[0].GetColor("_Palette_2");
+                mapData.propData[i].colorC = mats[0].GetColor("_Palette_3");
+                mapData.propData[i].colorD = mats[0].GetColor("_Palette_4");
             }
         }
         for (int i = 0; i < mapData.brushData.Count; i++)
@@ -174,15 +182,29 @@ public class Data_Manager : MonoBehaviour
             for (int i = 0; i < mapData.propData.Count; i++)
             {
                 //Setup
-                GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + mapData.propData[i].index));
-                brush.transform.position = mapData.propData[i].position;
-                brush.transform.rotation = mapData.propData[i].rotation;
-                brush.name = mapData.propData[i].objectHash.ToString();
-                brush.gameObject.layer = pickupLayer;
-                Component[] transforms = brush.GetComponentsInChildren(typeof(Transform), true);
+                GameObject prop = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + mapData.propData[i].index));
+                prop.transform.position = mapData.propData[i].position;
+                prop.transform.rotation = mapData.propData[i].rotation;
+                prop.name = mapData.propData[i].objectHash.ToString();
+                prop.gameObject.layer = pickupLayer;
+                Component[] transforms = prop.GetComponentsInChildren(typeof(Transform), true);
                 foreach (Transform transrights in transforms)
                 {
                     transrights.gameObject.layer = pickupLayer;
+                }
+
+                MeshRenderer[] rend = prop.GetComponentsInChildren<MeshRenderer>();
+                for (int e = 0; e < rend.Length; e++)
+                {
+                    Material[] mats = rend[e].materials;
+                    for (int f = 0; f < mats.Length; f++)
+                    {
+                        mats[f].SetColor("_Palette_1", mapData.propData[i].colorA);
+                        mats[f].SetColor("_Palette_2", mapData.propData[i].colorB);
+                        mats[f].SetColor("_Palette_3", mapData.propData[i].colorC);
+                        mats[f].SetColor("_Palette_4", mapData.propData[i].colorD);
+                    }
+                    rend[e].SetMaterials(mats.ToList());
                 }
             }
         }
