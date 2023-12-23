@@ -161,9 +161,13 @@ public class Hammer_UI : MonoBehaviour
                 {
                     ApplyMaterialToBrushFace();
                 }
-                if (Input.GetMouseButtonDown(1))
+                if (Input.mouseScrollDelta.y > 0)
                 {
-                    currentMaterial = (currentMaterial + 1) % maxMaterialSlots;
+                    currentMaterial = mod((currentMaterial + 1),  maxMaterialSlots);
+                }
+                if (Input.mouseScrollDelta.y < 0)
+                {
+                    currentMaterial = mod((currentMaterial - 1), maxMaterialSlots);
                 }
                 break;
             case 3:
@@ -172,14 +176,19 @@ public class Hammer_UI : MonoBehaviour
                 {
                     PaintProp();
                 }
+                if (Input.mouseScrollDelta.y > 0)
+                {
+                    currentPropColor = mod((currentPropColor + 1), paintColors.Length);
+                    document.rootVisualElement.Q<VisualElement>("Paint").style.unityBackgroundImageTintColor = paintColors[currentPropColor];
+                }
+                if (Input.mouseScrollDelta.y < 0)
+                {
+                    currentPropColor = mod((currentPropColor - 1), paintColors.Length);
+                    document.rootVisualElement.Q<VisualElement>("Paint").style.unityBackgroundImageTintColor = paintColors[currentPropColor];
+                }
                 if (Input.GetMouseButtonDown(1))
                 {
-                    currentPropLayerSelected = (currentPropLayerSelected + 1) % 4;
-                }
-                if (Input.GetMouseButtonDown(2))
-                {
-                    currentPropColor = (currentPropColor + 1) % paintColors.Length;
-                    document.rootVisualElement.Q<VisualElement>("Paint").style.unityBackgroundImageTintColor = paintColors[currentPropColor];
+                    currentPropLayerSelected = mod((currentPropLayerSelected + 1), 4); 
                 }
                 break;
             case 4:
@@ -247,15 +256,25 @@ public class Hammer_UI : MonoBehaviour
                 {
                     currentCreatedProp = null;
                 }
-                if (Input.GetMouseButtonDown(1))
+                if (Input.mouseScrollDelta.y > 0)
                 {
-                    if(currentCreatedProp != null)
+                    if (currentCreatedProp != null)
                     {
                         dataManager.RemovePropSaveData(currentCreatedProp.name);
                         Destroy(currentCreatedProp.gameObject);
                     }
-                    currentProp = (currentProp + 1) % maxPropSlots;
+                    currentProp = mod((currentProp + 1), maxPropSlots);
                 }
+                if (Input.mouseScrollDelta.y < 0)
+                {
+                    if (currentCreatedProp != null)
+                    {
+                        dataManager.RemovePropSaveData(currentCreatedProp.name);
+                        Destroy(currentCreatedProp.gameObject);
+                    }
+                    currentProp = mod((currentProp - 1), maxPropSlots);
+                }
+
                 break;
             default:
                 break;
@@ -474,11 +493,6 @@ public class Hammer_UI : MonoBehaviour
         }
 
         isSelected = on;
-        fpc.SetFOV(!on);
-        if (on)
-        {
-            lineColor = selectColor;
-        }
     }
 
     void RenderLines()
@@ -692,5 +706,10 @@ public class Hammer_UI : MonoBehaviour
 
             }
         }
+    }
+
+    int mod(int x, int m)
+    {
+        return (x % m + m) % m;
     }
 }

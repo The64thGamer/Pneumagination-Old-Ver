@@ -124,18 +124,21 @@ namespace StarterAssets
                     editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
                     hammerUI.enabled = true;
                     hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
+                    SetFOV(false);
                     break;
                 case 1:
                     editorUI.enabled = true;
                     editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
                     hammerUI.enabled = false;
                     hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    SetFOV(true);
                     break;
                 case 2:
                     editorUI.enabled = false;
                     editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
                     hammerUI.enabled = false;
                     hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    SetFOV(true);
                     break;
                 default:
                     break;
