@@ -3,7 +3,12 @@ guid: af3dae05b3867de4c8e0e965e662a752
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blob Tux
+    second: {fileID: 2100000, guid: c0b76c796c074114287fe685451ec543, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
