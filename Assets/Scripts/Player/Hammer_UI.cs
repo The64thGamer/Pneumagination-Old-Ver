@@ -45,7 +45,7 @@ public class Hammer_UI : MonoBehaviour
 
     //Consts
     const int maxMaterialSlots = 11;
-    const int maxPropSlots = 50;
+    const int maxPropSlots = 51;
     const float minVertexDistance = 0.1f;
     const float minLineDistance = 0.1f;
     const float maxPickingDistance = 10.0f;
