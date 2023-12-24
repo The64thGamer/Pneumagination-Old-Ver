@@ -9,7 +9,7 @@ public class DEAD_Light : MonoBehaviour
 
     [Header("Objects")]
     [SerializeField] List<Light> lights;
-    [SerializeField] List<MeshRenderer> emissiveMeshes;
+    [SerializeField] List<Renderer> emissiveMeshes;
 
     [Header("Signal")]
     [SerializeField] int dtuIndex;
