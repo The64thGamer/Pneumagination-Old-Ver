@@ -124,8 +124,7 @@ MonoBehaviour:
   beforeTransparentCustomPostProcesses: []
   beforePostProcessCustomPostProcesses: []
   afterPostProcessBlursCustomPostProcesses: []
-  afterPostProcessCustomPostProcesses:
-  - AnisotropicKuwahara, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  afterPostProcessCustomPostProcesses: []
   beforeTAACustomPostProcesses: []
   defaultRenderingLayerMask: 257
   renderingLayerNames:

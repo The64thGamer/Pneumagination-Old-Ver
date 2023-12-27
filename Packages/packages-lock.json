@@ -141,6 +141,12 @@
         "com.unity.render-pipelines.core": "16.0.4"
       }
     },
+    "com.unity.rendering.denoising": {
+      "version": "1.0.3",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.rendering.light-transport": {
       "version": "1.0.0",
       "depth": 2,
