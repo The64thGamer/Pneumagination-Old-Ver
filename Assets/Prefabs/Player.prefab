@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 7346867020699984951}
   - component: {fileID: 3443166164764453272}
   - component: {fileID: 3285997499659580579}
+  - component: {fileID: 1915950471124305014}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -454,7 +455,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3529944901283763864}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26d6499a6bd256e47b859377446493a1, type: 3}
   m_Name: 
@@ -530,6 +531,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c174b0f8a2fe74a8ad6a68a2933460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1915950471124305014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529944901283763864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d6499a6bd256e47b859377446493a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  fadeRadius: 0
+  priority: 0
+  customPasses:
+  - rid: 5438405026458632745
+  injectionPoint: 1
+  m_TargetCamera: {fileID: 0}
+  useTargetCamera: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 5438405026458632745
+      type: {class: HDRPCompatability, ns: , asm: TrueTrace}
+      data:
+        m_Name: Custom Pass
+        enabled: 1
+        targetColorBuffer: 0
+        targetDepthBuffer: 0
+        clearFlags: 0
+        passFoldout: 0
+        m_Version: 0
 --- !u!1 &3805736980352897171
 GameObject:
   m_ObjectHideFlags: 0
