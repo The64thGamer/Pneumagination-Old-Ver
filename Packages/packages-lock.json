@@ -68,12 +68,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.rendering.denoising": {
-      "version": "1.0.3",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.settings-manager": {
       "version": "2.0.1",
       "depth": 2,
@@ -205,12 +199,6 @@
       "dependencies": {}
     },
     "com.unity.modules.jsonserialize": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
-    "com.unity.modules.nvidia": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",

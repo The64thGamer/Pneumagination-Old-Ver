@@ -3,21 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Buildable Block
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - 
   - Water
   - UI
   - 
   - 
   - 
   - 
-  - Pickup
-  - CurrentlyPickingUp
+  - 
+  - 
   - 
   - 
   - 
