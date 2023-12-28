@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 3421.9546, g: 3665.3384, b: 3890.3755, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -163,7 +163,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 130000
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -810,7 +810,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 4500
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1759,6 +1759,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3443166164764453272, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
     - {fileID: 1915950471124305014, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
+    - {fileID: 7770876341089469749, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
+    - {fileID: 7346867020699984951, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
+    - {fileID: 3285997499659580579, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
