@@ -1397,7 +1397,7 @@ namespace TrueTrace {
                 AggData[] Aggs = new AggData[InstanceData.RenderQue.Count];
                 // UnityEngine.Profiling.Profiler.BeginSample("Remake Initial Data");
                 for (int i = 0; i < MeshDataCount; i++) {
-                    if (!RenderQue[i].IsSkinnedGroup) RenderQue[i].UpdateAABB(RenderTransforms[i]);
+                    if (!RenderQue[i].IsSkinnedGroup && !RenderQue[i].IsDeformable) RenderQue[i].UpdateAABB(RenderTransforms[i]);
                     MyMeshesCompacted.Add(new MyMeshDataCompacted() {
                         mesh_data_bvh_offsets = aggregated_bvh_node_count,
                         Transform = RenderTransforms[i].worldToLocalMatrix,
@@ -1477,7 +1477,7 @@ namespace TrueTrace {
                     {
                         TargetParent = RenderQue[i];
                         // RenderTransforms[i].hasChanged = false;
-                        if (TargetParent.IsSkinnedGroup) continue;
+                        if (TargetParent.IsSkinnedGroup || RenderQue[i].IsDeformable) continue;
                         TargetTransform = RenderTransforms[i];
                         TargetParent.UpdateAABB(TargetTransform);
                         TempMesh2 = MyMeshesCompacted[i];

@@ -4499,4 +4499,24 @@
     <RoughnessRemapMin>null</RoughnessRemapMin>
     <RoughnessRemapMax>null</RoughnessRemapMax>
   </MaterialShader>
+  <MaterialShader>
+    <Name>Custom/Water</Name>
+    <BaseColorTex>_MainTex</BaseColorTex>
+    <NormalTex>null</NormalTex>
+    <EmissionTex>null</EmissionTex>
+    <MetallicTex>null</MetallicTex>
+    <MetallicTexChannel>0</MetallicTexChannel>
+    <MetallicRange>null</MetallicRange>
+    <RoughnessTex>null</RoughnessTex>
+    <RoughnessTexChannel>0</RoughnessTexChannel>
+    <RoughnessRange>null</RoughnessRange>
+    <IsGlass>false</IsGlass>
+    <IsCutout>false</IsCutout>
+    <UsesSmoothness>false</UsesSmoothness>
+    <BaseColorValue>null</BaseColorValue>
+    <MetallicRemapMin>null</MetallicRemapMin>
+    <MetallicRemapMax>null</MetallicRemapMax>
+    <RoughnessRemapMin>null</RoughnessRemapMin>
+    <RoughnessRemapMax>null</RoughnessRemapMax>
+  </MaterialShader>
 </Materials>
