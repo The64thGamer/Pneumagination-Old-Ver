@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Color = UnityEngine.Color;
 
 public class Data_Manager : MonoBehaviour
 {
@@ -301,6 +303,8 @@ public class Data_Manager : MonoBehaviour
         GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
         brush.name = hash;
         brush.transform.position = position;
+        brush.transform.parent = trueTraceScene;
+
         CustomBrushData data = new CustomBrushData()
         {
             brushType = BrushType.block,

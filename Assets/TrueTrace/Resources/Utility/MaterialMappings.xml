@@ -64,17 +64,17 @@
     <Name>Autodesk Interactive</Name>
     <BaseColorTex>_MainTex</BaseColorTex>
     <NormalTex>_BumpMap</NormalTex>
-    <EmissionTex>null</EmissionTex>
-    <MetallicTex>null</MetallicTex>
+    <EmissionTex>_EmissionMap</EmissionTex>
+    <MetallicTex>_MetallicGlossMap</MetallicTex>
     <MetallicTexChannel>0</MetallicTexChannel>
-    <MetallicRange>null</MetallicRange>
-    <RoughnessTex>_MetallicGlossMap</RoughnessTex>
+    <MetallicRange>_Metallic</MetallicRange>
+    <RoughnessTex>_SpecGlossMap</RoughnessTex>
     <RoughnessTexChannel>0</RoughnessTexChannel>
-    <RoughnessRange>null</RoughnessRange>
+    <RoughnessRange>_Glossiness</RoughnessRange>
     <IsGlass>false</IsGlass>
     <IsCutout>false</IsCutout>
     <UsesSmoothness>false</UsesSmoothness>
-    <BaseColorValue>null</BaseColorValue>
+    <BaseColorValue>_Color</BaseColorValue>
     <MetallicRemapMin>null</MetallicRemapMin>
     <MetallicRemapMax>null</MetallicRemapMax>
     <RoughnessRemapMin>null</RoughnessRemapMin>
@@ -4454,6 +4454,46 @@
     <IsCutout>false</IsCutout>
     <UsesSmoothness>false</UsesSmoothness>
     <BaseColorValue>null</BaseColorValue>
+    <MetallicRemapMin>null</MetallicRemapMin>
+    <MetallicRemapMax>null</MetallicRemapMax>
+    <RoughnessRemapMin>null</RoughnessRemapMin>
+    <RoughnessRemapMax>null</RoughnessRemapMax>
+  </MaterialShader>
+  <MaterialShader>
+    <Name>Mixall/TwoSided</Name>
+    <BaseColorTex>_MainTex</BaseColorTex>
+    <NormalTex>null</NormalTex>
+    <EmissionTex>null</EmissionTex>
+    <MetallicTex>null</MetallicTex>
+    <MetallicTexChannel>0</MetallicTexChannel>
+    <MetallicRange>null</MetallicRange>
+    <RoughnessTex>null</RoughnessTex>
+    <RoughnessTexChannel>0</RoughnessTexChannel>
+    <RoughnessRange>null</RoughnessRange>
+    <IsGlass>false</IsGlass>
+    <IsCutout>false</IsCutout>
+    <UsesSmoothness>false</UsesSmoothness>
+    <BaseColorValue>null</BaseColorValue>
+    <MetallicRemapMin>null</MetallicRemapMin>
+    <MetallicRemapMax>null</MetallicRemapMax>
+    <RoughnessRemapMin>null</RoughnessRemapMin>
+    <RoughnessRemapMax>null</RoughnessRemapMax>
+  </MaterialShader>
+  <MaterialShader>
+    <Name>Shader Graphs/AVP_Metal</Name>
+    <BaseColorTex>Texture2D_1E4703A</BaseColorTex>
+    <NormalTex>null</NormalTex>
+    <EmissionTex>null</EmissionTex>
+    <MetallicTex>null</MetallicTex>
+    <MetallicTexChannel>0</MetallicTexChannel>
+    <MetallicRange>null</MetallicRange>
+    <RoughnessTex>null</RoughnessTex>
+    <RoughnessTexChannel>0</RoughnessTexChannel>
+    <RoughnessRange>null</RoughnessRange>
+    <IsGlass>false</IsGlass>
+    <IsCutout>false</IsCutout>
+    <UsesSmoothness>false</UsesSmoothness>
+    <BaseColorValue>Color_AD8F67CE</BaseColorValue>
     <MetallicRemapMin>null</MetallicRemapMin>
     <MetallicRemapMax>null</MetallicRemapMax>
     <RoughnessRemapMin>null</RoughnessRemapMin>

@@ -985,7 +985,7 @@ float3 ReconstructDisney(MaterialData hitDat, float3 wo, float3 wi, bool thin,
 }
 bool SampleDisney(MaterialData hitDat, inout float3 v, bool thin, out float PDF, inout float3 throughput, float3 norm, out int Case, uint pixel_index, out bool Refracted, bool GotFlipped)
 {
-    float3x3 TruTanMat = GetTangentSpace2(norm);
+    float3x3 TruTanMat = GetTangentSpace(norm);
     float4 P = CalculateLobePdfs(hitDat);//pSpecular, pClearcoat, pDiffuse, pTransmission
     v = ToLocal(TruTanMat, -v);
     Refracted = false;
@@ -1031,7 +1031,7 @@ inline bool EvaluateBsdf(const MaterialData hitDat, float3 DirectionIn, float3 D
     [branch] switch (hitDat.MatType) {//Switch between different materials
         case CutoutIndex:
         case DisneyIndex:
-            bsdf_value = EvaluateDisney(hitDat, -DirectionIn, DirectionOut, hitDat.Thin == 1, PDF, GetTangentSpace2(Normal), pixel_index);// DisneyEval(mat, -PrevDirection, norm, to_light, bsdf_pdf, hitDat);
+            bsdf_value = EvaluateDisney(hitDat, -DirectionIn, DirectionOut, hitDat.Thin == 1, PDF, GetTangentSpace(Normal), pixel_index);// DisneyEval(mat, -PrevDirection, norm, to_light, bsdf_pdf, hitDat);
             validbsdf = PDF > 0;
         break;
         case VolumetricIndex:

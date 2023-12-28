@@ -342,9 +342,10 @@ void IntersectBVHShadow(const int localid) {
                 break;
             }
         #else
-            max_distance = abs(ShadowRaysBuffer[ray_index].t);
-            ray.origin = ShadowRaysBuffer[ray_index].origin;
-            ray.direction = i_octahedral_32(ShadowRaysBuffer[ray_index].direction);
+            ShadowRayData ShadowRay = ShadowRaysBuffer[ray_index];
+            max_distance = abs(ShadowRay.t);
+            ray.origin = ShadowRay.origin;
+            ray.direction = i_octahedral_32(ShadowRay.direction);
             ray.direction_inv = rcp(ray.direction);
             ray2 = ray;
             float3 throughput = 1;
@@ -357,7 +358,6 @@ void IntersectBVHShadow(const int localid) {
 
             current_group.x = (uint)0;
             current_group.y = (uint)0x80000000;
-
             tlas_stack_size = -1;
             uint2 triangle_group;
             [loop] while (Reps < 1000) {//Traverse Accelleration Structure(Compressed Wide Bounding Volume Hierarchy)            
@@ -449,16 +449,17 @@ void IntersectBVHShadow(const int localid) {
                     if (stack_size == 0) {//thread has finished traversing
                         current_group.y = 0;
                         if(!TerrainExists) {
-                            if(UseReSTIRGI && ReSTIRGIUpdateRate != 0) NEEPosA[uint2(ShadowRaysBuffer[ray_index].PixelIndex % screen_width, ShadowRaysBuffer[ray_index].PixelIndex / screen_width)] += float4(0,0,0,ShadowRaysBuffer[ray_index].LuminanceIncomming);
-                            if (ShadowRaysBuffer[ray_index].t >= 0) {
+                            uint PixelIndex = ShadowRay.PixelIndex;
+                            if(UseReSTIRGI && ReSTIRGIUpdateRate != 0) NEEPosA[uint2(PixelIndex % screen_width, PixelIndex / screen_width)] += float4(0,0,0,ShadowRay.LuminanceIncomming);
+                            if (ShadowRay.t >= 0) {
                                 if (CurBounce == 0) {
-                                    GlobalColors[ShadowRaysBuffer[ray_index].PixelIndex].Direct += ShadowRaysBuffer[ray_index].illumination * throughput;
+                                    GlobalColors[PixelIndex].Direct += ShadowRay.illumination * throughput;
                                 } else {
-                                    GlobalColors[ShadowRaysBuffer[ray_index].PixelIndex].Indirect += ShadowRaysBuffer[ray_index].illumination * throughput;
+                                    GlobalColors[PixelIndex].Indirect += ShadowRay.illumination * throughput;
                                 }
                             }
                             else {
-                                GlobalColors[ShadowRaysBuffer[ray_index].PixelIndex].PrimaryNEERay = packRGBE(unpackRGBE(GlobalColors[ShadowRaysBuffer[ray_index].PixelIndex].PrimaryNEERay) + ShadowRaysBuffer[ray_index].illumination * throughput);
+                                GlobalColors[PixelIndex].PrimaryNEERay = packRGBE(unpackRGBE(GlobalColors[PixelIndex].PrimaryNEERay) + ShadowRay.illumination * throughput);
                             }
                         }
                         break;
@@ -551,6 +552,7 @@ void IntersectShadowHeightmap() {
             if(ShadowRaysBuffer[ray_index].t != 0) {
                 if (TerrainExists) HitHeightmap = IntersectHeightMapShadow(ray, abs(ShadowRaysBuffer[ray_index].t));
                 if (!HitHeightmap) {
+                    if(UseReSTIRGI && ReSTIRGIUpdateRate != 0) NEEPosA[uint2(pixel_index % screen_width, pixel_index / screen_width)] += float4(0,0,0,ShadowRaysBuffer[ray_index].LuminanceIncomming);
                     if (ShadowRaysBuffer[ray_index].t >= 0) {
                         if (CurBounce == 0) {
                             GlobalColors[pixel_index].Direct += ShadowRaysBuffer[ray_index].illumination;
@@ -650,7 +652,7 @@ void IntersectHeightMap() {
 
                         int PixIndex = GlobalRays[ray_index].PixelIndex;
                         uint2 TempUv = uint2(PixIndex % screen_width, PixIndex / screen_width);
-                        if(UseASVGF && CurBounce == 0) _PrimaryTriangleInfo[TempUv] = uint4(0, 0, 0, 1);
+                        if(CurBounce == 0) _PrimaryTriangleInfo[TempUv] = uint4(0, 0, 0, 1);
 
                         bestHit.u = uv.x;
                         bestHit.v = uv.y;

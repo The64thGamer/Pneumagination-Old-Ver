@@ -449,8 +449,6 @@ namespace CommonVars
     public struct Layer
     {
         unsafe public fixed int Children[8];
-        unsafe public fixed int Leaf[8];
-
     }
 
     [System.Serializable]

@@ -8,6 +8,7 @@
 #define StainedGlassShadows
 // #define DX11
 
+
 //Dont change the ones below
 #define DiffuseIndex 0
 #define DisneyIndex 1

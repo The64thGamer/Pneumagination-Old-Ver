@@ -342,6 +342,12 @@ void CopyData(uint3 id : SV_DispatchThreadID)
     #endif
     
     float2 pos_prev = ((((float2(id.xy)+0.5f) * float2(rcp(screen_width), rcp(screen_height)) + motion) * float2(screen_width, screen_height)));
+    if(any(pos_prev > float2(screen_width, screen_height) || pos_prev < 0)) pos_prev.x = -1000;
+//     float3 NormA = i_octahedral_32(asuint(ScreenSpaceInfo[id.xy].x));
+//     float3 NormB = i_octahedral_32(TEX_PT_NORMALS_B[pos_prev].x);
+//     if(dot(NormA, NormB) < 0.99f) {
+// pos_prev.x = -1000;
+//     }
     MetallicAWrite[id.xy] = float2((Input >> 16) / 65535.0f, (Input & 0xFFFF) / 65535.0f);
     if(TexInverted.w == 0) {
         Pixel.Direct = float3(0,0,0);
@@ -355,12 +361,12 @@ void CopyData(uint3 id : SV_DispatchThreadID)
     float Exposure = 1;
     if(UseExposure) Exposure = ExposureBuffer[0];
     [branch]if (Pixel.IsSpecular == 0 || (Input & 0xFFFF) / 65535.0f >= 0.4f) {
-        AlbedoColorA[id.xy] = uint2(WorldData.w, AlbedoColorB[pos_prev].y);
+        AlbedoColorA[id.xy] = uint2(WorldData.w, pos_prev.x == -1000 ? 0 : AlbedoColorB[pos_prev].y);
         STORE_SH(TEX_PT_COLOR_LF_SHWrite, TEX_PT_COLOR_LF_COCGWrite, id.xy, irradiance_to_SH(clamp(PartialRenderingFactor * Exposure * IndirectBoost * clamp(Pixel.Indirect * ((TexInverted.xyz * ((WorldAlbedo > 0.001f) ? rcp(WorldAlbedo) : 0))) / 1024.0f,0,120000),0,120000.0f), clamp(asfloat(WorldData.xyz),-1,1)));
         TEX_PT_COLOR_HFWrite[id.xy] = clamp(float4(PartialRenderingFactor * Exposure * (Pixel.Direct + unpackRGBE(Pixel.Fog) * ((Pixel.IsSpecular != 2) ? TexBaseColor : TexBaseColor)) * TexInverted.xyz * ((WorldAlbedo > 0.001f) ? rcp(WorldAlbedo) : 1.0f),1),0,120000.0f);
         TEX_PT_COLOR_SPECWrite[id.xy] = 0;
     } else {
-        AlbedoColorA[id.xy] = uint2(AlbedoColorB[pos_prev].x, WorldData.w);
+        AlbedoColorA[id.xy] = uint2(pos_prev.x == -1000 ? 0 : AlbedoColorB[pos_prev].x, WorldData.w);
         TEX_PT_COLOR_LF_SHWrite[id.xy] = 0;
         TEX_PT_COLOR_LF_COCGWrite[id.xy] = 0;
         TEX_PT_COLOR_SPECWrite[id.xy] = packRGBE(PartialRenderingFactor * max(Exposure * (Pixel.Direct + IndirectBoost * Pixel.Indirect + unpackRGBE(Pixel.Fog) * TexBaseColor) * TexInverted.xyz * ((WorldAlbedo > 0.001f) ? rcp(WorldAlbedo) : 1.0f),0));
@@ -635,7 +641,7 @@ void Temporal(uint3 gl_GlobalInvocationID : SV_DispatchThreadID, uint3 gl_WorkGr
     #endif
 
 
-    float2 pos_prev = ((((float2(ipos)+0.5f) * float2(rcp(screen_width), rcp(screen_height)) + motion.xy) * float2(screen_width, screen_height))) + (random(54, gl_GlobalInvocationID) - 0.5f) * 0.2f;
+    float2 pos_prev = ((((float2(ipos)+0.5f) * float2(rcp(screen_width), rcp(screen_height)) + motion.xy) * float2(screen_width, screen_height)));// + (random(54, gl_GlobalInvocationID) - 0.5f) * 0.2f;
 
     // Load the parameters of the target pixel
     bool ReflectedRefracted = ReflectedRefractedTex[gl_GlobalInvocationID.xy];
@@ -649,7 +655,7 @@ void Temporal(uint3 gl_GlobalInvocationID : SV_DispatchThreadID, uint3 gl_WorkGr
     float2 reflprojection = ((curprojectedrefl.xy / curprojectedrefl.w) - (prevprojectedrefl.xy / prevprojectedrefl.w)) * 0.5f;
 
 
-    float motion_length = 0.0f;//length((motion.xy) * float2(screen_width, screen_height));
+    float motion_length = length((motion.xy) * float2(screen_width, screen_height));
     float CenterFDepth = TEX_PT_VIEW_DEPTH_A[ipos].y;
 
     float shininess = clamp(2.0 / max(pow(MetallicA[ipos].y, 4), 0.001f) - 2.0, 0.0, 32.0);
@@ -987,7 +993,7 @@ inline void filter_image(
 
     float step_size = int(1u << (iteration));
     float hist_len_lf = TEX_ASVGF_HIST_MOMENTS_HF_A[ipos_hires].a;
-    if(hist_len_lf > 2 && iteration == 4) step_size = int(1u << (1));
+    if(hist_len_lf > 0 && iteration == 4) step_size = int(1u << (1));
     float sum_w_lf = 1;// + clamp((hist_len_lf + 4) / 12.0f, 0, 1) * 1.0f;
     // sum_w_lf = clamp((hist_len_lf + 6) / 12.0f, 0, 1) * 1.0f;
     SH sum_color_lf = color_center_lf;
@@ -1106,8 +1112,8 @@ inline void deflicker_image(
         float ratio = max_lum / color_center_lf.shY.w;
         float ratio2 = (exp(max_lum) - 1) * 1024.0f * 1024.0f / ((exp(color_center_lf.shY.w) - 1) * 1024.0f * 1024.0f);
         // if(TEX_ASVGF_HIST_MOMENTS_HF_A[ipos_hires].a > 4) {
-            // color_center_lf.shY *= ratio;
-            // color_center_lf.CoCg *= ratio;
+            color_center_lf.shY *= ratio;
+            color_center_lf.CoCg *= ratio;
         // }
         LFVarianceB[gl_GlobalInvocationID.xy] = ratio;
     } else {
@@ -1206,10 +1212,23 @@ inline void filter_image(
 
     float hist_len_hf = TEX_ASVGF_HIST_MOMENTS_HF_A[ipos].b;
     float3 normal_center = normalize(lerp(i_octahedral_32(TEX_PT_NORMALS_A[ipos].x), i_octahedral_32(TEX_PT_NORMALS_A[ipos].y), clamp(hist_len_hf / 8.0f, 0, 1)));
-
+    if (hist_len_hf > 1)
+    {
+        // Compute luminance variance from the statistical moments: Var(X) = E[X^2] - E[X]^2
+        // The `asvgf_temporal` shader computes a combination of temporal and spatial (3x3) moments,
+        // and stores these into a texture. This shader will combine moments of the surrounding 
+        // pixels using the same weights as for colors, and the combined moments are used on the next iteration.
+        lum_mean_hf = moments_center.x;
     float lum_variance_hf = max(1e-8, moments_center.y - moments_center.x * moments_center.x) * (hist_len_hf <= 4 ? (1.0f + 2.0f * (1.0f - (hist_len_hf) / 4.0f)) : 1.0f);
         sigma_l_hf =  min(hist_len_hf, 16) / (2.0 * lum_variance_hf);
-        // if(spec_iteration == 0) sigma_l_hf = 120.0f;
+    }
+    else
+    {
+        // If there is no history, treat all moments as invalid, because 3x3 spatial 
+        // is just not enough to get reasonable filtering. Ignore luminance in this case,
+        // and perform a depth-normal-guided bilateral blur.
+        sigma_l_hf = 0;
+    }
     // sigma_l_hf = lerp(0, sigma_l_hf, clamp(hist_len_hf / 12.0f - 1, 0.01f, 1));
 
     // reduce the HF filter sensitivity to normals when the lighting is invalidated

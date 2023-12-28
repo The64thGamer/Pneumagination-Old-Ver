@@ -14,6 +14,7 @@ namespace TrueTrace {
     {
         public Task AsyncTask;
         public int ExistsInQue = -1;
+        public bool IsDeformable = false;
         [HideInInspector] public ComputeBuffer LightTriBuffer;
         [HideInInspector] public ComputeBuffer TriBuffer;
         [HideInInspector] public ComputeBuffer BVHBuffer;
@@ -29,6 +30,7 @@ namespace TrueTrace {
         [HideInInspector] public List<LightTriData> LightTriangles;
         [HideInInspector] public BVH8Builder BVH;
         [HideInInspector] public SkinnedMeshRenderer[] SkinnedMeshes;
+        [HideInInspector] public MeshFilter[] DeformableMeshes;
         [HideInInspector] public int[] IndexCounts;
         [HideInInspector] public ComputeShader MeshRefit;
         [HideInInspector] public bool HasStarted;
@@ -155,7 +157,6 @@ namespace TrueTrace {
 
         public void Reset(int Que) {
             ExistsInQue = Que;
-            ClearAll();
             LoadData();
             AsyncTask = Task.Run(() => BuildTotal());
         }
@@ -163,7 +164,7 @@ namespace TrueTrace {
         public void OnApplicationQuit()
         {
             if (VertexBuffers != null) {
-                for (int i = 0; i < SkinnedMeshes.Length; i++) {
+                for (int i = 0; i < Mathf.Max(SkinnedMeshes.Length, DeformableMeshes.Length); i++) {
                     VertexBuffers[i].Release();
                     IndexBuffers[i].Release();
                     NodeBuffer.Release();
@@ -420,6 +421,10 @@ namespace TrueTrace {
                 HasStarted = false;
                 SkinnedMeshes = new SkinnedMeshRenderer[TotalObjects];
                 IndexCounts = new int[TotalObjects];
+            } else if(IsDeformable) {
+                HasStarted = false;
+                DeformableMeshes = new MeshFilter[TotalObjects];
+                IndexCounts = new int[TotalObjects];
             }
 
             int VertCount = 0;
@@ -470,7 +475,7 @@ namespace TrueTrace {
 
                 for (int i2 = 0; i2 < submeshcount; ++i2) {//Add together all the submeshes in the mesh to consider it as one object
                     int IndiceLength = (int)mesh.GetIndexCount(i2) / 3;
-                    MatIndex = i2 + RepCount;
+                    MatIndex = Mathf.Min(i2, CurrentObject.Names.Length) + RepCount;
                     TotalIndexLength += IndiceLength;
                     var SubMesh = new int[IndiceLength];
                     System.Array.Fill(SubMesh, MatIndex);
@@ -481,13 +486,17 @@ namespace TrueTrace {
                     SkinnedMeshes[i] = ChildObjects[i].GetComponent<SkinnedMeshRenderer>();
                     SkinnedMeshes[i].updateWhenOffscreen = true;
                     TotalTriangles += TotalIndexLength;
+                } else if(IsDeformable) {
+                    IndexCounts[i] = TotalIndexLength;
+                    DeformableMeshes[i] = ChildObjects[i].GetComponent<MeshFilter>();
+                    TotalTriangles += TotalIndexLength;
                 }
                 TransformIndexes.Add(new MeshTransformVertexs() {
                     VertexStart = PreIndexLength,
                     VertexCount = CurMeshData.Indices.Count - PreIndexLength,
                     IndexOffset = IndexOffset
                 });
-                RepCount += submeshcount;
+                RepCount += Mathf.Min(submeshcount, CurrentObject.Names.Length);
             }
         }
 
@@ -551,7 +560,7 @@ namespace TrueTrace {
             #else
                 for (int i = 0; i < CWBVHIndicesBufferCount; i++) CWBVHIndicesBufferInverted[i] = i;
             #endif
-            if (IsSkinnedGroup)
+            if (IsSkinnedGroup || IsDeformable)
             {
                 NodePair = new List<NodeIndexPairData>();
                 NodePair.Add(new NodeIndexPairData());
@@ -567,28 +576,22 @@ namespace TrueTrace {
                 TempSlab.Slab = new List<int>();
 
                 for (int i = 0; i < MaxRecur; i++) LayerStack[i] = TempSlab;
-                for(int i = 0; i < 8; i++) PresetLayer.Leaf[i] = PresetLayer.Children[i] = -1;
+                for(int i = 0; i < 8; i++) PresetLayer.Children[i] = 0;
 
                 for (int i = 0; i < NodePair.Count; i++) {
                     ForwardStack[i] = PresetLayer;
                     if (IsLeafList[i].x == 1) {
                         int first_triangle = (byte)BVH.BVH8Nodes[NodePair[i].BVHNode].meta[NodePair[i].InNodeOffset] & 0b11111;
                         int NumBits = CommonFunctions.NumberOfSetBits((byte)BVH.BVH8Nodes[NodePair[i].BVHNode].meta[NodePair[i].InNodeOffset] >> 5);
-                        ForwardStack[i].Children[NodePair[i].InNodeOffset] = NumBits + (int)BVH.BVH8Nodes[NodePair[i].BVHNode].base_index_triangle + first_triangle;
-                        ForwardStack[i].Leaf[NodePair[i].InNodeOffset] = (int)BVH.BVH8Nodes[NodePair[i].BVHNode].base_index_triangle + first_triangle + 1;
+                        ForwardStack[i].Children[NodePair[i].InNodeOffset] = NumBits + ((int)BVH.BVH8Nodes[NodePair[i].BVHNode].base_index_triangle + first_triangle) * 24 + 1;
                     } else {
-                        ForwardStack[i].Children[NodePair[i].InNodeOffset] = i;
-                        ForwardStack[i].Leaf[NodePair[i].InNodeOffset] = 0;
+                        ForwardStack[i].Children[NodePair[i].InNodeOffset] = (-i) - 1;
                     }
-                    ForwardStack[IsLeafList[i].z].Children[NodePair[i].InNodeOffset] = i;
-                    ForwardStack[IsLeafList[i].z].Leaf[NodePair[i].InNodeOffset] = 0;
+                    ForwardStack[IsLeafList[i].z].Children[NodePair[i].InNodeOffset] = (-i) - 1;
                     
                     var TempLayer = LayerStack[IsLeafList[i].y];
                     TempLayer.Slab.Add(i);
                     LayerStack[IsLeafList[i].y] = TempLayer;
-                }
-                for(int i = 0; i < LayerStack.Length; i++) {
-                    LayerStack[i].Slab.Sort((s1, s2) => (s1).CompareTo((s2)));
                 }
                 CommonFunctions.ConvertToSplitNodes(BVH, ref SplitNodes);
             }
@@ -611,20 +614,33 @@ namespace TrueTrace {
             AABB OverAABB = new AABB();
             tempAABB = new AABB();
             OverAABB.init();
-            for (int i = 0; i < SkinnedMeshes.Length; i++) {
-                tempAABB.BBMax = SkinnedMeshes[i].bounds.center + SkinnedMeshes[i].bounds.size / 2.0f;
-                tempAABB.BBMin = SkinnedMeshes[i].bounds.center - SkinnedMeshes[i].bounds.size / 2.0f;
-                OverAABB.Extend(ref tempAABB);
+            if(IsSkinnedGroup) {
+                for (int i = 0; i < SkinnedMeshes.Length; i++) {
+                    tempAABB.BBMax = SkinnedMeshes[i].bounds.center + SkinnedMeshes[i].bounds.size / 2.0f;
+                    tempAABB.BBMin = SkinnedMeshes[i].bounds.center - SkinnedMeshes[i].bounds.size / 2.0f;
+                    OverAABB.Extend(ref tempAABB);
+                }
+            } else {
+                for (int i = 0; i < DeformableMeshes.Length; i++) {
+                    tempAABB.BBMax = DeformableMeshes[i].gameObject.GetComponent<Renderer>().bounds.center + DeformableMeshes[i].gameObject.GetComponent<Renderer>().bounds.size / 2.0f;
+                    tempAABB.BBMin = DeformableMeshes[i].gameObject.GetComponent<Renderer>().bounds.center - DeformableMeshes[i].gameObject.GetComponent<Renderer>().bounds.size / 2.0f;
+                    OverAABB.Extend(ref tempAABB);
+                }
             }
 
             aabb = OverAABB;
             if (!HasStarted) {
-                VertexBuffers = new GraphicsBuffer[SkinnedMeshes.Length];
-                IndexBuffers = new ComputeBuffer[SkinnedMeshes.Length];
+                if(IsSkinnedGroup) {                
+                    VertexBuffers = new GraphicsBuffer[SkinnedMeshes.Length];
+                    IndexBuffers = new ComputeBuffer[SkinnedMeshes.Length];
+                } else {
+                    VertexBuffers = new GraphicsBuffer[DeformableMeshes.Length];
+                    IndexBuffers = new ComputeBuffer[DeformableMeshes.Length];
+                }
                 NodeBuffer = new ComputeBuffer(NodePair.Count, 32);
                 NodeBuffer.SetData(NodePair);
                 AABBBuffer = new ComputeBuffer(TotalTriangles, 24);
-                StackBuffer = new ComputeBuffer(ForwardStack.Length, 64);
+                StackBuffer = new ComputeBuffer(ForwardStack.Length, 32);
                 StackBuffer.SetData(ForwardStack);
                 CWBVHIndicesBuffer = new ComputeBuffer(BVH.cwbvh_indices.Length, 4);
                 CWBVHIndicesBuffer.SetData(CWBVHIndicesBufferInverted);
@@ -644,7 +660,7 @@ namespace TrueTrace {
                 }
                 for (int i = 0; i < VertexBuffers.Length; i++) {
                     if (IndexBuffers[i] != null) IndexBuffers[i].Release();
-                    int[] IndexBuffer = SkinnedMeshes[i].sharedMesh.triangles;
+                    int[] IndexBuffer = IsSkinnedGroup ? SkinnedMeshes[i].sharedMesh.triangles : DeformableMeshes[i].sharedMesh.triangles;
                     IndexBuffers[i] = new ComputeBuffer(IndexBuffer.Length, 4, ComputeBufferType.Raw);
                     IndexBuffers[i].SetData(IndexBuffer);
                 }
@@ -654,8 +670,13 @@ namespace TrueTrace {
                 cmd.BeginSample("ReMesh");
                 for (int i = 0; i < VertexBuffers.Length; i++) {
                     VertexBuffers[i].Release();
-                    SkinnedMeshes[i].vertexBufferTarget |= GraphicsBuffer.Target.Raw;
-                    VertexBuffers[i] = SkinnedMeshes[i].GetVertexBuffer();
+                    if(IsSkinnedGroup) {
+                        SkinnedMeshes[i].vertexBufferTarget |= GraphicsBuffer.Target.Raw;
+                        VertexBuffers[i] = SkinnedMeshes[i].GetVertexBuffer();
+                    } else {
+                        DeformableMeshes[i].sharedMesh.vertexBufferTarget |= GraphicsBuffer.Target.Raw;
+                        VertexBuffers[i] = DeformableMeshes[i].sharedMesh.GetVertexBuffer(0);
+                    }
                 }
                 cmd.SetComputeBufferParam(MeshRefit, RefitLayerKernel, "ReverseStack", StackBuffer);
                 cmd.SetComputeBufferParam(MeshRefit, ConstructKernel, "Boxs", AABBBuffer);
@@ -677,7 +698,7 @@ namespace TrueTrace {
 
                 for (int i = 0; i < TotalObjects; i++)
                 {
-                    var SkinnedRootBone = SkinnedMeshes[i].rootBone;
+                    var SkinnedRootBone = IsSkinnedGroup ? SkinnedMeshes[i].rootBone : this.transform;
                     if(SkinnedRootBone == null) continue;
                     int IndexCount = IndexCounts[i];
 
@@ -702,39 +723,46 @@ namespace TrueTrace {
                 }
                 cmd.EndSample("ReMesh Light Transfer");
 
+                #if HardwareRT
+                #else
+                    cmd.BeginSample("ReMesh Init");
+                    cmd.SetComputeIntParam(MeshRefit, "NodeCount", NodePair.Count);
+                    cmd.DispatchCompute(MeshRefit, NodeInitializerKernel, (int)Mathf.Ceil(NodePair.Count / (float)KernelRatio), 1, 1);
+                    cmd.EndSample("ReMesh Init");
 
-                cmd.BeginSample("ReMesh Init");
-                cmd.SetComputeIntParam(MeshRefit, "NodeCount", NodePair.Count);
-                cmd.DispatchCompute(MeshRefit, NodeInitializerKernel, (int)Mathf.Ceil(NodePair.Count / (float)KernelRatio), 1, 1);
-                cmd.EndSample("ReMesh Init");
+                    cmd.BeginSample("ReMesh Refit");
+                    for (int i = MaxRecur - 1; i >= 0; i--) {
+                        var NodeCount2 = LayerStack[i].Slab.Count;
+                        cmd.SetComputeIntParam(MeshRefit, "NodeCount", NodeCount2);
+                        cmd.SetComputeBufferParam(MeshRefit, RefitLayerKernel, "NodesToWork", WorkingBuffer[i]);
+                        cmd.DispatchCompute(MeshRefit, RefitLayerKernel, (int)Mathf.Ceil(WorkingBuffer[i].count / (float)KernelRatio), 1, 1);
+                    }
+                    cmd.EndSample("ReMesh Refit");
 
-                cmd.BeginSample("ReMesh Refit");
-                for (int i = MaxRecur - 1; i >= 0; i--) {
-                    var NodeCount2 = LayerStack[i].Slab.Count;
-                    cmd.SetComputeIntParam(MeshRefit, "NodeCount", NodeCount2);
-                    cmd.SetComputeBufferParam(MeshRefit, RefitLayerKernel, "NodesToWork", WorkingBuffer[i]);
-                    cmd.DispatchCompute(MeshRefit, RefitLayerKernel, (int)Mathf.Ceil(WorkingBuffer[i].count / (float)KernelRatio), 1, 1);
-                }
-                cmd.EndSample("ReMesh Refit");
+                    cmd.BeginSample("ReMesh Update");
+                    cmd.SetComputeIntParam(MeshRefit, "NodeCount", NodePair.Count);
+                    cmd.DispatchCompute(MeshRefit, NodeUpdateKernel, (int)Mathf.Ceil(NodePair.Count / (float)KernelRatio), 1, 1);
+                    cmd.EndSample("ReMesh Update");
 
-                cmd.BeginSample("ReMesh Update");
-                cmd.SetComputeIntParam(MeshRefit, "NodeCount", NodePair.Count);
-                cmd.DispatchCompute(MeshRefit, NodeUpdateKernel, (int)Mathf.Ceil(NodePair.Count / (float)KernelRatio), 1, 1);
-                cmd.EndSample("ReMesh Update");
-
-                cmd.BeginSample("ReMesh Compress");
-                cmd.SetComputeIntParam(MeshRefit, "NodeCount", BVH.BVH8Nodes.Length);
-                cmd.SetComputeIntParam(MeshRefit, "NodeOffset", NodeOffset);
-                cmd.DispatchCompute(MeshRefit, NodeCompressKernel, (int)Mathf.Ceil(NodePair.Count / (float)KernelRatio), 1, 1);
-                cmd.EndSample("ReMesh Compress");
-                cmd.EndSample("ReMesh");
+                    cmd.BeginSample("ReMesh Compress");
+                    cmd.SetComputeIntParam(MeshRefit, "NodeCount", BVH.BVH8Nodes.Length);
+                    cmd.SetComputeIntParam(MeshRefit, "NodeOffset", NodeOffset);
+                    cmd.DispatchCompute(MeshRefit, NodeCompressKernel, (int)Mathf.Ceil(NodePair.Count / (float)KernelRatio), 1, 1);
+                    cmd.EndSample("ReMesh Compress");
+                    cmd.EndSample("ReMesh");
+                #endif
             }
 
             if (!AllFull) {
                 for (int i = 0; i < VertexBuffers.Length; i++)
                 {
-                    SkinnedMeshes[i].vertexBufferTarget |= GraphicsBuffer.Target.Raw;
-                    VertexBuffers[i] = SkinnedMeshes[i].GetVertexBuffer();
+                    if(IsSkinnedGroup) {
+                        SkinnedMeshes[i].vertexBufferTarget |= GraphicsBuffer.Target.Raw;
+                        VertexBuffers[i] = SkinnedMeshes[i].GetVertexBuffer();
+                    } else {
+                        DeformableMeshes[i].sharedMesh.vertexBufferTarget |= GraphicsBuffer.Target.Raw;
+                        VertexBuffers[i] = DeformableMeshes[i].sharedMesh.GetVertexBuffer(0);
+                    }
                 }
                 if (!((new List<GraphicsBuffer>(VertexBuffers)).Contains(null))) AllFull = true;
             }
@@ -761,7 +789,7 @@ namespace TrueTrace {
             return new Vector2(width, height);
         }
 
-        public async ValueTask BuildTotal() {
+        public async Task BuildTotal() {
             int IllumTriCount = 0;
             CudaTriangle TempTri = new CudaTriangle();
             Matrix4x4 ParentMatInv = CachedTransforms[0].WTL;
