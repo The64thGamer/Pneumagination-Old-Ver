@@ -16,11 +16,14 @@ public class Data_Manager : MonoBehaviour
     [SerializeField] MapData mapData;
     [SerializeField] bool retryMap;
 
+    Transform trueTraceScene;
+
     //Consts
     const int pickupLayer = 10;
 
     private void Awake()
     {
+        trueTraceScene = GameObject.Find("Scene").transform;
         string saveFilePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml";
 
         if (!File.Exists(saveFilePath))
@@ -151,6 +154,7 @@ public class Data_Manager : MonoBehaviour
                 brush.transform.position = mapData.brushData[i].position;
                 brush.transform.rotation = mapData.brushData[i].rotation;
                 brush.name = mapData.brushData[i].objectHash.ToString();
+                brush.transform.parent = trueTraceScene;
 
                 MeshFilter filter = brush.GetComponent<MeshFilter>();
                 filter.mesh.vertices = mapData.brushData[i].vertices;
@@ -185,6 +189,7 @@ public class Data_Manager : MonoBehaviour
                 GameObject prop = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + mapData.propData[i].index));
                 prop.transform.position = mapData.propData[i].position;
                 prop.transform.rotation = mapData.propData[i].rotation;
+                prop.transform.parent = trueTraceScene;
                 prop.name = mapData.propData[i].objectHash.ToString();
                 prop.gameObject.layer = pickupLayer;
                 Component[] transforms = prop.GetComponentsInChildren(typeof(Transform), true);
@@ -238,6 +243,7 @@ public class Data_Manager : MonoBehaviour
                     animatronic.transform.position = mapData.animatronics[i].position;
                     animatronic.transform.rotation = mapData.animatronics[i].rotation;
                 }
+                animatronic.transform.parent = trueTraceScene;
                 animatronic.AddComponent<Rigidbody>();
                 animatronic.AddComponent<PhysicsObject>();
                 Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
