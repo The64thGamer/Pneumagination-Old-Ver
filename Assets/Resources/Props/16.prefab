@@ -279,12 +279,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1298602363549504998}
-  - component: {fileID: 3486991271461938996}
   - component: {fileID: 1775639052292970072}
   - component: {fileID: 7173394805625554451}
   - component: {fileID: 8961502094749808233}
   - component: {fileID: 6366129560149482781}
   - component: {fileID: 8624403067768155458}
+  - component: {fileID: 2667939203083291842}
   m_Layer: 11
   m_Name: 16
   m_TagString: Untagged
@@ -310,33 +310,6 @@ Transform:
   - {fileID: 2955098155924374433}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &3486991271461938996
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3222171296319046533}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.014353156, y: 2.6160362, z: -0.11577654}
-  m_Size: 6.157238
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.13
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 6574372891563010023}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 85629333765297939}
-  - screenRelativeHeight: 0.012046006
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 3168988197902162668}
-  m_Enabled: 1
 --- !u!65 &1775639052292970072
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -435,6 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -448,6 +422,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0
@@ -519,6 +494,18 @@ MonoBehaviour:
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}
+--- !u!114 &2667939203083291842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3222171296319046533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6201244122830097773
 GameObject:
   m_ObjectHideFlags: 0

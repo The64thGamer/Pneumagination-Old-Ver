@@ -233,41 +233,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaterialOptions: 
-  TransmissionColor: []
-  BaseColor: []
-  MetallicRemap: []
-  RoughnessRemap: []
-  emmission: []
-  EmissionColor: []
-  EmissionMask: 
-  BaseIsMap: 
-  ReplaceBase: 
-  Roughness: []
-  IOR: []
-  Metallic: []
-  SpecularTint: []
-  Sheen: []
-  SheenTint: []
-  ClearCoat: []
-  ClearCoatGloss: []
-  Anisotropic: []
-  Flatness: []
-  DiffTrans: []
-  SpecTrans: []
-  Thin: 
-  FollowMaterial: 
-  ScatterDist: []
-  SharedMaterials: []
-  Names: []
-  Specular: []
-  IsSmoothness: 
+  MaterialOptions: 0100000001000000
+  TransmissionColor:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  BaseColor:
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  MetallicRemap:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  RoughnessRemap:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  emmission:
+  - 0
+  - 0
+  EmissionColor:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  EmissionMask: 0000
+  BaseIsMap: 0000
+  ReplaceBase: 0000
+  Roughness:
+  - 0
+  - 0
+  IOR:
+  - 1
+  - 1
+  Metallic:
+  - 0
+  - 0
+  SpecularTint:
+  - 0
+  - 0
+  Sheen:
+  - 0
+  - 0
+  SheenTint:
+  - 0
+  - 0
+  ClearCoat:
+  - 0
+  - 0
+  ClearCoatGloss:
+  - 0
+  - 0
+  Anisotropic:
+  - 0
+  - 0
+  Flatness:
+  - 0
+  - 0
+  DiffTrans:
+  - 0
+  - 0
+  SpecTrans:
+  - 0
+  - 0
+  Thin: 0000000000000000
+  FollowMaterial: 0101
+  ScatterDist:
+  - 0
+  - 0
+  SharedMaterials:
+  - {fileID: 2100000, guid: 82e721b70b43c36438c92f4c6dc5d688, type: 2}
+  - {fileID: 2100000, guid: 433ffcbac2f716c448e5a727c224572b, type: 2}
+  Names:
+  - Computer
+  - Computer Glass
+  Specular:
+  - 0
+  - 0
+  IsSmoothness: 0000
   Selected: 0
-  Indexes: 
+  Indexes: 0000000000000000
   NeedsToUpdate: 0
-  IsReady: 0
-  MaterialIndex: 
-  LocalMaterialIndex: 
+  IsReady: 1
+  MaterialIndex: 0000000000000000
+  LocalMaterialIndex: 0000000000000000
   JustCreated: 1
   TilingChanged: 0
 --- !u!114 &4792469937631163697
@@ -283,6 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -296,6 +341,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0

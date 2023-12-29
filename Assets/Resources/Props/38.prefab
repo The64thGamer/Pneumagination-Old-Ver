@@ -102,9 +102,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8526069612050620712}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6063830739327365624}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
       insertIndex: -1
@@ -115,6 +112,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5134174908543922178}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6747014593479278269}
     - targetCorrespondingSourceObject: {fileID: 2063524308175803288, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2045366286122335986}
@@ -184,33 +184,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
   m_PrefabInstance: {fileID: 2442153433196033635}
   m_PrefabAsset: {fileID: 0}
---- !u!205 &8526069612050620712
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3253055002799459122}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: 1.2995955, z: -0.06374794}
-  m_Size: 3.1105332
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.2694
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 3814086961915950815}
-  - screenRelativeHeight: 0.07493086
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 6480258184211331632}
-  - screenRelativeHeight: 0.006511111
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4804188802649851697}
-  m_Enabled: 1
 --- !u!65 &6063830739327365624
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -288,6 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -301,6 +275,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0
@@ -372,11 +347,18 @@ MonoBehaviour:
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}
---- !u!23 &3814086961915950815 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1516057731949428924, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
-  m_PrefabInstance: {fileID: 2442153433196033635}
+--- !u!114 &6747014593479278269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3253055002799459122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4415596877564978683 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2063524308175803288, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
@@ -431,11 +413,6 @@ MonoBehaviour:
   LocalMaterialIndex: 
   JustCreated: 1
   TilingChanged: 0
---- !u!23 &4804188802649851697 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7156129480023273810, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
-  m_PrefabInstance: {fileID: 2442153433196033635}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6188194509269385536 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -863381037154027741, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
@@ -490,8 +467,3 @@ MonoBehaviour:
   LocalMaterialIndex: 
   JustCreated: 1
   TilingChanged: 0
---- !u!23 &6480258184211331632 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8649943633771727955, guid: 3f6409c5b47b494409a7dd5e0eb2ddcf, type: 3}
-  m_PrefabInstance: {fileID: 2442153433196033635}
-  m_PrefabAsset: {fileID: 0}

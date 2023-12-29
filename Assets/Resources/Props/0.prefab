@@ -90,9 +90,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4191239805261904943}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 9075905519775157213}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
       insertIndex: -1
@@ -103,6 +100,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5810667429741278363}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4368183330580703899}
     - targetCorrespondingSourceObject: {fileID: 8939939626637637444, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8763563324943378408}
@@ -243,21 +243,6 @@ MonoBehaviour:
   LocalMaterialIndex: 
   JustCreated: 1
   TilingChanged: 0
---- !u!23 &2287333360903886906 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -2233313165965327840, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
-  m_PrefabInstance: {fileID: 9133176970911980058}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &6083334091991954926 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -6137341756296351756, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
-  m_PrefabInstance: {fileID: 9133176970911980058}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &7528183465098057232 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7582114636101645302, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
-  m_PrefabInstance: {fileID: 9133176970911980058}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7714121330149767388 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1563171739371545286, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
@@ -317,33 +302,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c4b5e115a46dbb4595c4df13057c1b6, type: 3}
   m_PrefabInstance: {fileID: 9133176970911980058}
   m_PrefabAsset: {fileID: 0}
---- !u!205 &4191239805261904943
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8250306176222340939}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.31145048, y: 2.326958, z: -0.053702593}
-  m_Size: 4.733908
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.13
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 2287333360903886906}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 7528183465098057232}
-  - screenRelativeHeight: 0.0037037744
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 6083334091991954926}
-  m_Enabled: 1
 --- !u!114 &9075905519775157213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -434,6 +393,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0
@@ -505,3 +465,15 @@ MonoBehaviour:
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}
+--- !u!114 &-4368183330580703899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8250306176222340939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

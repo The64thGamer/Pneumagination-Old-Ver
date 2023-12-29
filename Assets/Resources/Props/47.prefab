@@ -209,41 +209,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaterialOptions: 
-  TransmissionColor: []
-  BaseColor: []
-  MetallicRemap: []
-  RoughnessRemap: []
-  emmission: []
-  EmissionColor: []
-  EmissionMask: 
-  BaseIsMap: 
-  ReplaceBase: 
-  Roughness: []
-  IOR: []
-  Metallic: []
-  SpecularTint: []
-  Sheen: []
-  SheenTint: []
-  ClearCoat: []
-  ClearCoatGloss: []
-  Anisotropic: []
-  Flatness: []
-  DiffTrans: []
-  SpecTrans: []
-  Thin: 
-  FollowMaterial: 
-  ScatterDist: []
-  SharedMaterials: []
-  Names: []
-  Specular: []
-  IsSmoothness: 
+  MaterialOptions: 01000000
+  TransmissionColor:
+  - {x: 0, y: 0, z: 0}
+  BaseColor:
+  - {x: 1, y: 1, z: 1}
+  MetallicRemap:
+  - {x: 0, y: 0}
+  RoughnessRemap:
+  - {x: 0, y: 0}
+  emmission:
+  - 0
+  EmissionColor:
+  - {x: 0, y: 0, z: 0}
+  EmissionMask: 00
+  BaseIsMap: 00
+  ReplaceBase: 00
+  Roughness:
+  - 0
+  IOR:
+  - 1
+  Metallic:
+  - 0
+  SpecularTint:
+  - 0
+  Sheen:
+  - 0
+  SheenTint:
+  - 0
+  ClearCoat:
+  - 0
+  ClearCoatGloss:
+  - 0
+  Anisotropic:
+  - 0
+  Flatness:
+  - 0
+  DiffTrans:
+  - 0
+  SpecTrans:
+  - 0
+  Thin: 00000000
+  FollowMaterial: 01
+  ScatterDist:
+  - 0
+  SharedMaterials:
+  - {fileID: 2100000, guid: 82e721b70b43c36438c92f4c6dc5d688, type: 2}
+  Names:
+  - Computer
+  Specular:
+  - 0
+  IsSmoothness: 00
   Selected: 0
-  Indexes: 
+  Indexes: 00000000
   NeedsToUpdate: 0
-  IsReady: 0
-  MaterialIndex: 
-  LocalMaterialIndex: 
+  IsReady: 1
+  MaterialIndex: 00000000
+  LocalMaterialIndex: 00000000
   JustCreated: 1
   TilingChanged: 0
 --- !u!114 &4242087713309536814
@@ -259,6 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -272,6 +295,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0

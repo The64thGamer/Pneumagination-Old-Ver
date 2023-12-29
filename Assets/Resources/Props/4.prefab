@@ -414,7 +414,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7961984465955257063}
-  - component: {fileID: 4696882093266027065}
   - component: {fileID: 7661548104621699335}
   - component: {fileID: 2412464283016746855}
   - component: {fileID: 4535089461916123653}
@@ -423,6 +422,7 @@ GameObject:
   - component: {fileID: 8330015512162214224}
   - component: {fileID: 4071515648219956915}
   - component: {fileID: 8438504682165127987}
+  - component: {fileID: -9168547718475707463}
   m_Layer: 11
   m_Name: 4
   m_TagString: Untagged
@@ -448,33 +448,6 @@ Transform:
   - {fileID: 3594754788209545701}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &4696882093266027065
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7609429319811455510}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0.000020980835, y: 5.575405, z: -0.42592502}
-  m_Size: 11.2033
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.13
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 5188298148081751308}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 2002352613913853761}
-  - screenRelativeHeight: 0.0036000002
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 6852396229385370223}
-  m_Enabled: 1
 --- !u!65 &7661548104621699335
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -636,6 +609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -649,6 +623,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0
@@ -720,3 +695,15 @@ MonoBehaviour:
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}
+--- !u!114 &-9168547718475707463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7609429319811455510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

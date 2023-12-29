@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2782044255784654221}
-  - component: {fileID: 2186587139501720341}
   - component: {fileID: 6982603930172610923}
   - component: {fileID: 3287782951140477734}
   - component: {fileID: 1199863253371116639}
+  - component: {fileID: 6548712282417360355}
   m_Layer: 11
   m_Name: 33
   m_TagString: Untagged
@@ -37,29 +37,6 @@ Transform:
   - {fileID: 7719277207926569391}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &2186587139501720341
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2319397338249183066}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.0793277, y: 11.502758, z: -0.008913755}
-  m_Size: 22.981987
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.13
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 2034361400434880603}
-  - screenRelativeHeight: 0.020448506
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 5451722489712907875}
-  m_Enabled: 1
 --- !u!114 &6982603930172610923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -129,6 +107,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0
@@ -200,6 +179,18 @@ MonoBehaviour:
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}
+--- !u!114 &6548712282417360355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2319397338249183066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7810431163038417188
 GameObject:
   m_ObjectHideFlags: 0

@@ -436,10 +436,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8214070228008775355}
-  - component: {fileID: 5523117472980738655}
   - component: {fileID: 3878124092370111399}
   - component: {fileID: 7255474983705223453}
   - component: {fileID: 4494397875733411739}
+  - component: {fileID: 8273898706731723458}
   m_Layer: 11
   m_Name: 21
   m_TagString: Untagged
@@ -465,33 +465,6 @@ Transform:
   - {fileID: 8012149604532349738}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &5523117472980738655
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7067093218996858736}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.0033245087, y: -0.035077572, z: -0.0018564463}
-  m_Size: 4.495867
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.13
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4531492372720577543}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4190080449244850353}
-  - screenRelativeHeight: 0.018539831
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 1655417785721399034}
-  m_Enabled: 1
 --- !u!114 &3878124092370111399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,6 +521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -561,6 +535,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0
@@ -632,3 +607,15 @@ MonoBehaviour:
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}
+--- !u!114 &8273898706731723458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7067093218996858736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

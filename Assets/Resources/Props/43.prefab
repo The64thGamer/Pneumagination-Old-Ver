@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExistsInQue: -1
+  IsDeformable: 0
   Name: 
   CWBVHIndicesBufferInverted: 
   ChildObjects: []
@@ -165,6 +166,7 @@ MonoBehaviour:
     cwbvhindex_count: 0
     cwbvhnode_count: 0
   SkinnedMeshes: []
+  DeformableMeshes: []
   IndexCounts: 
   MeshRefit: {fileID: 0}
   HasStarted: 0
@@ -247,11 +249,11 @@ GameObject:
   - component: {fileID: 7102544212610529126}
   - component: {fileID: 4318929315200858501}
   - component: {fileID: 3610338161333562703}
-  - component: {fileID: 3252459277279758090}
   - component: {fileID: 2139191017015427210}
   - component: {fileID: 6236573249273006303}
   - component: {fileID: 3469193036299364145}
   - component: {fileID: 2976650674663328770}
+  - component: {fileID: -5003534794213721517}
   m_Layer: 11
   m_Name: 43
   m_TagString: Untagged
@@ -317,37 +319,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.36800766, y: 12.06102, z: 0.3527398}
   m_Center: {x: 0.0000019073486, y: 7.01362, z: 0.010439634}
---- !u!205 &3252459277279758090
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5128713076451486390}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.03763771, y: 13.078646, z: -0.0000007748604}
-  m_Size: 13.078022
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.13
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 3086602261522653849}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 348115867263429692}
-  - screenRelativeHeight: 0.46947563
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 5168638644555992304}
-  - screenRelativeHeight: 0.045774482
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 3934600465718895209}
-  m_Enabled: 1
 --- !u!114 &2139191017015427210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,6 +404,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5214865, y: 0.65053034, z: 0.5218835}
   m_Center: {x: 2.7722104, y: 11.952376, z: -0.002077962}
+--- !u!114 &-5003534794213721517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5128713076451486390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5466931530856732077
 GameObject:
   m_ObjectHideFlags: 0
