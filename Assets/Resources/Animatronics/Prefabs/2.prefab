@@ -174,9 +174,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1913071226930874336}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -7740991119594634825}
     - targetCorrespondingSourceObject: {fileID: 6618512217748419823, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6727739606754166953}
@@ -195,6 +192,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -2192155031024310294, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2880165168035625370}
+    - targetCorrespondingSourceObject: {fileID: -2418447339448717214, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1817876909000884472}
+    - targetCorrespondingSourceObject: {fileID: -2418447339448717214, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2198925782530418141}
   m_SourcePrefab: {fileID: 100100000, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
 --- !u!1 &1807053430434898410 stripped
 GameObject:
@@ -222,6 +225,225 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.005165068, y: 0.02047569, z: 0.001941779}
   m_Center: {x: 5.3107624e-10, y: 0.008763313, z: 0.00020145609}
+--- !u!1 &2064248125411337575 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2418447339448717214, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
+  m_PrefabInstance: {fileID: 4812760645688825093}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1817876909000884472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064248125411337575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaterialOptions: 010000000100000001000000
+  TransmissionColor:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  BaseColor:
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  MetallicRemap:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  RoughnessRemap:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  emmission:
+  - 0
+  - 0
+  - 0
+  EmissionColor:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  EmissionMask: 000000
+  BaseIsMap: 000000
+  ReplaceBase: 000000
+  Roughness:
+  - 0
+  - 0
+  - 0
+  IOR:
+  - 1
+  - 1
+  - 1
+  Metallic:
+  - 0
+  - 0
+  - 0
+  SpecularTint:
+  - 0
+  - 0
+  - 0
+  Sheen:
+  - 0
+  - 0
+  - 0
+  SheenTint:
+  - 0
+  - 0
+  - 0
+  ClearCoat:
+  - 0
+  - 0
+  - 0
+  ClearCoatGloss:
+  - 0
+  - 0
+  - 0
+  Anisotropic:
+  - 0
+  - 0
+  - 0
+  Flatness:
+  - 0
+  - 0
+  - 0
+  DiffTrans:
+  - 0
+  - 0
+  - 0
+  SpecTrans:
+  - 0
+  - 0
+  - 0
+  Thin: 000000000000000000000000
+  FollowMaterial: 010101
+  ScatterDist:
+  - 0
+  - 0
+  - 0
+  SharedMaterials:
+  - {fileID: 2100000, guid: 6728959124acaf14089a6aa91f102381, type: 2}
+  - {fileID: 2100000, guid: 4b00a89e6f0f33d42a00fa82ad7f1cef, type: 2}
+  - {fileID: 2100000, guid: 75c1c659f43d5aa4fae2b3778af5a837, type: 2}
+  Names:
+  - Test Animatronic
+  - Cylinders
+  - Airlines
+  Specular:
+  - 0
+  - 0
+  - 0
+  IsSmoothness: 000000
+  Selected: 0
+  Indexes: 000000000000000000000000
+  NeedsToUpdate: 0
+  IsReady: 1
+  MaterialIndex: 000000000000000000000000
+  LocalMaterialIndex: 000000000000000000000000
+  JustCreated: 1
+  TilingChanged: 0
+--- !u!114 &2198925782530418141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064248125411337575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3edaff1cd4be25f4eb0921104c840289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExistsInQue: -1
+  IsDeformable: 0
+  Name: 
+  CWBVHIndicesBufferInverted: 
+  ChildObjects: []
+  MeshCountChanged: 0
+  AggTriangles: []
+  ParentScale: {x: 0, y: 0, z: 0}
+  LightTriangles: []
+  BVH:
+    cwbvh_indices: 
+    BVH8Nodes: []
+    cwbvhindex_count: 0
+    cwbvhnode_count: 0
+  SkinnedMeshes: []
+  DeformableMeshes: []
+  IndexCounts: 
+  MeshRefit: {fileID: 0}
+  HasStarted: 0
+  AggNodes: []
+  InstanceMeshIndex: 0
+  LightEndIndex: 0
+  aabb_untransformed:
+    BBMax: {x: 0, y: 0, z: 0}
+    BBMin: {x: 0, y: 0, z: 0}
+  aabb:
+    BBMax: {x: 0, y: 0, z: 0}
+    BBMin: {x: 0, y: 0, z: 0}
+  AllFull: 0
+  AggIndexCount: 0
+  AggBVHNodeCount: 0
+  _Materials: []
+  MatOffset: 0
+  CachedTransforms: []
+  CurMeshData:
+    Indices: 
+    Verticies: []
+    Normals: []
+    Tangents: []
+    UVs: []
+    MatDat: 
+  TotalObjects: 0
+  TransformIndexes: []
+  HasCompleted: 0
+  TotEnergy: 0
+  ThisTransform: {fileID: 0}
+  ConstructKernel: 0
+  TransferKernel: 0
+  RefitLayerKernel: 0
+  NodeUpdateKernel: 0
+  NodeCompressKernel: 0
+  NodeInitializerKernel: 0
+  CompactedMeshData: 0
+  InstanceReferences: 0
+  NeedsToUpdate: 0
+  Assets: {fileID: 0}
+  FailureCount: 0
+  TotalTriangles: 0
+  IsSkinnedGroup: 0
+  HasLightTriangles: 0
+  ForwardStack: []
+  LayerStack: []
+  NodePair: []
+  MaxRecur: 0
+  ToBVHIndex: 
+  tempAABB:
+    BBMax: {x: 0, y: 0, z: 0}
+    BBMin: {x: 0, y: 0, z: 0}
+  NodeOffset: 0
+  TriOffset: 0
+  LightTriOffset: 0
+  SplitNodes: []
+  AlbedoTexs: []
+  AlbedoIndexes: []
+  NormalTexs: []
+  NormalIndexes: []
+  MetallicTexs: []
+  MetallicIndexes: []
+  MetallicTexChannelIndex: 
+  RoughnessTexs: []
+  RoughnessIndexes: []
+  RoughnessTexChannelIndex: 
+  EmissionTexs: []
+  EmissionIndexes: []
+  ChildObjectTransforms: []
+  center: {x: 0, y: 0, z: 0}
+  extent: {x: 0, y: 0, z: 0}
 --- !u!1 &2460119970037768459 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6984597428581250062, guid: de40f9b30141fc84e82b56155d9d1a80, type: 3}
@@ -563,52 +785,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.09318662, y: 0.73479986, z: 0.16590282}
   m_Center: {x: 0.98380697, y: 0.46623898, z: 0.0021386892}
---- !u!114 &-7740991119594634825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5623647516840831060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaterialOptions: 
-  TransmissionColor: []
-  BaseColor: []
-  MetallicRemap: []
-  RoughnessRemap: []
-  emmission: []
-  EmissionColor: []
-  EmissionMask: 
-  BaseIsMap: 
-  ReplaceBase: 
-  Roughness: []
-  IOR: []
-  Metallic: []
-  SpecularTint: []
-  Sheen: []
-  SheenTint: []
-  ClearCoat: []
-  ClearCoatGloss: []
-  Anisotropic: []
-  Flatness: []
-  DiffTrans: []
-  SpecTrans: []
-  Thin: 
-  FollowMaterial: 
-  ScatterDist: []
-  SharedMaterials: []
-  Names: []
-  Specular: []
-  IsSmoothness: 
-  Selected: 0
-  Indexes: 
-  NeedsToUpdate: 0
-  IsReady: 0
-  MaterialIndex: 
-  LocalMaterialIndex: 
-  JustCreated: 1
-  TilingChanged: 0
