@@ -42,6 +42,9 @@ namespace StarterAssets
         [SerializeField] float sensitivity = 10f;
         [SerializeField] float sensitivityFly = 10f;
         [SerializeField] float maxYAngle = 95f;
+        [SerializeField] float maxWallClimbReach = 3.0f;
+        [SerializeField] float maxWallClimbVel = 10.0f;
+        [SerializeField] float wallClimbMultiplier = 10.0f;
         [SerializeField] AnimationCurve crouchCurve;
         [SerializeField] AnimationCurve fovCurve;
 
@@ -56,6 +59,9 @@ namespace StarterAssets
         float fovAdder = 0;
         float fovFly = 20f;
         float fovFlyAdder = 0;
+        bool wallClimbing;
+        Vector3 wallClimbNormal;
+        Vector3 wallClimbStartPos;
         Vector3 currentFlyModePan = Vector3.zero;
         Vector2 lastFlyCamRotation;
         Vector2 lastRegularCamRotation;
@@ -371,6 +377,12 @@ namespace StarterAssets
                 }
             }
 
+            //Wall Climb
+            Vector3 climb = WallClimb();
+            currentPositionData._speed.x += climb.x;
+            currentPositionData._verticalVelocity += climb.y;
+            currentPositionData._speed.z += climb.z;
+
             //Jump
             if (_controller.isGrounded)
             {
@@ -524,7 +536,54 @@ namespace StarterAssets
         {
             disableFOV = !on;
         }
+
+        public Vector3 WallClimb()
+        {
+            if(wallClimbing)
+            {
+                if (!Input.GetMouseButton(0))
+                {
+                    wallClimbing = false;
+                    RaycastHit hit;
+                    if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit))
+                    {
+                        Vector3 speed = Vector3.ClampMagnitude(-Vector3.ProjectOnPlane(hit.point - wallClimbStartPos, wallClimbNormal), maxWallClimbVel);
+                        Debug.Log(speed);
+                        return speed * wallClimbMultiplier;
+                    }
+                }
+            }
+            else
+            {
+                if(Input.GetMouseButtonDown(0))
+                {
+                    RaycastHit hit;
+                    if(Physics.Raycast(_mainCamera.transform.position,_mainCamera.transform.forward,out hit, maxWallClimbReach))
+                    {
+                        wallClimbing = true;
+                        wallClimbStartPos = hit.point;
+                        wallClimbNormal = hit.normal;
+                    }
+                }
+            }
+
+            return Vector3.zero;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (wallClimbing)
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit))
+                {
+                    Gizmos.DrawLine(wallClimbStartPos, wallClimbStartPos + Vector3.ClampMagnitude(-Vector3.ProjectOnPlane(hit.point - wallClimbStartPos, wallClimbNormal), maxWallClimbVel));
+                }
+            }
+        }
     }
+
+    
 
 
     [System.Serializable]

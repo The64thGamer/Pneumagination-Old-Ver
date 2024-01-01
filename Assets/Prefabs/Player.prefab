@@ -212,7 +212,6 @@ GameObject:
   - component: {fileID: 6487522925483904757}
   - component: {fileID: 8059549140532217502}
   - component: {fileID: 5761797468236246604}
-  - component: {fileID: 3432782279356628317}
   - component: {fileID: 6910018526878810499}
   m_Layer: 0
   m_Name: Main Camera
@@ -308,19 +307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa591dbd84c3ac04394f217fa069f9e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3432782279356628317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3529944901283763864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25708ab1647d3af43927c5c250594658, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camSens: 2.5
 --- !u!114 &6910018526878810499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,6 +604,9 @@ MonoBehaviour:
   sensitivity: 0.08
   sensitivityFly: 0.2
   maxYAngle: 89
+  maxWallClimbReach: 3
+  maxWallClimbVel: 3
+  wallClimbMultiplier: 10
   crouchCurve:
     serializedVersion: 2
     m_Curve:
