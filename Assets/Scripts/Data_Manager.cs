@@ -96,13 +96,15 @@ public class Data_Manager : MonoBehaviour
             {
                 MeshRenderer rend = g.GetComponentInChildren<MeshRenderer>();
                 Material[] mats = rend.materials;
-
-                mapData.propData[i].position = g.transform.position;
-                mapData.propData[i].rotation = g.transform.rotation;
-                mapData.propData[i].colorA = mats[0].GetColor("_Palette_1");
-                mapData.propData[i].colorB = mats[0].GetColor("_Palette_2");
-                mapData.propData[i].colorC = mats[0].GetColor("_Palette_3");
-                mapData.propData[i].colorD = mats[0].GetColor("_Palette_4");
+                if (mats.Length > 0)
+                {
+                    mapData.propData[i].position = g.transform.position;
+                    mapData.propData[i].rotation = g.transform.rotation;
+                    mapData.propData[i].colorA = mats[0].GetColor("_Palette_1");
+                    mapData.propData[i].colorB = mats[0].GetColor("_Palette_2");
+                    mapData.propData[i].colorC = mats[0].GetColor("_Palette_3");
+                    mapData.propData[i].colorD = mats[0].GetColor("_Palette_4");
+                }
             }
         }
         for (int i = 0; i < mapData.brushData.Count; i++)
