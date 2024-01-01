@@ -605,7 +605,7 @@ MonoBehaviour:
   sensitivityFly: 0.2
   maxYAngle: 89
   maxWallClimbReach: 3
-  maxWallClimbVel: 3
+  maxWallClimbVel: 2
   wallClimbMultiplier: 10
   crouchCurve:
     serializedVersion: 2
