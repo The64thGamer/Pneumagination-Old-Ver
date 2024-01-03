@@ -244,6 +244,7 @@ public class Hammer_UI : MonoBehaviour
                     if (currentCreatedProp == null)
                     {
                         currentCreatedProp = dataManager.GenerateNewProp(currentProp, objectPos);
+                        currentCreatedProp.GetComponent<CelAnimator>().enabled = true;
                     }
                     else
                     {
@@ -261,7 +262,9 @@ public class Hammer_UI : MonoBehaviour
                     {
                         transrights.gameObject.layer = pickupLayer;
                     }
+                    currentCreatedProp.GetComponent<CelAnimator>().enabled = false;
                     currentCreatedProp = null;
+
                 }
                 if (Input.mouseScrollDelta.y > 0)
                 {

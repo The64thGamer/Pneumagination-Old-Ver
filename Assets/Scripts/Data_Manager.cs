@@ -327,9 +327,9 @@ public class Data_Manager : MonoBehaviour
     public GameObject GenerateNewProp(int index, Vector3 position)
     {
         string hash = Random.Range(int.MinValue, int.MaxValue).ToString();
-        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + index));
-        brush.name = hash;
-        brush.transform.position = position;
+        GameObject prop = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + index));
+        prop.name = hash;
+        prop.transform.position = position;
         CustomPropData data = new CustomPropData()
         {
             index = index,
@@ -338,11 +338,11 @@ public class Data_Manager : MonoBehaviour
             colorB = Color.white,
             colorC = Color.white,
             colorD = Color.white,
-            position = brush.transform.position,
-            rotation = brush.transform.rotation,
+            position = prop.transform.position,
+            rotation = prop.transform.rotation,
         };
         mapData.propData.Add(data);
-        return brush;
+        return prop;
     }
 
     public void RemoveBrushSaveData(string hashCode)

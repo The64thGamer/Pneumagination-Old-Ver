@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6813207095609665088}
   - component: {fileID: 3582797361761270138}
   - component: {fileID: -5381933231299302555}
+  - component: {fileID: 8265899352337187137}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Buildable Block
@@ -395,3 +396,15 @@ MonoBehaviour:
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}
+--- !u!114 &8265899352337187137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124939517267701858}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e380edc03008e640956d245f62fe70c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -15,6 +15,7 @@ namespace StarterAssets
         [SerializeField] Player_UI editorUI;
         [SerializeField] Hammer_UI hammerUI;
         [SerializeField] Camera _mainCamera;
+        [SerializeField] Camera _celCamera;
         [SerializeField] Transform camOffet;
 
         [Header("Input")]
@@ -178,7 +179,6 @@ namespace StarterAssets
                 UpdateFOV();
 
                 _mainCamera.transform.localPosition = Vector3.zero;
-
             }
             if (inputFlyMenu)
             {
@@ -504,10 +504,12 @@ namespace StarterAssets
             if (inputFlyMenu)
             {
                 _mainCamera.fieldOfView = fovFly;
+                _celCamera.fieldOfView = fovFly;
             }
             else
             {
                 _mainCamera.fieldOfView = fov;
+                _celCamera.fieldOfView = fov;
             }
         }
 

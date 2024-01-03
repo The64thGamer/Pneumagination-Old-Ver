@@ -9,7 +9,7 @@ public class CelAnimator : MonoBehaviour
 
     private void OnEnable()
     {
-        effect = Camera.main.GetComponent<OutlineEffect>();
+        effect = Camera.main.transform.Find("Cel Camera").GetComponent<OutlineEffect>();
 
         effect.OutlineLayers[0].Add(this.gameObject);
         effect.OutlineLayers[1].Add(this.gameObject);

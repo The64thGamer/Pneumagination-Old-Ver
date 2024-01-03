@@ -16,8 +16,8 @@ MonoBehaviour:
   - _settings:
       _outlineSettings: {fileID: 0}
       _outlineColor: {r: 0, g: 0, b: 0, a: 1}
-      _outlineWidth: 4
-      _outlineIntensity: 17.9
+      _outlineWidth: 5
+      _outlineIntensity: 7.3
       _outlineAlphaCutoff: 0.9
       _outlineMode: 3
     _name: Cartoon
@@ -25,9 +25,9 @@ MonoBehaviour:
     _mergeLayerObjects: 1
   - _settings:
       _outlineSettings: {fileID: 0}
-      _outlineColor: {r: 1, g: 0, b: 0, a: 1}
-      _outlineWidth: 4
-      _outlineIntensity: 2
+      _outlineColor: {r: 0, g: 0, b: 0, a: 0.5019608}
+      _outlineWidth: 15
+      _outlineIntensity: 3.8
       _outlineAlphaCutoff: 0.9
       _outlineMode: 3
     _name: 
