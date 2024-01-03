@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 8059549140532217502}
   - component: {fileID: 5761797468236246604}
   - component: {fileID: 6910018526878810499}
+  - component: {fileID: 5488143371417385116}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -325,6 +326,21 @@ MonoBehaviour:
   KuwaharaRadius: 4
   KuwaharaQ: 12
   ResolutionScale: 1
+--- !u!114 &5488143371417385116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529944901283763864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270d3185d159bf54fb4cddbb42235437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineLayers: {fileID: 11400000, guid: c69df5247a82c824ab02860f7504cba5, type: 2}
+  _cameraEvent: 19
 --- !u!1 &3805736980352897171
 GameObject:
   m_ObjectHideFlags: 0
