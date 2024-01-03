@@ -180,7 +180,6 @@ GameObject:
   - component: {fileID: 6503890058546721491}
   - component: {fileID: 6693714223027044992}
   - component: {fileID: 3649646782029480772}
-  - component: {fileID: 3174037461276355661}
   m_Layer: 0
   m_Name: Cel Camera
   m_TagString: Untagged
@@ -234,9 +233,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
+  near clip plane: 0.01
+  far clip plane: 3000
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -262,21 +261,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2805148819313939024}
   m_Enabled: 1
---- !u!114 &3174037461276355661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2805148819313939024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 270d3185d159bf54fb4cddbb42235437, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
-  _outlineLayers: {fileID: 11400000, guid: c69df5247a82c824ab02860f7504cba5, type: 2}
-  _cameraEvent: 19
 --- !u!1 &3323731923618958071
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,6 +305,7 @@ GameObject:
   - component: {fileID: 8059549140532217502}
   - component: {fileID: 5761797468236246604}
   - component: {fileID: 6910018526878810499}
+  - component: {fileID: 5415869931360771926}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -434,6 +419,21 @@ MonoBehaviour:
   KuwaharaRadius: 4
   KuwaharaQ: 12
   ResolutionScale: 1
+--- !u!114 &5415869931360771926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529944901283763864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270d3185d159bf54fb4cddbb42235437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineLayers: {fileID: 11400000, guid: c69df5247a82c824ab02860f7504cba5, type: 2}
+  _cameraEvent: 20
 --- !u!1 &3805736980352897171
 GameObject:
   m_ObjectHideFlags: 0
