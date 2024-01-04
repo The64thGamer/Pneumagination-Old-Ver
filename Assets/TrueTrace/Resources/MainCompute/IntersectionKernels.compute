@@ -45,7 +45,7 @@ inline void IntersectTriangle(int mesh_id, int tri_id, const Ray ray, inout RayH
                     if(_Materials[MaterialIndex].MatType == CutoutIndex) {
                         float2 BaseUv = AggTris[tri_id].tex0 * (1.0f - u - v) + AggTris[tri_id].texedge1 * u + AggTris[tri_id].texedge2 * v;
                         float2 Uv = AlignUV(BaseUv, _Materials[MaterialIndex].AlbedoTexScale, _Materials[MaterialIndex].AlbedoTex);
-                        if(_TextureAtlas.SampleLevel(my_linear_clamp_sampler, Uv, 0).w < 0.1f) return;
+                        if(_TextureAtlas.SampleLevel(my_linear_clamp_sampler, Uv, 0).w < _Materials[MaterialIndex].AlphaCutoff) return;
                     }
                 #endif
                 #ifdef IgnoreGlassMain
@@ -124,7 +124,7 @@ void IntersectBVH() {
                         if(_Materials[MaterialIndex].MatType == CutoutIndex) {
                             float2 BaseUv = AggTris[tri_id].tex0 * (1.0f - bestHit.u - bestHit.v) + AggTris[tri_id].texedge1 * bestHit.u + AggTris[tri_id].texedge2 * bestHit.v;
                             float2 Uv = AlignUV(BaseUv, _Materials[MaterialIndex].AlbedoTexScale, _Materials[MaterialIndex].AlbedoTex);
-                            if(_TextureAtlas.SampleLevel(my_point_clamp_sampler, Uv, 0).w < 0.0001f) {myRay.TMin = bestHit.t + 0.001f; continue;}
+                            if(_TextureAtlas.SampleLevel(my_point_clamp_sampler, Uv, 0).w < _Materials[MaterialIndex].AlphaCutoff) {myRay.TMin = bestHit.t + 0.001f; continue;}
                         }
                     #endif
                 }
@@ -212,8 +212,8 @@ void IntersectBVH() {
                         int root_index = (_MeshData[mesh_id].mesh_data_bvh_offsets & 0x7fffffff);
 
                         MatOffset = _MeshData[mesh_id].MaterialOffset;
-                        ray.direction = (mul((float3x3)_MeshData[mesh_id].Transform, ray.direction));
-                        ray.origin = (mul(_MeshData[mesh_id].Transform, float4(ray.origin, 1))).xyz;
+                        ray.direction = (mul((float3x3)_MeshData[mesh_id].W2L, ray.direction));
+                        ray.origin = (mul(_MeshData[mesh_id].W2L, float4(ray.origin, 1))).xyz;
                         ray.direction_inv = rcp(ray.direction);
 
                         oct_inv4 = ray_get_octant_inv4(ray.direction);
@@ -418,8 +418,8 @@ void IntersectBVHShadow(const int localid) {
                         int root_index = (_MeshData[mesh_id].mesh_data_bvh_offsets & 0x7fffffff);
 
                         MatOffset = _MeshData[mesh_id].MaterialOffset;
-                        ray.direction = (mul((float3x3)_MeshData[mesh_id].Transform, ray.direction)).xyz;
-                        ray.origin = (mul(_MeshData[mesh_id].Transform, float4(ray.origin, 1))).xyz;
+                        ray.direction = (mul((float3x3)_MeshData[mesh_id].W2L, ray.direction)).xyz;
+                        ray.origin = (mul(_MeshData[mesh_id].W2L, float4(ray.origin, 1))).xyz;
                         ray.direction_inv = rcp(ray.direction);
 
                         oct_inv4 = ray_get_octant_inv4(ray.direction);

@@ -306,7 +306,7 @@ inline int SelectLight(const uint pixel_index, const uint MeshIndex, inout float
         TriangleUV = sample_triangle(Rand2.x, Rand2.y);
         LightPosition = (LightTriangles[Index].pos0 + LightTriangles[Index].posedge1 * TriangleUV.x + LightTriangles[Index].posedge2 * TriangleUV.y - Position);
         p_hat = rcp(dot(LightPosition, LightPosition));
-        if(dot(normalize(LightPosition), Norm) < 0) p_hat = 0;
+        if(dot(normalize(LightPosition), Norm) < 0) continue;
         wsum += p_hat;
         [branch]if(Rand.y < p_hat / wsum) {
             FinalUV = TriangleUV;
@@ -363,7 +363,7 @@ inline void calcFinalColor(SmallerRay ray, inout ColData Color, MaterialData hit
     float3 Geomnorm;
     float3 USGNorm;//Unsmoothed geometric normal
     float3 norm;
-    float4x4 Inverse = inverse(_MeshData[hit.mesh_id].Transform);
+    float3x3 Inverse = transpose((float3x3)_MeshData[hit.mesh_id].W2L);
     float pdf = 0.0f;
     bool validBSDFSample;
 
@@ -373,7 +373,9 @@ inline void calcFinalColor(SmallerRay ray, inout ColData Color, MaterialData hit
         USGNorm = Geomnorm;
     } else {
         Geomnorm = GetTriangleNormal(hit.triangle_id, float2(hit.u, hit.v), Inverse);
-        USGNorm = -normalize(cross(mul(Inverse, float4(normalize(AggTris[hit.triangle_id].posedge1),0)).xyz, mul(Inverse, float4(normalize(AggTris[hit.triangle_id].posedge2),0)).xyz));
+        USGNorm = mul(Inverse, cross(normalize(AggTris[hit.triangle_id].posedge1), normalize(AggTris[hit.triangle_id].posedge2)));
+        float wldScale = rsqrt(dot(USGNorm, USGNorm));
+        USGNorm = -mul(wldScale, USGNorm);
         if(dot(USGNorm, Geomnorm) < 0) USGNorm *= -1;
         if(hitDat.MatType == CutoutIndex) USGNorm = Geomnorm;
     }
@@ -409,8 +411,8 @@ inline void calcFinalColor(SmallerRay ray, inout ColData Color, MaterialData hit
             if (CurBounce <= 1) Color.Direct += EmissCol;
             else Color.Indirect += Color.throughput * EmissCol;
         } else {
-            float3 a1 = mul((float3x3)Inverse, AggTris[hit.triangle_id].posedge1).xyz;
-            float3 a2 = mul((float3x3)Inverse, AggTris[hit.triangle_id].posedge2).xyz;
+            float3 a1 = mul((float3x3)inverse(_MeshData[hit.mesh_id].W2L), AggTris[hit.triangle_id].posedge1).xyz;
+            float3 a2 = mul((float3x3)inverse(_MeshData[hit.mesh_id].W2L), AggTris[hit.triangle_id].posedge2).xyz;
             float a = AreaOfTriangle(float3(0,0,0), a1, a2);
             float SA = abs(dot(norm, ray.direction)) * a / (hit.t * hit.t);
             float light_pdf = 1.0f / (SA * LightMeshCount) * rcp(_MeshData[hit.mesh_id].LightTriCount);
@@ -535,9 +537,8 @@ inline void calcFinalColor(SmallerRay ray, inout ColData Color, MaterialData hit
         PrevWorldData.xyz = UseReSTIRGI ? asuint(pos) : asuint(PrevDirection);
     }
     [branch] if (CurBounce == 0 || AlbedoTexData.w == -1) {//Setting textures for denosier to use
-        bool PSRActiveGlass = CurBounce == 0;
-        PrevWorldData.w = packRGBE(PSRActiveGlass ? max(hitDat.surfaceColor, 0.005f) : (unpackRGBE(PrevWorldData.w) * max(hitDat.surfaceColor, 0.005f)));
-        PrevScreenData = float4(asfloat(octahedral_32(Geomnorm)), asfloat(octahedral_32(norm)),(CurBounce == 0) ? (PrevScreenData.z + hit.t) : (PrevScreenData.z + hit.t), asfloat(((uint)(MaterialIndex << 2) >> 2) | ((CurBounce != 0 ? (asuint(PrevScreenData.w) >> 30) :  (uint)MaterialLobe) << 30))); 
+        PrevWorldData.w = packRGBE((CurBounce == 0) ? max(hitDat.surfaceColor, 0.005f) : (unpackRGBE(PrevWorldData.w) * max(hitDat.surfaceColor, 0.005f)));
+        PrevScreenData = float4(asfloat(octahedral_32(Geomnorm)), asfloat(octahedral_32(norm)),PrevScreenData.z + hit.t, asfloat(((uint)(MaterialIndex << 2) >> 2) | ((CurBounce != 0 ? (asuint(PrevScreenData.w) >> 30) :  (uint)MaterialLobe) << 30))); 
 
         AlbedoTexData = float4(((CurBounce == 0) ? max(throughput, 0.005f) : (max(throughput, 0.005f) * AlbedoTexData.xyz)), (UseASVGF && ((MaterialLobe == 3 && hitDat.roughness < 0.25f) || (MaterialLobe == 0 && hitDat.roughness < 0.01f && hitDat.metallic == 1 && CurBounce == 0))) ? -1 : (CurBounce + 1));  
         throughput = 1;  
@@ -563,55 +564,45 @@ inline void calcFinalColor(SmallerRay ray, inout ColData Color, MaterialData hit
         if (UseUnityLight) {
             triindex = SelectUnityLight(pixel_index, RunningWeight, norm, pos, PrevDirection);
             LightData Light = _UnityLights[triindex];
-            float3x3 rotationmatrix;
-            float3 tangent0;
-            float3 randVector = 0;
             float sinPhi, cosPhi;
             LightPosition = Light.Position;
             LightNorm = Light.Direction;
             LightFormat = Light.Type;
             Radiance = Light.Radiance;
-            float3 RandomA = float3(random(23, pixel_index), random(62, pixel_index).x);
+            float3 RandVec = float3(random(23, pixel_index), random(62, pixel_index).x);
+            if(LightFormat == AREALIGHTQUAD || LightFormat == AREALIGHTDISK) {
+                sincos(Light.ZAxisRotation, sinPhi, cosPhi);
+            }
             [branch] switch (LightFormat) {
                 case POINTLIGHT:
                     LightNorm = normalize(ray.origin - LightPosition);
-                    LightPosition += (RandomA - 0.5f) * Light.Softness * 0.1f;//Soft Shadows
+                    LightPosition += (RandVec - 0.5f) * Light.Softness * 0.1f;//Soft Shadows
                 break;
                 case DIRECTIONALLIGHT:
                     LightPosition = ray.origin + LightNorm;
                     LightNorm = -LightNorm;
-                    LightPosition += (RandomA - 0.5f) * Light.Softness * 0.01f;//Soft Shadows
+                    LightPosition += (RandVec - 0.5f) * Light.Softness * 0.01f;//Soft Shadows
                     Radiance *= GetSkyTransmittance(ray.origin, SunDir, 0, SunDir);
                 break;
                 case SPOTLIGHT:
-                    LightPosition += (RandomA - 0.5f) * Light.Softness * 0.1f;//Soft Shadows
+                    LightPosition += (RandVec - 0.5f) * Light.Softness * 0.1f;//Soft Shadows
                 break;
                 case AREALIGHTQUAD:
-                    randVector = (float3(RandomA.x * Light.SpotAngle.x, RandomA.y * Light.SpotAngle.y, 0)) - float3(Light.SpotAngle.x, Light.SpotAngle.y, 0) / 2.0f;
-                    sincos(Light.ZAxisRotation, sinPhi, cosPhi);
-                    randVector = float3(randVector.x * cosPhi - randVector.y * sinPhi, randVector.y * cosPhi + randVector.x * sinPhi, 0);
-                    tangent0 = cross(LightNorm, float3(0, 1, 0));
-                    if (dot(tangent0, tangent0) < 0.001f) tangent0 = cross(LightNorm, float3(1, 0, 0));
-                    tangent0 = normalize(tangent0);
-                    rotationmatrix = float3x3(tangent0, normalize(cross(LightNorm, tangent0)), LightNorm);
-                    LightPosition += mul(normalize(randVector), rotationmatrix) * length(randVector);
+                    RandVec.xy = RandVec.xy * Light.SpotAngle - Light.SpotAngle / 2.0f;
+                    RandVec.xy = mul(float2x2(cosPhi, -sinPhi, sinPhi, cosPhi), RandVec.xy);
+                    LightPosition += ToWorld(GetTangentSpace2(LightNorm), normalize(float3(RandVec.x,0,RandVec.y))) * length(RandVec.xy);
                     area = Light.SpotAngle.x * Light.SpotAngle.y;
                 break;
                 case AREALIGHTDISK:
-                    sincos(RandomA.x * 2.0f * PI, randVector.x, randVector.y);
-                    sincos(Light.ZAxisRotation, sinPhi, cosPhi);
-                    randVector = float3(randVector.x * cosPhi - randVector.y * sinPhi, randVector.y * cosPhi + randVector.x * sinPhi, 0) * RandomA.y * Light.SpotAngle.x;
-                    tangent0 = cross(LightNorm, float3(0, 1, 0));
-                    if (dot(tangent0, tangent0) < 0.001f) tangent0 = cross(LightNorm, float3(1, 0, 0));
-                    tangent0 = normalize(tangent0);
-                    rotationmatrix = float3x3(tangent0, normalize(cross(LightNorm, tangent0)), LightNorm);
-                    LightPosition += mul(normalize(randVector), rotationmatrix) * length(randVector);
+                    sincos(RandVec.x * 2.0f * PI, RandVec.x, RandVec.y);
+                    RandVec.xy = mul(float2x2(cosPhi, -sinPhi, sinPhi, cosPhi), RandVec.xy) * RandVec.z * Light.SpotAngle.x;
+                    LightPosition += ToWorld(GetTangentSpace2(LightNorm), normalize(float3(RandVec.x,0,RandVec.y))) * length(RandVec.xy);
                     area = PI * Light.SpotAngle.x * Light.SpotAngle.x;
                 break;
             }
         } else {
             int MeshIndex = SelectLightMesh(pixel_index);
-            float4x4 MeshTransformInverse = _MeshData[_LightMeshes[MeshIndex].LockedMeshIndex].Transform;
+            float4x4 MeshTransformInverse = _MeshData[_LightMeshes[MeshIndex].LockedMeshIndex].W2L;
             int AggTriIndex = SelectLight(pixel_index, MeshIndex, RunningWeight, norm, pos, MeshTransformInverse, Radiance, LightPosition);
             TrianglePos CurTri = triangle_get_positions(AggTriIndex);
             MeshTransformInverse = inverse(MeshTransformInverse);

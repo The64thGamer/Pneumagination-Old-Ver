@@ -4,7 +4,7 @@
 // #define IgnoreGlassMain
 // #define HDRP
 // #define HardwareRT
-// #define PointFiltering
+#define PointFiltering
 #define StainedGlassShadows
 // #define DX11
 

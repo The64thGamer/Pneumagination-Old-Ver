@@ -667,6 +667,8 @@ namespace TrueTrace {
             }
             else if (AllFull)
             {
+                cmd.SetComputeIntParam(MeshRefit, "TriBuffOffset", TriOffset);
+                cmd.SetComputeIntParam(MeshRefit, "LightTriBuffOffset", LightTriOffset);
                 cmd.BeginSample("ReMesh");
                 for (int i = 0; i < VertexBuffers.Length; i++) {
                     VertexBuffers[i].Release();
@@ -703,7 +705,11 @@ namespace TrueTrace {
                     int IndexCount = IndexCounts[i];
 
                     cmd.SetComputeIntParam(MeshRefit, "Stride", VertexBuffers[i].stride / 4);
-                    cmd.SetComputeMatrixParam(MeshRefit, "Transform", transform.worldToLocalMatrix * Matrix4x4.TRS(SkinnedRootBone.position, SkinnedRootBone.rotation, Vector3.one ));
+                    if(IsSkinnedGroup) {
+                        cmd.SetComputeMatrixParam(MeshRefit, "Transform", transform.worldToLocalMatrix * Matrix4x4.TRS(SkinnedRootBone.position, SkinnedRootBone.rotation, Vector3.one ));
+                    } else {
+                        cmd.SetComputeMatrixParam(MeshRefit, "Transform", Matrix4x4.identity);
+                    }
                     cmd.SetComputeVectorParam(MeshRefit, "Offset", SkinnedRootBone.localPosition);
     
                     cmd.SetComputeIntParam(MeshRefit, "VertOffset", CurVertOffset);

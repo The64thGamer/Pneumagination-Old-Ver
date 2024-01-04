@@ -46,7 +46,7 @@ namespace TrueTrace {
         [HideInInspector] public ComputeBuffer BVH8AggregatedBuffer;
         [HideInInspector] public ComputeBuffer AggTriBuffer;
         [HideInInspector] public ComputeBuffer LightTriBuffer;
-        [HideInInspector] public List<MyMeshDataCompacted> MyMeshesCompacted;
+        [HideInInspector] public MyMeshDataCompacted[] MyMeshesCompacted;
         [HideInInspector] public List<LightData> UnityLights;
         [HideInInspector] public InstancedManager InstanceData;
         [HideInInspector] public List<InstancedObject> Instances;
@@ -608,7 +608,7 @@ namespace TrueTrace {
                 InstanceAddQue = new List<InstancedObject>();
                 InstanceRemoveQue = new List<InstancedObject>();
             }
-            MyMeshesCompacted = new List<MyMeshDataCompacted>();
+            // MyMeshesCompacted = new MyMeshDataCompacted[];
             UnityLights = new List<LightData>();
             LightMeshes = new List<LightMeshData>();
             LightTransforms = new List<Transform>();
@@ -919,7 +919,8 @@ namespace TrueTrace {
                         CurTriOffset += RenderQue[i].AggTriangles.Length;
                         MatOffset += RenderQue[i]._Materials.Count;
                     }
-                    for (int i = 0; i < InstanceData.RenderQue.Count; i++)
+                    int InstanceQueCount = InstanceData.RenderQue.Count;
+                    for (int i = 0; i < InstanceQueCount; i++)
                     {//Accumulate the BVH nodes and triangles for all instanced models
                         InstanceData.RenderQue[i].UpdateData();
                         InstanceData.RenderQue[i].InstanceMeshIndex = i + ParentsLength;
@@ -977,49 +978,17 @@ namespace TrueTrace {
                 if (!OnlyInstanceUpdated || _Materials.Count == 0) CreateAtlas();
             }
             ParentCountHasChanged = false;
-            #if !HardwareRT
-                if (UseSkinning && didstart)
-                {
-                    MyMeshDataCompacted TempMesh2;
-                    for (int i = 0; i < ParentsLength; i++)
-                    {//Refit BVH's of skinned meshes
-                        if (RenderQue[i].IsSkinnedGroup || RenderQue[i].IsDeformable)//this can be optimized to operate directly on the triangle buffer instead of needing to copy it
-                        {
-                            cmd.SetComputeIntParam(RenderQue[i].MeshRefit, "TriBuffOffset", RenderQue[i].TriOffset);
-                            cmd.SetComputeIntParam(RenderQue[i].MeshRefit, "LightTriBuffOffset", RenderQue[i].LightTriOffset);
-                            RenderQue[i].RefitMesh(ref BVH8AggregatedBuffer, ref AggTriBuffer, ref LightTriBuffer, cmd);
-                            if(i < MyMeshesCompacted.Count) {
-                                TempMesh2 = MyMeshesCompacted[i];
-                                TempMesh2.Transform = RenderTransforms[i].worldToLocalMatrix;
-                                MyMeshesCompacted[i] = TempMesh2;
-                                MeshAABBs[i] = RenderQue[i].aabb;
-                            }
+            if (UseSkinning && didstart) {
+                for (int i = 0; i < ParentsLength; i++) {//Refit BVH's of skinned meshes
+                    if (RenderQue[i].IsSkinnedGroup || RenderQue[i].IsDeformable) {
+                        RenderQue[i].RefitMesh(ref BVH8AggregatedBuffer, ref AggTriBuffer, ref LightTriBuffer, cmd);
+                        if(i < MyMeshesCompacted.Length) {
+                            MyMeshesCompacted[i].Transform = RenderTransforms[i].worldToLocalMatrix;
+                            MeshAABBs[i] = RenderQue[i].aabb;
                         }
                     }
                 }
-            #else
-                if (UseSkinning && didstart)
-                {
-                    MyMeshDataCompacted TempMesh2;
-                    for (int i = 0; i < ParentsLength; i++)
-                    {//Refit BVH's of skinned meshes
-                        if (RenderQue[i].IsSkinnedGroup)//this can be optimized to operate directly on the triangle buffer instead of needing to copy it
-                        {
-                             cmd.SetComputeIntParam(RenderQue[i].MeshRefit, "TriBuffOffset", RenderQue[i].TriOffset);
-                            cmd.SetComputeIntParam(RenderQue[i].MeshRefit, "LightTriBuffOffset", RenderQue[i].LightTriOffset);
-                            RenderQue[i].RefitMesh(ref BVH8AggregatedBuffer, ref AggTriBuffer, ref LightTriBuffer, cmd);
-                            if(i < MyMeshesCompacted.Count) {
-                                TempMesh2 = MyMeshesCompacted[i];
-                                TempMesh2.Transform = RenderTransforms[i].worldToLocalMatrix;
-                                MyMeshesCompacted[i] = TempMesh2;
-                                MeshAABBs[i] = RenderQue[i].aabb;
-                            }
-                        }
-                    }
-                }
-
-
-            #endif
+            }
         }
 
         public struct AggData
@@ -1381,7 +1350,6 @@ namespace TrueTrace {
                     RayLight.ThisLightData.Radiance *= LightEnergyScale;
                     if (RayLight.ThisLightData.Type == 1) SunDirection = RayLight.ThisLightData.Direction;
                     try{UnityLights[RayLight.ArrayIndex] = RayLight.ThisLightData;} catch(System.Exception throwawayerror) {}
-                    // finally {PrevLightCount = 0;}
                 }
             }
                 // UnityEngine.Profiling.Profiler.EndSample();
@@ -1391,21 +1359,21 @@ namespace TrueTrace {
             int aggregated_bvh_node_count = 2 * (MeshDataCount + InstanceRenderQue.Count);
             int AggNodeCount = aggregated_bvh_node_count;
             int AggTriCount = 0;
-            if (ChildrenUpdated || !didstart || OnlyInstanceUpdated || MyMeshesCompacted.Count == 0)
+            if (ChildrenUpdated || !didstart || OnlyInstanceUpdated || MyMeshesCompacted.Length == 0)
             {
-                MyMeshesCompacted.Clear();
+                MyMeshesCompacted = new MyMeshDataCompacted[MeshDataCount + InstanceRenderQue.Count];
                 AggData[] Aggs = new AggData[InstanceData.RenderQue.Count];
                 // UnityEngine.Profiling.Profiler.BeginSample("Remake Initial Data");
                 for (int i = 0; i < MeshDataCount; i++) {
                     if (!RenderQue[i].IsSkinnedGroup && !RenderQue[i].IsDeformable) RenderQue[i].UpdateAABB(RenderTransforms[i]);
-                    MyMeshesCompacted.Add(new MyMeshDataCompacted() {
+                    MyMeshesCompacted[i] = new MyMeshDataCompacted() {
                         mesh_data_bvh_offsets = aggregated_bvh_node_count,
                         Transform = RenderTransforms[i].worldToLocalMatrix,
                         AggIndexCount = AggTriCount,
                         AggNodeCount = AggNodeCount,
                         MaterialOffset = MatOffset,
                         LightTriCount = RenderQue[i].LightTriangles.Count
-                    });
+                    };
                     RenderQue[i].CompactedMeshData = i;
                     MatOffset += RenderQue[i].MatOffset;
                     MeshAABBs[i] = RenderQue[i].aabb;
@@ -1435,11 +1403,11 @@ namespace TrueTrace {
                 // UnityEngine.Profiling.Profiler.EndSample();
                 // UnityEngine.Profiling.Profiler.BeginSample("Remake Initial Instance Data B");
                 InstanceCount = InstanceRenderQue.Count;
-                int MeshCount = MyMeshesCompacted.Count;
+                int MeshCount = MeshDataCount;
                 for (int i = 0; i < InstanceCount; i++)
                 {
                     int Index = InstanceRenderQue[i].InstanceParent.CompactedMeshData;
-                    MyMeshesCompacted.Add(new MyMeshDataCompacted()
+                    MyMeshesCompacted[i + MeshCount] = new MyMeshDataCompacted()
                     {
                         mesh_data_bvh_offsets = Aggs[Index].mesh_data_bvh_offsets,
                         Transform = InstanceRenderQue[i].transform.worldToLocalMatrix,
@@ -1448,7 +1416,7 @@ namespace TrueTrace {
                         MaterialOffset = Aggs[Index].MaterialOffset,
                         LightTriCount = Aggs[Index].LightTriCount
 
-                    });
+                    };
                     InstanceRenderQue[i].CompactedMeshData = MeshCount + i;
                     AABB aabb = InstanceRenderQue[i].InstanceParent.aabb_untransformed;
                     CreateAABB(InstanceRenderQue[i].transform, ref aabb);
@@ -1480,9 +1448,7 @@ namespace TrueTrace {
                         if (TargetParent.IsSkinnedGroup || RenderQue[i].IsDeformable) continue;
                         TargetTransform = RenderTransforms[i];
                         TargetParent.UpdateAABB(TargetTransform);
-                        TempMesh2 = MyMeshesCompacted[i];
-                        TempMesh2.Transform = TargetTransform.worldToLocalMatrix;
-                        MyMeshesCompacted[i] = TempMesh2;
+                        MyMeshesCompacted[i].Transform = TargetTransform.worldToLocalMatrix;
                         #if HardwareRT
                             foreach(var a in TargetParent.Renderers) {
                                 AccelStruct.UpdateInstanceTransform(a);
@@ -1501,9 +1467,7 @@ namespace TrueTrace {
                     if (InstanceRenderTransforms[i].hasChanged || ChangedLastFrame)
                     {
                         TargetTransform = InstanceRenderTransforms[i];
-                        MyMeshDataCompacted TempMesh = MyMeshesCompacted[InstanceRenderQue[i].CompactedMeshData];
-                        TempMesh.Transform = TargetTransform.worldToLocalMatrix;
-                        MyMeshesCompacted[InstanceRenderQue[i].CompactedMeshData] = TempMesh;
+                        MyMeshesCompacted[InstanceRenderQue[i].CompactedMeshData].Transform = TargetTransform.worldToLocalMatrix;
                         TargetTransform.hasChanged = false;
                         AABB aabb = InstanceRenderQue[i].InstanceParent.aabb_untransformed;
                         CreateAABB(TargetTransform, ref aabb);
@@ -1577,6 +1541,7 @@ namespace TrueTrace {
                     TempMat.Specular = CurrentMaterial.Specular[Index];
                     TempMat.scatterDistance = CurrentMaterial.ScatterDist[Index];
                     TempMat.IsSmoothness = CurrentMaterial.IsSmoothness[Index] ? 1 : 0;
+                    TempMat.AlphaCutoff = CurrentMaterial.AlphaCutoff[Index];
                     if(CurrentMaterial.TilingChanged) {
                         string MatTile = AssetManager.data.Material[AssetManager.ShaderNames.IndexOf(CurrentMaterial.SharedMaterials[Index].shader.name)].BaseColorTex;
                         TempMat.AlbedoTextureScale = new Vector4(CurrentMaterial.SharedMaterials[Index].GetTextureScale(MatTile).x, CurrentMaterial.SharedMaterials[Index].GetTextureScale(MatTile).y, CurrentMaterial.SharedMaterials[Index].GetTextureOffset(MatTile).x, CurrentMaterial.SharedMaterials[Index].GetTextureOffset(MatTile).y);
@@ -1640,6 +1605,7 @@ namespace TrueTrace {
                             TempMat.Specular = CurrentMaterial.Specular[Index];
                             TempMat.scatterDistance = CurrentMaterial.ScatterDist[Index];
                             TempMat.IsSmoothness = CurrentMaterial.IsSmoothness[Index] ? 1 : 0;
+                            TempMat.AlphaCutoff = CurrentMaterial.AlphaCutoff[Index];
                             _Materials[CurrentMaterial.MaterialIndex[i3]] = TempMat;
                             HasChangedMaterials = true;
                         }

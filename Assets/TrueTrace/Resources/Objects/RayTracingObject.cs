@@ -33,6 +33,7 @@ namespace TrueTrace {
 		[SerializeField] public Material[] SharedMaterials;
 		public string[] Names;
 		[SerializeField] public float[] Specular;
+		[SerializeField] public float[] AlphaCutoff;
 		[SerializeField] public bool[] IsSmoothness;
 		[SerializeField] public int Selected;
 		public int[] Indexes;
@@ -122,6 +123,7 @@ namespace TrueTrace {
 				RoughnessRemap = new Vector2[SubMeshCount];
 			}
 			if(IsSmoothness == null || IsSmoothness.Length != SubMeshCount) IsSmoothness = new bool[SubMeshCount];
+			if(AlphaCutoff == null || AlphaCutoff.Length != SubMeshCount) {AlphaCutoff = new float[SubMeshCount]; System.Array.Fill(AlphaCutoff, 0.1f);}
 			if(ScatterDist == null || ScatterDist.Length != SubMeshCount) ScatterDist = new float[SubMeshCount];
 			if(BaseIsMap == null || BaseIsMap.Length != SubMeshCount) BaseIsMap = new bool[SubMeshCount];				
 			if(ReplaceBase == null || ReplaceBase.Length != SubMeshCount) ReplaceBase = new bool[SubMeshCount];				

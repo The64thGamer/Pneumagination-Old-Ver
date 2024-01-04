@@ -88,6 +88,7 @@ namespace CommonVars
         public Vector4 AlbedoTextureScale;
         public Vector2 MetallicRemap;
         public Vector2 RoughnessRemap;
+        public float AlphaCutoff;
     }
 
     [System.Serializable]

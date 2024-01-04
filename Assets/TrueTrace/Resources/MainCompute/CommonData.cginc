@@ -163,7 +163,7 @@ Texture2D<uint4> PrimaryTriData;
 StructuredBuffer<int> TLASBVH8Indices;
 
 struct MyMeshDataCompacted {
-	float4x4 Transform;
+	float4x4 W2L;
 	int TriOffset;
 	int NodeOffset;
 	int MaterialOffset;
@@ -231,6 +231,7 @@ struct MaterialData {//56
 	float4 AlbedoTexScale;
 	float2 MetallicRemap;
 	float2 RoughnessRemap;
+	float AlphaCutoff;
 };
 
 StructuredBuffer<MaterialData> _Materials;
@@ -285,6 +286,14 @@ float3x3 GetTangentSpace(float3 normal) {
 
     // Generate floattors
     float3 tangent = normalize(cross(normal, helper));
+    float3 binormal = cross(normal, tangent);
+
+    return float3x3(tangent, normal, binormal);
+}
+
+float3x3 GetTangentSpace2(float3 normal) {
+
+    float3 tangent = normalize(cross(normal, float3(0, 1, 0)));
     float3 binormal = cross(normal, tangent);
 
     return float3x3(tangent, normal, binormal);
@@ -541,7 +550,7 @@ inline bool triangle_intersect_shadow(int tri_id, const Ray ray, float max_dista
 	                float2 BaseUv = AggTris[tri_id].tex0 * (1.0f - u - v) + AggTris[tri_id].texedge1 * u + AggTris[tri_id].texedge2 * v;
 	                float2 Uv = AlignUV(BaseUv, _Materials[MaterialIndex].AlbedoTexScale, _Materials[MaterialIndex].AlbedoTex);
 	                float4 BaseCol = _TextureAtlas.SampleLevel(my_point_clamp_sampler, Uv, 0);
-	                if(_Materials[MaterialIndex].MatType == CutoutIndex && BaseCol.w < 0.1f) return false;
+	                if(_Materials[MaterialIndex].MatType == CutoutIndex && BaseCol.w < _Materials[MaterialIndex].AlphaCutoff) return false;
 
 		            #ifdef IgnoreGlassShadow
 		                if(_Materials[MaterialIndex].specTrans == 1) {
@@ -1064,8 +1073,8 @@ bool VisabilityCheckCompute(Ray ray, float dist) {
                     int root_index = (_MeshData[mesh_id].mesh_data_bvh_offsets & 0x7fffffff);
 
                     MatOffset = _MeshData[mesh_id].MaterialOffset;
-                    ray.direction = (mul((float3x3)_MeshData[mesh_id].Transform, ray.direction)).xyz;
-                    ray.origin = (mul(_MeshData[mesh_id].Transform, float4(ray.origin, 1))).xyz;
+                    ray.direction = (mul((float3x3)_MeshData[mesh_id].W2L, ray.direction)).xyz;
+                    ray.origin = (mul(_MeshData[mesh_id].W2L, float4(ray.origin, 1))).xyz;
                     ray.direction_inv = rcp(ray.direction);
 
                     oct_inv4 = ray_get_octant_inv4(ray.direction);
@@ -1111,29 +1120,21 @@ inline float luminance(const float3 a) {
 }
 
 inline float3 GetTriangleNormal(const uint TriIndex, const float2 TriUV, const float3x3 Inverse) {
-	float scalex = length(mul(Inverse, float3(1,0,0)));
-    float scaley = length(mul(Inverse, float3(0,1,0)));
-    float scalez = length(mul(Inverse, float3(0,0,1)));
-    float3 Scale = pow(rcp(float3(scalex, scaley, scalez)),2);
-
     float3 Normal0 = i_octahedral_32(AggTris[TriIndex].norms.x);
     float3 Normal1 = i_octahedral_32(AggTris[TriIndex].norms.y);
     float3 Normal2 = i_octahedral_32(AggTris[TriIndex].norms.z);
-
-    return normalize(mul(Inverse, Scale * (Normal0 * (1.0f - TriUV.x - TriUV.y) + TriUV.x * Normal1 + TriUV.y * Normal2)));
+    Normal2 = mul(Inverse, (Normal0 * (1.0f - TriUV.x - TriUV.y) + TriUV.x * Normal1 + TriUV.y * Normal2));
+    float wldScale = rsqrt(dot(Normal2, Normal2));
+    return mul(wldScale, Normal2);	
 }
 
 inline float3 GetTriangleTangent(const uint TriIndex, const float2 TriUV, const float3x3 Inverse) {
-	float scalex = length(mul(Inverse, float3(1,0,0)));
-    float scaley = length(mul(Inverse, float3(0,1,0)));
-    float scalez = length(mul(Inverse, float3(0,0,1)));
-
-    float3 Scale = pow(rcp(float3(scalex, scaley, scalez)),2);
-    float3 Tangent0 = i_octahedral_32(AggTris[TriIndex].tans.x);
-    float3 Tangent1 = i_octahedral_32(AggTris[TriIndex].tans.y);
-    float3 Tangent2 = i_octahedral_32(AggTris[TriIndex].tans.z);
-
-    return normalize(mul(Inverse, Scale * (Tangent0 * (1.0f - TriUV.x - TriUV.y) + TriUV.x * Tangent1 + TriUV.y * Tangent2)));
+    float3 Normal0 = i_octahedral_32(AggTris[TriIndex].tans.x);
+    float3 Normal1 = i_octahedral_32(AggTris[TriIndex].tans.y);
+    float3 Normal2 = i_octahedral_32(AggTris[TriIndex].tans.z);
+    Normal2 = mul(Inverse, (Normal0 * (1.0f - TriUV.x - TriUV.y) + TriUV.x * Normal1 + TriUV.y * Normal2));
+    float wldScale = rsqrt(dot(Normal2, Normal2));
+    return mul(wldScale, Normal2);
 }
 
 float GetHeightRaw(float3 CurrentPos, const TerrainData Terrain) {
