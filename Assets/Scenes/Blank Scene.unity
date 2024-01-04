@@ -300,43 +300,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1382779751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &440227577
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 1
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &794460553
 GameObject:
   m_ObjectHideFlags: 19
@@ -822,12 +785,12 @@ MonoBehaviour:
     anisotropic: 0
     flatness: 0
     diffTrans: 0
-    specTrans: 1
+    specTrans: 0
     Thin: 0
     Specular: 0
     scatterDistance: 0
     IsSmoothness: 0
-    AlbedoTextureScale: {x: 1, y: 1, z: 0, w: 0}
+    AlbedoTextureScale: {x: 0, y: 0, z: 0, w: 0}
     MetallicRemap: {x: 0, y: 1}
     RoughnessRemap: {x: 0, y: 1}
   MatOffset: 1
@@ -910,30 +873,20 @@ MonoBehaviour:
   LightTriOffset: 0
   SplitNodes: []
   AlbedoTexs:
-  - {fileID: 2800000, guid: 5e0edc916bbc0034ca2c9a5ea501a907, type: 3}
+  - {fileID: 2800000, guid: 1dd83ee8f37eff44488fdb1a4c642438, type: 3}
   AlbedoIndexes:
   - RayObjectList:
     - Obj: {fileID: 1105671739}
       Terrain: {fileID: 0}
       ObjIndex: 0
-  NormalTexs:
-  - {fileID: 2800000, guid: cd57e8098c5edcd4496551493524bbec, type: 3}
-  NormalIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 1105671739}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
+  NormalTexs: []
+  NormalIndexes: []
   MetallicTexs: []
   MetallicIndexes: []
   MetallicTexChannelIndex: 
-  RoughnessTexs:
-  - {fileID: 2800000, guid: 3a2bc42be79f3154cb4e795abba073ad, type: 3}
-  RoughnessIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 1105671739}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
-  RoughnessTexChannelIndex: 00000000
+  RoughnessTexs: []
+  RoughnessIndexes: []
+  RoughnessTexChannelIndex: 
   EmissionTexs: []
   EmissionIndexes: []
   ChildObjectTransforms:
@@ -1222,6 +1175,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &1740129124
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 1
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!115 &1787309872
 MonoScript:
   m_ObjectHideFlags: 0
@@ -1767,21 +1757,8 @@ MonoBehaviour:
   TotalParentObjectSize: 0
   AlbedoAtlasSize: 0
   VideoPlayerObject: {fileID: 0}
-  VideoTexture: {fileID: 440227577}
-  MaterialsChanged:
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
-  - {fileID: 1105671739}
+  VideoTexture: {fileID: 1740129124}
+  MaterialsChanged: []
   _Materials: []
   MyMeshesCompacted: []
   UnityLights: []
@@ -1794,6 +1771,7 @@ MonoBehaviour:
   RenderTransforms: []
   BuildQue:
   - {fileID: 1105671743}
+  - {fileID: 2014073698}
   AddQue: []
   RemoveQue: []
   UpdateQue:
@@ -1997,15 +1975,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ExistsInQue: 1
   IsDeformable: 0
-  Name: Blank Map
+  Name: Blank Map (1)
   CWBVHIndicesBufferInverted: 0000000001000000
   ChildObjects:
   - {fileID: 2014073699}
   MeshCountChanged: 0
   AggTriangles:
-  - pos0: {x: 0.01, y: -0.01, z: 2.9679128e-17}
-    posedge1: {x: -0.02, y: 0.02, z: -5.9358256e-17}
-    posedge2: {x: 0, y: 0.02, z: -5.9358256e-17}
+  - pos0: {x: 0.01, y: -0.01, z: 0}
+    posedge1: {x: -0.02, y: 0.02, z: 0}
+    posedge2: {x: 0, y: 0.02, z: 0}
     norm0: 2147450879
     norm1: 2147450879
     norm2: 2147450879
@@ -2016,9 +1994,9 @@ MonoBehaviour:
     texedge1: {x: 10.5, y: 10.5}
     texedge2: {x: -9.5, y: 10.5}
     MatDat: 0
-  - pos0: {x: 0.01, y: -0.01, z: 2.9679128e-17}
+  - pos0: {x: 0.01, y: -0.01, z: 0}
     posedge1: {x: -0.02, y: 0, z: 0}
-    posedge2: {x: -0.02, y: 0.02, z: -5.9358256e-17}
+    posedge2: {x: -0.02, y: 0.02, z: 0}
     norm0: 2147450879
     norm1: 2147450879
     norm2: 2147450879
@@ -2029,12 +2007,12 @@ MonoBehaviour:
     texedge1: {x: 10.5, y: -9.5}
     texedge2: {x: 10.5, y: 10.5}
     MatDat: 0
-  ParentScale: {x: 0.00000010000001, y: 0.00000010000002, z: 0.00000010000002}
+  ParentScale: {x: 0.0000000020000002, y: 0.0000000020000004, z: 0.0000000020000004}
   LightTriangles: []
   BVH:
     cwbvh_indices: 0000000001000000
     BVH8Nodes:
-    - e: 720000007200000061000000
+    - e: 72000000720000005c000000
       imask: 0
       base_index_child: 1
       base_index_triangle: 0
@@ -2044,8 +2022,8 @@ MonoBehaviour:
       quantized_min_y: 0000000000000000
       quantized_max_y: a4a4000000000000
       quantized_min_z: 0000000000000000
-      quantized_max_z: d7d7000000000000
-      p: {x: -0.01, y: -0.01, z: -0.00000010000002}
+      quantized_max_z: 8a8a000000000000
+      p: {x: -0.01, y: -0.01, z: -0.0000000020000004}
     cwbvhindex_count: 2
     cwbvhnode_count: 1
   SkinnedMeshes: []
@@ -2054,8 +2032,8 @@ MonoBehaviour:
   MeshRefit: {fileID: 7200000, guid: 8375b50c4fc272d41ab1b7c55b853562, type: 3}
   HasStarted: 0
   AggNodes:
-  - node_0xyz: {x: -0.01, y: -0.01, z: -0.00000010000002}
-    node_0w: 6386290
+  - node_0xyz: {x: -0.01, y: -0.01, z: -0.0000000020000004}
+    node_0w: 6058610
     node_1x: 1
     node_1y: 0
     node_1z: 8480
@@ -2070,13 +2048,13 @@ MonoBehaviour:
     node_3w: 0
     node_4x: 0
     node_4y: 0
-    node_4z: 55255
+    node_4z: 35466
     node_4w: 0
   InstanceMeshIndex: 0
   LightEndIndex: 0
   aabb_untransformed:
-    BBMax: {x: 0.01, y: 0.01, z: 0.00000010000002}
-    BBMin: {x: -0.01, y: -0.01, z: -0.00000010000002}
+    BBMax: {x: 0.01, y: 0.01, z: 0.0000000020000004}
+    BBMin: {x: -0.01, y: -0.01, z: -0.0000000020000004}
   aabb:
     BBMax: {x: 0, y: 0, z: 0}
     BBMin: {x: 0, y: 0, z: 0}
@@ -2106,7 +2084,7 @@ MonoBehaviour:
     anisotropic: 0
     flatness: 0
     diffTrans: 0
-    specTrans: 1
+    specTrans: 0
     Thin: 0
     Specular: 0
     scatterDistance: 0
@@ -2117,41 +2095,41 @@ MonoBehaviour:
   MatOffset: 1
   CachedTransforms:
   - WTL:
-      e00: 0.0001
+      e00: 0.000002
       e01: 0
       e02: 0
       e03: 0
       e10: 0
-      e11: -1.1920929e-11
-      e12: -0.00009999999
-      e13: 0
+      e11: -2.3841858e-13
+      e12: -0.0000019999998
+      e13: -9.7751614e-14
       e20: 0
-      e21: 0.00009999999
-      e22: -1.1920929e-11
-      e23: 0
+      e21: 0.0000019999998
+      e22: -2.3841858e-13
+      e23: 0.0000008199999
       e30: 0
       e31: 0
       e32: 0
       e33: 1
-    Position: {x: 0, y: 0, z: 0}
+    Position: {x: 0, y: -0.41, z: 0}
   - WTL:
-      e00: 0.0001
+      e00: 0.000002
       e01: 0
       e02: 0
       e03: 0
       e10: 0
-      e11: -1.1920929e-11
-      e12: -0.00009999999
-      e13: 0
+      e11: -2.3841858e-13
+      e12: -0.0000019999998
+      e13: -9.7751614e-14
       e20: 0
-      e21: 0.00009999999
-      e22: -1.1920929e-11
-      e23: 0
+      e21: 0.0000019999998
+      e22: -2.3841858e-13
+      e23: 0.0000008199999
       e30: 0
       e31: 0
       e32: 0
       e33: 1
-    Position: {x: 0, y: 0, z: 0}
+    Position: {x: 0, y: -0.41, z: 0}
   CurMeshData:
     Indices: 
     Verticies: []
@@ -2175,7 +2153,7 @@ MonoBehaviour:
   NodeInitializerKernel: 6
   CompactedMeshData: 0
   InstanceReferences: 0
-  NeedsToUpdate: 1
+  NeedsToUpdate: 0
   Assets: {fileID: 1948616041}
   FailureCount: 0
   TotalTriangles: 0
@@ -2223,7 +2201,7 @@ MonoBehaviour:
   ChildObjectTransforms:
   - {fileID: 2014073696}
   center: {x: 0, y: 0, z: 0}
-  extent: {x: 0.01, y: 0.01, z: 0.00000010000002}
+  extent: {x: 0.01, y: 0.01, z: 0.0000000020000004}
 --- !u!114 &2014073699
 MonoBehaviour:
   m_ObjectHideFlags: 0

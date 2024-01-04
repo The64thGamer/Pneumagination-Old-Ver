@@ -433,7 +433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
   _outlineLayers: {fileID: 11400000, guid: c69df5247a82c824ab02860f7504cba5, type: 2}
-  _cameraEvent: 20
+  _cameraEvent: 19
 --- !u!1 &3805736980352897171
 GameObject:
   m_ObjectHideFlags: 0
