@@ -334,6 +334,7 @@ Material:
     - _Palette_1: {r: 0.54999995, g: 0.7, b: 0.29999998, a: 1}
     - _Palette_2: {r: 0.45, g: 0.5, b: 0.39999998, a: 1}
     - _Palette_3: {r: 0.24999997, g: 0.19999996, b: 0.5, a: 1}
+    - _Palette_4: {r: 0.24999997, g: 0.19999996, b: 0.5, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
