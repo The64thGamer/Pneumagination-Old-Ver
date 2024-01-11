@@ -301,13 +301,14 @@ MonoBehaviour:
   - 0
   SharedMaterials:
   - {fileID: 2100000, guid: 82e721b70b43c36438c92f4c6dc5d688, type: 2}
-  - {fileID: 2100000, guid: 433ffcbac2f716c448e5a727c224572b, type: 2}
+  - {fileID: 0}
   Names:
   - Computer
   - Computer Glass
   Specular:
   - 0
   - 0
+  AlphaCutoff: []
   IsSmoothness: 0000
   Selected: 0
   Indexes: 0000000000000000

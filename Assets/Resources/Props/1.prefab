@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4207918605915674702
 Transform:
   m_ObjectHideFlags: 0
@@ -98,41 +98,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaterialOptions: 
-  TransmissionColor: []
-  BaseColor: []
-  MetallicRemap: []
-  RoughnessRemap: []
-  emmission: []
-  EmissionColor: []
-  EmissionMask: 
-  BaseIsMap: 
-  ReplaceBase: 
-  Roughness: []
-  IOR: []
-  Metallic: []
-  SpecularTint: []
-  Sheen: []
-  SheenTint: []
-  ClearCoat: []
-  ClearCoatGloss: []
-  Anisotropic: []
-  Flatness: []
-  DiffTrans: []
-  SpecTrans: []
-  Thin: 
-  FollowMaterial: 
-  ScatterDist: []
-  SharedMaterials: []
-  Names: []
-  Specular: []
-  IsSmoothness: 
+  MaterialOptions: 01000000
+  TransmissionColor:
+  - {x: 0, y: 0, z: 0}
+  BaseColor:
+  - {x: 1, y: 1, z: 1}
+  MetallicRemap:
+  - {x: 0, y: 0}
+  RoughnessRemap:
+  - {x: 0, y: 0}
+  emmission:
+  - 0
+  EmissionColor:
+  - {x: 0, y: 0, z: 0}
+  EmissionMask: 00
+  BaseIsMap: 00
+  ReplaceBase: 00
+  Roughness:
+  - 0
+  IOR:
+  - 1
+  Metallic:
+  - 0
+  SpecularTint:
+  - 0
+  Sheen:
+  - 0
+  SheenTint:
+  - 0
+  ClearCoat:
+  - 0
+  ClearCoatGloss:
+  - 0
+  Anisotropic:
+  - 0
+  Flatness:
+  - 0
+  DiffTrans:
+  - 0
+  SpecTrans:
+  - 0
+  Thin: 00000000
+  FollowMaterial: 01
+  ScatterDist:
+  - 0
+  SharedMaterials:
+  - {fileID: 2100000, guid: 775422f48c1072342bab5c4ac5efb95b, type: 2}
+  Names:
+  - Chairs
+  Specular:
+  - 0
+  AlphaCutoff:
+  - 0.1
+  IsSmoothness: 00
   Selected: 0
-  Indexes: 
+  Indexes: 00000000
   NeedsToUpdate: 0
-  IsReady: 0
-  MaterialIndex: 
-  LocalMaterialIndex: 
+  IsReady: 1
+  MaterialIndex: 00000000
+  LocalMaterialIndex: 00000000
   JustCreated: 1
   TilingChanged: 0
 --- !u!1 &2007353767263015335
@@ -349,6 +373,7 @@ MonoBehaviour:
   SharedMaterials: []
   Names: []
   Specular: []
+  AlphaCutoff: []
   IsSmoothness: 
   Selected: 0
   Indexes: 
@@ -376,7 +401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1071140633845183584
 Transform:
   m_ObjectHideFlags: 0
@@ -484,6 +509,7 @@ MonoBehaviour:
   SharedMaterials: []
   Names: []
   Specular: []
+  AlphaCutoff: []
   IsSmoothness: 
   Selected: 0
   Indexes: 
@@ -641,7 +667,7 @@ MonoBehaviour:
   NodeInitializerKernel: 0
   CompactedMeshData: 0
   InstanceReferences: 0
-  NeedsToUpdate: 0
+  NeedsToUpdate: 1
   Assets: {fileID: 0}
   FailureCount: 0
   TotalTriangles: 0

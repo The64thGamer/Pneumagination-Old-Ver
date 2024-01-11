@@ -302,7 +302,7 @@ public class Data_Manager : MonoBehaviour
     public GameObject GenerateNewBrush(BrushType brushType, Vector3 position)
     {
         string hash = Random.Range(int.MinValue, int.MaxValue).ToString();
-        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
+        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"),GameObject.Find("Scene").transform);
         brush.name = hash;
         brush.transform.position = position;
         brush.transform.parent = trueTraceScene;
