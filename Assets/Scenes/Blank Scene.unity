@@ -2406,6 +2406,10 @@ PrefabInstance:
       propertyPath: fullscreenPassthrough
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8550631515773891685, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
+      propertyPath: m_HDR
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9031352389853259661, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
       propertyPath: deadInterface
       value: 
