@@ -1779,6 +1779,12 @@ MonoBehaviour:
   RemoveQue: []
   UpdateQue:
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   InstanceRenderQue: []
   InstanceUpdateQue: []
   InstanceRenderTransforms: []
@@ -2358,6 +2364,18 @@ PrefabInstance:
       propertyPath: dataManager
       value: 
       objectReference: {fileID: 1913721398}
+    - target: {fileID: 5761797468236246604, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6568539290739481206, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6910018526878810499, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7198735824386820814, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
