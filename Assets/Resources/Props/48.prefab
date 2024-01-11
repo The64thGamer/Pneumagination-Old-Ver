@@ -262,6 +262,8 @@ MonoBehaviour:
   - Computer
   Specular:
   - 0
+  AlphaCutoff:
+  - 0.1
   IsSmoothness: 00
   Selected: 0
   Indexes: 00000000
