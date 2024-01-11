@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/The64thGamer/Pneumagination/main/Assets/UI/Logo/FullTallRender.png" height="800">
+<img src="https://raw.githubusercontent.com/The64thGamer/Pneumagination/TrueTrace-Test/Assets/UI/Logo/Steam Vertical Capsule.png" height="800">
 </p>
 
 # Pneumagination
