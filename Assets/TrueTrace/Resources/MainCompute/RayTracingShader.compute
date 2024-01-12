@@ -353,7 +353,7 @@ inline int SelectLight(const uint pixel_index, const uint MeshIndex, inout float
 inline void calcFinalColor(SmallerRay ray, inout ColData Color, MaterialData hitDat, RayHit hit, uint2 id, float2 NormalUV, RayData RayDat, const uint pixel_index, int MaterialIndex, inout float4 AlbedoTexData, inout uint4 PrevWorldData, inout float4 PrevScreenData) {//main function
     bool CB = !DoPartialRendering;
     if(!CB) {
-        CB = curframe % PartialRenderingFactor == (floor((pixel_index % screen_width) / PartialRenderingFactor) + (floor((pixel_index / screen_width) / PartialRenderingFactor) % PartialRenderingFactor)) % PartialRenderingFactor;
+        CB = (int(id.x)/2 + int(id.y)/2 + curframe)%PartialRenderingFactor==0;//(floor((pixel_index % screen_width) / PartialRenderingFactor) + (floor((pixel_index / screen_width) / PartialRenderingFactor) % PartialRenderingFactor)) % PartialRenderingFactor;
         if(UseASVGF || (UseReSTIRGI && ReSTIRGIUpdateRate != 0)) {
             if(RandomNums[id].z != 0 || RandomNums[id].w != 0) CB = true;
         }
@@ -495,6 +495,7 @@ inline void calcFinalColor(SmallerRay ray, inout ColData Color, MaterialData hit
                     Geomnorm *= -1;
                     norm *= -1;
                     USGNorm *= -1;
+                    CB = true;
                 } else if (AlbedoTexData.w <= 0 && MaterialLobe == 3) {
                     Color.IsSpecular = 3;
                     Color.pad = asfloat(0);
@@ -732,7 +733,7 @@ void kernel_shade(uint3 id : SV_DispatchThreadID) {
                 NEEPosA[id.xy] += float4(0,0,0,luminance(BackgroundColor * BackgroundIntensity / clamp(GlobRay.last_pdf,0.1,1.0f)));
             break;
         }
-        if(CurBounce == 1) WorldPosA[id.xy] = uint4(UseReSTIRGI ? asuint(ray.origin + ray.direction * 12.0f) : asuint(ray.direction), WorldPosA[id.xy].w);
+        if(CurBounce == 1) WorldPosA[id.xy] = uint4(UseReSTIRGI ? asuint(ray.origin + ray.direction * 1222.0f) : asuint(ray.direction), WorldPosA[id.xy].w);
         if(CurBounce == 0) TempAlbedoTex[id.xy] = float4(Color.Direct,0);
         GlobalColors[pixel_index] = Color;
         return;
@@ -880,7 +881,7 @@ void GIReTraceKernel(uint3 id : SV_DispatchThreadID, uint3 id2 : SV_GroupThreadI
             float2 MotionVector = MotionVectors.SampleLevel(my_linear_clamp_sampler, uv, 0).xy;
         #endif
         int2 prevIndex = int2(floor(((float2(id.xy) + 0.5) * float2(rcp(screen_width), rcp(screen_height)) - MotionVector) * float2(screen_width, screen_height)));
-        if (RandomNums[prevIndex].z == 0 && ReservoirA[prevIndex].z != 3 && prevIndex.x >= 0 && prevIndex.x < screen_width && prevIndex.y >= 0 && prevIndex.y < screen_height && PrevGlobalColorsA[prevIndex.x + prevIndex.y * screen_width].throughput.x >= 0) {
+        if ((!DoPartialRendering || (int(prevIndex.x)/2 + int(prevIndex.y)/2 + curframe-1)%PartialRenderingFactor==0) && RandomNums[prevIndex].z == 0 && ReservoirA[prevIndex].z != 3 && prevIndex.x >= 0 && prevIndex.x < screen_width && prevIndex.y >= 0 && prevIndex.y < screen_height && PrevGlobalColorsA[prevIndex.x + prevIndex.y * screen_width].throughput.x >= 0) {
             RandomNumsWrite[id.xy] = float4(PrevGlobalColorsA[prevIndex.x + prevIndex.y * screen_width].throughput.yx, 1 + ReservoirA[prevIndex].z,  PrevGlobalColorsA[prevIndex.x + prevIndex.y * screen_width].throughput.z);
         }
     }

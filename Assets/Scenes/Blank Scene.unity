@@ -300,43 +300,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1382779751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &470820932
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 1
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &794460553
 GameObject:
   m_ObjectHideFlags: 19
@@ -829,7 +792,7 @@ MonoBehaviour:
     Specular: 0
     scatterDistance: 0
     IsSmoothness: 0
-    AlbedoTextureScale: {x: 0, y: 0, z: 0, w: 0}
+    AlbedoTextureScale: {x: 1, y: 1, z: 0, w: 0}
     MetallicRemap: {x: 0, y: 1}
     RoughnessRemap: {x: 0, y: 1}
     AlphaCutoff: 0
@@ -913,20 +876,30 @@ MonoBehaviour:
   LightTriOffset: 0
   SplitNodes: []
   AlbedoTexs:
-  - {fileID: 2800000, guid: 1dd83ee8f37eff44488fdb1a4c642438, type: 3}
+  - {fileID: 2800000, guid: 5e0edc916bbc0034ca2c9a5ea501a907, type: 3}
   AlbedoIndexes:
   - RayObjectList:
     - Obj: {fileID: 1105671739}
       Terrain: {fileID: 0}
       ObjIndex: 0
-  NormalTexs: []
-  NormalIndexes: []
+  NormalTexs:
+  - {fileID: 2800000, guid: cd57e8098c5edcd4496551493524bbec, type: 3}
+  NormalIndexes:
+  - RayObjectList:
+    - Obj: {fileID: 1105671739}
+      Terrain: {fileID: 0}
+      ObjIndex: 0
   MetallicTexs: []
   MetallicIndexes: []
   MetallicTexChannelIndex: 
-  RoughnessTexs: []
-  RoughnessIndexes: []
-  RoughnessTexChannelIndex: 
+  RoughnessTexs:
+  - {fileID: 2800000, guid: 3a2bc42be79f3154cb4e795abba073ad, type: 3}
+  RoughnessIndexes:
+  - RayObjectList:
+    - Obj: {fileID: 1105671739}
+      Terrain: {fileID: 0}
+      ObjIndex: 0
+  RoughnessTexChannelIndex: 00000000
   EmissionTexs: []
   EmissionIndexes: []
   ChildObjectTransforms:
@@ -1164,6 +1137,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &1447006723
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 1
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &1690059080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1698,6 +1708,7 @@ MonoBehaviour:
     _TransmittanceLUT: {fileID: 0}
     MultiScatterTex: {fileID: 0}
   Assets: {fileID: 0}
+  ShadingShader: {fileID: 0}
   ScreenSpaceInfo: {fileID: 0}
   _transformsToWatch: []
   SampleCount: 0
@@ -1760,7 +1771,7 @@ MonoBehaviour:
   TotalParentObjectSize: 0
   AlbedoAtlasSize: 0
   VideoPlayerObject: {fileID: 0}
-  VideoTexture: {fileID: 470820932}
+  VideoTexture: {fileID: 1447006723}
   MaterialsChanged: []
   _Materials: []
   MyMeshesCompacted: []
@@ -1775,13 +1786,10 @@ MonoBehaviour:
   BuildQue:
   - {fileID: 1105671743}
   - {fileID: 2014073698}
+  - {fileID: 0}
   AddQue: []
   RemoveQue: []
   UpdateQue:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -2163,7 +2171,7 @@ MonoBehaviour:
   NodeInitializerKernel: 6
   CompactedMeshData: 0
   InstanceReferences: 0
-  NeedsToUpdate: 1
+  NeedsToUpdate: 0
   Assets: {fileID: 1948616041}
   FailureCount: 0
   TotalTriangles: 0

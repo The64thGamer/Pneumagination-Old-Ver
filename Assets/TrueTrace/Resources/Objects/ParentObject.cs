@@ -292,7 +292,7 @@ namespace TrueTrace {
                 int Offset = 0;
 
                 for (int i = 0; i < SharedMatLength; ++i) {
-                    bool JustCreated = obj.JustCreated || obj.FollowMaterial[i];
+                    bool JustCreated = obj.JustCreated && obj.FollowMaterial[i] || obj.FollowMaterial[i];
                     MaterialData CurMat = new MaterialData();
                     bool GotSentBack = DoneMats.IndexOf(SharedMaterials[i]) != -1;
                     if (GotSentBack) Offset = DoneMats.IndexOf(SharedMaterials[i]);
@@ -962,9 +962,10 @@ namespace TrueTrace {
                     this.GetComponentInParent<InstancedManager>().ParentCountHasChanged = true;
                 }
                 else {
-                    GameObject.Find("Scene").GetComponent<AssetManager>().AddQue.Add(this);
+                    GameObject.FindObjectsOfType<AssetManager>()[0].AddQue.Add(this);
+                    Assets = GameObject.FindObjectsOfType<AssetManager>()[0];
                     ExistsInQue = 3;
-                    GameObject.Find("Scene").GetComponent<AssetManager>().ParentCountHasChanged = true;
+                    GameObject.FindObjectsOfType<AssetManager>()[0].ParentCountHasChanged = true;
                 }
                 HasCompleted = false;
             }

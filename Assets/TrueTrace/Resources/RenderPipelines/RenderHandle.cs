@@ -37,7 +37,8 @@ public class RenderHandle : MonoBehaviour
     }
     // [ImageEffectOpaque]
     private void OnRenderImage(RenderTexture source, RenderTexture destination) {
-        if(gameObject.GetComponent<Camera>() != Camera.current) return;
+        if(gameObject.GetComponent<Camera>() != Camera.current || (RayMaster == null && GameObject.FindObjectsOfType<TrueTrace.RayTracingMaster>().Length == 0)) {Graphics.Blit(source, destination); return;}
+        if(RayMaster == null) RayMaster = GameObject.FindObjectsOfType<TrueTrace.RayTracingMaster>()[0];
         RayMaster.TossCamera(gameObject.GetComponent<Camera>());
         if(RayMaster == null) {
             Start();

@@ -70,9 +70,11 @@ namespace TrueTrace {
 
 
 		public void CallMaterialEdited() {
-			if(Assets == null) Assets = GameObject.Find("Scene").GetComponent<AssetManager>();
-			if(gameObject.activeInHierarchy && Assets != null) Assets.MaterialsChanged.Add(this);
-			System.Array.Fill(FollowMaterial, false);
+			if(Application.isPlaying) {
+				if(Assets == null) Assets = GameObject.Find("Scene").GetComponent<AssetManager>();
+				if(gameObject.activeInHierarchy && Assets != null) Assets.MaterialsChanged.Add(this);
+			}
+				System.Array.Fill(FollowMaterial, false);
 		}
 
 		public void CallTilingScrolled() {
@@ -84,7 +86,7 @@ namespace TrueTrace {
 			TilingChanged = false;
 			WasDeleted = false;
 			this.gameObject.isStatic = false;
-			Assets = GameObject.Find("Scene").GetComponent<AssetManager>();
+			if(GameObject.Find("Scene") != null) Assets = GameObject.Find("Scene").GetComponent<AssetManager>();
 			 Mesh mesh = new Mesh();
 			 int SubMeshCount;
 			 if(GetComponent<MeshRenderer>() != null) { 
@@ -198,6 +200,7 @@ namespace TrueTrace {
 
 	    private void OnDisable() {
 	    	if(gameObject.scene.isLoaded && this.transform.parent.GetComponent<ParentObject>() != null) {
+				if(GameObject.Find("Scene") != null) Assets = GameObject.Find("Scene").GetComponent<AssetManager>();
 	    		this.transform.parent.GetComponent<ParentObject>().NeedsToUpdate = true;
 	    		if(Assets != null && Assets.UpdateQue != null && !Assets.UpdateQue.Contains(this.transform.parent.GetComponent<ParentObject>())) Assets.UpdateQue.Add(this.transform.parent.GetComponent<ParentObject>());
 	    	} else if(gameObject.scene.isLoaded && this.transform.GetComponent<ParentObject>() != null) {

@@ -46,7 +46,7 @@ namespace TrueTrace {
         [HideInInspector] public ComputeBuffer BVH8AggregatedBuffer;
         [HideInInspector] public ComputeBuffer AggTriBuffer;
         [HideInInspector] public ComputeBuffer LightTriBuffer;
-        [HideInInspector] public MyMeshDataCompacted[] MyMeshesCompacted;
+        [HideInInspector] public List<MyMeshDataCompacted> MyMeshesCompacted;
         [HideInInspector] public List<LightData> UnityLights;
         [HideInInspector] public InstancedManager InstanceData;
         [HideInInspector] public List<InstancedObject> Instances;
@@ -608,7 +608,7 @@ namespace TrueTrace {
                 InstanceAddQue = new List<InstancedObject>();
                 InstanceRemoveQue = new List<InstancedObject>();
             }
-            // MyMeshesCompacted = new MyMeshDataCompacted[];
+            MyMeshesCompacted = new List<MyMeshDataCompacted>();
             UnityLights = new List<LightData>();
             LightMeshes = new List<LightMeshData>();
             LightTransforms = new List<Transform>();
@@ -800,12 +800,13 @@ namespace TrueTrace {
         {//Only has unbuilt be built
             Terrains = new List<TerrainObject>(GetComponentsInChildren<TerrainObject>());
             init();
-            List<ParentObject> TempQue = new List<ParentObject>(GetComponentsInChildren<ParentObject>());
+            List<ParentObject> TempQue = new List<ParentObject>(GameObject.FindObjectsOfType<ParentObject>());
             InstanceAddQue = new List<InstancedObject>(GetComponentsInChildren<InstancedObject>());
             InstanceData.BuildCombined();
             RunningTasks = 0;
             for (int i = 0; i < TempQue.Count; i++)
             {
+                if(TempQue[i].transform.parent.name == "InstancedStorage") continue;
                 if (TempQue[i].HasCompleted && !TempQue[i].NeedsToUpdate) {
                     TempQue[i].ExistsInQue = 0;
                     RenderQue.Add(TempQue[i]);
@@ -982,8 +983,10 @@ namespace TrueTrace {
                 for (int i = 0; i < ParentsLength; i++) {//Refit BVH's of skinned meshes
                     if (RenderQue[i].IsSkinnedGroup || RenderQue[i].IsDeformable) {
                         RenderQue[i].RefitMesh(ref BVH8AggregatedBuffer, ref AggTriBuffer, ref LightTriBuffer, cmd);
-                        if(i < MyMeshesCompacted.Length) {
-                            MyMeshesCompacted[i].Transform = RenderTransforms[i].worldToLocalMatrix;
+                        if(i < MyMeshesCompacted.Count) {
+                        MyMeshDataCompacted TempMesh2 = MyMeshesCompacted[i];
+                        TempMesh2.Transform = RenderTransforms[i].worldToLocalMatrix;
+                        MyMeshesCompacted[i] = TempMesh2;
                             MeshAABBs[i] = RenderQue[i].aabb;
                         }
                     }
@@ -1359,21 +1362,21 @@ namespace TrueTrace {
             int aggregated_bvh_node_count = 2 * (MeshDataCount + InstanceRenderQue.Count);
             int AggNodeCount = aggregated_bvh_node_count;
             int AggTriCount = 0;
-            if (ChildrenUpdated || !didstart || OnlyInstanceUpdated || MyMeshesCompacted.Length == 0)
+            if (ChildrenUpdated || !didstart || OnlyInstanceUpdated || MyMeshesCompacted.Count == 0)
             {
-                MyMeshesCompacted = new MyMeshDataCompacted[MeshDataCount + InstanceRenderQue.Count];
+                MyMeshesCompacted.Clear();// = new MyMeshDataCompacted[MeshDataCount + InstanceRenderQue.Count];
                 AggData[] Aggs = new AggData[InstanceData.RenderQue.Count];
                 // UnityEngine.Profiling.Profiler.BeginSample("Remake Initial Data");
                 for (int i = 0; i < MeshDataCount; i++) {
                     if (!RenderQue[i].IsSkinnedGroup && !RenderQue[i].IsDeformable) RenderQue[i].UpdateAABB(RenderTransforms[i]);
-                    MyMeshesCompacted[i] = new MyMeshDataCompacted() {
+                    MyMeshesCompacted.Add(new MyMeshDataCompacted() {
                         mesh_data_bvh_offsets = aggregated_bvh_node_count,
                         Transform = RenderTransforms[i].worldToLocalMatrix,
                         AggIndexCount = AggTriCount,
                         AggNodeCount = AggNodeCount,
                         MaterialOffset = MatOffset,
                         LightTriCount = RenderQue[i].LightTriangles.Count
-                    };
+                    });
                     RenderQue[i].CompactedMeshData = i;
                     MatOffset += RenderQue[i].MatOffset;
                     MeshAABBs[i] = RenderQue[i].aabb;
@@ -1448,7 +1451,9 @@ namespace TrueTrace {
                         if (TargetParent.IsSkinnedGroup || RenderQue[i].IsDeformable) continue;
                         TargetTransform = RenderTransforms[i];
                         TargetParent.UpdateAABB(TargetTransform);
-                        MyMeshesCompacted[i].Transform = TargetTransform.worldToLocalMatrix;
+                        TempMesh2 = MyMeshesCompacted[i];
+                        TempMesh2.Transform = TargetTransform.worldToLocalMatrix;
+                        MyMeshesCompacted[i] = TempMesh2;
                         #if HardwareRT
                             foreach(var a in TargetParent.Renderers) {
                                 AccelStruct.UpdateInstanceTransform(a);
@@ -1467,7 +1472,9 @@ namespace TrueTrace {
                     if (InstanceRenderTransforms[i].hasChanged || ChangedLastFrame)
                     {
                         TargetTransform = InstanceRenderTransforms[i];
-                        MyMeshesCompacted[InstanceRenderQue[i].CompactedMeshData].Transform = TargetTransform.worldToLocalMatrix;
+                         MyMeshDataCompacted TempMesh = MyMeshesCompacted[InstanceRenderQue[i].CompactedMeshData];
+                        TempMesh.Transform = TargetTransform.worldToLocalMatrix;
+                        MyMeshesCompacted[InstanceRenderQue[i].CompactedMeshData] = TempMesh;
                         TargetTransform.hasChanged = false;
                         AABB aabb = InstanceRenderQue[i].InstanceParent.aabb_untransformed;
                         CreateAABB(TargetTransform, ref aabb);

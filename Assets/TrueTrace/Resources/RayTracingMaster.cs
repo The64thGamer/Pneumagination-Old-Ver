@@ -16,7 +16,7 @@ namespace TrueTrace {
         private Denoiser Denoisers;
         private ASVGF ASVGFCode;
 
-        private ComputeShader ShadingShader;
+        [HideInInspector] public ComputeShader ShadingShader;
         private ComputeShader IntersectionShader;
         private ComputeShader GenerateShader;
         private ComputeShader ReSTIRGI;
@@ -186,12 +186,6 @@ namespace TrueTrace {
             TargetHeight = 1;
             SourceWidth = 1;
             SourceHeight = 1;
-            if (Mathf.Abs(SourceWidth - TargetWidth) < 2)
-            {
-                SourceWidth = TargetWidth;
-                SourceHeight = TargetHeight;
-                RenderScale = 1;
-            }
             PrevResFactor = RenderScale;
             _meshObjectsNeedRebuilding = true;
             Assets = gameObject.GetComponent<AssetManager>();
@@ -759,6 +753,9 @@ namespace TrueTrace {
                 CommonFunctions.CreateRenderTexture(ref Gradients, SourceWidth / 3, SourceHeight / 3, CommonFunctions.RTHalf2);
                 // Reset sampling
                 _currentSample = 0;
+                              uFirstFrame = 1;
+            FramesSinceStart = 0;
+            FramesSinceStart2 = 0;
             }
         }
         public void ClearOutRenderTexture(RenderTexture renderTexture)
@@ -894,6 +891,7 @@ namespace TrueTrace {
                                     RenderScale, 
                                     (FramesSinceStart2 % 2 == 1) ? CorrectedDistanceTex : CorrectedDistanceTexB, 
                                     ((FramesSinceStart2 % 2 == 0) ? ScreenSpaceInfo : ScreenSpaceInfoPrev), 
+                                    ((FramesSinceStart2 % 2 == 1) ? ScreenSpaceInfo : ScreenSpaceInfoPrev), 
                                     cmd, 
                                     (FramesSinceStart2 % 2 == 0) ? CorrectedDistanceTex : CorrectedDistanceTexB, 
                                     FramesSinceStart2, 

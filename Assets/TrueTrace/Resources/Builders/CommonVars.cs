@@ -779,6 +779,20 @@ public static uint PackOctahedral(Vector3 nor)
             ThisTex.Create();
         }
 
+        public static void CreateRenderTextureArray(ref RenderTexture ThisTexArray, 
+                                                    int Width, int Height, int Depth,
+                                                    RenderTextureFormat Form, 
+                                                    RenderTextureReadWrite RendRead = RenderTextureReadWrite.Linear) {
+            if(ThisTexArray != null) ThisTexArray?.Release();
+            ThisTexArray = new RenderTexture(Width, Height, 0,
+                Form, RendRead);
+            
+            ThisTexArray.dimension = UnityEngine.Rendering.TextureDimension.Tex2DArray;
+            ThisTexArray.enableRandomWrite = true;
+            ThisTexArray.volumeDepth = Depth;
+            ThisTexArray.Create();
+        }
+
 
         public static void CreateComputeBuffer<T>(ref ComputeBuffer buffer, List<T> data)
             where T : struct

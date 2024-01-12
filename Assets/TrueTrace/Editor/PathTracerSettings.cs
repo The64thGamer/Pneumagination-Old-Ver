@@ -390,7 +390,7 @@ Toggle MovingToggle;
 Toggle AccumToggle;
 Toggle SkinToggle;
 Toggle BloomToggle;        
-FloatField ResField;
+[Delayed] FloatField ResField;
 Toggle TAAUToggle;
 FloatField AtmoScatterField;
 Toggle GIToggle;
@@ -589,6 +589,9 @@ Toolbar toolbar;
          using(StreamWriter writer = new StreamWriter(Application.dataPath + "/TrueTrace/Resources/Utility/MaterialMappings.xml")) {
             var serializer = new XmlSerializer(typeof(Materials));
             serializer.Serialize(writer.BaseStream, AssetManager.data);
+            AssetDatabase.Refresh();
+            
+               Assets.UpdateMaterialDefinition();
          }
       }
       void AddAssetsToMenu() {
@@ -624,6 +627,18 @@ Toolbar toolbar;
          }
          MatShader = AssetManager.data.Material.Find((s1) => s1.Name.Equals(shader.name));
          Index = AssetManager.data.Material.IndexOf(MatShader);
+         if(Index == -1) {
+            if(Assets != null && Assets.NeedsToUpdateXML) {
+               Assets.AddMaterial(shader);
+               using(StreamWriter writer = new StreamWriter(Application.dataPath + "/TrueTrace/Resources/Utility/MaterialMappings.xml")) {
+                  var serializer = new XmlSerializer(typeof(Materials));
+                  serializer.Serialize(writer.BaseStream, AssetManager.data);
+                  AssetDatabase.Refresh();
+               }
+               Assets.UpdateMaterialDefinition();
+               Index = AssetManager.data.Material.IndexOf(MatShader);
+            }
+         }
          VisualElement BaseColorRow = new VisualElement();
          BaseColorRow.style.flexDirection = FlexDirection.Row;
             BaseColorField = new PopupField<string>("Base Color ->");
@@ -938,7 +953,7 @@ Toolbar toolbar;
                ResField.ElementAt(0).style.minWidth = 75;
                ResField.ElementAt(1).style.width = 35;
                TopEnclosingBox.Add(ResField);
-               ResField.RegisterValueChangedCallback(evt => {if(!Application.isPlaying) {RenderRes = evt.newValue; RenderRes = Mathf.Max(RenderRes, 0.05f); RenderRes = Mathf.Min(RenderRes, 1.0f); RayMaster.RenderScale = RenderRes;} else ResField.value = RenderRes;});        
+               ResField.RegisterValueChangedCallback(evt => {RenderRes = evt.newValue; RenderRes = Mathf.Max(RenderRes, 0.5f); RenderRes = Mathf.Min(RenderRes, 1.0f); RayMaster.RenderScale = RenderRes;});        
                TopEnclosingBox.Add(AtlasField);
            MainSource.Add(TopEnclosingBox);
 

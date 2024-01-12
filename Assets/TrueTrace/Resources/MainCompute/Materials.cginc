@@ -977,7 +977,7 @@ float3 ReconstructDisney(MaterialData hitDat, float3 wo, float3 wi, bool thin,
             Success = Success || true;
         }
     } else {
-        reflectance *= rcp(P[Case]);
+        reflectance = saturate(reflectance / P[Case]);
         forwardPdf *= P[Case];
     }
 
