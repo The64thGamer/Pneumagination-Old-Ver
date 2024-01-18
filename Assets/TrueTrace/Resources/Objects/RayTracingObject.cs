@@ -85,7 +85,7 @@ namespace TrueTrace {
 		public void matfill() {
 			TilingChanged = false;
 			WasDeleted = false;
-			this.gameObject.isStatic = false;
+			// this.gameObject.isStatic = false;
 			if(GameObject.Find("Scene") != null) Assets = GameObject.Find("Scene").GetComponent<AssetManager>();
 			 Mesh mesh = new Mesh();
 			 int SubMeshCount;
@@ -185,11 +185,16 @@ namespace TrueTrace {
 		
 	    private void OnEnable() {
 	    	// if(this.gameObject.GetComponent<SkinnedMeshRenderer>() != null) this.gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-	    	if(gameObject.scene.isLoaded && this.transform.parent.GetComponent<ParentObject>() != null) {
+	    	if(gameObject.scene.isLoaded && (this.transform.GetComponent<ParentObject>() != null || this.transform.parent.GetComponent<ParentObject>() != null)) {
 	    		matfill();
 	    		if(WasDeleted) return;
-		    	this.transform.parent.GetComponent<ParentObject>().NeedsToUpdate = true;
-				if(Assets != null && Assets.UpdateQue != null && !Assets.UpdateQue.Contains(this.transform.parent.GetComponent<ParentObject>())) Assets.UpdateQue.Add(this.transform.parent.GetComponent<ParentObject>());
+		    	if(this.transform.GetComponent<ParentObject>() != null) {
+		    		this.transform.GetComponent<ParentObject>().NeedsToUpdate = true;
+					if(Assets != null && Assets.UpdateQue != null && !Assets.UpdateQue.Contains(this.transform.GetComponent<ParentObject>())) Assets.UpdateQue.Add(this.transform.GetComponent<ParentObject>());
+		    	} else {
+		    		this.transform.parent.GetComponent<ParentObject>().NeedsToUpdate = true;
+					if(Assets != null && Assets.UpdateQue != null && !Assets.UpdateQue.Contains(this.transform.parent.GetComponent<ParentObject>())) Assets.UpdateQue.Add(this.transform.parent.GetComponent<ParentObject>());
+	    		}
 	    	} else if(gameObject.scene.isLoaded && this.transform.GetComponent<ParentObject>() != null) {
 	    		matfill();
 	    		if(WasDeleted) return;

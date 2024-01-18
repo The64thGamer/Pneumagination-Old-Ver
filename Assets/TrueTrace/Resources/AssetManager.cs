@@ -105,6 +105,10 @@ namespace TrueTrace {
         [HideInInspector] public Vector3 SunDirection;
 
         private BVHNode8DataCompressed[] TempBVHArray;
+        #if TTLightMapping
+            public List<int> LightMapTexIndex;
+            public LightMapData[] LightMaps;
+        #endif
 
         [SerializeField] public int RunningTasks;
         #if HardwareRT
@@ -141,155 +145,122 @@ namespace TrueTrace {
             Resources.UnloadUnusedAssets();
             System.GC.Collect();
         }
-        private Dictionary<int,Texture2D> AlbedoDict;
-        private Dictionary<int,RayObjects> AlbedoIndexes;
-        private Dictionary<int,Texture2D> NormalDict;
-        private Dictionary<int,RayObjects> NormalIndexes;
-        private Dictionary<int,Texture2D> MetallicDict;
-        private Dictionary<int,RayObjects> MetallicIndexes;
-        private List<int> MetallicTexChannelIndex;
-        private Dictionary<int,Texture2D> RoughnessDict;
-        private Dictionary<int,RayObjects> RoughnessIndexes;
-        private List<int> RoughnessTexChannelIndex;
-        private Dictionary<int,Texture2D> EmissiveDict;
-        private Dictionary<int,RayObjects> EmissiveIndexes;
+
         public static AssetManager Assets;
 
-        private void AddTextures(ref Dictionary<int,Texture2D> Texs, ref Dictionary<int,RayObjects> Indexes, ref List<RayObjects> ObjIndexes, ref List<Texture> ObjTexs, ref List<int> ReadIndex, List<int> ObjReadIndex = null) {
-            int NewLength = ObjTexs.Count;
-            int PrevLength = Texs.Count;
-            for (int i = 0; i < NewLength; i++) {
-                int Index = ObjTexs[i].GetInstanceID();//Texs.IndexOf((Texture2D)ObjTexs[i], 0, PrevLength);
-                if (!Texs.ContainsKey(Index)) {
-                    Texs.Add(Index, (Texture2D)ObjTexs[i]);
-                    if(ObjReadIndex != null) ReadIndex.Add(ObjReadIndex[i]);
-                    var E = new RayObjects();
-                    E.RayObjectList = new List<RayObjectTextureIndex>(ObjIndexes[i].RayObjectList);
-                    Indexes.Add(Index, E);
-                } else {
-                    Indexes[Index].RayObjectList.AddRange(ObjIndexes[i].RayObjectList);
-                }
-            }
-        }
-
-        private void ModifyTextureBounds(ref Rect[] Rects, int TexLength, ref Dictionary<int,RayObjects> Indexes, int TargetTex) {
-            int TerrainIndexOffset = 0;
-            int i = 0;
-            foreach(var A in Indexes) {
-                var B = A.Value;
-                int SecondaryLength = B.RayObjectList.Count;
-                for (int i2 = 0; i2 < SecondaryLength; i2++) {
-                    int Index = B.RayObjectList[i2].Obj == null ? (B.RayObjectList[i2].Terrain.MaterialIndex[B.RayObjectList[i2].ObjIndex] + MatCount + TerrainIndexOffset) 
-                    : B.RayObjectList[i2].Obj.MaterialIndex[B.RayObjectList[i2].ObjIndex];
-                    MaterialData TempMat = _Materials[Index];
-                    switch (TargetTex) {
-                        case 0: TempMat.AlbedoTex = new Vector4(Rects[i].xMax, Rects[i].yMax, Rects[i].xMin, Rects[i].yMin); break;
-                        case 1: TempMat.NormalTex = new Vector4(Rects[i].xMax, Rects[i].yMax, Rects[i].xMin, Rects[i].yMin); break;
-                        case 2: TempMat.MetallicTex = new Vector4(Rects[i].xMax, Rects[i].yMax, Rects[i].xMin, Rects[i].yMin); break;
-                        case 3: TempMat.RoughnessTex = new Vector4(Rects[i].xMax, Rects[i].yMax, Rects[i].xMin, Rects[i].yMin); break;
-                        case 4: TempMat.EmissiveTex = new Vector4(Rects[i].xMax, Rects[i].yMax, Rects[i].xMin, Rects[i].yMin); break;
-                        default: Debug.Log("Materials Broke"); break;
-                    }
-                    _Materials[Index] = TempMat;
-                }
-                i++;
-            }
-        }
-
-        private void ConstructAtlas(Dictionary<int,Texture2D>.ValueCollection Texs, ref RenderTexture Atlas, out Rect[] Rects, int DesiredRes, bool IsNormalMap, bool IsAlphaMap = false, bool IsHeightmap = false, bool IsAlbedo = false, int ReadIndex = -1, List<int> TexChannelIndex = null) {
-            if(Texs.Count == 0) {
-                Rects = new Rect[0];
-                if(IsHeightmap) {
-                    CreateRenderTexture(ref Atlas, 1, 1, RenderTextureFormat.RHalf, true);
-                } else if(IsAlphaMap) {
-                    CreateRenderTexture(ref Atlas, 1, 1, RenderTextureFormat.ARGBHalf, true);
-                } else if(TexChannelIndex != null || IsNormalMap) {
-                    if(IsNormalMap) CreateRenderTexture(ref Atlas, 1, 1, RenderTextureFormat.RG16, true);
-                    else CreateRenderTexture(ref Atlas, 1, 1, RenderTextureFormat.R8, true);
-                } else CreateRenderTexture(ref Atlas, IsAlbedo ? DesiredRes : 1, IsAlbedo ? DesiredRes : 1, RenderTextureFormat.ARGB32, false);
-                return;
-            }
-            PackingRectangle[] rectangles = new PackingRectangle[Texs.Count];
-            int i = 0;
-            // for (int i = 0; i < Texs.Count; i++) {
-            foreach(Texture2D A in Texs) {
-                rectangles[i].Width = (uint)A.width + 1;
-                rectangles[i].Height = (uint)A.height + 1;
-                rectangles[i].Id = i;
-                i++;
-            }
+    private void PackAndCompact(Dictionary<int, TexObj> DictTex, ref RenderTexture Atlas, ref RenderTexture AlphaAtlas, PackingRectangle[] Rects, int DesiredRes, int TexIndex, int ReadIndex = -1, List<int> TexChannelIndex = null) {
+        Vector2 Scale = new Vector2(1,1);
+        int TexCount = DictTex.Count;
+        if(TexCount != 0) {
             PackingRectangle BoundRects;
-            RectanglePacker.Pack(rectangles, out BoundRects);
-            if(IsHeightmap) {
-                DesiredRes = (int)Mathf.Min(Mathf.Max(BoundRects.Width, BoundRects.Height), DesiredRes);
+            RectanglePacker.Pack(Rects, out BoundRects);
+            if(TexIndex < 3) DesiredRes = (int)Mathf.Min(Mathf.Max(BoundRects.Width, BoundRects.Height), DesiredRes);
+            Scale = new Vector2(Mathf.Min((float)DesiredRes / BoundRects.Width, 1), Mathf.Min((float)DesiredRes / BoundRects.Height, 1));
+        } else {
+            if(TexIndex != 6 && TexIndex != 7) DesiredRes = 1;
+        }
+
+        switch(TexIndex) {
+            case 0://heightmap
                 CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.RHalf, true);
-            } else if(IsAlphaMap) {
-                DesiredRes = (int)Mathf.Min(Mathf.Max(BoundRects.Width, BoundRects.Height), DesiredRes);
+            break;
+            case 1://alphamap
                 CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.ARGBHalf, true);
-            } else if(TexChannelIndex != null || IsNormalMap) {
-                if(IsNormalMap) {
-                    DesiredRes = (int)Mathf.Min(Mathf.Max(BoundRects.Width, BoundRects.Height), DesiredRes);
-                    CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.RG16, true);
-                } else CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.R8, true);
-            } else {
-                if(ReadIndex == -1) {
-                    // DesiredRes = (int)Mathf.Min(Mathf.Max(BoundRects.Width, BoundRects.Height), DesiredRes);
-                    CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.ARGB32, false);
-                } else CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.R8, true);
-            }
-            int TexCount = Texs.Count;
-            Rects = new Rect[TexCount];
-            for (i = 0; i < TexCount; i++) {
-                Rects[rectangles[i].Id].width = rectangles[i].Width;
-                Rects[rectangles[i].Id].height = rectangles[i].Height;
-                Rects[rectangles[i].Id].x = rectangles[i].X;
-                Rects[rectangles[i].Id].y = rectangles[i].Y;
-            }
+            break;
+            case 2://normalmap
+                CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.RG16, true);
+            break;
+            case 3://metallicmap
+            case 4://roughnessmap
+                CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.R8, true);
+            break;
+            case 5://EmissionMap
+                CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.ARGB32, false);
+            break;
+            case 6://AlbedoMap
+                CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.ARGB32, false);
+                CreateRenderTexture(ref AlphaAtlas, DesiredRes, DesiredRes, RenderTextureFormat.R8, true);
+            break;
+            case 7://albedoalpha
+                CreateRenderTexture(ref Atlas, DesiredRes, DesiredRes, RenderTextureFormat.ARGB32, false);
+                CreateRenderTexture(ref AlphaAtlas, DesiredRes, DesiredRes, RenderTextureFormat.R8, true);
+            break;
+        }
+        if(TexCount == 0) return;
 
-            Vector2 Scale = new Vector2(Mathf.Min((float)DesiredRes / BoundRects.Width, 1), Mathf.Min((float)DesiredRes / BoundRects.Height, 1));
-            CopyShader.SetBool("IsNormalMap", IsNormalMap);
-            i = 0;
-            // for (i = 0; i < TexCount; i++) {
-            foreach(Texture2D A in Texs) {
-                CopyShader.SetVector("InputSize", new Vector2(Rects[i].width, Rects[i].height));
-                CopyShader.SetVector("OutputSize", new Vector2(Atlas.width, Atlas.height));
-                CopyShader.SetVector("Scale", Scale);
-                CopyShader.SetVector("Offset", new Vector2(Rects[i].x, Rects[i].y));
 
-                CopyShader.SetBool("IsHeightmap", IsHeightmap);
-                if(IsHeightmap) {
-                    CopyShader.SetInt("OutputRead", 0);
-                    CopyShader.SetTexture(2, "AdditionTex", A);
-                    CopyShader.SetTexture(2, "ResultSingle", Atlas);
-                    CopyShader.Dispatch(2, (int)Mathf.CeilToInt(Rects[i].width * Scale.x / 32.0f), (int)Mathf.CeilToInt(Rects[i].height * Scale.y / 32.0f), 1);
-                } else if(IsAlphaMap) {
-                    CopyShader.SetTexture(5, "_Source2", A);
-                    CopyShader.SetTexture(5, "_Target2", Atlas);
-                    CopyShader.Dispatch(5, (int)Mathf.CeilToInt(Rects[i].width * Scale.x / 32.0f), (int)Mathf.CeilToInt(Rects[i].height * Scale.y / 32.0f), 1);
-                } else if(ReadIndex != -1) {
-                    CopyShader.SetInt("OutputRead", ((TexChannelIndex == null) ? ReadIndex : TexChannelIndex[i]));
-                    if(!IsNormalMap) {
-                        CopyShader.SetTexture(2, "AdditionTex", A);
+        CopyShader.SetBool("IsNormalMap", TexIndex == 2);
+        CopyShader.SetVector("Scale", Scale);
+        CopyShader.SetVector("OutputSize", new Vector2(Atlas.width, Atlas.height));
+        CopyShader.SetBool("IsHeightmap", TexIndex == 0);
+        for (int i = 0; i < TexCount; i++) {
+                PackingRectangle TempRect = Rects[i];
+                int ID = TempRect.Id;
+                CopyShader.SetVector("InputSize", new Vector2(TempRect.Width, TempRect.Height));
+                CopyShader.SetVector("Offset", new Vector2(TempRect.X, TempRect.Y));
+                TexObj SelectedTex = DictTex[ID];
+                int ListLength = SelectedTex.TexObjList.Count;
+                MaterialData MatDat;
+                Vector4 RectSelect = new Vector4(0, 0, Mathf.Floor(TempRect.X * Scale.x) / Atlas.width, Mathf.Floor(TempRect.Y * Scale.y) / Atlas.height);
+                RectSelect.x = RectSelect.z + Mathf.Floor((TempRect.Width - 1) * Scale.x) / Atlas.width;
+                RectSelect.y = RectSelect.w + Mathf.Floor((TempRect.Height - 1) * Scale.y) / Atlas.height;
+
+                if(TexIndex >= 2 && TexIndex < 7) {
+                    for(int j = 0; j < ListLength; j++) {
+                            MatDat = _Materials[SelectedTex.TexObjList[j]];
+                            switch (TexIndex) {
+                                case 2: MatDat.NormalTex = RectSelect; break;
+                                case 3: MatDat.MetallicTex = RectSelect; break;
+                                case 4: MatDat.RoughnessTex = RectSelect; break;
+                                case 5: MatDat.EmissiveTex = RectSelect; break;
+                                case 6: MatDat.AlbedoTex = RectSelect; break;
+                                default: break;
+                            }
+                            _Materials[SelectedTex.TexObjList[j]] = MatDat;
+                        }
+                } else if(TexIndex < 2) {
+                    TerrainDat TempTerrain = TerrainInfos[SelectedTex.TexObjList[0]];
+                    if(TexIndex == 0) TempTerrain.HeightMap = RectSelect;
+                    else TempTerrain.AlphaMap = RectSelect;
+                    TerrainInfos[SelectedTex.TexObjList[0]] = TempTerrain;
+                }
+                switch(TexIndex) {
+                    case 0:
+                        CopyShader.SetInt("OutputRead", 0);
+                        CopyShader.SetTexture(2, "AdditionTex", SelectedTex.Tex);
                         CopyShader.SetTexture(2, "ResultSingle", Atlas);
-                        CopyShader.Dispatch(2, (int)Mathf.CeilToInt(Rects[i].width * Scale.x / 32.0f), (int)Mathf.CeilToInt(Rects[i].height * Scale.y / 32.0f), 1);
-                    }
-                } else {
-                    if(IsNormalMap) {
-                        CopyShader.SetTexture(3, "AdditionTex", A);
+                        CopyShader.Dispatch(2, (int)Mathf.CeilToInt(TempRect.Width * Scale.x / 32.0f), (int)Mathf.CeilToInt(TempRect.Height * Scale.y / 32.0f), 1);
+                    break;
+                    case 1:
+                        CopyShader.SetTexture(5, "_Source2", SelectedTex.Tex);
+                        CopyShader.SetTexture(5, "_Target2", Atlas);
+                        CopyShader.Dispatch(5, (int)Mathf.CeilToInt(TempRect.Width * Scale.x / 32.0f), (int)Mathf.CeilToInt(TempRect.Height * Scale.y / 32.0f), 1);
+                    break;
+                    case 2:
+                        CopyShader.SetTexture(3, "AdditionTex", SelectedTex.Tex);
                         CopyShader.SetTexture(3, "ResultDouble", Atlas);
-                        CopyShader.Dispatch(3, (int)Mathf.CeilToInt(Rects[i].width * Scale.x / 32.0f), (int)Mathf.CeilToInt(Rects[i].height * Scale.y / 32.0f), 1);
-                    } else {
-                        CopyShader.SetTexture(0, "AdditionTex", A);
+                        CopyShader.Dispatch(3, (int)Mathf.CeilToInt(TempRect.Width * Scale.x / 32.0f), (int)Mathf.CeilToInt(TempRect.Height * Scale.y / 32.0f), 1);
+                    break;                    
+                    case 3:
+                    case 4:
+                    case 7:
+                        CopyShader.SetInt("OutputRead", ((TexChannelIndex == null) ? ReadIndex : SelectedTex.ReadIndex));
+                        CopyShader.SetTexture(2, "AdditionTex", SelectedTex.Tex);
+                        CopyShader.SetTexture(2, "ResultSingle", Atlas);
+                        CopyShader.Dispatch(2, (int)Mathf.CeilToInt(TempRect.Width * Scale.x / 32.0f), (int)Mathf.CeilToInt(TempRect.Height * Scale.y / 32.0f), 1);
+                    break;
+                    case 5:
+                    case 6:
+                        CopyShader.SetTexture(0, "AdditionTex", SelectedTex.Tex);
                         CopyShader.SetTexture(0, "Result", Atlas);
-                        CopyShader.Dispatch(0, (int)Mathf.CeilToInt(Rects[i].width * Scale.x / 32.0f), (int)Mathf.CeilToInt(Rects[i].height * Scale.y / 32.0f), 1);
-                    }
+                        CopyShader.Dispatch(0, (int)Mathf.CeilToInt(TempRect.Width * Scale.x / 32.0f), (int)Mathf.CeilToInt(TempRect.Height * Scale.y / 32.0f), 1);
+                        CopyShader.SetInt("OutputRead", ((TexChannelIndex == null) ? ReadIndex : SelectedTex.ReadIndex));
+                        CopyShader.SetTexture(2, "AdditionTex", SelectedTex.Tex);
+                        CopyShader.SetTexture(2, "ResultSingle", AlphaAtlas);
+                        CopyShader.Dispatch(2, (int)Mathf.CeilToInt(TempRect.Width * Scale.x / 32.0f), (int)Mathf.CeilToInt(TempRect.Height * Scale.y / 32.0f), 1);
+                    break;
                 }
 
-                Rects[i].width = Mathf.Floor((Rects[i].width - 1) * Scale.x) / Atlas.width;
-                Rects[i].x = Mathf.Floor(Rects[i].x * Scale.x) / Atlas.width;
-                Rects[i].height = Mathf.Floor((Rects[i].height - 1) * Scale.y) / Atlas.height;
-                Rects[i].y = Mathf.Floor(Rects[i].y * Scale.y) / Atlas.height;
-                i++;
             }
         }
 
@@ -303,90 +274,148 @@ namespace TrueTrace {
             ThisTex.Create();
         }
 
+        private void KeyCheck(int MatIndex, Texture Tex, ref Dictionary<int, TexObj> DictTextures, ref List<PackingRectangle> PR, int ReadChannelIndex) {
+            int Index = Tex.GetInstanceID();
+            if(DictTextures.ContainsKey(Index)) {
+                DictTextures[Index].TexObjList.Add(MatIndex);
+            } else {
+                var E = new TexObj();
+                E.Tex = Tex;
+                PR.Add(new PackingRectangle() {
+                    Width = (uint)Tex.width + 1,
+                    Height = (uint)Tex.height + 1,
+                    Id = Index
+                });
+                E.ReadIndex = ReadChannelIndex;
+                E.TexObjList.Add(MatIndex);
+                DictTextures.Add(Index, E);
+            }                    
+        } 
+
         private void CreateAtlas() {//Creates texture atlas
             _Materials = new List<MaterialData>();
-            AlbedoIndexes = new Dictionary<int,RayObjects>();
-            AlbedoDict = new Dictionary<int,Texture2D>();
-            NormalDict = new Dictionary<int,Texture2D>();
-            NormalIndexes = new Dictionary<int,RayObjects>();
-            MetallicDict = new Dictionary<int,Texture2D>();
-            MetallicIndexes = new Dictionary<int,RayObjects>();
-            MetallicTexChannelIndex = new List<int>();
-            RoughnessDict = new Dictionary<int,Texture2D>();
-            RoughnessIndexes = new Dictionary<int,RayObjects>();
-            RoughnessTexChannelIndex = new List<int>();
-            EmissiveDict = new Dictionary<int,Texture2D>();
-            EmissiveIndexes = new Dictionary<int,RayObjects>();
-            Dictionary<int, Texture2D> HeightMaps = new Dictionary<int, Texture2D>();
-            Dictionary<int, Texture2D> AlphaMaps = new Dictionary<int, Texture2D>();
+            Dictionary<int, TexObj> HeightMapTextures = new Dictionary<int, TexObj>();
+            Dictionary<int, TexObj> AlphaMapTextures = new Dictionary<int, TexObj>();
+            List<PackingRectangle> HeightMapRect = new List<PackingRectangle>();
+            List<PackingRectangle> AlphaMapRect = new List<PackingRectangle>();
+            Dictionary<int, TexObj> AlbTextures = new Dictionary<int, TexObj>();
+            Dictionary<int, TexObj> NormTextures = new Dictionary<int, TexObj>();
+            Dictionary<int, TexObj> EmisTextures = new Dictionary<int, TexObj>();
+            Dictionary<int, TexObj> MetTextures = new Dictionary<int, TexObj>();
+            Dictionary<int, TexObj> RoughTextures = new Dictionary<int, TexObj>();
+            List<PackingRectangle> AlbRect = new List<PackingRectangle>();
+            List<PackingRectangle> NormRect = new List<PackingRectangle>();
+            List<PackingRectangle> EmisRect = new List<PackingRectangle>();
+            List<PackingRectangle> MetRect = new List<PackingRectangle>();
+            List<PackingRectangle> RoughRect = new List<PackingRectangle>();
 
             int TerrainCount = Terrains.Count;
-            int MaterialOffset = 0;
-            List<Vector2> Sizes = new List<Vector2>();
             TerrainInfos = new List<TerrainDat>();
             DoHeightmap = false;
 
             if (CopyShader == null) CopyShader = Resources.Load<ComputeShader>("Utility/CopyTextureShader");
-            for (int i = 0; i < TerrainCount; i++) {
-                TerrainDat TempTerrain = new TerrainDat();
-                TempTerrain.PositionOffset = Terrains[i].transform.position;
-                AlphaMaps.Add(Terrains[i].AlphaMap.GetInstanceID(), Terrains[i].AlphaMap);
-                HeightMaps.Add(Terrains[i].AlphaMap.GetInstanceID(), Terrains[i].HeightMap);
-                Sizes.Add(new Vector2(Terrains[i].HeightMap.width, Terrains[i].HeightMap.height));
-                TempTerrain.TerrainDim = Terrains[i].TerrainDim;
-                TempTerrain.HeightScale = Terrains[i].HeightScale;
-                TempTerrain.MatOffset = MaterialOffset;
-                MaterialOffset += Terrains[i].Materials.Count;
-                TerrainInfos.Add(TempTerrain);
-            }
-            Rect[] HeightRects;
-            Rect[] AlphaRects;
 
-            ConstructAtlas(HeightMaps.Values, ref HeightmapAtlas, out HeightRects, 16300, false, false, true);
-            ConstructAtlas(AlphaMaps.Values, ref AlphaMapAtlas, out AlphaRects, 16300, false, true);
-            
-            if (TerrainCount != 0) {
-                DoHeightmap = true;
-                for (int i = 0; i < TerrainCount; i++) {
-                    TerrainDat TempTerrain = TerrainInfos[i];
-                    TempTerrain.HeightMap = new Vector4(HeightRects[i].xMax, HeightRects[i].yMax, HeightRects[i].xMin, HeightRects[i].yMin);
-                    TempTerrain.AlphaMap = new Vector4(AlphaRects[i].xMax, AlphaRects[i].yMax, AlphaRects[i].xMin, AlphaRects[i].yMin);
-                    TerrainInfos[i] = TempTerrain;
-                }
-            }
             if(RenderQue.Count == 0) return;
             int CurCount = RenderQue[0].AlbedoTexs.Count;
             foreach (ParentObject Obj in RenderQue) {
-                AddTextures(ref AlbedoDict, ref AlbedoIndexes, ref Obj.AlbedoIndexes, ref Obj.AlbedoTexs, ref MetallicTexChannelIndex);
-                AddTextures(ref NormalDict, ref NormalIndexes, ref Obj.NormalIndexes, ref Obj.NormalTexs, ref MetallicTexChannelIndex);
-                AddTextures(ref MetallicDict, ref MetallicIndexes, ref Obj.MetallicIndexes, ref Obj.MetallicTexs, ref MetallicTexChannelIndex, Obj.MetallicTexChannelIndex);
-                AddTextures(ref RoughnessDict, ref RoughnessIndexes, ref Obj.RoughnessIndexes, ref Obj.RoughnessTexs, ref RoughnessTexChannelIndex, Obj.RoughnessTexChannelIndex);
-                AddTextures(ref EmissiveDict, ref EmissiveIndexes, ref Obj.EmissionIndexes, ref Obj.EmissionTexs, ref MetallicTexChannelIndex);
+                foreach (RayTracingObject Obj2 in Obj.ChildObjects) {
+                    MaterialsChanged.Add(Obj2);
+                    int ObjLength = Obj2.MaterialIndex.Length;
+                    for (int i = 0; i < ObjLength; i++) Obj2.MaterialIndex[i] = Obj2.LocalMaterialIndex[i] + MatCount;
+                }
+                int ThisMatCount = Obj._Materials.Count;
+                for(int i = 0; i < ThisMatCount; i++) {
+                    MaterialData TempMat = Obj._Materials[i];
+                    if(TempMat.AlbedoTex.w != 0) KeyCheck(MatCount + i, Obj.AlbedoTexs[(int)TempMat.AlbedoTex.w-1], ref AlbTextures, ref AlbRect, 0);
+                    if(TempMat.NormalTex.w != 0) KeyCheck(MatCount + i, Obj.NormalTexs[(int)TempMat.NormalTex.w-1], ref NormTextures, ref NormRect, 0);
+                    if(TempMat.EmissiveTex.w != 0) KeyCheck(MatCount + i, Obj.EmissionTexs[(int)TempMat.EmissiveTex.w-1], ref EmisTextures, ref EmisRect, 0);
+                    if(TempMat.MetallicTex.w != 0) KeyCheck(MatCount + i, Obj.MetallicTexs[(int)TempMat.MetallicTex.w-1], ref MetTextures, ref MetRect, Obj.MetallicTexChannelIndex[(int)TempMat.MetallicTex.w-1]);
+                    if(TempMat.RoughnessTex.w != 0) KeyCheck(MatCount + i, Obj.RoughnessTexs[(int)TempMat.RoughnessTex.w-1], ref RoughTextures, ref RoughRect, Obj.RoughnessTexChannelIndex[(int)TempMat.RoughnessTex.w-1]);
+
+                    _Materials.Add(TempMat);
+                }
+                MatCount += ThisMatCount;
             }
             foreach (ParentObject Obj in InstanceData.RenderQue) {
-                AddTextures(ref AlbedoDict, ref AlbedoIndexes, ref Obj.AlbedoIndexes, ref Obj.AlbedoTexs, ref MetallicTexChannelIndex);
-                AddTextures(ref NormalDict, ref NormalIndexes, ref Obj.NormalIndexes, ref Obj.NormalTexs, ref MetallicTexChannelIndex);
-                AddTextures(ref MetallicDict, ref MetallicIndexes, ref Obj.MetallicIndexes, ref Obj.MetallicTexs, ref MetallicTexChannelIndex, Obj.MetallicTexChannelIndex);
-                AddTextures(ref RoughnessDict, ref RoughnessIndexes, ref Obj.RoughnessIndexes, ref Obj.RoughnessTexs, ref RoughnessTexChannelIndex, Obj.RoughnessTexChannelIndex);
-                AddTextures(ref EmissiveDict, ref EmissiveIndexes, ref Obj.EmissionIndexes, ref Obj.EmissionTexs, ref MetallicTexChannelIndex);
+                foreach (RayTracingObject Obj2 in Obj.ChildObjects) {
+                    MaterialsChanged.Add(Obj2);
+                    int ObjLength = Obj2.MaterialIndex.Length;
+                    for (int i = 0; i < ObjLength; i++) Obj2.MaterialIndex[i] = Obj2.LocalMaterialIndex[i] + MatCount;
+                }
+                int ThisMatCount = Obj._Materials.Count;
+                for(int i = 0; i < ThisMatCount; i++) {
+                    MaterialData TempMat = Obj._Materials[i];
+                    if(TempMat.AlbedoTex.w != 0) KeyCheck(MatCount + i, Obj.AlbedoTexs[(int)TempMat.AlbedoTex.w-1], ref AlbTextures, ref AlbRect, 0);
+                    if(TempMat.NormalTex.w != 0) KeyCheck(MatCount + i, Obj.NormalTexs[(int)TempMat.NormalTex.w-1], ref NormTextures, ref NormRect, 0);
+                    if(TempMat.EmissiveTex.w != 0) KeyCheck(MatCount + i, Obj.EmissionTexs[(int)TempMat.EmissiveTex.w-1], ref EmisTextures, ref EmisRect, 0);
+                    if(TempMat.MetallicTex.w != 0) KeyCheck(MatCount + i, Obj.MetallicTexs[(int)TempMat.MetallicTex.w-1], ref MetTextures, ref MetRect, Obj.MetallicTexChannelIndex[(int)TempMat.MetallicTex.w-1]);
+                    if(TempMat.RoughnessTex.w != 0) KeyCheck(MatCount + i, Obj.RoughnessTexs[(int)TempMat.RoughnessTex.w-1], ref RoughTextures, ref RoughRect, Obj.RoughnessTexChannelIndex[(int)TempMat.RoughnessTex.w-1]);
+
+                    _Materials.Add(TempMat);
+                }
+                MatCount += ThisMatCount;
             }
+            int TerrainMatCount = MatCount;
             if (TerrainCount != 0) {
-                for (int i = 0; i < TerrainCount; i++) {
-                    AddTextures(ref AlbedoDict, ref AlbedoIndexes, ref Terrains[i].AlbedoIndexes, ref Terrains[i].AlbedoTexs, ref MetallicTexChannelIndex);
-                    AddTextures(ref NormalDict, ref NormalIndexes, ref Terrains[i].NormalIndexes, ref Terrains[i].NormalTexs, ref MetallicTexChannelIndex);
-                    AddTextures(ref MetallicDict, ref MetallicIndexes, ref Terrains[i].MetallicIndexes, ref Terrains[i].MetallicTexs, ref MetallicTexChannelIndex);
+                for (int j = 0; j < TerrainCount; j++) {
+                    TerrainObject Obj2 = Terrains[j];
+                    TerrainDat TempTerrain = new TerrainDat();
+                    TempTerrain.PositionOffset = Obj2.transform.position;
+                    TempTerrain.TerrainDim = Terrains[j].TerrainDim;
+                    TempTerrain.HeightScale = Terrains[j].HeightScale;
+                    TempTerrain.MatOffset = TerrainMatCount - MatCount;
+                    int Index = Obj2.HeightMap.GetInstanceID();
+                    var E = new TexObj();
+                    {
+                        HeightMapRect.Add(new PackingRectangle() {
+                            Width = (uint)Obj2.HeightMap.width + 1,
+                            Height = (uint)Obj2.HeightMap.height + 1,
+                            Id = Index
+                        });
+                        E.Tex = Obj2.HeightMap;
+                        E.ReadIndex = 0;
+                        E.TexObjList.Add(j);
+                        HeightMapTextures.Add(Index, E);
+                    }
+                    E = new TexObj();
+                    Index = Obj2.AlphaMap.GetInstanceID();
+                    {
+                        AlphaMapRect.Add(new PackingRectangle() {
+                            Width = (uint)Obj2.AlphaMap.width + 1,
+                            Height = (uint)Obj2.AlphaMap.height + 1,
+                            Id = Index
+                        });
+                        E.Tex = Obj2.AlphaMap;
+                        E.ReadIndex = 0;
+                        E.TexObjList.Add(j);
+                        AlphaMapTextures.Add(Index, E);
+                    }
+
+
+                    int ThisMatCount = Obj2.Materials.Count;
+                    for (int i = 0; i < ThisMatCount; i++) {
+                        MaterialData TempMat = Obj2.Materials[i];
+                        if(TempMat.AlbedoTex.w != 0) KeyCheck(TerrainMatCount + i, Obj2.AlbedoTexs[(int)TempMat.AlbedoTex.w-1], ref AlbTextures, ref AlbRect, 0);
+                        if(TempMat.NormalTex.w != 0) KeyCheck(TerrainMatCount + i, Obj2.NormalTexs[(int)TempMat.NormalTex.w-1], ref NormTextures, ref NormRect, 0);
+                        KeyCheck(TerrainMatCount + i, Obj2.NormalTexs[(int)TempMat.NormalTex.w-1], ref NormTextures, ref NormRect, 0);
+
+                        _Materials.Add(TempMat);
+                    }
+                    TerrainMatCount += ThisMatCount;
+                    TerrainInfos.Add(TempTerrain);
                 }
             }
+
 
             if (!RenderQue.Any())
                 return;
 
-            Rect[] AlbedoRects, NormalRects, EmissiveRects, MetallicRects, RoughnessRects;
             if(NormalAtlas != null) NormalAtlas?.Release();
             if(RoughnessAtlas != null) RoughnessAtlas?.Release();
             if(MetallicAtlas != null) MetallicAtlas?.Release();
             if(EmissiveAtlas != null) EmissiveAtlas?.Release();
-            ConstructAtlas(AlbedoDict.Values, ref TempTex, out AlbedoRects, DesiredRes, false, false, false, true);
+            
+            PackAndCompact(AlbTextures, ref TempTex, ref AlphaAtlas, AlbRect.ToArray(), DesiredRes, 6, 3, null);
             int tempWidth = (TempTex.width + 3) / 4;
             int tempHeight = (TempTex.height + 3) / 4;
             var desc = new RenderTextureDescriptor
@@ -401,7 +430,6 @@ namespace TrueTrace {
             desc.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SInt;
 
             s_Prop_EncodeBCn_Temp = new RenderTexture(desc);
-            ConstructAtlas(AlbedoDict.Values, ref AlphaAtlas, out AlbedoRects, AlbedoAtlas.width, false, false, false, false, 3, null);
             CopyShader.SetTexture(4, "_Source", TempTex);
             CopyShader.SetTexture(4, "Alpha", AlphaAtlas);
             CopyShader.SetTexture(4, "_Target", s_Prop_EncodeBCn_Temp);
@@ -409,11 +437,15 @@ namespace TrueTrace {
             Graphics.CopyTexture(s_Prop_EncodeBCn_Temp, 0, AlbedoAtlas, 0);
             TempTex.Release();
             s_Prop_EncodeBCn_Temp.Release();
+
+
+            PackAndCompact(NormTextures, ref NormalAtlas, ref AlphaAtlas, NormRect.ToArray(), DesiredRes, 2);
+            PackAndCompact(EmisTextures, ref EmissiveAtlas, ref AlphaAtlas, EmisRect.ToArray(), DesiredRes, 5);
+            PackAndCompact(MetTextures, ref MetallicAtlas, ref AlphaAtlas, MetRect.ToArray(), AlbedoAtlas.width, 3, 0);
+            PackAndCompact(RoughTextures, ref RoughnessAtlas, ref AlphaAtlas, RoughRect.ToArray(), AlbedoAtlas.width, 4, 0);
+            PackAndCompact(HeightMapTextures, ref HeightmapAtlas, ref AlphaAtlas, HeightMapRect.ToArray(), 16300, 0);
+            PackAndCompact(AlphaMapTextures, ref AlphaMapAtlas, ref AlphaAtlas, AlphaMapRect.ToArray(), 16300, 1);
             AlphaAtlas.Release();
-            ConstructAtlas(NormalDict.Values, ref NormalAtlas, out NormalRects, DesiredRes, true, false, false, false);
-            ConstructAtlas(EmissiveDict.Values, ref EmissiveAtlas, out EmissiveRects, DesiredRes, false, false, false, false);
-            ConstructAtlas(MetallicDict.Values, ref MetallicAtlas, out MetallicRects, AlbedoAtlas.width, false, false, false, false, 0, MetallicTexChannelIndex);
-            ConstructAtlas(RoughnessDict.Values, ref RoughnessAtlas, out RoughnessRects, AlbedoAtlas.width, false, false, false, false, 0, RoughnessTexChannelIndex);
             AlbedoAtlasSize = AlbedoAtlas.width;
             NormalAtlas.anisoLevel = 3;
             NormalAtlas.GenerateMips();
@@ -421,53 +453,42 @@ namespace TrueTrace {
             RoughnessAtlas.GenerateMips();
             MatCount = 0;
 
-            foreach (ParentObject Obj in RenderQue) {
-                foreach (RayTracingObject Obj2 in Obj.ChildObjects) {
-                    MaterialsChanged.Add(Obj2);
-                    for (int i = 0; i < Obj2.MaterialIndex.Length; i++) Obj2.MaterialIndex[i] = Obj2.LocalMaterialIndex[i] + MatCount;
-                }
-                _Materials.AddRange(Obj._Materials);
-                MatCount += Obj._Materials.Count;
-            }
-            foreach (ParentObject Obj in InstanceData.RenderQue) {
-                foreach (RayTracingObject Obj2 in Obj.ChildObjects) {
-                    MaterialsChanged.Add(Obj2);
-                    for (int i = 0; i < Obj2.MaterialIndex.Length; i++) Obj2.MaterialIndex[i] = Obj2.LocalMaterialIndex[i] + MatCount;
-                }
-                _Materials.AddRange(Obj._Materials);
-                MatCount += Obj._Materials.Count;
-            }
-            int TerrainMaterials = 0;
-            if (TerrainCount != 0) {
-                foreach (TerrainObject Obj2 in Terrains) {
-                    for (int i = 0; i < Obj2.MaterialIndex.Length; i++) Obj2.MaterialIndex[i] += TerrainMaterials;
-                    _Materials.AddRange(Obj2.Materials);
-                    TerrainMaterials += Obj2.Materials.Count;
-                }
-            }
 
-            ModifyTextureBounds(ref AlbedoRects, AlbedoDict.Count, ref AlbedoIndexes, 0);
-            ModifyTextureBounds(ref NormalRects, NormalDict.Count, ref NormalIndexes, 1);
-            ModifyTextureBounds(ref MetallicRects, MetallicDict.Count, ref MetallicIndexes, 2);
-            ModifyTextureBounds(ref RoughnessRects, RoughnessDict.Count, ref RoughnessIndexes, 3);
-            ModifyTextureBounds(ref EmissiveRects, EmissiveDict.Count, ref EmissiveIndexes, 4);
+            AlbTextures.Clear();
+            AlbTextures.TrimExcess();
+            NormTextures.Clear();
+            NormTextures.TrimExcess();
+            EmisTextures.Clear();
+            EmisTextures.TrimExcess();
+            MetTextures.Clear();
+            MetTextures.TrimExcess();
+            RoughTextures.Clear();
+            RoughTextures.TrimExcess();
+            HeightMapTextures.Clear();
+            HeightMapTextures.TrimExcess();
+            AlphaMapTextures.Clear();
+            AlphaMapTextures.TrimExcess();
 
-            AlbedoDict.Clear();
-            AlbedoDict.TrimExcess();
-            NormalDict.Clear();
-            NormalDict.TrimExcess();
-            MetallicDict.Clear();
-            MetallicDict.TrimExcess();
-            RoughnessDict.Clear();
-            RoughnessDict.TrimExcess();
-            EmissiveDict.Clear();
-            EmissiveDict.TrimExcess();
-
+            AlbRect.Clear();
+            AlbRect.TrimExcess();
+            NormRect.Clear();
+            NormRect.TrimExcess();
+            EmisRect.Clear();
+            EmisRect.TrimExcess();
+            MetRect.Clear();
+            MetRect.TrimExcess();
+            RoughRect.Clear();
+            RoughRect.TrimExcess();
+            HeightMapRect.Clear();
+            HeightMapRect.TrimExcess();
+            AlphaMapRect.Clear();
+            AlphaMapRect.TrimExcess();
             if (TerrainCount != 0) {
                 if (TerrainBuffer != null) TerrainBuffer.Release();
                 TerrainBuffer = new ComputeBuffer(TerrainCount, 56);
                 TerrainBuffer.SetData(TerrainInfos);
             }
+
             NormalSize = NormalAtlas.width;
             EmissiveSize = EmissiveAtlas.width;
 
@@ -773,7 +794,12 @@ namespace TrueTrace {
             }
             if (ChildrenUpdated || ParentCountHasChanged) MeshAABBs = new AABB[RenderQue.Count + InstanceRenderQue.Count];
         }
-        public void EditorBuild()
+
+        #if TTLightMapping
+            public void BuildCombined()
+        #else
+            public void EditorBuild()
+        #endif
         {//Forces all to rebuild
             ClearAll();
             Terrains = new List<TerrainObject>();
@@ -796,7 +822,11 @@ namespace TrueTrace {
             }
             didstart = false;
         }
-        public void BuildCombined()
+        #if TTLightMapping
+            public void EditorBuild()
+        #else
+            public void BuildCombined()
+        #endif
         {//Only has unbuilt be built
             Terrains = new List<TerrainObject>(GetComponentsInChildren<TerrainObject>());
             init();
@@ -867,6 +897,29 @@ namespace TrueTrace {
                 if(LightTriCount == 0) LightTriCount++;
                 if (AggNodeCount != 0)
                 {//Accumulate the BVH nodes and triangles for all normal models
+                    #if TTLightMapping
+                        LightMapTexIndex = new List<int>();
+                        for(int i = 0; i < ParentsLength; i++) {
+                            int Count2 = RenderQue[i].LightMapTexIndex.Count;
+                            for(int j = 0; j < Count2; j++) {
+                                if(!LightMapTexIndex.Contains(RenderQue[i].LightMapTexIndex[j])) LightMapTexIndex.Add(RenderQue[i].LightMapTexIndex[j]);
+                            }
+                        }
+                        int LightMapCount = LightMapTexIndex.Count;
+                        LightMaps = new LightMapData[LightMapCount];
+                        for(int i = 0; i < LightMapCount; i++) {
+                            LightMaps[i].LightMapIndex = i;
+                            LightMaps[i].LightMapTris = new List<LightMapTriData>();
+                        }
+                        for(int i = 0; i < ParentsLength; i++) {
+                            int Count2 = RenderQue[i].LightMapTexIndex.Count;
+                            for(int j = 0; j < Count2; j++) {
+                                Debug.Log(RenderQue[i].LightMapTris.Length);
+                                LightMaps[RenderQue[i].LightMapTexIndex[j]].LightMapTris.AddRange(RenderQue[i].LightMapTris[j]);
+                            }
+                        }
+                    #endif
+
                     BVH8AggregatedBuffer = new ComputeBuffer(AggNodeCount, 80);
                     AggTriBuffer = new ComputeBuffer(AggTriCount, 88);
                     LightTriBuffer = new ComputeBuffer(LightTriCount, 40);
@@ -1410,8 +1463,7 @@ namespace TrueTrace {
                 for (int i = 0; i < InstanceCount; i++)
                 {
                     int Index = InstanceRenderQue[i].InstanceParent.CompactedMeshData;
-                    MyMeshesCompacted[i + MeshCount] = new MyMeshDataCompacted()
-                    {
+                    MyMeshesCompacted.Add(new MyMeshDataCompacted() {
                         mesh_data_bvh_offsets = Aggs[Index].mesh_data_bvh_offsets,
                         Transform = InstanceRenderQue[i].transform.worldToLocalMatrix,
                         AggIndexCount = Aggs[Index].AggIndexCount,
@@ -1419,7 +1471,7 @@ namespace TrueTrace {
                         MaterialOffset = Aggs[Index].MaterialOffset,
                         LightTriCount = Aggs[Index].LightTriCount
 
-                    };
+                    });
                     InstanceRenderQue[i].CompactedMeshData = MeshCount + i;
                     AABB aabb = InstanceRenderQue[i].InstanceParent.aabb_untransformed;
                     CreateAABB(InstanceRenderQue[i].transform, ref aabb);

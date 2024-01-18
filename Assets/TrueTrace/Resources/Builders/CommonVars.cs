@@ -19,6 +19,27 @@ namespace CommonVars
     }
 
     [System.Serializable]
+    public struct LightMapTriData
+    {
+        public Vector3 pos0;
+        public Vector3 posedge1;
+        public Vector3 posedge2;
+        public Vector2 LMUV0;
+        public Vector2 LMUV1;
+        public Vector2 LMUV2;
+        public uint Norm1;
+        public uint Norm2;
+        public uint Norm3;
+    }
+
+    [System.Serializable]
+    public struct LightMapData
+    {
+        public int LightMapIndex;
+        public List<LightMapTriData> LightMapTris;
+    }
+
+    [System.Serializable]
     public struct MeshDat
     {
         public List<int> Indices;
@@ -26,10 +47,15 @@ namespace CommonVars
         public List<Vector3> Normals;
         public List<Vector4> Tangents;
         public List<Vector2> UVs;
+        public List<Vector2> LightmapUVs;
         public List<int> MatDat;
 
         public void SetUvZero(int Count) {
             for (int i = 0; i < Count; i++) UVs.Add(new Vector2(0.0f, 0.0f));
+        }
+        public void AddLightmapUVs(Vector2[] LightUVs, Vector4 ScaleOffset) {
+            int Count = LightUVs.Length;
+            for (int i = 0; i < Count; i++) LightmapUVs.Add(new Vector2(LightUVs[i].x * ScaleOffset.x + ScaleOffset.z, LightUVs[i].y * ScaleOffset.y + ScaleOffset.w));
         }
         public void SetTansZero(int Count) {
             for (int i = 0; i < Count; i++) Tangents.Add(new Vector4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -38,6 +64,7 @@ namespace CommonVars
             this.Tangents = new List<Vector4>(StartingSize);
             this.MatDat = new List<int>(StartingSize / 3);
             this.UVs = new List<Vector2>(StartingSize);
+            this.LightmapUVs = new List<Vector2>(StartingSize);
             this.Verticies = new List<Vector3>(StartingSize);
             this.Normals = new List<Vector3>(StartingSize);
             this.Indices = new List<int>(StartingSize);
@@ -47,6 +74,7 @@ namespace CommonVars
                 CommonFunctions.DeepClean(ref Tangents);
                 CommonFunctions.DeepClean(ref MatDat);
                 CommonFunctions.DeepClean(ref UVs);
+                CommonFunctions.DeepClean(ref LightmapUVs);
                 CommonFunctions.DeepClean(ref Verticies);
                 CommonFunctions.DeepClean(ref Normals);
                 CommonFunctions.DeepClean(ref Indices);
@@ -471,6 +499,15 @@ namespace CommonVars
     {
         public List<RayObjectTextureIndex> RayObjectList = new List<RayObjectTextureIndex>();
     }   
+
+    [System.Serializable]
+    public class TexObj
+    {
+        public Texture Tex;
+        public int ReadIndex;
+        public List<int> TexObjList = new List<int>();
+    }   
+
 
     [System.Serializable]
     public class MaterialShader

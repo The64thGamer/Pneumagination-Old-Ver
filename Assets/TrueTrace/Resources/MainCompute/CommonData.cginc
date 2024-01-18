@@ -338,7 +338,7 @@ int ReSTIRGIUpdateRate;
 bool UseReSTIRGI;
 
 float2 randomNEE(uint samdim, uint pixel_index) {
-	uint hash = pcg_hash((pixel_index * (uint)204 + samdim) * (MaxBounce + 1) + CurBounce);
+	uint hash = pcg_hash((pixel_index * (uint)258 + samdim) * (MaxBounce + 1) + CurBounce);
 
 	const static float one_over_max_unsigned = asfloat(0x2f7fffff);
 
@@ -354,7 +354,7 @@ float2 randomNEE(uint samdim, uint pixel_index) {
 float2 random(uint samdim, uint pixel_index) {
 	[branch] if (UseASVGF || ReSTIRGIUpdateRate != 0) {
 		uint2 pixid = uint2(pixel_index % screen_width, pixel_index / screen_width);
-		uint hash = pcg_hash(((uint)RandomNums[pixid].y * (uint)112 + samdim) * (MaxBounce + 1) + CurBounce);
+		uint hash = pcg_hash(((uint)RandomNums[pixid].y * (uint)258 + samdim) * (MaxBounce + 1) + CurBounce);
 
 		const static float one_over_max_unsigned = asfloat(0x2f7fffff);
 
@@ -365,7 +365,7 @@ float2 random(uint samdim, uint pixel_index) {
 		return float2(x, y);
 	}
 	else {
-		uint hash = pcg_hash((pixel_index * (uint)204 + samdim) * (MaxBounce + 1) + CurBounce);
+		uint hash = pcg_hash((pixel_index * (uint)258 + samdim) * (MaxBounce + 1) + CurBounce);
 
 		const static float one_over_max_unsigned = asfloat(0x2f7fffff);
 
@@ -467,7 +467,7 @@ SmallerRay CreateCameraRay(float2 uv, uint pixel_index) {
 	// Transform the direction from camera to world space and normalize
 	direction = mul(CamToWorld, float4(direction, 0.0f)).xyz;
 	direction = normalize(direction);
-	[branch] if (UseDoF && pixel_index != (screen_width / 2 + screen_width * screen_height / 2)) {
+	[branch] if (UseDoF) {
 		float3 cameraForward = mul(CamInvProj, float4(0, 0, 0.0f, 1.0f)).xyz;
 		// Transform the direction from camera to world space and normalize
 		float4 sensorPlane;
@@ -485,8 +485,8 @@ SmallerRay CreateCameraRay(float2 uv, uint pixel_index) {
 		// convert back into world space
 		sensorPos = mul(CamToWorld, float4(cameraSpaceSensorPos, 1.0f)).xyz;
 
-		float angle = random(6, pixel_index).x * 2.0f * PI;
-		float radius = sqrt(random(6, pixel_index).y);
+		float angle = random(9, pixel_index).x * 2.0f * PI;
+		float radius = sqrt(random(9, pixel_index).y);
 		float2 offset = float2(cos(angle), sin(angle)) * radius * AperatureRadius;
 
 		float3 p = origin + direction * (focal_distance);
@@ -707,7 +707,7 @@ int RISCount;
 
 int SelectLightMesh(uint pixel_index) {//Select mesh to sample light from
 	if (LightMeshCount == 1) return 0;
-	const float2 rand_mesh = random(4, pixel_index);
+	const float2 rand_mesh = random(10, pixel_index);
 	return clamp((rand_mesh.y * LightMeshCount), 0, LightMeshCount - 1);
 }
 
@@ -722,7 +722,7 @@ int SelectLightMeshSmart(uint pixel_index, inout float MeshWeight, float3 Pos) {
     float2 Rand;
     const int RISFinal = RISCount + 1;
     for(int i = 0; i < RISFinal; i++) {
-        Rand = random(i + 92, pixel_index);
+        Rand = random(i + 11, pixel_index);
         int Index = clamp((Rand.x * LightMeshCount), 0, LightMeshCount - 1);
         p_hat = 1.0f / dot(Pos - _LightMeshes[Index].Center, Pos - _LightMeshes[Index].Center);
         wsum += p_hat;

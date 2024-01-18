@@ -7,17 +7,7 @@ using UnityEngine.SceneManagement;
 public class RenderHandle : MonoBehaviour
 {
     TrueTrace.RayTracingMaster RayMaster;
-    Material OverlayMaterial;
-    RenderTexture GITex;
-    RenderTexture ParticleTex;
-    private void CreateRenderTexture(ref RenderTexture ThisTex)
-    {
-        ThisTex?.Release();
-        ThisTex = new RenderTexture(gameObject.GetComponent<Camera>().pixelWidth, gameObject.GetComponent<Camera>().pixelHeight, 0,
-            RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.sRGB);
-        ThisTex.enableRandomWrite = true;
-        ThisTex.Create();
-    }
+
     void Start()
     {
         if(GameObject.FindObjectsOfType<TrueTrace.RayTracingMaster>().Length == 0) {RayMaster = null; return;}

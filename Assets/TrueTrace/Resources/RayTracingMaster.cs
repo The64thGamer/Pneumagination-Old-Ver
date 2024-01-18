@@ -15,6 +15,7 @@ namespace TrueTrace {
         private ReCurDenoiser ReCurDen;
         private Denoiser Denoisers;
         private ASVGF ASVGFCode;
+        private bool Abandon = false;
 
         [HideInInspector] public ComputeShader ShadingShader;
         private ComputeShader IntersectionShader;
@@ -43,6 +44,17 @@ namespace TrueTrace {
         private RenderTexture GINEEPosB;
 
         private RenderTexture Gradients;
+
+
+        #if TTLightMapping
+            public RenderTexture LightMapTemp; 
+            public int LightMappingSampleCount = 150;
+            private RenderTexture LightWorldIndex;
+            public LightmapData[] lightmaps;
+            public int CurrentLightmapIndex;
+            public ComputeBuffer LightMapTrisBuffer;
+        #endif
+
 
         [HideInInspector] public RenderTexture ScreenSpaceInfo;
         private RenderTexture ScreenSpaceInfoPrev;
@@ -134,6 +146,7 @@ namespace TrueTrace {
         private float PrevResFactor;
         private int GenKernel;
         private int GenASVGFKernel;
+        private int GenLightmapKernel;
         private int TraceKernel;
         private int ShadowKernel;
         private int HeightmapKernel;
@@ -173,6 +186,10 @@ namespace TrueTrace {
         }
         unsafe public void Start2()
         {
+            #if TTLightMapping
+                CurrentLightmapIndex = 0;
+                lightmaps = LightmapSettings.lightmaps;
+            #endif
             Application.targetFrameRate = 165;
             ASVGFCode = new ASVGF();
             ReCurDen = new ReCurDenoiser();
@@ -205,6 +222,7 @@ namespace TrueTrace {
             CorrectedDistanceKernel = ShadingShader.FindKernel("DepthCopyKernel");
             ReSTIRCorectKernel = ShadingShader.FindKernel("ReSTIRCorectKernel");
             ReSTIRGIKernel = ReSTIRGI.FindKernel("ReSTIRGIKernel");
+            GenLightmapKernel = GenerateShader.FindKernel("LightMapGen");
 
             ASVGFCode.Initialized = false;
             ReSTIRASVGFCode.Initialized = false;
@@ -404,8 +422,11 @@ namespace TrueTrace {
             if(Denoisers.Initialized == false) Denoisers.init(SourceWidth, SourceHeight);
 
             BufferSizes = new BufferSizeData[bouncecount + 1];
-            BufferSizes[0].tracerays = SourceWidth * SourceHeight;
-            BufferSizes[0].heightmap_rays = SourceWidth * SourceHeight;
+            #if TTLightMapping
+            #else
+                BufferSizes[0].tracerays = SourceWidth * SourceHeight;
+                BufferSizes[0].heightmap_rays = SourceWidth * SourceHeight;
+            #endif
             if(_BufferSizes == null) {
                 _BufferSizes = new ComputeBuffer(bouncecount + 1, 16);
             }
@@ -416,6 +437,7 @@ namespace TrueTrace {
             _BufferSizes.SetData(BufferSizes);
             GenerateShader.SetComputeBuffer(GenKernel, "BufferSizes", _BufferSizes);
             GenerateShader.SetComputeBuffer(GenASVGFKernel, "BufferSizes", _BufferSizes);
+            GenerateShader.SetComputeBuffer(GenLightmapKernel, "BufferSizes", _BufferSizes);
             IntersectionShader.SetComputeBuffer(TraceKernel, "BufferSizes", _BufferSizes);
             IntersectionShader.SetComputeBuffer(ShadowKernel, "BufferSizes", _BufferSizes);
             ShadingShader.SetComputeBuffer(ShadeKernel, "BufferSizes", _BufferSizes);
@@ -490,7 +512,7 @@ namespace TrueTrace {
             SetBool("DoReSTIRGIConnectionValidation", DoReSTIRGIConnectionValidation);
             SetBool("UseASVGF", UseASVGF);
             var C = UseASVGF != PrevASVGF || UseReSTIRGI != PrevReSTIRGI;
-            SetBool("AbandonSamples", C);
+            SetBool("AbandonSamples", C || Abandon);
             SetBool("TerrainExists", Assets.Terrains.Count != 0);
             SetBool("DoPartialRendering", DoPartialRendering);
 
@@ -564,6 +586,24 @@ namespace TrueTrace {
             GenerateShader.SetTexture(GenKernel, "RandomNums", (FramesSinceStart2 % 2 == 0) ? _RandomNums : _RandomNumsB);
             GenerateShader.SetComputeBuffer(GenKernel, "GlobalRays", _RayBuffer);
             GenerateShader.SetComputeBuffer(GenKernel, "GlobalColors", LightingBuffer);
+
+            #if TTLightMapping
+                GenerateShader.SetTexture(GenLightmapKernel, "RandomNums", (FramesSinceStart2 % 2 == 0) ? _RandomNums : _RandomNumsB);
+                GenerateShader.SetTexture(GenLightmapKernel, "WorldIndex", LightWorldIndex);
+                GenerateShader.SetTexture(GenLightmapKernel + 2, "WorldIndex", LightWorldIndex);
+                GenerateShader.SetComputeBuffer(GenLightmapKernel, "GlobalRays", _RayBuffer);
+                GenerateShader.SetComputeBuffer(GenLightmapKernel, "GlobalColors", LightingBuffer);
+                GenerateShader.SetComputeBuffer(GenLightmapKernel, "LightMapTris", LightMapTrisBuffer);
+                GenerateShader.SetInt("LightMapTriCount", LightMapTrisBuffer.count);
+        
+                GenerateShader.SetTexture(GenLightmapKernel + 2, "RandomNums", (FramesSinceStart2 % 2 == 0) ? _RandomNums : _RandomNumsB);
+                GenerateShader.SetComputeBuffer(GenLightmapKernel + 2, "GlobalRays", _RayBuffer);
+                GenerateShader.SetComputeBuffer(GenLightmapKernel + 2, "GlobalColors", LightingBuffer);
+                GenerateShader.SetComputeBuffer(GenLightmapKernel + 2, "LightMapTris", LightMapTrisBuffer);
+                GenerateShader.SetComputeBuffer(GenLightmapKernel + 1, "GlobalColors", LightingBuffer);
+            #endif
+            
+
 
             IntersectionShader.SetComputeBuffer(TraceKernel, "TLASBVH8Indices", Assets.TLASCWBVHIndexes);
             IntersectionShader.SetComputeBuffer(TraceKernel, "GlobalRays", _RayBuffer);
@@ -751,11 +791,14 @@ namespace TrueTrace {
                 CommonFunctions.CreateRenderTexture(ref ScreenSpaceInfo, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
                 CommonFunctions.CreateRenderTexture(ref ScreenSpaceInfoPrev, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
                 CommonFunctions.CreateRenderTexture(ref Gradients, SourceWidth / 3, SourceHeight / 3, CommonFunctions.RTHalf2);
+                #if TTLightMapping
+                    CommonFunctions.CreateRenderTexture(ref LightWorldIndex, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
+                #endif
                 // Reset sampling
                 _currentSample = 0;
-                              uFirstFrame = 1;
-            FramesSinceStart = 0;
-            FramesSinceStart2 = 0;
+                uFirstFrame = 1;
+                FramesSinceStart = 0;
+                FramesSinceStart2 = 0;
             }
         }
         public void ClearOutRenderTexture(RenderTexture renderTexture)
@@ -765,9 +808,9 @@ namespace TrueTrace {
             GL.Clear(true, true, Color.clear);
             RenderTexture.active = rt;
         }
-
         private void Render(RenderTexture destination, CommandBuffer cmd)
         {
+            Denoisers.ValidateInit(AllowBloom, AllowTAA, SourceWidth != TargetWidth, UseTAAU);
             float CurrentSample;
             cmd.BeginSample("Linearize and Copy Depth");
             cmd.DispatchCompute(ShadingShader, CorrectedDistanceKernel, Mathf.CeilToInt(SourceWidth / 32.0f), Mathf.CeilToInt(SourceHeight / 32.0f), 1);
@@ -783,15 +826,29 @@ namespace TrueTrace {
             }
 
             SetInt("CurBounce", 0, cmd);
-            if(UseReSTIRGI && ReSTIRGIUpdateRate != 0) {
-                cmd.BeginSample("ReSTIR GI Reproject");
-                cmd.DispatchCompute(ShadingShader, GIReTraceKernel, Mathf.CeilToInt(SourceWidth / 24.0f), Mathf.CeilToInt(SourceHeight / 24.0f), 1);
-                cmd.EndSample("ReSTIR GI Reproject");
-            } else {
-                cmd.BeginSample("Primary Ray Generation");
-                cmd.DispatchCompute(GenerateShader, (UseASVGF || (UseReSTIRGI && ReSTIRGIUpdateRate != 0)) ? GenASVGFKernel : GenKernel, Mathf.CeilToInt(SourceWidth / 256.0f), SourceHeight, 1);
-                cmd.EndSample("Primary Ray Generation");
-            }
+            #if TTLightMapping
+                cmd.BeginSample("Clear");
+                cmd.DispatchCompute(GenerateShader, GenLightmapKernel + 1, Mathf.CeilToInt(SourceWidth / 16.0f), Mathf.CeilToInt(SourceHeight / 16.0f), 1);
+                cmd.EndSample("Clear");
+                if(_currentSample == 0) {
+                    cmd.BeginSample("Gen2");
+                    cmd.DispatchCompute(GenerateShader, GenLightmapKernel + 2, Mathf.CeilToInt(LightMapTrisBuffer.count / 256.0f), 1, 1);
+                    cmd.EndSample("Gen2");
+                }                  
+                cmd.BeginSample("Gen");
+                cmd.DispatchCompute(GenerateShader, GenLightmapKernel, Mathf.CeilToInt(SourceWidth / 16.0f), Mathf.CeilToInt(SourceHeight / 16.0f), 1);
+                cmd.EndSample("Gen");
+            #else
+                if(UseReSTIRGI && ReSTIRGIUpdateRate != 0) {
+                    cmd.BeginSample("ReSTIR GI Reproject");
+                    cmd.DispatchCompute(ShadingShader, GIReTraceKernel, Mathf.CeilToInt(SourceWidth / 24.0f), Mathf.CeilToInt(SourceHeight / 24.0f), 1);
+                    cmd.EndSample("ReSTIR GI Reproject");
+                } else {
+                    cmd.BeginSample("Primary Ray Generation");
+                    cmd.DispatchCompute(GenerateShader, (UseASVGF || (UseReSTIRGI && ReSTIRGIUpdateRate != 0)) ? GenASVGFKernel : GenKernel, Mathf.CeilToInt(SourceWidth / 256.0f), SourceHeight, 1);
+                    cmd.EndSample("Primary Ray Generation");
+                }
+            #endif
 
                 cmd.BeginSample("Pathtracing Kernels");
 
@@ -954,6 +1011,7 @@ namespace TrueTrace {
 
         public void RenderImage(RenderTexture destination, CommandBuffer cmd)
         {
+            Abandon = false;
             _camera.renderingPath = RenderingPath.DeferredShading;
             if(RenderScale != 1.0f) {
                 _camera.renderingPath = RenderingPath.DeferredShading;
@@ -961,12 +1019,31 @@ namespace TrueTrace {
             }
             if (SceneIsRunning && Assets != null && Assets.RenderQue.Count > 0)
             {
+                #if TTLightMapping
+                    if(LightMapTemp != null) Graphics.CopyTexture(LightMapTemp,0,0, lightmaps[CurrentLightmapIndex].lightmapColor,0,0);
+                    if(uFirstFrame == 1 || FramesSinceStart2 > LightMappingSampleCount) {
+                        if(uFirstFrame == 1) CurrentLightmapIndex = 0;
+                        else CurrentLightmapIndex = (CurrentLightmapIndex + 1) % lightmaps.Length;
+                        CommonFunctions.CreateComputeBuffer(ref LightMapTrisBuffer, Assets.LightMaps[CurrentLightmapIndex].LightMapTris);
+                        FramesSinceStart = 0;
+                        FramesSinceStart2 = 0;
+                        SampleCount = 0;
+                        _currentSample = 0;
+                        CommonFunctions.CreateRenderTexture(ref LightMapTemp, lightmaps[CurrentLightmapIndex].lightmapColor.width, lightmaps[CurrentLightmapIndex].lightmapColor.height, CommonFunctions.RTHalf4);
+                        Abandon = true;
+                    }
+                #endif
                 ResetAllTextures();
                 RunUpdate();
                 RebuildMeshObjectBuffers(cmd);
                 InitRenderTexture();
                 SetShaderParameters(cmd);
-                Render(destination, cmd);
+                #if TTLightMapping
+                    Render(LightMapTemp, cmd);
+                    cmd.Blit(LightMapTemp, destination);
+                #else
+                    Render(destination, cmd);
+                #endif
                 uFirstFrame = 0;
             }
             else

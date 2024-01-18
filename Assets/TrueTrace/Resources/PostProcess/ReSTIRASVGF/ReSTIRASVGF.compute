@@ -329,7 +329,7 @@ void CopyData(uint3 id : SV_DispatchThreadID)
 {
     if(id.x > screen_width || id.y > screen_height) return;
     const int pixel_index = id.y * screen_width + id.x;
-    const ColData Pixel = PerPixelRadiance[pixel_index];
+    ColData Pixel = PerPixelRadiance[pixel_index];
     float4 TexInverted = TEX_PT_BASE_COLOR_A[id.xy];
     const uint4 WorldData = WorldPosData[id.xy];
     float3 TexBaseColor = clamp(TexInverted.xyz,0,12.0f);
@@ -348,15 +348,15 @@ void CopyData(uint3 id : SV_DispatchThreadID)
     if(((asuint(ScreenSpaceInfo[id.xy].w) << 2) >> 2) != ((asuint(ScreenSpaceInfoPrev[pos_prev].w) << 2) >> 2)) {
         pos_prev.x = -1000;
     }
-    // if(TexInverted.w == 0) {
-    //     Pixel.Direct = float3(0,0,0);
-    //     Pixel.Indirect = float3(0,0,0);
-    //     Pixel.Fog = 0;
-    // }
+    if(TexInverted.w == 0) {
+        Pixel.Direct = float3(0,0,0);
+        Pixel.Indirect = float3(0,0,0);
+        Pixel.Fog = 0;
+    }
 
     bool ReflectedRefracted = max(Pixel.IsSpecular - 2,0);
     float3 WorldAlbedo = clamp(unpackRGBE(WorldData.w),0,12.0f);
-    TexInverted.xyz *= ((WorldAlbedo > 0.001f) ? rcp(WorldAlbedo) : 1.0f);
+    TexInverted.xyz *= ((WorldAlbedo > 0.001f) ? rcp(WorldAlbedo) : 0.0f);
     float Exposure = 1;
     if(UseExposure) Exposure = ExposureBuffer[0];
 
@@ -726,7 +726,7 @@ void Temporal(uint3 gl_GlobalInvocationID : SV_DispatchThreadID, uint3 gl_WorkGr
                     temporal_sum_w_spec += w_spec;
                 }
             } else {
-                if (dist_depth < 0.1)
+                if (ReflectedRefracted.y == ReflectedRefractedPrev.y &&dist_depth < 0.1)
                 {
                     float w_diff = pow(w[i],clamp(6.0f / depth_curr,1.0f, 3.0f));
                     float w_spec = w[i];
@@ -823,9 +823,9 @@ void Temporal(uint3 gl_GlobalInvocationID : SV_DispatchThreadID, uint3 gl_WorkGr
 
         // Compute the blending weights based on history length, so that the filter
         // converges faster. I.e. the first frame has weight of 1.0, the second frame 1/2, third 1/3 and so on.
-        float alpha_color_lf = max(0.001f, 1.0f / (hist_len_lf));
-        float alpha_color_hf = max(0.002f, 1.0f / (hist_len_hf));
-        float alpha_moments_hf = max(0.001f, 1.0f / (hist_len_hf));
+        float alpha_color_lf = max(0.001f, 1.0f / max(hist_len_lf - 1,1));
+        float alpha_color_hf = max(0.002f, 1.0f / max(hist_len_hf - 1,1));
+        float alpha_moments_hf = max(0.001f, 1.0f / max(hist_len_hf - 1,1));
 
         // Adjust the blending factors, taking the antilag factors into account again
         alpha_color_lf = lerp(alpha_color_lf, 1.0, antilag_alpha_lf);
@@ -861,7 +861,7 @@ void Temporal(uint3 gl_GlobalInvocationID : SV_DispatchThreadID, uint3 gl_WorkGr
         color_curr_spec.rgb = exp(clamp(log(color_curr_spec.rgb + 1), 0, log(Max + 15))) - 1;
 
         // Same sequence as above, only for the specular channel
-        float antilag = grad_hf_spec.y * clamp(1.0f - motion_length, 0.1f, 1.0f) + motion_length * 0.001f;
+        float antilag = grad_hf_spec.y;// * clamp(1.0f - motion_length, 0.1f, 1.0f) + motion_length * 0.001f;
         // float antilag = grad_hf_spec.y + motion_length * 0.001f;
         float antilag_alpha_spec = clamp(lerp(0.0, antilag, 1), 0, 1);
         float hist_len_spec = min(temporal_color_histlen_spec.a * pow(1.0 - antilag_alpha_spec, 10) + 2.0, 256.0);
@@ -1290,7 +1290,7 @@ inline void filter_image(
 
             float depth = TEX_PT_VIEW_DEPTH_A[p].x;
 
-            float dist_z = abs(depth_center - depth) * fwidth_depth;
+            float dist_z = abs(depth_center - depth);// * fwidth_depth;
             w *= exp(-dist_z);
             w *= wavelet_kernel[abs(xx)][abs(yy)];
 
