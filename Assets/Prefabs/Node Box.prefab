@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 6780115908201618491}
   - component: {fileID: 1275465038272392675}
   - component: {fileID: 3579135297008681564}
+  - component: {fileID: 5602823445035983440}
   m_Layer: 0
   m_Name: Node Box
   m_TagString: Untagged
@@ -295,6 +296,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: {fileID: 7283414933910528111}
   skin: {fileID: 3579135297008681564}
+  box: {fileID: 5602823445035983440}
+  smoothCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  nailIn:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 7.9245286
+      outSlope: 7.9245286
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.18637525
+    - serializedVersion: 3
+      time: 0.11178166
+      value: 0.44981614
+      inSlope: 1.8402579
+      outSlope: 0.9165931
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.3752398
+      value: 0.3929602
+      inSlope: -1.6639467
+      outSlope: 2.496337
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.09875876
+      outWeight: 0.0375677
+    - serializedVersion: 3
+      time: 0.59711605
+      value: 0.9740094
+      inSlope: -0.15557599
+      outSlope: 0.12946601
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.36672664
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!137 &3579135297008681564
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -354,3 +431,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.4985379, y: -0.4985379, z: 0.002259091}
     m_Extent: {x: 0.5014621, y: 0.5014621, z: 0.0037704152}
   m_DirtyAABB: 0
+--- !u!65 &5602823445035983440
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417565229577771047}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.02, y: 0.01, z: 0.003}
+  m_Center: {x: -0.01, y: -0.005, z: 0}

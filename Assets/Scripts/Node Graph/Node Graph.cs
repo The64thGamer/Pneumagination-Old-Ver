@@ -29,7 +29,7 @@ public class NodeGraph : MonoBehaviour
             UpdateBackingPlane();
         }
 
-        if(Input.mousePositionDelta != Vector3.zero && Input.GetMouseButton(0))
+        if(Input.mousePositionDelta != Vector3.zero && Input.GetMouseButton(2))
         {
             mainCam.transform.position -= Input.mousePositionDelta * zoomLevel / Mathf.Min(screenRes.x, screenRes.y);
             UpdateBackingPlane();
@@ -39,6 +39,20 @@ public class NodeGraph : MonoBehaviour
         {
             zoomLevel = Mathf.Clamp(zoomLevel - (int)Input.mouseScrollDelta.y*5,minZoomLevel,maxZoomLevel);
             UpdateBackingPlane();
+        }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+
+            if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit))
+            {
+                SingleNode node = hit.collider.GetComponent<SingleNode>();
+                if(node != null)
+                {
+                    node.PickUp(hit.point - hit.collider.transform.position);
+                }
+            }
         }
     }
 
