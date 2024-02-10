@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class SingleNode : MonoBehaviour
 {
@@ -12,19 +14,32 @@ public class SingleNode : MonoBehaviour
     [SerializeField] BoxCollider box;
     [SerializeField] AnimationCurve smoothCurve;
     [SerializeField] AnimationCurve nailIn;
+    [SerializeField] GameObject ringTerminal;
+    [SerializeField] GameObject screwTerminal;
+
+    Canvas canvas;
 
     Vector2 pickupOffset;
     bool dragging;
     float dragTimer;
     float dragTimerB;
+    int optionCount;
 
     const float nailUpSpeed = 3;
     const float nailDownSpeed = 2;
     const float boxSpeed = 10;
+    const float spacing = -2.89f;
+    Vector3 constTerminalStartPos = new Vector3(-1,-7,0);
 
     void Start()
     {
         UpdateName(name);
+        canvas = this.GetComponentInChildren<Canvas>();
+        for (int i = 0; i < Random.Range(0, 20); i++)
+        {
+            AddOption("Option #" + i, Convert.ToBoolean(Random.Range(0, 2)), Convert.ToBoolean(Random.Range(0, 2)));
+
+        }
     }
 
     private void LateUpdate()
@@ -86,4 +101,20 @@ public class SingleNode : MonoBehaviour
         dragging = true;
     }
 
+    public void AddOption(string name, bool input, bool output)
+    {
+        options.text += name + "\n";
+        UpdateSize();
+        if(input)
+        {
+            GameObject inputGameObject = GameObject.Instantiate(ringTerminal,canvas.transform);
+            inputGameObject.transform.localPosition = constTerminalStartPos + new Vector3(0,spacing * optionCount);
+        }
+        if (output)
+        {
+            GameObject inputGameObject = GameObject.Instantiate(screwTerminal, canvas.transform);
+            inputGameObject.transform.localPosition = constTerminalStartPos + new Vector3(Mathf.Max(label.mesh.bounds.size.x, options.mesh.bounds.size.x) + 5f, spacing * optionCount,-1.25f);
+        }
+        optionCount++;
+    }
 }

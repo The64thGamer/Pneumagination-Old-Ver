@@ -54,6 +54,20 @@ public class NodeGraph : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            {
+                ScrewTerminal terminal = hit.collider.GetComponent<ScrewTerminal>();
+                if (terminal != null)
+                {
+                    terminal.StartConnection();
+                }
+            }
+        }
     }
 
     void UpdateBackingPlane()
