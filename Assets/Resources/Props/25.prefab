@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 136420636809367407}
   - component: {fileID: 8349600356512627476}
   - component: {fileID: 7378638813487050300}
+  - component: {fileID: 388329851435517310}
   m_Layer: 11
   m_Name: Circle Light LOD0
   m_TagString: Untagged
@@ -107,6 +108,55 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.031087382, y: 0.031087376, z: 0.0043443027}
   m_Center: {x: -0.00000047683716, y: -1.5434067e-17, z: -0.0021721513}
+--- !u!114 &388329851435517310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765553608750901499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaterialOptions: 
+  TransmissionColor: []
+  BaseColor: []
+  MetallicRemap: []
+  RoughnessRemap: []
+  emmission: []
+  EmissionColor: []
+  EmissionMask: 
+  BaseIsMap: 
+  ReplaceBase: 
+  Roughness: []
+  IOR: []
+  Metallic: []
+  SpecularTint: []
+  Sheen: []
+  SheenTint: []
+  ClearCoat: []
+  ClearCoatGloss: []
+  Anisotropic: []
+  Flatness: []
+  DiffTrans: []
+  SpecTrans: []
+  Thin: 
+  FollowMaterial: 
+  ScatterDist: []
+  SharedMaterials: []
+  Names: []
+  Specular: []
+  IsSmoothness: 
+  Selected: 0
+  Indexes: 
+  NeedsToUpdate: 0
+  IsReady: 0
+  MaterialIndex: 
+  LocalMaterialIndex: 
+  JustCreated: 1
+  TilingChanged: 0
 --- !u!1 &3888271109769921544
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,6 +168,7 @@ GameObject:
   - component: {fileID: 7455308517113855620}
   - component: {fileID: 4009172252337853012}
   - component: {fileID: 6073925853175040178}
+  - component: {fileID: 7036964090089972161}
   m_Layer: 11
   m_Name: Circle Light LOD1
   m_TagString: Untagged
@@ -192,6 +243,55 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7036964090089972161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3888271109769921544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaterialOptions: 
+  TransmissionColor: []
+  BaseColor: []
+  MetallicRemap: []
+  RoughnessRemap: []
+  emmission: []
+  EmissionColor: []
+  EmissionMask: 
+  BaseIsMap: 
+  ReplaceBase: 
+  Roughness: []
+  IOR: []
+  Metallic: []
+  SpecularTint: []
+  Sheen: []
+  SheenTint: []
+  ClearCoat: []
+  ClearCoatGloss: []
+  Anisotropic: []
+  Flatness: []
+  DiffTrans: []
+  SpecTrans: []
+  Thin: 
+  FollowMaterial: 
+  ScatterDist: []
+  SharedMaterials: []
+  Names: []
+  Specular: []
+  IsSmoothness: 
+  Selected: 0
+  Indexes: 
+  NeedsToUpdate: 0
+  IsReady: 0
+  MaterialIndex: 
+  LocalMaterialIndex: 
+  JustCreated: 1
+  TilingChanged: 0
 --- !u!1 &3917450227087994257
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,9 +301,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2985998488490671708}
-  - component: {fileID: 6660928250238146057}
   - component: {fileID: 9167999994789032654}
   - component: {fileID: 1222633008144947575}
+  - component: {fileID: 5457545909739918807}
+  - component: {fileID: -444841369876303449}
+  - component: {fileID: -533319425950042026}
   m_Layer: 11
   m_Name: 25
   m_TagString: Untagged
@@ -229,33 +331,6 @@ Transform:
   - {fileID: 6082412583489309411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
---- !u!205 &6660928250238146057
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3917450227087994257}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.000047683716, y: -0.21895733, z: 0}
-  m_Size: 3.2726214
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.13
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 8349600356512627476}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 6073925853175040178}
-  - screenRelativeHeight: 0.021661581
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 3244940334132639578}
-  m_Enabled: 1
 --- !u!114 &9167999994789032654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +374,129 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5457545909739918807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3917450227087994257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3edaff1cd4be25f4eb0921104c840289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExistsInQue: -1
+  IsDeformable: 0
+  Name: 
+  CWBVHIndicesBufferInverted: 
+  ChildObjects: []
+  MeshCountChanged: 0
+  AggTriangles: []
+  ParentScale: {x: 0, y: 0, z: 0}
+  LightTriangles: []
+  BVH:
+    cwbvh_indices: 
+    BVH8Nodes: []
+    cwbvhindex_count: 0
+    cwbvhnode_count: 0
+  SkinnedMeshes: []
+  DeformableMeshes: []
+  IndexCounts: 
+  MeshRefit: {fileID: 0}
+  HasStarted: 0
+  AggNodes: []
+  InstanceMeshIndex: 0
+  LightEndIndex: 0
+  aabb_untransformed:
+    BBMax: {x: 0, y: 0, z: 0}
+    BBMin: {x: 0, y: 0, z: 0}
+  aabb:
+    BBMax: {x: 0, y: 0, z: 0}
+    BBMin: {x: 0, y: 0, z: 0}
+  AllFull: 0
+  AggIndexCount: 0
+  AggBVHNodeCount: 0
+  _Materials: []
+  MatOffset: 0
+  CachedTransforms: []
+  CurMeshData:
+    Indices: 
+    Verticies: []
+    Normals: []
+    Tangents: []
+    UVs: []
+    MatDat: 
+  TotalObjects: 0
+  TransformIndexes: []
+  HasCompleted: 0
+  TotEnergy: 0
+  ThisTransform: {fileID: 0}
+  ConstructKernel: 0
+  TransferKernel: 0
+  RefitLayerKernel: 0
+  NodeUpdateKernel: 0
+  NodeCompressKernel: 0
+  NodeInitializerKernel: 0
+  CompactedMeshData: 0
+  InstanceReferences: 0
+  NeedsToUpdate: 0
+  Assets: {fileID: 0}
+  FailureCount: 0
+  TotalTriangles: 0
+  IsSkinnedGroup: 0
+  HasLightTriangles: 0
+  ForwardStack: []
+  LayerStack: []
+  NodePair: []
+  MaxRecur: 0
+  ToBVHIndex: 
+  tempAABB:
+    BBMax: {x: 0, y: 0, z: 0}
+    BBMin: {x: 0, y: 0, z: 0}
+  NodeOffset: 0
+  TriOffset: 0
+  LightTriOffset: 0
+  SplitNodes: []
+  AlbedoTexs: []
+  AlbedoIndexes: []
+  NormalTexs: []
+  NormalIndexes: []
+  MetallicTexs: []
+  MetallicIndexes: []
+  MetallicTexChannelIndex: 
+  RoughnessTexs: []
+  RoughnessIndexes: []
+  RoughnessTexChannelIndex: 
+  EmissionTexs: []
+  EmissionIndexes: []
+  ChildObjectTransforms: []
+  center: {x: 0, y: 0, z: 0}
+  extent: {x: 0, y: 0, z: 0}
+--- !u!114 &-444841369876303449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3917450227087994257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66308dab8b81c1e45a74b8ee6ea0db41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-533319425950042026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3917450227087994257}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e380edc03008e640956d245f62fe70c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5370367318146411113
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +508,7 @@ GameObject:
   - component: {fileID: 6082412583489309411}
   - component: {fileID: 4128966207404344577}
   - component: {fileID: 3244940334132639578}
+  - component: {fileID: 8033195749054908700}
   m_Layer: 11
   m_Name: Circle Light LOD2
   m_TagString: Untagged
@@ -384,3 +583,52 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8033195749054908700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370367318146411113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c103227aee5e4584a96e35173641b818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaterialOptions: 
+  TransmissionColor: []
+  BaseColor: []
+  MetallicRemap: []
+  RoughnessRemap: []
+  emmission: []
+  EmissionColor: []
+  EmissionMask: 
+  BaseIsMap: 
+  ReplaceBase: 
+  Roughness: []
+  IOR: []
+  Metallic: []
+  SpecularTint: []
+  Sheen: []
+  SheenTint: []
+  ClearCoat: []
+  ClearCoatGloss: []
+  Anisotropic: []
+  Flatness: []
+  DiffTrans: []
+  SpecTrans: []
+  Thin: 
+  FollowMaterial: 
+  ScatterDist: []
+  SharedMaterials: []
+  Names: []
+  Specular: []
+  IsSmoothness: 
+  Selected: 0
+  Indexes: 
+  NeedsToUpdate: 0
+  IsReady: 0
+  MaterialIndex: 
+  LocalMaterialIndex: 
+  JustCreated: 1
+  TilingChanged: 0

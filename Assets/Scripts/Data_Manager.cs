@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Color = UnityEngine.Color;
 
 public class Data_Manager : MonoBehaviour
 {
@@ -16,11 +18,14 @@ public class Data_Manager : MonoBehaviour
     [SerializeField] MapData mapData;
     [SerializeField] bool retryMap;
 
+    Transform trueTraceScene;
+
     //Consts
     const int pickupLayer = 10;
 
     private void Awake()
     {
+        trueTraceScene = GameObject.Find("Scene").transform;
         string saveFilePath = Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/SaveFile.xml";
 
         if (!File.Exists(saveFilePath))
@@ -91,13 +96,15 @@ public class Data_Manager : MonoBehaviour
             {
                 MeshRenderer rend = g.GetComponentInChildren<MeshRenderer>();
                 Material[] mats = rend.materials;
-
-                mapData.propData[i].position = g.transform.position;
-                mapData.propData[i].rotation = g.transform.rotation;
-                mapData.propData[i].colorA = mats[0].GetColor("_Palette_1");
-                mapData.propData[i].colorB = mats[0].GetColor("_Palette_2");
-                mapData.propData[i].colorC = mats[0].GetColor("_Palette_3");
-                mapData.propData[i].colorD = mats[0].GetColor("_Palette_4");
+                if (mats.Length > 0)
+                {
+                    mapData.propData[i].position = g.transform.position;
+                    mapData.propData[i].rotation = g.transform.rotation;
+                    mapData.propData[i].colorA = mats[0].GetColor("_Palette_1");
+                    mapData.propData[i].colorB = mats[0].GetColor("_Palette_2");
+                    mapData.propData[i].colorC = mats[0].GetColor("_Palette_3");
+                    mapData.propData[i].colorD = mats[0].GetColor("_Palette_4");
+                }
             }
         }
         for (int i = 0; i < mapData.brushData.Count; i++)
@@ -151,6 +158,7 @@ public class Data_Manager : MonoBehaviour
                 brush.transform.position = mapData.brushData[i].position;
                 brush.transform.rotation = mapData.brushData[i].rotation;
                 brush.name = mapData.brushData[i].objectHash.ToString();
+                brush.transform.parent = trueTraceScene;
 
                 MeshFilter filter = brush.GetComponent<MeshFilter>();
                 filter.mesh.vertices = mapData.brushData[i].vertices;
@@ -185,6 +193,7 @@ public class Data_Manager : MonoBehaviour
                 GameObject prop = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + mapData.propData[i].index));
                 prop.transform.position = mapData.propData[i].position;
                 prop.transform.rotation = mapData.propData[i].rotation;
+                prop.transform.parent = trueTraceScene;
                 prop.name = mapData.propData[i].objectHash.ToString();
                 prop.gameObject.layer = pickupLayer;
                 Component[] transforms = prop.GetComponentsInChildren(typeof(Transform), true);
@@ -238,6 +247,7 @@ public class Data_Manager : MonoBehaviour
                     animatronic.transform.position = mapData.animatronics[i].position;
                     animatronic.transform.rotation = mapData.animatronics[i].rotation;
                 }
+                animatronic.transform.parent = trueTraceScene;
                 animatronic.AddComponent<Rigidbody>();
                 animatronic.AddComponent<PhysicsObject>();
                 Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
@@ -292,9 +302,11 @@ public class Data_Manager : MonoBehaviour
     public GameObject GenerateNewBrush(BrushType brushType, Vector3 position)
     {
         string hash = Random.Range(int.MinValue, int.MaxValue).ToString();
-        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"));
+        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Brushes/Cube"),GameObject.Find("Scene").transform);
         brush.name = hash;
         brush.transform.position = position;
+        brush.transform.parent = trueTraceScene;
+
         CustomBrushData data = new CustomBrushData()
         {
             brushType = BrushType.block,
@@ -315,9 +327,9 @@ public class Data_Manager : MonoBehaviour
     public GameObject GenerateNewProp(int index, Vector3 position)
     {
         string hash = Random.Range(int.MinValue, int.MaxValue).ToString();
-        GameObject brush = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + index));
-        brush.name = hash;
-        brush.transform.position = position;
+        GameObject prop = GameObject.Instantiate(Resources.Load<GameObject>("Props/" + index));
+        prop.name = hash;
+        prop.transform.position = position;
         CustomPropData data = new CustomPropData()
         {
             index = index,
@@ -326,11 +338,11 @@ public class Data_Manager : MonoBehaviour
             colorB = Color.white,
             colorC = Color.white,
             colorD = Color.white,
-            position = brush.transform.position,
-            rotation = brush.transform.rotation,
+            position = prop.transform.position,
+            rotation = prop.transform.rotation,
         };
         mapData.propData.Add(data);
-        return brush;
+        return prop;
     }
 
     public void RemoveBrushSaveData(string hashCode)

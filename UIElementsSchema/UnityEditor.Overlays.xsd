@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Overlays" elementFormDefault="qualified" targetNamespace="UnityEditor.Overlays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="Unity.Profiling.Editor.UI" elementFormDefault="qualified" targetNamespace="UnityEditor.Overlays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:complexType name="ToolbarOverlayContainerType">
     <xs:complexContent mixed="false">
@@ -17,13 +17,16 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="null" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="null" name="data-source-type" type="xs:string" use="optional" />
         <xs:attribute default="false" name="horizontal" type="xs:boolean" use="optional" />
         <xs:attribute default="" name="supported-overlay-layout" type="xs:string" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ToolbarOverlayContainer" substitutionGroup="engine:VisualElement" type="ToolbarOverlayContainerType" />
+  <xs:element name="ToolbarOverlayContainer" substitutionGroup="engine:VisualElement" xmlns:q1="UnityEditor.Overlays" type="q1:ToolbarOverlayContainerType" />
   <xs:complexType name="OverlayContainerType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -40,11 +43,14 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="null" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="null" name="data-source-type" type="xs:string" use="optional" />
         <xs:attribute default="false" name="horizontal" type="xs:boolean" use="optional" />
         <xs:attribute default="" name="supported-overlay-layout" type="xs:string" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="OverlayContainer" substitutionGroup="engine:VisualElement" type="OverlayContainerType" />
+  <xs:element name="OverlayContainer" substitutionGroup="engine:VisualElement" xmlns:q2="UnityEditor.Overlays" type="q2:OverlayContainerType" />
 </xs:schema>

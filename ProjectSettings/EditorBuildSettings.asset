@@ -9,16 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Title Screen.unity
     guid: a4559bed5a333e5478a35a18a36f8f5c
   - enabled: 1
-    path: Assets/Scenes/Fast Food Place.unity
-    guid: 8124e5870f4fd4c779e7a5f994e84ad1
-  - enabled: 1
-    path: Assets/Scenes/Drive Thru.unity
-    guid: d43470eec60017d4e9d936b90b376519
+    path: Assets/Scenes/Blank Scene.unity
+    guid: 64b631c5decda1942a66b5a831c74039
   - enabled: 1
     path: Assets/Scenes/Animatronic Creator.unity
     guid: 9953ca07ab0141c43b281a24dfe866e2
-  - enabled: 1
-    path: Assets/Scenes/Blank Scene.unity
-    guid: 64b631c5decda1942a66b5a831c74039
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
