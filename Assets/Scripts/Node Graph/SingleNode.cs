@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class SingleNode : MonoBehaviour
 {
     [SerializeField] TMP_Text label;
+    [SerializeField] TMP_Text options;
     [SerializeField] SkinnedMeshRenderer skin;
     [SerializeField] BoxCollider box;
     [SerializeField] AnimationCurve smoothCurve;
@@ -24,7 +25,6 @@ public class SingleNode : MonoBehaviour
     void Start()
     {
         UpdateName(name);
-        UpdateSize(2, Random.Range(2, 6));
     }
 
     private void LateUpdate()
@@ -62,10 +62,17 @@ public class SingleNode : MonoBehaviour
     void UpdateName(string newName)
     {
         label.text = newName;
+        UpdateSize();
     }
 
-    void UpdateSize(int x, int y)
+    void UpdateSize()
     {
+        options.ForceMeshUpdate();
+        label.ForceMeshUpdate();
+
+        float x = ((Mathf.Max(label.mesh.bounds.size.x, options.mesh.bounds.size.x)) / 10.0f) + 0.3f;
+        float y = ((label.mesh.bounds.size.y + options.mesh.bounds.size.y) / 10.0f) + 0.3f;
+
         skin.SetBlendShapeWeight(0, x);
         skin.SetBlendShapeWeight(1, y);
         box.size = new Vector3(x / 100.0f, y / 100.0f, 0.003f);
