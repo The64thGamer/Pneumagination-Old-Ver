@@ -48,26 +48,17 @@ public class NodeGraph : MonoBehaviour
             if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit))
             {
                 SingleNode node = hit.collider.GetComponent<SingleNode>();
-                if(node != null)
+                ScrewTerminal terminal = hit.collider.GetComponent<ScrewTerminal>();
+                RingTerminal ringTerminal = hit.collider.GetComponent<RingTerminal>();
+                if (node != null)
                 {
                     node.PickUp(hit.point - hit.collider.transform.position);
                 }
-            }
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            RaycastHit hit;
-
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                ScrewTerminal terminal = hit.collider.GetComponent<ScrewTerminal>();
-                RingTerminal ringTerminal = hit.collider.GetComponent<RingTerminal>();
-                if (terminal != null)
+                else if (terminal != null)
                 {
                     terminal.StartConnection();
                 }
-                else if(ringTerminal != null)
+                else if (ringTerminal != null)
                 {
                     ringTerminal.DisconnectAndReconnectToMouse();
                 }
