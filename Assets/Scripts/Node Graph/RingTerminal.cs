@@ -25,4 +25,16 @@ public class RingTerminal : MonoBehaviour
     {
         target = null;
     }
+
+    public void DisconnectAndReconnectToMouse()
+    {
+        if(target == null)
+        {
+            return;
+        }
+        ScrewTerminal newtarget = target;
+        target = null;
+        newtarget.EndConnection();
+        newtarget.StartConnection();
+    }
 }

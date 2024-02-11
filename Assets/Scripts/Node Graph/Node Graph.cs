@@ -62,9 +62,14 @@ public class NodeGraph : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 ScrewTerminal terminal = hit.collider.GetComponent<ScrewTerminal>();
+                RingTerminal ringTerminal = hit.collider.GetComponent<RingTerminal>();
                 if (terminal != null)
                 {
                     terminal.StartConnection();
+                }
+                else if(ringTerminal != null)
+                {
+                    ringTerminal.DisconnectAndReconnectToMouse();
                 }
             }
         }
