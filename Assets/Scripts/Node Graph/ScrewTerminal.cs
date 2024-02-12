@@ -36,7 +36,10 @@ public class ScrewTerminal : MonoBehaviour
                     }
                     else
                     {
-                        EndConnection(targets[targets.Count-1]);
+                        currentlyConnecting = false;
+                        LineRenderer rend = lineRenderers[lineRenderers.Count-1];
+                        lineRenderers.RemoveAt(lineRenderers.Count - 1);
+                        Destroy(rend);
                     }
                 }
             }
@@ -79,6 +82,8 @@ public class ScrewTerminal : MonoBehaviour
         }
         currentlyConnecting = false;
     }
+
+
     public enum TerminalType
     {
         power,
