@@ -39,7 +39,7 @@ public class ScrewTerminal : MonoBehaviour
                         currentlyConnecting = false;
                         LineRenderer rend = lineRenderers[lineRenderers.Count-1];
                         lineRenderers.RemoveAt(lineRenderers.Count - 1);
-                        Destroy(rend);
+                        Destroy(rend.gameObject);
                     }
                 }
             }
@@ -76,7 +76,7 @@ public class ScrewTerminal : MonoBehaviour
                 targets.RemoveAt(i);
                 LineRenderer rend = lineRenderers[i];
                 lineRenderers.RemoveAt(i);
-                Destroy(rend);
+                Destroy(rend.gameObject);
                 break;
             }
         }
