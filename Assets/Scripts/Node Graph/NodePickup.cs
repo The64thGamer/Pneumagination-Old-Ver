@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[RequireComponent(typeof(BoxCollider))]
 public class NodePickup : MonoBehaviour
 {
-    [SerializeField] protected BoxCollider box;
-    [SerializeField] protected AnimationCurve smoothCurve;
+    BoxCollider box;
+    [SerializeField] AnimationCurve smoothCurve;
     Vector2 pickupOffset;
-    protected float dragTimer;
-    protected bool dragging;
-    protected const float boxSpeed = 10;
+    float dragTimer;
+    bool dragging;
+    const float boxSpeed = 10;
 
+    private void Start()
+    {
+        box = this.GetComponent<BoxCollider>();
+    }
     private void LateUpdate()
     {
         if (dragging)
@@ -42,5 +47,10 @@ public class NodePickup : MonoBehaviour
         box.enabled = false;
         pickupOffset = offset;
         dragging = true;
+    }
+
+    public bool IsDragging()
+    {
+        return dragging;
     }
 }
