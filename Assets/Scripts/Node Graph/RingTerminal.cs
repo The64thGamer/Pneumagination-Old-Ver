@@ -15,7 +15,7 @@ public class RingTerminal : MonoBehaviour
         }
         if(target != null)
         {
-            target.EndConnection();
+            target.EndConnection(this);
         }
         target = self;
         return true;
@@ -34,7 +34,7 @@ public class RingTerminal : MonoBehaviour
         }
         ScrewTerminal newtarget = target;
         target = null;
-        newtarget.EndConnection();
+        newtarget.EndConnection(this);
         newtarget.StartConnection();
     }
 }

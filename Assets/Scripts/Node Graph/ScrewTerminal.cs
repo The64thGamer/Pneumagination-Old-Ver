@@ -1,85 +1,84 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ScrewTerminal : MonoBehaviour
 {
+    [SerializeField] GameObject wirePrefab;
     [SerializeField] TerminalType terminalType;
-    ConnectionState connection;
-    RingTerminal target;
-    LineRenderer rend; 
-
-    void Start()
-    {
-        rend = this.GetComponent<LineRenderer>();
-    }
+    bool currentlyConnecting;
+    List<RingTerminal> targets = new List<RingTerminal>();
+    List<LineRenderer> lineRenderers = new List<LineRenderer>(); 
 
     private void Update()
     {
-        switch (connection)
+        Vector3 startOffset = transform.position + new Vector3(0.15f, 0, +0.1f);
+
+        if (currentlyConnecting)
         {
-            case ConnectionState.inProgress:
-                RaycastHit hit;
+            RaycastHit hit;
 
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            {
+                lineRenderers[lineRenderers.Count - 1].SetPosition(0, startOffset);
+
+                lineRenderers[lineRenderers.Count-1].SetPosition(1, hit.point + new Vector3(0, 0, -hit.point.z + 0.25f));
+
+                if (Input.GetMouseButtonUp(0))
                 {
-                    rend.SetPosition(1, hit.point + new Vector3(0, 0, -hit.point.z + 0.25f));
-
-                    if (Input.GetMouseButtonUp(1))
+                    RingTerminal ring = hit.collider.GetComponent<RingTerminal>();
+                    if (ring != null && ring.MakeConnection(this, terminalType))
                     {
-                        RingTerminal ring = hit.collider.GetComponent<RingTerminal>();
-                        if (ring != null && ring.MakeConnection(this,terminalType))
-                        {
-                            connection = ConnectionState.connected;
-                            target = ring;
-                        }
-                        else
-                        {
-                            EndConnection();
-                        }
+                        currentlyConnecting = false;
+                        targets.Add(ring);
+                    }
+                    else
+                    {
+                        EndConnection(targets[targets.Count-1]);
                     }
                 }
-                break;
-            case ConnectionState.connected:
-                rend.SetPosition(0, transform.position + new Vector3(0.15f, 0, +0.1f));
-                rend.SetPosition(1, target.transform.position + new Vector3(-0.125f, 0, -target.transform.position.z + 0.25f));
-                break;
-            default:
-                break;
+            }
         }
+
+        for (int i = 0; i < lineRenderers.Count + (currentlyConnecting ? -1 : 0); i++)
+        {
+            lineRenderers[i].SetPosition(0, startOffset);
+            lineRenderers[i].SetPosition(1, targets[i].transform.position + new Vector3(-0.125f, 0, -targets[i].transform.position.z + 0.25f));
+        }
+
     }
 
     public void StartConnection()
     {
-        if(connection != ConnectionState.none)
+        if (currentlyConnecting)
         {
             return;
         }
 
-        target = null;
-        connection = ConnectionState.inProgress;
-        rend.enabled = true;
-        rend.SetPosition(0, transform.position + new Vector3(0.15f,0,+0.1f));
+        currentlyConnecting = true;
+        GameObject newPrefab = GameObject.Instantiate(wirePrefab,this.transform);
+        newPrefab.transform.position = Vector3.zero;
+        lineRenderers.Add(newPrefab.GetComponent<LineRenderer>());
     }
 
-    public void EndConnection()
+    public void EndConnection(RingTerminal ring)
     {
-        if(target != null)
+        for (int i = 0; i < targets.Count; i++)
         {
-            target.Disconnect();
-            target = null;
+            if (targets[i] == ring)
+            {
+                ring.Disconnect();
+                targets.RemoveAt(i);
+                LineRenderer rend = lineRenderers[i];
+                lineRenderers.RemoveAt(i);
+                Destroy(rend);
+                break;
+            }
         }
-        connection = ConnectionState.none;
-        rend.enabled = false;
+        currentlyConnecting = false;
     }
-
-    public enum ConnectionState
-    {
-        none,
-        inProgress,
-        connected,
-    }
-
     public enum TerminalType
     {
         power,
