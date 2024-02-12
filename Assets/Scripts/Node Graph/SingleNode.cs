@@ -29,6 +29,7 @@ public class SingleNode : MonoBehaviour
     const float nailDownSpeed = 2;
     const float boxSpeed = 10;
     const float spacing = -2.89f;
+    const float evenLineNumberSpacingFix = 5f;
     Vector3 constTerminalStartPos = new Vector3(-1,-7,0);
 
     void Start()
@@ -86,7 +87,8 @@ public class SingleNode : MonoBehaviour
         label.ForceMeshUpdate();
 
         float x = ((Mathf.Max(label.mesh.bounds.size.x, options.mesh.bounds.size.x)) / 10.0f) + 0.3f;
-        float y = ((label.mesh.bounds.size.y + options.mesh.bounds.size.y) / 10.0f) + 0.3f;
+        float y = ((label.mesh.bounds.size.y + options.mesh.bounds.size.y + (optionCount % 2 == 0 && optionCount != 0 ? evenLineNumberSpacingFix : 0)) / 10.0f) + 0.25f;
+        Debug.Log(optionCount + " : " + label.mesh.bounds.size.y + " e " + options.mesh.bounds.size.y);
 
         skin.SetBlendShapeWeight(0, x);
         skin.SetBlendShapeWeight(1, y);
@@ -104,7 +106,6 @@ public class SingleNode : MonoBehaviour
     public void AddOption(string name, bool input, bool output)
     {
         options.text += name + "\n";
-        UpdateSize();
         if(input)
         {
             GameObject inputGameObject = GameObject.Instantiate(ringTerminal,canvas.transform);
@@ -116,5 +117,6 @@ public class SingleNode : MonoBehaviour
             inputGameObject.transform.localPosition = constTerminalStartPos + new Vector3(Mathf.Max(label.mesh.bounds.size.x, options.mesh.bounds.size.x) + 5f, spacing * optionCount,-1.25f);
         }
         optionCount++;
+        UpdateSize();
     }
 }
