@@ -30,7 +30,7 @@ public class ScrewTerminal : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.NameToLayer("NodeUI")))
+            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.GetMask("NodeUI")))
             {
                 lineRenderers[lineRenderers.Count - 1].SetPosition(0, startOffset);
 

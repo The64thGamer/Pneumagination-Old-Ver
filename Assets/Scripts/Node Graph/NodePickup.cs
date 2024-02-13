@@ -26,7 +26,7 @@ public class NodePickup : MonoBehaviour
             dragTimer = Mathf.Min(1, dragTimer + (Time.deltaTime * boxSpeed));
 
             RaycastHit hit;
-            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.NameToLayer("NodeUI")))
+            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.GetMask("NodeUI")))
             {
                 transform.position = new Vector3(hit.point.x - pickupOffset.x, hit.point.y - pickupOffset.y, transform.position.z);
             }
@@ -58,6 +58,10 @@ public class NodePickup : MonoBehaviour
 
     public Camera GetCamera()
     {
+        if(mainCam == null)
+        {
+            mainCam = transform.parent.parent.GetComponentInChildren<Camera>();
+        }
         return mainCam;
     }
 }

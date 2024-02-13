@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6571720992819291348}
   - component: {fileID: 3167277011828062476}
   - component: {fileID: 729231925270597353}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 1608138652718936768}
   - component: {fileID: 5187272659110956037}
   - component: {fileID: 3121566833860795378}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Keycode Node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 5602823445035983440}
   - component: {fileID: 5061537350234256982}
   - component: {fileID: 6294269360948330004}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Keycode Node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,6 +322,10 @@ PrefabInstance:
     - target: {fileID: 1457498852995910531, guid: 797d5c67b0631484b823c36a961e367b, type: 3}
       propertyPath: m_Name
       value: Screw Terminal
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457498852995910531, guid: 797d5c67b0631484b823c36a961e367b, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7568022504479520021, guid: 797d5c67b0631484b823c36a961e367b, type: 3}
       propertyPath: m_Pivot.x
@@ -484,6 +488,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 433948b60eccdc448b7a6da8d5b34b83, type: 3}
       propertyPath: m_Name
       value: Key 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 433948b60eccdc448b7a6da8d5b34b83, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

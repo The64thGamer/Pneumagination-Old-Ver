@@ -85,7 +85,6 @@ public class SingleNode : MonoBehaviour
         if (input)
         {
             GameObject inputGameObject = GameObject.Instantiate(ringTerminal, canvas.transform);
-            inputGameObject.GetComponentInChildren<ScrewTerminal>().SetNodePickup(pickup);
             inputGameObject.transform.localPosition = constTerminalStartPos + new Vector3(0, spacing * optionCount);
         }
         if (output)

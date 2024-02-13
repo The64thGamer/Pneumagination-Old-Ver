@@ -45,7 +45,7 @@ public class NodeGraph : MonoBehaviour
         {
             RaycastHit hit;
 
-            if(Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.NameToLayer("NodeUI")))
+            if(Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.GetMask("NodeUI")))
             {
                 NodePickup node = hit.collider.GetComponent<NodePickup>();
                 ScrewTerminal terminal = hit.collider.GetComponent<ScrewTerminal>();

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3435572281674464026}
   - component: {fileID: 2474314645949028929}
   - component: {fileID: 419077767010318148}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Screw Terminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,3 +112,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wirePrefab: {fileID: 1457498852995910531, guid: ffe1dab10305e394f9f19acf1a3bee4d, type: 3}
   terminalType: 0
+  nodePickup: {fileID: 0}

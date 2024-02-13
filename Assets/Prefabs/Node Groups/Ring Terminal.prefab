@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3435572281674464026}
   - component: {fileID: 2474314645949028929}
   - component: {fileID: 7925874488806806051}
-  m_Layer: 5
+  m_Layer: 12
   m_Name: Ring Terminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,3 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3f5539a025cbe4d858169bc689265e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  terminalType: 0
