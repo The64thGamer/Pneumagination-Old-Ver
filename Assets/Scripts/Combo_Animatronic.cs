@@ -5,7 +5,7 @@ using System.IO.Ports;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Combo_Animatronic : MonoBehaviour
+public class Combo_Animatronic : PneumagiNode
 {
     [SerializeField] List<DEAD_Animatronic> animatronicParts;
     [SerializeField] Combo_Animatronic_SaveFile saveFile = new Combo_Animatronic_SaveFile();
@@ -103,9 +103,18 @@ public class Combo_Animatronic : MonoBehaviour
         {
             Debug.LogError("Some part of the animatronic couldn't find its bone");
         }
+
+
         for (int i = 0; i < animatronicParts.Count; i++)
         {
-            animatronicParts[i].SetInterface(deadInterface);
+            DEAD_Actuator[] actuators = animatronicParts[i].GetActuatorInfoCopy();
+
+            for (int e = 0; e < actuators.Length; e++)
+            {
+                InputHolder holder = new InputHolder { inputID = actuators[e].actuationName };
+                holder.inputListener.AddListener(animatronicParts[i].SetActuatorTargetValue);
+                nodeInputs.Add(holder);
+            }
         }
     }
 

@@ -283,6 +283,7 @@ MonoBehaviour:
   Specular:
   - 0
   - 0
+  AlphaCutoff: []
   IsSmoothness: 0000
   Selected: 0
   Indexes: 0000000000000000
@@ -344,6 +345,7 @@ MonoBehaviour:
     Normals: []
     Tangents: []
     UVs: []
+    LightmapUVs: []
     MatDat: 
   TotalObjects: 0
   TransformIndexes: []
@@ -377,17 +379,12 @@ MonoBehaviour:
   LightTriOffset: 0
   SplitNodes: []
   AlbedoTexs: []
-  AlbedoIndexes: []
   NormalTexs: []
-  NormalIndexes: []
   MetallicTexs: []
-  MetallicIndexes: []
   MetallicTexChannelIndex: 
   RoughnessTexs: []
-  RoughnessIndexes: []
   RoughnessTexChannelIndex: 
   EmissionTexs: []
-  EmissionIndexes: []
   ChildObjectTransforms: []
   center: {x: 0, y: 0, z: 0}
   extent: {x: 0, y: 0, z: 0}

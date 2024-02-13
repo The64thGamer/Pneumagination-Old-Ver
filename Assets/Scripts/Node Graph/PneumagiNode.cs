@@ -5,9 +5,9 @@ using UnityEngine.Events;
 
 public class PneumagiNode : MonoBehaviour
 {
-    [SerializeField] List<InputHolder> nodeInputs = new List<InputHolder>();
-
-    List<OutputHolder> nodesToOutputTo = new List<OutputHolder>();
+    [SerializeField]
+    protected List<InputHolder> nodeInputs = new List<InputHolder>();
+    protected List<OutputHolder> nodesToOutputTo = new List<OutputHolder>();
 
 
     public void RecieveSignal(List<string> inputIDs, float value)
@@ -20,7 +20,7 @@ public class PneumagiNode : MonoBehaviour
             {
                 if (nodeInputs[y].inputID == inputIDs[x])
                 {
-                    nodeInputs[y].inputListener.Invoke(value);
+                    nodeInputs[y].inputListener.Invoke(nodeInputs[y].inputID,value);
                     for (int z = 0; z < nodesToOutputTo.Count; z++)
                     {
                         if (nodeInputs[y].inputID == nodesToOutputTo[z].outputID)
@@ -75,6 +75,6 @@ public class RecieverNodeHolder
 [System.Serializable]
 public class InputHolder
 {
-    public UnityEvent<float> inputListener;
+    public UnityEvent<string,float> inputListener = new UnityEvent<string,float>();
     public string inputID;
 }

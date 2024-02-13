@@ -8,10 +8,11 @@ using UnityEngine.Animations;
 public class DEAD_Animatronic : MonoBehaviour
 {
     [SerializeField] DEAD_Actuator[] deadActuators;
-    [SerializeField] DEAD_Interface deadInterface;
 
     int[] animatorHashes;
     Animator animator;
+
+    const float PSI = 40;
 
     private void Start()
     {
@@ -31,30 +32,22 @@ public class DEAD_Animatronic : MonoBehaviour
 
     private void Update()
     {
-        if(deadInterface != null)
-        {
-            UpdateMovements();
-        }
+        UpdateMovements();
     }
 
     void UpdateMovements()
     {
-        if(deadInterface == null)
-        {
-            return;
-        }
-
         for (int i = 0; i < deadActuators.Length; i++)
         {
             animator.SetFloat(animatorHashes[i], CalculateAirflow(i));
-        } 
+        }
     }
 
     float CalculateAirflow(int index)
     {
-        float time = Time.deltaTime * deadInterface.GetPSI();
-        float dtuData = deadInterface.GetData(deadActuators[index].dtuIndex);
-        if (Convert.ToBoolean((int)dtuData))
+        float time = Time.deltaTime * PSI; //replace this with PSI node input soon;
+        float currentPosition = animator.GetFloat(animatorHashes[index]);
+        if (currentPosition < deadActuators[index].currentTarget)
         {
             time *= deadActuators[index].airflowExtension;
         }
@@ -62,7 +55,7 @@ public class DEAD_Animatronic : MonoBehaviour
         {
             time *= deadActuators[index].airflowRetraction;
         }
-        return Mathf.Lerp(animator.GetFloat(animatorHashes[index]), dtuData, time);
+        return Mathf.Lerp(currentPosition, deadActuators[index].currentTarget, time);
     }
 
     public int[] GetDTUIndexes()
@@ -80,14 +73,9 @@ public class DEAD_Animatronic : MonoBehaviour
         return deadActuators;
     }
 
-    public void SetInterface(DEAD_Interface dead)
-    {
-        deadInterface = dead;
-    }
-
     public int GetActuatorCount()
     {
-        if(deadActuators == null)
+        if (deadActuators == null)
         {
             return 0;
         }
@@ -98,6 +86,18 @@ public class DEAD_Animatronic : MonoBehaviour
     {
         deadActuators[index].dtuIndex = DTU;
     }
+
+    public void SetActuatorTargetValue(string id, float value)
+    {
+        for (int i = 0; i < deadActuators.Length; i++)
+        {
+            if (deadActuators[i].actuationName == id)
+            {
+                deadActuators[i].currentTarget = value;
+                return;
+            }
+        }
+    }
 }
 
 [System.Serializable]
@@ -107,8 +107,12 @@ public struct DEAD_Actuator
     public string actuationName;
     public AnimationClip animation;
     public int dtuIndex;
-    [HideInInspector]public DEAD_Actuator_Type actuatorType;
+    [HideInInspector] public DEAD_Actuator_Type actuatorType;
     public bool invertedFlow;
+
+    [Header("Target Position")]
+    [Range(0, 1)]
+    public float currentTarget;
 
     [Header("Lever Settings")]
     [HideInInspector] public Transform fulcrumBone;
