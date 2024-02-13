@@ -26,9 +26,10 @@ public class PneumagiNode : MonoBehaviour
                         if (nodeInputs[y].inputID == nodesToOutputTo[z].outputID)
                         {
                             SendSignal(nodesToOutputTo[z].outputID, value);
+                            Color c = Color.white * value;
                             for (int i = 0; i < nodesToOutputTo[z].lineRenderers.Count; i++)
                             {
-                                nodesToOutputTo[z].lineRenderers[i].SetColor("_Tint", Color.white * value);
+                                nodesToOutputTo[z].lineRenderers[i].SetColor("_Tint", c);
                             }
                             break;
                         }
@@ -42,7 +43,17 @@ public class PneumagiNode : MonoBehaviour
 
     public void SendSignal(string outputID, float value)
     {
-
+        for (int i = 0; i < nodesToOutputTo.Count; i++)
+        {
+            if(outputID == nodesToOutputTo[i].outputID)
+            {
+                for (int e = 0; e < nodesToOutputTo[i].recieverNodes.Count; e++)
+                {
+                    nodesToOutputTo[i].recieverNodes[e].recieverNode.RecieveSignal(nodesToOutputTo[i].recieverNodes[e].inputIDs, value);
+                }
+                break;
+            }
+        }
     }
 }
 
