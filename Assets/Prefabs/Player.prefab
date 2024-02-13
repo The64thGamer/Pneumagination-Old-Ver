@@ -317,6 +317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataManager: {fileID: 0}
   hammerUI: {fileID: 7675325787711145775}
+  nodeGraphUI: {fileID: 8498358503089182528}
   _mainCamera: {fileID: 6487522925483904757}
   _celCamera: {fileID: 6693714223027044992}
   camOffet: {fileID: 2556485762120783340}
@@ -1026,3 +1027,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 562028712689632699, guid: 2c7b2a1aa39bba645a2383dc22b519d1, type: 3}
   m_PrefabInstance: {fileID: 1790505221870105261}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8498358503089182528 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7865847958246368749, guid: 2c7b2a1aa39bba645a2383dc22b519d1, type: 3}
+  m_PrefabInstance: {fileID: 1790505221870105261}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c20b7391d11dabc45886243a69888129, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

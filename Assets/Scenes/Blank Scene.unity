@@ -1084,7 +1084,6 @@ GameObject:
   - component: {fileID: 1913721396}
   - component: {fileID: 1913721398}
   - component: {fileID: 1913721403}
-  - component: {fileID: 1913721404}
   m_Layer: 0
   m_Name: Data Manager
   m_TagString: Untagged
@@ -1151,18 +1150,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c85ca24aed0de7f4bb834c92b727d65b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1913721404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1913721395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e380edc03008e640956d245f62fe70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1948616039
@@ -1875,10 +1862,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7770876341089469749, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
       propertyPath: fullscreenPassthrough
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8550631515773891685, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
-      propertyPath: m_HDR
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9031352389853259661, guid: 1c330a5dda1766344b18a150867e4570, type: 3}

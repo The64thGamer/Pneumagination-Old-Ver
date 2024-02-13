@@ -13,6 +13,7 @@ namespace StarterAssets
         [Header("Objects")]
         [SerializeField] Data_Manager dataManager;
         [SerializeField] Hammer_UI hammerUI;
+        [SerializeField] NodeGraph nodeGraphUI;
         [SerializeField] Camera _mainCamera;
         [SerializeField] Camera _celCamera;
         [SerializeField] Transform camOffet;
@@ -120,18 +121,40 @@ namespace StarterAssets
 
         void SwitchUIs(InputAction.CallbackContext context)
         {
-            currentmenu = (currentmenu + 1) % 2;
+            currentmenu = (currentmenu + 1) % 3;
+
             switch (currentmenu)
             {
                 case 0:
                     hammerUI.enabled = true;
                     hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
+                    nodeGraphUI.gameObject.SetActive(false);
                     SetFOV(false);
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    _mainCamera.enabled = true;
+                    _celCamera.enabled = true;
                     break;
                 case 1:
                     hammerUI.enabled = false;
                     hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    nodeGraphUI.gameObject.SetActive(false);
                     SetFOV(true);
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    _mainCamera.enabled = true;
+                    _celCamera.enabled = true;
+
+                    break;
+                case 2:
+                    hammerUI.enabled = false;
+                    hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                    SetFOV(false);
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                    _mainCamera.enabled = false;
+                    _celCamera.enabled = false;
+                    nodeGraphUI.gameObject.SetActive(true);
                     break;
                 default:
                     break;

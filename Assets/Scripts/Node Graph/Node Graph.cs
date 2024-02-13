@@ -20,19 +20,6 @@ public class NodeGraph : MonoBehaviour
         UpdateBackingPlane();
     }
 
-    private void OnEnable()
-    {
-        Camera.main.enabled = false;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
-    private void OnDisable()
-    {
-        Camera.main.enabled = true;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
     void Update()
     {
         if (screenRes.x != Screen.width || screenRes.y != Screen.height)
@@ -44,7 +31,7 @@ public class NodeGraph : MonoBehaviour
 
         if(Input.mousePositionDelta != Vector3.zero && Input.GetMouseButton(2))
         {
-            mainCam.transform.position -= Input.mousePositionDelta * zoomLevel / Mathf.Min(screenRes.x, screenRes.y);
+            mainCam.transform.localPosition -= Input.mousePositionDelta * zoomLevel / Mathf.Min(screenRes.x, screenRes.y);
             UpdateBackingPlane();
         }
 
@@ -81,7 +68,7 @@ public class NodeGraph : MonoBehaviour
 
     void UpdateBackingPlane()
     {
-        mainCam.transform.position = new Vector3(mainCam.transform.position.x, mainCam.transform.position.y, -zoomLevel);
+        mainCam.transform.localPosition = new Vector3(mainCam.transform.position.x, mainCam.transform.position.y, -zoomLevel);
         float pos = (mainCam.nearClipPlane + zoomLevel);
         backingPlane.position = mainCam.transform.position + (mainCam.transform.forward * pos);
         float h = Mathf.Tan(mainCam.fieldOfView * Mathf.Deg2Rad * 0.5f) * pos * 2f;
