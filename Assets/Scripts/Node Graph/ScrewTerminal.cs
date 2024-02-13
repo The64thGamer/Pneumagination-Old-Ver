@@ -8,6 +8,7 @@ public class ScrewTerminal : MonoBehaviour
 {
     [SerializeField] GameObject wirePrefab;
     [SerializeField] TerminalType terminalType;
+    [SerializeField] NodePickup nodePickup;
     bool currentlyConnecting;
     List<RingTerminal> targets = new List<RingTerminal>();
     List<LineRenderer> lineRenderers = new List<LineRenderer>();
@@ -15,7 +16,10 @@ public class ScrewTerminal : MonoBehaviour
 
     private void Start()
     {
-        mainCam = transform.parent.parent.parent.parent.GetComponentInChildren<Camera>();
+        if(nodePickup != null)
+        {
+            mainCam = nodePickup.GetCamera();
+        }
     }
 
     private void Update()
@@ -87,6 +91,12 @@ public class ScrewTerminal : MonoBehaviour
             }
         }
         currentlyConnecting = false;
+    }
+
+    public void SetNodePickup(NodePickup pickup)
+    {
+        nodePickup = pickup;
+        mainCam = nodePickup.GetCamera();
     }
 
 

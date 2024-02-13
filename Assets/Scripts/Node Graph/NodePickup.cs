@@ -28,7 +28,7 @@ public class NodePickup : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.NameToLayer("NodeUI")))
             {
-                transform.localPosition = new Vector3(hit.point.x - pickupOffset.x, hit.point.y - pickupOffset.y, transform.position.z);
+                transform.position = new Vector3(hit.point.x - pickupOffset.x, hit.point.y - pickupOffset.y, transform.position.z);
             }
             if (Input.GetMouseButtonUp(0))
             {
@@ -42,7 +42,7 @@ public class NodePickup : MonoBehaviour
             dragTimer = Mathf.Max(0, dragTimer - (Time.deltaTime * boxSpeed));
         }
 
-        transform.localPosition = new Vector3(transform.position.x, transform.position.y, Mathf.Lerp(0.3f, -0.4f, smoothCurve.Evaluate(dragTimer)));
+        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Lerp(0.3f, -0.4f, smoothCurve.Evaluate(dragTimer)));
     }
     public void PickUp(Vector2 offset)
     {
@@ -54,5 +54,10 @@ public class NodePickup : MonoBehaviour
     public bool IsDragging()
     {
         return dragging;
+    }
+
+    public Camera GetCamera()
+    {
+        return mainCam;
     }
 }

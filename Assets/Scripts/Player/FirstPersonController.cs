@@ -510,7 +510,6 @@ namespace StarterAssets
                     if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit))
                     {
                         Vector3 speed = Vector3.ClampMagnitude(-Vector3.ProjectOnPlane(hit.point - wallClimbStartPos, wallClimbNormal), maxWallClimbVel);
-                        Debug.Log(speed);
                         return speed * wallClimbMultiplier;
                     }
                 }

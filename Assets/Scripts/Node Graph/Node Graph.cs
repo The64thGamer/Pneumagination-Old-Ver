@@ -66,6 +66,12 @@ public class NodeGraph : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        this.transform.position = Vector3.zero;
+        this.transform.rotation = Quaternion.identity;
+    }
+
     void UpdateBackingPlane()
     {
         mainCam.transform.localPosition = new Vector3(mainCam.transform.position.x, mainCam.transform.position.y, -zoomLevel);

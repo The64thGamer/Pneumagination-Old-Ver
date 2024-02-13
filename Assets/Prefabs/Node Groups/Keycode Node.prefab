@@ -315,6 +315,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4357156921163057044}
     m_Modifications:
+    - target: {fileID: 419077767010318148, guid: 797d5c67b0631484b823c36a961e367b, type: 3}
+      propertyPath: nodePickup
+      value: 
+      objectReference: {fileID: 5061537350234256982}
     - target: {fileID: 1457498852995910531, guid: 797d5c67b0631484b823c36a961e367b, type: 3}
       propertyPath: m_Name
       value: Screw Terminal
