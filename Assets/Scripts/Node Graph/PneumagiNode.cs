@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,7 @@ public class PneumagiNode : MonoBehaviour
     protected List<InputHolder> nodeInputs = new List<InputHolder>();
     protected List<OutputHolder> nodesToOutputTo = new List<OutputHolder>();
     Vector2 nodePosition;
+    bool nodeVisibility;
 
     public void RecieveSignal(List<string> inputIDs, float value)
     {
@@ -20,7 +22,7 @@ public class PneumagiNode : MonoBehaviour
             {
                 if (nodeInputs[y].inputID == inputIDs[x])
                 {
-                    nodeInputs[y].inputListener.Invoke(nodeInputs[y].inputID,value);
+                    nodeInputs[y].inputListener.Invoke(nodeInputs[y].inputID, value);
                     for (int z = 0; z < nodesToOutputTo.Count; z++)
                     {
                         if (nodeInputs[y].inputID == nodesToOutputTo[z].outputID)
@@ -45,11 +47,49 @@ public class PneumagiNode : MonoBehaviour
     {
         for (int i = 0; i < nodesToOutputTo.Count; i++)
         {
-            if(outputID == nodesToOutputTo[i].outputID)
+            if (outputID == nodesToOutputTo[i].outputID)
             {
                 for (int e = 0; e < nodesToOutputTo[i].recieverNodes.Count; e++)
                 {
                     nodesToOutputTo[i].recieverNodes[e].recieverNode.RecieveSignal(nodesToOutputTo[i].recieverNodes[e].inputIDs, value);
+                }
+                break;
+            }
+        }
+    }
+
+    public void SetNodePosition(Vector2 position)
+    {
+        nodePosition = position;
+    }
+
+    public void SetNodeVisibility(bool visibility)
+    {
+        nodeVisibility = visibility;
+    }
+
+    public void AddOutputs(string output, string nodeHashID, string[] recieverIDs)
+    {
+        for (int i = 0; i < nodesToOutputTo.Count; i++)
+        {
+            if (nodesToOutputTo[i].outputID == output)
+            {
+                bool foundNode = false;
+                for (int x = 0; x < nodesToOutputTo[i].recieverNodes.Count; x++)
+                {
+                    if (nodesToOutputTo[i].recieverNodes[x].recieverNode.gameObject.name == nodeHashID)
+                    {
+                        nodesToOutputTo[i].recieverNodes[x].inputIDs.Concat(recieverIDs.ToList());
+                        foundNode = true;
+                        break;
+                    }
+                }
+                if (!foundNode)
+                {
+                    RecieverNodeHolder recHolder = new RecieverNodeHolder();
+                    recHolder.recieverNode = GameObject.Find(nodeHashID).GetComponentInChildren<PneumagiNode>();
+                    recHolder.inputIDs = recieverIDs.ToList<string>();
+                    nodesToOutputTo[i].recieverNodes.Add(recHolder);
                 }
                 break;
             }
@@ -75,6 +115,6 @@ public class RecieverNodeHolder
 [System.Serializable]
 public class InputHolder
 {
-    public UnityEvent<string,float> inputListener = new UnityEvent<string,float>();
+    public UnityEvent<string, float> inputListener = new UnityEvent<string, float>();
     public string inputID;
 }

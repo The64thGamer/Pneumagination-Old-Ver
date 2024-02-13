@@ -182,7 +182,7 @@ public class Data_Manager : MonoBehaviour
             }
         }
 
-        //Brushes
+        //Props
         if (mapData.propData != null)
         {
             for (int i = 0; i < mapData.propData.Count; i++)
@@ -212,6 +212,20 @@ public class Data_Manager : MonoBehaviour
                         mats[f].SetColor("_Palette_4", mapData.propData[i].colorD);
                     }
                     rend[e].SetMaterials(mats.ToList());
+                }
+
+                if (mapData.propData[i].nodeData != null)
+                {
+                    PneumagiNode node = prop.GetComponentInChildren<PneumagiNode>();
+                    node.SetNodePosition(mapData.propData[i].nodeData.position);
+                    node.SetNodeVisibility(mapData.propData[i].nodeData.isVisible);
+                    for (int e = 0; e < mapData.propData[i].nodeData.outputs.Length; e++)
+                    {
+                        for (int f = 0; f < mapData.propData[i].nodeData.outputs[e].recieverNodes.Length; f++)
+                        {
+                            node.AddOutputs(mapData.propData[i].nodeData.outputs[e].outputID, mapData.propData[i].nodeData.outputs[e].recieverNodes[f].nodeHashID, mapData.propData[i].nodeData.outputs[e].recieverNodes[f].recieverInputIDs);
+                        }
+                    }
                 }
             }
         }
@@ -328,6 +342,7 @@ public class Data_Manager : MonoBehaviour
             colorD = Color.white,
             position = prop.transform.position,
             rotation = prop.transform.rotation,
+            nodeData = new CustomNodeData(){ isVisible = true, position = Vector2.zero },
         };
         mapData.propData.Add(data);
         return prop;
@@ -473,7 +488,30 @@ public class CustomPropData
     public Color colorD;
     public Vector3 position;
     public Quaternion rotation;
+    public CustomNodeData nodeData;
 }
+[System.Serializable]
+public class CustomNodeData
+{
+    public bool isVisible;
+    public Vector2 position;
+    public CustomNodeOutputData[] outputs;
+}
+
+[System.Serializable]
+public class CustomNodeOutputData
+{
+    public string outputID;
+    public CustomNodeOutputRecieverData[] recieverNodes;
+}
+
+[System.Serializable]
+public class CustomNodeOutputRecieverData
+{
+    public string nodeHashID;
+    public string[] recieverInputIDs;
+}
+
 
 [System.Serializable]
 public class CustomBrushData
