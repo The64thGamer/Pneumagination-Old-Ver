@@ -8,7 +8,7 @@ public class PneumagiNode : MonoBehaviour
     [SerializeField]
     protected List<InputHolder> nodeInputs = new List<InputHolder>();
     protected List<OutputHolder> nodesToOutputTo = new List<OutputHolder>();
-
+    Vector2 nodePosition;
 
     public void RecieveSignal(List<string> inputIDs, float value)
     {

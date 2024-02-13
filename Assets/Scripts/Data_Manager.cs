@@ -10,8 +10,6 @@ using Color = UnityEngine.Color;
 
 public class Data_Manager : MonoBehaviour
 {
-    [SerializeField][Range(0, 1)] float rainPercent = 0;
-    [SerializeField][Range(0, 1)] float snowPercent = 0;
     [SerializeField] Vector3 mapAnimatronicPlacementSpot;
     [SerializeField] float worldFlyingSphereSize;
     [SerializeField] SaveFileData saveFileData;
@@ -282,16 +280,6 @@ public class Data_Manager : MonoBehaviour
         mapData.startingColorDark = palette[4];
 
         DEAD_Save_Load.WriteFile(Application.persistentDataPath + "/Saves/Save" + PlayerPrefs.GetInt("CurrentSaveFile") + "/MapData" + saveFileData.currentMap + ".xml", mapData.SerializeToXML());
-    }
-
-    public float GetCurrentRainValue()
-    {
-        return rainPercent;
-    }
-
-    public float GetCurrentSnowValue()
-    {
-        return snowPercent;
     }
 
     public float GetWorldFlyingSphereSize()
