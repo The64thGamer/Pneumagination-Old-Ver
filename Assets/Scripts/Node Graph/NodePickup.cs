@@ -12,10 +12,12 @@ public class NodePickup : MonoBehaviour
     float dragTimer;
     bool dragging;
     const float boxSpeed = 10;
+    Camera mainCam;
 
     private void Start()
     {
         box = this.GetComponent<BoxCollider>();
+        mainCam = transform.parent.parent.GetComponentInChildren<Camera>();
     }
     private void LateUpdate()
     {
@@ -24,9 +26,9 @@ public class NodePickup : MonoBehaviour
             dragTimer = Mathf.Min(1, dragTimer + (Time.deltaTime * boxSpeed));
 
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.NameToLayer("NodeUI")))
             {
-                transform.position = new Vector3(hit.point.x - pickupOffset.x, hit.point.y - pickupOffset.y, transform.position.z);
+                transform.localPosition = new Vector3(hit.point.x - pickupOffset.x, hit.point.y - pickupOffset.y, transform.position.z);
             }
             if (Input.GetMouseButtonUp(0))
             {
@@ -40,7 +42,7 @@ public class NodePickup : MonoBehaviour
             dragTimer = Mathf.Max(0, dragTimer - (Time.deltaTime * boxSpeed));
         }
 
-        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Lerp(0.3f, -0.4f, smoothCurve.Evaluate(dragTimer)));
+        transform.localPosition = new Vector3(transform.position.x, transform.position.y, Mathf.Lerp(0.3f, -0.4f, smoothCurve.Evaluate(dragTimer)));
     }
     public void PickUp(Vector2 offset)
     {

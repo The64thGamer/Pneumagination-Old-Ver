@@ -90,6 +90,8 @@ public class Data_Manager : MonoBehaviour
             if (node != null)
             {
                 mapData.animatronics[i].nodeData = node.GenerateSaveData();
+                Debug.Log(mapData.animatronics[i].nodeData.outputs.Length);
+
             }
         }
         for (int i = 0; i < mapData.propData.Count; i++)

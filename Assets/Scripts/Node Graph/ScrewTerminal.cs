@@ -10,7 +10,13 @@ public class ScrewTerminal : MonoBehaviour
     [SerializeField] TerminalType terminalType;
     bool currentlyConnecting;
     List<RingTerminal> targets = new List<RingTerminal>();
-    List<LineRenderer> lineRenderers = new List<LineRenderer>(); 
+    List<LineRenderer> lineRenderers = new List<LineRenderer>();
+    Camera mainCam;
+
+    private void Start()
+    {
+        mainCam = transform.parent.parent.parent.parent.GetComponentInChildren<Camera>();
+    }
 
     private void Update()
     {
@@ -20,7 +26,7 @@ public class ScrewTerminal : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.NameToLayer("NodeUI")))
             {
                 lineRenderers[lineRenderers.Count - 1].SetPosition(0, startOffset);
 

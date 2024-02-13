@@ -20,6 +20,19 @@ public class NodeGraph : MonoBehaviour
         UpdateBackingPlane();
     }
 
+    private void OnEnable()
+    {
+        Camera.main.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+    private void OnDisable()
+    {
+        Camera.main.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
     void Update()
     {
         if (screenRes.x != Screen.width || screenRes.y != Screen.height)
@@ -45,7 +58,7 @@ public class NodeGraph : MonoBehaviour
         {
             RaycastHit hit;
 
-            if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit))
+            if(Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out hit, 10000, LayerMask.NameToLayer("NodeUI")))
             {
                 NodePickup node = hit.collider.GetComponent<NodePickup>();
                 ScrewTerminal terminal = hit.collider.GetComponent<ScrewTerminal>();

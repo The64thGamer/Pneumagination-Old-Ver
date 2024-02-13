@@ -850,7 +850,7 @@ MonoBehaviour:
   NodeInitializerKernel: 6
   CompactedMeshData: 0
   InstanceReferences: 0
-  NeedsToUpdate: 0
+  NeedsToUpdate: 1
   Assets: {fileID: 1948616041}
   FailureCount: 0
   TotalTriangles: 0
@@ -1119,8 +1119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 542e8be098071fd41a6263957cb77c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rainPercent: 0
-  snowPercent: 0
   mapAnimatronicPlacementSpot: {x: -22.5, y: 0, z: 1.24}
   worldFlyingSphereSize: 120
   saveFileData:
@@ -1282,7 +1280,9 @@ MonoBehaviour:
   - {fileID: 2014073698}
   AddQue: []
   RemoveQue: []
-  UpdateQue: []
+  UpdateQue:
+  - {fileID: 1105671743}
+  - {fileID: 2014073698}
   InstanceRenderQue: []
   InstanceUpdateQue: []
   InstanceRenderTransforms: []
@@ -1661,7 +1661,7 @@ MonoBehaviour:
   NodeInitializerKernel: 6
   CompactedMeshData: 0
   InstanceReferences: 0
-  NeedsToUpdate: 0
+  NeedsToUpdate: 1
   Assets: {fileID: 1948616041}
   FailureCount: 0
   TotalTriangles: 0
