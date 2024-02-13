@@ -95,6 +95,25 @@ public class PneumagiNode : MonoBehaviour
             }
         }
     }
+
+    public CustomNodeData GenerateSaveData()
+    {
+        CustomNodeData data = new CustomNodeData();
+        data.isVisible = nodeVisibility;
+        data.position = nodePosition;
+        data.outputs = new CustomNodeOutputData[nodesToOutputTo.Count];
+        for (int i = 0; i < nodesToOutputTo.Count; i++)
+        {
+            data.outputs[i].outputID = nodesToOutputTo[i].outputID;
+            data.outputs[i].recieverNodes = new CustomNodeOutputRecieverData[nodesToOutputTo[i].recieverNodes.Count];
+            for (int e = 0; e < nodesToOutputTo[i].recieverNodes.Count; e++)
+            {
+                data.outputs[i].recieverNodes[e].nodeHashID = nodesToOutputTo[i].recieverNodes[e].recieverNode.gameObject.name;
+                data.outputs[i].recieverNodes[e].recieverInputIDs = nodesToOutputTo[i].recieverNodes[e].inputIDs.ToArray();
+            }
+        }
+        return data;
+    }
 }
 
 [System.Serializable]

@@ -9,7 +9,6 @@ public class Combo_Animatronic : PneumagiNode
 {
     [SerializeField] List<DEAD_Animatronic> animatronicParts;
     [SerializeField] Combo_Animatronic_SaveFile saveFile = new Combo_Animatronic_SaveFile();
-    [SerializeField] DEAD_Interface deadInterface;
 
     private void Start()
     {
@@ -19,11 +18,6 @@ public class Combo_Animatronic : PneumagiNode
     public Combo_Animatronic_SaveFile GetSaveFileData()
     {
         return saveFile;
-    }
-
-    public void InsertDeadInterface(DEAD_Interface inter)
-    {
-        deadInterface = inter;
     }
 
     public void ReassignFullSaveFile(Combo_Animatronic_SaveFile file)

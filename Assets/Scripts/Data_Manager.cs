@@ -103,6 +103,13 @@ public class Data_Manager : MonoBehaviour
                     mapData.propData[i].colorC = mats[0].GetColor("_Palette_3");
                     mapData.propData[i].colorD = mats[0].GetColor("_Palette_4");
                 }
+
+                PneumagiNode node = g.GetComponentInChildren<PneumagiNode>();
+                if(node != null)
+                {
+                    mapData.propData[i].nodeData = node.GenerateSaveData();
+                }
+
             }
         }
         for (int i = 0; i < mapData.brushData.Count; i++)
@@ -214,9 +221,10 @@ public class Data_Manager : MonoBehaviour
                     rend[e].SetMaterials(mats.ToList());
                 }
 
-                if (mapData.propData[i].nodeData != null)
+                PneumagiNode node = prop.GetComponentInChildren<PneumagiNode>();
+
+                if (mapData.propData[i].nodeData != null && node != null)
                 {
-                    PneumagiNode node = prop.GetComponentInChildren<PneumagiNode>();
                     node.SetNodePosition(mapData.propData[i].nodeData.position);
                     node.SetNodeVisibility(mapData.propData[i].nodeData.isVisible);
                     for (int e = 0; e < mapData.propData[i].nodeData.outputs.Length; e++)
@@ -263,7 +271,6 @@ public class Data_Manager : MonoBehaviour
                 animatronic.AddComponent<Rigidbody>();
                 animatronic.AddComponent<PhysicsObject>();
                 Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
-                combo.InsertDeadInterface(this.GetComponent<DEAD_Interface>());
                 combo.ReassignFullSaveFile(mapData.animatronics[i]);
             }
         }
