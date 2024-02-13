@@ -36,7 +36,9 @@ namespace TrueTrace {
         public InstancedManager Instancer;
         private bool Cleared;
         private AudioClip DingNoise;
+         [SerializeField] public static Dictionary<int, CommonVars.RayObject> RayObjects;
          [SerializeField] public Camera SelectedCamera;
+         [SerializeField] public bool ClayMode = false;
          [SerializeField] public ObjectField CameraField;
          [SerializeField] public int BounceCount = 7;
          [SerializeField] public float RenderRes = 1;
@@ -49,6 +51,7 @@ namespace TrueTrace {
          [SerializeField] public float BloomStrength = 0.5f;
          [SerializeField] public bool DoF = false;
          [SerializeField] public float DoFAperature = 0.1f;
+         [SerializeField] public float DoFAperatureScale = 1.0f;
          [SerializeField] public float DoFFocal = 0.1f;
          [SerializeField] public bool DoExposure = false;
          [SerializeField] public bool DoExposureAuto = false;
@@ -60,13 +63,12 @@ namespace TrueTrace {
          [SerializeField] public bool GISpatial = true;
          [SerializeField] public int GISpatialSampleCount = 6;
          [SerializeField] public bool TAA = false;
-         [SerializeField] public int SVGFSize = 4;
          [SerializeField] public bool ToneMap = false;
          [SerializeField] public bool TAAU = true;
          [SerializeField] public int AtmoScatter = 4;
          [SerializeField] public bool ShowFPS = true;
          [SerializeField] public float Exposure = 0;
-         [SerializeField] public int AtlasSize = 16300;
+         [SerializeField] public int AtlasSize = 16384;
          [SerializeField] public bool DoPartialRendering = false;
          [SerializeField] public int PartialRenderingFactor = 1;
          [SerializeField] public bool DoFirefly = false;
@@ -78,6 +80,7 @@ namespace TrueTrace {
          [SerializeField] public int DenoiserSelection = 0;
          [SerializeField] public bool ReSTIRDenoiser = false;
          void OnEnable() {
+            RayObjects = new Dictionary<int, CommonVars.RayObject>();
             EditorSceneManager.activeSceneChangedInEditMode += EvaluateScene;
             if(EditorPrefs.GetString("EditModeFunctions", JsonUtility.ToJson(this, false)) != null) {
                var data = EditorPrefs.GetString("EditModeFunctions", JsonUtility.ToJson(this, false));
@@ -402,7 +405,6 @@ Toggle SpatialGIToggle;
 Toggle TAAToggle;
 Toggle DoPartialRenderingToggle;
 Toggle DoFireflyToggle;
-FloatField SVGFSizeField;
 Toggle SampleValidToggle;
 Toggle IndirectClampingToggle;
 FloatField RISCountField;
@@ -422,6 +424,7 @@ private void StandardSet() {
          BloomStrength = 0.5f;
          DoF = false;
          DoFAperature = 0.1f;
+         DoFAperatureScale = 1.0f;
          DoFFocal = 0.1f;
          DoExposure = false;
          DoExposureAuto = false;
@@ -433,13 +436,12 @@ private void StandardSet() {
          GISpatial = true;
          GISpatialSampleCount = 12;
          TAA = false;
-         SVGFSize = 4;
          ToneMap = false;
          TAAU = true;
          AtmoScatter = 4;
          ShowFPS = true;
          Exposure = 0;
-         AtlasSize = 16300;
+         AtlasSize = 16384;
          DoPartialRendering = false;
          DoFirefly = false;
          MinSpatialSize = 30;
@@ -783,6 +785,9 @@ Toolbar toolbar;
          Toggle HardwareRTToggle = new Toggle() {value = (definesList.Contains("HardwareRT")), text = "Enable RT Cores (Requires Unity 2023+)"};
          HardwareRTToggle.RegisterValueChangedCallback(evt => {if(evt.newValue) definesList.Add("HardwareRT"); else RemoveDefine("HardwareRT"); SetDefines();});
          HardSettingsMenu.Add(HardwareRTToggle);
+         Toggle ClayModeToggle = new Toggle() {value = ClayMode, text = "Use ClayMode"};
+         ClayModeToggle.RegisterValueChangedCallback(evt => {ClayMode = evt.newValue; RayMaster.ClayMode = ClayMode;});
+         HardSettingsMenu.Add(ClayModeToggle);
          Toggle LightmappingToggle = new Toggle() {value = (definesList.Contains("TTLightMapping")), text = "Use TrueTrace as a LightMapper"};
          LightmappingToggle.RegisterValueChangedCallback(evt => {if(evt.newValue) definesList.Add("TTLightMapping"); else RemoveDefine("TTLightMapping"); SetDefines();});
          HardSettingsMenu.Add(LightmappingToggle);
@@ -820,6 +825,7 @@ Toolbar toolbar;
             MainSource.Clear();
             CreateGUI();
          }
+
         public void CreateGUI() {
             DingNoise = Resources.Load("Utility/DING", typeof(AudioClip)) as AudioClip;
             OnFocus();
@@ -869,6 +875,7 @@ Toolbar toolbar;
            RayMaster.BloomStrength = 128 - BloomStrength * 128.0f;
            RayMaster.AllowDoF = DoF;
            RayMaster.DoFAperature = DoFAperature;
+           RayMaster.DoFAperatureScale = DoFAperatureScale;
            RayMaster.DoFFocal = DoFFocal;
            RayMaster.AllowAutoExpose = DoExposure;
            RayMaster.DoExposureAuto = DoExposureAuto;
@@ -882,11 +889,10 @@ Toolbar toolbar;
            RayMaster.ReSTIRGITemporalMCap = GITemporalMCap;
            RayMaster.ReSTIRGISpatialCount = GISpatialSampleCount;
            RayMaster.AllowTAA = TAA;
-           RayMaster.SVGFAtrousKernelSizes = SVGFSize;
            RayMaster.AllowToneMap = ToneMap;
            RayMaster.UseTAAU = TAAU;
            RayMaster.AtmoNumLayers = AtmoScatter;
-           Assets.DesiredRes = AtlasSize;
+           Assets.MainDesiredRes = AtlasSize;
            RayMaster.DoPartialRendering = DoPartialRendering;
            RayMaster.PartialRenderingFactor = PartialRenderingFactor;
            RayMaster.DoFirefly = DoFirefly;
@@ -894,6 +900,7 @@ Toolbar toolbar;
            RayMaster.RISCount = RISCount;
            RayMaster.ReCurBlurRadius = ReCurBlurRadius;
            RayMaster.ImprovedPrimaryHit = ImprovedPrimaryHit;
+           RayMaster.ClayMode = ClayMode;
          }
 
          AddHardSettingsToMenu();
@@ -926,7 +933,8 @@ Toolbar toolbar;
            ForceInstancesButton = new Button(() => {if(!Application.isPlaying) ConstructInstances(); else Debug.Log("Cant Do This In Editor");}) {text = "Force Instances"};
 
            IntegerField AtlasField = new IntegerField() {value = AtlasSize, label = "Atlas Size"};
-           AtlasField.RegisterValueChangedCallback(evt => {if(!Application.isPlaying) {AtlasSize = evt.newValue; AtlasSize = Mathf.Min(AtlasSize, 16300); AtlasSize = Mathf.Max(AtlasSize, 32); Assets.DesiredRes = AtlasSize;} else AtlasField.value = AtlasSize;});
+           AtlasField.isDelayed = true;
+           AtlasField.RegisterValueChangedCallback(evt => {if(!Application.isPlaying) {AtlasSize = evt.newValue; AtlasSize = Mathf.Min(AtlasSize, 16384); AtlasSize = Mathf.Max(AtlasSize, 32); AtlasField.value = AtlasSize; Assets.MainDesiredRes = AtlasSize;} else AtlasField.value = AtlasSize;});
                AtlasField.ElementAt(0).style.minWidth = 65;
                AtlasField.ElementAt(1).style.width = 45;
 
@@ -996,8 +1004,9 @@ Toolbar toolbar;
             DenoiserSettings.Add("None");
             DenoiserSettings.Add("ASVGF");
             DenoiserSettings.Add("ReCur");
-            DenoiserSettings.Add("SVGF");
-            PopupField<string> DenoiserField = new PopupField<string>("Denoiser");
+            PopupField<string> DenoiserField = new PopupField<string>("<b>Denoiser</b>");
+            DenoiserField.ElementAt(0).style.minWidth = 55;
+            DenoiserField.style.width = 250;
             DenoiserField.choices = DenoiserSettings;
             DenoiserField.index = DenoiserSelection;
             DenoiserField.style.flexDirection = FlexDirection.Row;
@@ -1005,9 +1014,7 @@ Toolbar toolbar;
                DenoiserSelection = DenoiserField.index;
                RayMaster.UseASVGF = false;
                RayMaster.UseReCur = false;
-               RayMaster.UseSVGF = false;
                if(DenoiserField.Contains(ReCurBlurField)) DenoiserField.Remove(ReCurBlurField);
-               if(DenoiserField.Contains(SVGFSizeField)) DenoiserField.Remove(SVGFSizeField);
                switch(DenoiserSelection) {
                   case 0:
                   break;
@@ -1017,23 +1024,16 @@ Toolbar toolbar;
                   case 2:
                      RayMaster.UseReCur = true;
                      ReCurBlurField = new FloatField("ReCur Blur Radius") {value = ReCurBlurRadius};
+                     ReCurBlurField.ElementAt(0).style.minWidth = 65;
                      ReCurBlurField.RegisterValueChangedCallback(evt => {ReCurBlurRadius = (int)evt.newValue; ReCurBlurRadius = Mathf.Max(ReCurBlurRadius, 2); RayMaster.ReCurBlurRadius = ReCurBlurRadius;});
                      DenoiserField.Add(ReCurBlurField);
-                  break;
-                  case 3:
-                     RayMaster.UseSVGF = true;
-                     SVGFSizeField = new FloatField("SVGF Atrous Kernel Size") {value = SVGFSize};
-                     SVGFSizeField.RegisterValueChangedCallback(evt => {SVGFSize = (int)evt.newValue; RayMaster.SVGFAtrousKernelSizes = SVGFSize;});
-                     DenoiserField.Add(SVGFSizeField);
                   break;
                } 
             });
             if(DenoiserField.Contains(ReCurBlurField)) DenoiserField.Remove(ReCurBlurField);
-            if(DenoiserField.Contains(SVGFSizeField)) DenoiserField.Remove(SVGFSizeField);
             DenoiserSelection = DenoiserField.index;
             RayMaster.UseASVGF = false;
             RayMaster.UseReCur = false;
-            RayMaster.UseSVGF = false;
             switch(DenoiserSelection) {
                case 0:
                break;
@@ -1043,16 +1043,12 @@ Toolbar toolbar;
                case 2:
                   RayMaster.UseReCur = true;
                   ReCurBlurField = new FloatField("ReCur Blur Radius") {value = ReCurBlurRadius};
+                  ReCurBlurField.ElementAt(0).style.minWidth = 65;
                   ReCurBlurField.RegisterValueChangedCallback(evt => {ReCurBlurRadius = (int)evt.newValue; ReCurBlurRadius = Mathf.Max(ReCurBlurRadius, 2); RayMaster.ReCurBlurRadius = ReCurBlurRadius;});
                   DenoiserField.Add(ReCurBlurField);
                break;
-               case 3:
-                  RayMaster.UseSVGF = true;
-                  SVGFSizeField = new FloatField("SVGF Atrous Kernel Size") {value = SVGFSize};
-                  SVGFSizeField.RegisterValueChangedCallback(evt => {SVGFSize = (int)evt.newValue; RayMaster.SVGFAtrousKernelSizes = SVGFSize;});
-                  DenoiserField.Add(SVGFSizeField);
-               break;
             } 
+
             MainSource.Add(DenoiserField);
 
 
@@ -1061,7 +1057,7 @@ Toolbar toolbar;
          BloomToggle = new Toggle() {value = Bloom, text = "Enable Bloom"};
            VisualElement BloomBox = new VisualElement();
                Label BloomLabel = new Label("Bloom Strength");
-               Slider BloomSlider = new Slider() {value = BloomStrength, highValue = 1.0f, lowValue = 0};
+               Slider BloomSlider = new Slider() {value = BloomStrength, highValue = 0.9999f, lowValue = 0.5f};
                BloomSlider.style.width = 100;
                BloomToggle.RegisterValueChangedCallback(evt => {Bloom = evt.newValue; RayMaster.AllowBloom = Bloom; if(evt.newValue) MainSource.Insert(MainSource.IndexOf(BloomToggle) + 1, BloomBox); else MainSource.Remove(BloomBox);});        
                BloomSlider.RegisterValueChangedCallback(evt => {BloomStrength = evt.newValue; RayMaster.BloomStrength = 128 - BloomStrength * 128.0f;});
@@ -1073,14 +1069,18 @@ Toolbar toolbar;
 
            Label AperatureLabel = new Label("Aperature Size");
            Slider AperatureSlider = new Slider() {value = DoFAperature, highValue = 1, lowValue = 0};
-           AperatureSlider.style.width = 100;
+           AperatureSlider.style.width = 250;
+           FloatField AperatureScaleField = new FloatField() {value = DoFAperatureScale, label = "Aperature Scale"};
+           AperatureScaleField.ElementAt(0).style.minWidth = 65;
+           AperatureScaleField.RegisterValueChangedCallback(evt => {DoFAperatureScale = evt.newValue; DoFAperatureScale = Mathf.Max(DoFAperatureScale, 0.0001f); RayMaster.DoFAperatureScale = DoFAperatureScale; AperatureScaleField.value = DoFAperatureScale;});
            Label FocalLabel = new Label("Focal Length");
            FocalSlider = new FloatField() {value = DoFFocal};
-           FocalSlider.style.width = 100;
+           FocalSlider.style.width = 150;
            Button AutofocusButton = new Button(() => GetFocalLength()) {text = "Autofocus DoF"};
            Box AperatureBox = new Box();
            AperatureBox.Add(AperatureLabel);
            AperatureBox.Add(AperatureSlider);
+           AperatureBox.Add(AperatureScaleField);
            AperatureBox.style.flexDirection = FlexDirection.Row;
            Box FocalBox = new Box();
            FocalBox.Add(FocalLabel);
@@ -1186,7 +1186,9 @@ Toolbar toolbar;
             TonemapSettings.Add("Uchimura");
             TonemapSettings.Add("Reinhard");
             TonemapSettings.Add("Uncharted 2");
-            PopupField<string> ToneMapField = new PopupField<string>("Tonemapper");
+            TonemapSettings.Add("AgX");
+            PopupField<string> ToneMapField = new PopupField<string>("<b>Tonemapper</b>");
+            ToneMapField.ElementAt(0).style.minWidth = 65;
             ToneMapField.choices = TonemapSettings;
             ToneMapField.index = RayMaster.ToneMapper;
             ToneMapField.RegisterValueChangedCallback(evt => {RayMaster.ToneMapper = ToneMapField.index;});
@@ -1210,6 +1212,7 @@ Toolbar toolbar;
             VisualElement PartialRenderingFoldout = new VisualElement() {};
                PartialRenderingFoldout.style.flexDirection = FlexDirection.Row;
                IntegerField PartialRenderingField = new IntegerField() {value = PartialRenderingFactor, label = "Partial Factor"};
+               PartialRenderingField.ElementAt(0).style.minWidth = 65;
                PartialRenderingField.RegisterValueChangedCallback(evt => {PartialRenderingFactor = evt.newValue; PartialRenderingFactor = Mathf.Max(PartialRenderingFactor, 1); RayMaster.PartialRenderingFactor = PartialRenderingFactor;});
                PartialRenderingFoldout.Add(PartialRenderingField);
            DoPartialRenderingToggle = new Toggle() {value = DoPartialRendering, text = "Use Partial Rendering"};
@@ -1273,6 +1276,45 @@ Toolbar toolbar;
 
         }
         void Update() {
+            if(!Application.isPlaying) {
+               foreach(var A in RayObjects.Values) {
+                  if(A.RayObj != null && A.RayObj.GetComponent<RayTracingObject>() != null) {
+                     RayTracingObject a = A.RayObj.GetComponent<RayTracingObject>();
+                     for(int i = 0; i < a.BaseColor.Length; i++) {
+                        a.BaseColor[i] = A.RayData[i].BaseColor;
+                        a.TransmissionColor[i] = A.RayData[i].TransmittanceColor;
+                        a.MetallicRemap[i] = A.RayData[i].MetallicRemap;
+                        a.RoughnessRemap[i] = A.RayData[i].RoughnessRemap;
+                        a.emmission[i] = A.RayData[i].emmission;
+                        a.EmissionColor[i] = A.RayData[i].EmissionColor;
+                        a.EmissionMask[i] = A.RayData[i].EmissionMask;
+                        a.BaseIsMap[i] = A.RayData[i].BaseIsMap;
+                        a.ReplaceBase[i] = A.RayData[i].ReplaceBase;
+                        a.Roughness[i] = A.RayData[i].Roughness;
+                        a.IOR[i] = A.RayData[i].IOR;
+                        a.Metallic[i] = A.RayData[i].Metallic;
+                        a.SpecularTint[i] = A.RayData[i].SpecularTint;
+                        a.Sheen[i] = A.RayData[i].Sheen;
+                        a.SheenTint[i] = A.RayData[i].SheenTint;
+                        a.ClearCoat[i] = A.RayData[i].ClearCoat;
+                        a.ClearCoatGloss[i] = A.RayData[i].ClearCoatGloss;
+                        a.Anisotropic[i] = A.RayData[i].Anisotropic;
+                        a.Flatness[i] = A.RayData[i].Flatness;
+                        a.DiffTrans[i] = A.RayData[i].DiffTrans;
+                        a.SpecTrans[i] = A.RayData[i].SpecTrans;
+                        a.Thin[i] = A.RayData[i].Thin;
+                        a.FollowMaterial[i] = A.RayData[i].FollowMaterial;
+                        a.ScatterDist[i] = A.RayData[i].ScatterDist;
+                        a.Specular[i] = A.RayData[i].Specular;
+                        a.AlphaCutoff[i] = A.RayData[i].AlphaCutoff;
+                        a.IsSmoothness[i] = A.RayData[i].IsSmoothness;
+                        a.NormalStrength[i] = A.RayData[i].NormalStrength;
+                     }
+                  }
+               }
+               RayObjects.Clear();
+            }
+
             if(Assets != null && Instancer != null && Assets.RunningTasks != null && Instancer.RunningTasks != null) RemainingObjectsField.value = Assets.RunningTasks + Instancer.RunningTasks;
             if(RayMaster != null) SampleCountField.value = RayMaster.SampleCount;
             

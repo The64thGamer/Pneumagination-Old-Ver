@@ -241,7 +241,7 @@ namespace TrueTrace {
         private int TextureParse(ref Vector4 RefMat, Material Mat, string TexName, ref List<Texture> Texs, ref float TextureIndex) {
             TextureIndex = 0;
             if (Mat.HasProperty(TexName) && Mat.GetTexture(TexName) as Texture2D != null) {
-                if(RefMat.x == 0) RefMat = new Vector4(Mat.GetTextureScale(TexName).x, Mat.GetTextureScale(TexName).y, Mat.GetTextureOffset(TexName).x, Mat.GetTextureOffset(TexName).y);
+                if(RefMat.x == 0) RefMat = new Vector4(Mat.mainTextureScale.x, Mat.mainTextureScale.y, Mat.mainTextureOffset.x, Mat.mainTextureOffset.y);
                 Texture Tex = Mat.GetTexture(TexName);
                 TextureIndex = Texs.IndexOf(Tex) + 1;
                 if (TextureIndex != 0) {
@@ -307,9 +307,9 @@ namespace TrueTrace {
                     MaterialShader RelevantMat = AssetManager.data.Material[Index];
                     if(!RelevantMat.MetallicRange.Equals("null") && JustCreated) obj.Metallic[i] = SharedMaterials[i].GetFloat(RelevantMat.MetallicRange);
                     if(!RelevantMat.RoughnessRange.Equals("null") && JustCreated) obj.Roughness[i] = SharedMaterials[i].GetFloat(RelevantMat.RoughnessRange);
-                    if(RelevantMat.MetallicRemapMin != null && !RelevantMat.MetallicRemapMin.Equals("null")) obj.MetallicRemap[i] = new Vector2(SharedMaterials[i].GetFloat(RelevantMat.MetallicRemapMin), SharedMaterials[i].GetFloat(RelevantMat.MetallicRemapMax));
+                    if(RelevantMat.MetallicRemapMin != null && !RelevantMat.MetallicRemapMin.Equals("null") && JustCreated) obj.MetallicRemap[i] = new Vector2(SharedMaterials[i].GetFloat(RelevantMat.MetallicRemapMin), SharedMaterials[i].GetFloat(RelevantMat.MetallicRemapMax));
                     else obj.MetallicRemap[i] = new Vector2(0, 1);
-                    if(RelevantMat.RoughnessRemapMin != null && !RelevantMat.RoughnessRemapMin.Equals("null")) obj.RoughnessRemap[i] = new Vector2(SharedMaterials[i].GetFloat(RelevantMat.RoughnessRemapMin), SharedMaterials[i].GetFloat(RelevantMat.RoughnessRemapMax));
+                    if(RelevantMat.RoughnessRemapMin != null && !RelevantMat.RoughnessRemapMin.Equals("null") && JustCreated) obj.RoughnessRemap[i] = new Vector2(SharedMaterials[i].GetFloat(RelevantMat.RoughnessRemapMin), SharedMaterials[i].GetFloat(RelevantMat.RoughnessRemapMax));
                     else obj.RoughnessRemap[i] = new Vector2(0, 1);
                     if(!RelevantMat.BaseColorValue.Equals("null") && JustCreated) obj.BaseColor[i] = (Vector3)((Vector4)SharedMaterials[i].GetColor(RelevantMat.BaseColorValue));
                     else if(JustCreated) obj.BaseColor[i] = new Vector3(1,1,1);

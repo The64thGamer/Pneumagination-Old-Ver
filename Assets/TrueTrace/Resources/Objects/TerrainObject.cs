@@ -119,9 +119,8 @@ namespace TrueTrace {
         public TreeInstance[] Trees;
         public DetailedObjectInstance[] Details;
         // Start is called before the first frame update
-        public List<Texture> MetallicTexs;
-        public List<Texture> RoughnessTexs;
         public List<MaterialData> Materials;
+        public List<Texture> MaskTexs;
         public List<Texture> AlbedoTexs;
         public List<Texture> NormalTexs;
 
@@ -163,8 +162,7 @@ namespace TrueTrace {
 
             AlbedoTexs = new List<Texture>();
             NormalTexs = new List<Texture>();
-            MetallicTexs = new List<Texture>();
-            RoughnessTexs = new List<Texture>();
+            MaskTexs = new List<Texture>();
             Materials = new List<MaterialData>();
 
             int TerrainLayerCount = TerrainTile.terrainData.terrainLayers.Length;
@@ -173,6 +171,8 @@ namespace TrueTrace {
                 MaterialData MatDat = new MaterialData();
                 TextureParse(ref AlbedoTexs, ref MatDat.AlbedoTex.w, TerrainTile.terrainData.terrainLayers[i].diffuseTexture);
                 TextureParse(ref NormalTexs, ref MatDat.NormalTex.w, TerrainTile.terrainData.terrainLayers[i].normalMapTexture);
+                TextureParse(ref MaskTexs, ref MatDat.MetallicTex.w, TerrainTile.terrainData.terrainLayers[i].maskMapTexture);
+                TextureParse(ref MaskTexs, ref MatDat.RoughnessTex.w, TerrainTile.terrainData.terrainLayers[i].maskMapTexture);
 
                 MatDat.metallic = TerrainTile.terrainData.terrainLayers[i].metallic;
                 MatDat.Specular = 0;//TerrainTile.terrainData.terrainLayers[i].smoothness,
@@ -180,6 +180,7 @@ namespace TrueTrace {
                 MatDat.BaseColor = new Vector3(TerrainTile.terrainData.size.x / TerrainTile.terrainData.terrainLayers[i].tileSize.x, TerrainTile.terrainData.size.z / TerrainTile.terrainData.terrainLayers[i].tileSize.y, 0);
                 MatDat.TransmittanceColor = new Vector3(TerrainTile.terrainData.terrainLayers[i].tileOffset.x / TerrainTile.terrainData.terrainLayers[i].tileSize.x, TerrainTile.terrainData.terrainLayers[i].tileOffset.y / TerrainTile.terrainData.terrainLayers[i].tileSize.y, 0);
                 MatDat.MatType = 1;
+                MatDat.IsSmoothness = 1;
                 MatDat.AlbedoTextureScale = new Vector4(1,1,0,0);
                 Materials.Add(MatDat);
             }

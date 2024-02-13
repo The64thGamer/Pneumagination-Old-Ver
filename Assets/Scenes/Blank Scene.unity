@@ -251,55 +251,43 @@ MonoBehaviour:
     Softness: 0
   ArrayIndex: 0
   ShadowSoftness: 0
---- !u!1 &432432459
-GameObject:
+--- !u!84 &646261475
+RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 432432461}
-  - component: {fileID: 432432460}
-  m_Layer: 0
-  m_Name: Sky and Fog Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!114 &432432460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 432432459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 0}
---- !u!4 &432432461
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 432432459}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.955317, y: 1.1591134, z: -7.0465026}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1382779751}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 1
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &794460553
 GameObject:
   m_ObjectHideFlags: 19
@@ -634,6 +622,8 @@ MonoBehaviour:
   - 0
   AlphaCutoff:
   - 0.1
+  NormalStrength:
+  - 1
   IsSmoothness: 00
   Selected: 0
   Indexes: 00000000
@@ -643,6 +633,7 @@ MonoBehaviour:
   LocalMaterialIndex: 00000000
   JustCreated: 0
   TilingChanged: 0
+  MatOffset: 0
 --- !u!65 &1105671740
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -765,11 +756,11 @@ MonoBehaviour:
   AggIndexCount: 0
   AggBVHNodeCount: 0
   _Materials:
-  - AlbedoTex: {x: 0, y: 0, z: 0, w: 0}
-    NormalTex: {x: 0, y: 0, z: 0, w: 0}
+  - AlbedoTex: {x: 0, y: 0, z: 0, w: 1}
+    NormalTex: {x: 0, y: 0, z: 0, w: 1}
     EmissiveTex: {x: 0, y: 0, z: 0, w: 0}
     MetallicTex: {x: 0, y: 0, z: 0, w: 0}
-    RoughnessTex: {x: 0, y: 0, z: 0, w: 0}
+    RoughnessTex: {x: 0, y: 0, z: 0, w: 1}
     BaseColor: {x: 1, y: 1, z: 1}
     emmissive: 0
     EmissionColor: {x: 1, y: 1, z: 1}
@@ -796,6 +787,7 @@ MonoBehaviour:
     MetallicRemap: {x: 0, y: 1}
     RoughnessRemap: {x: 0, y: 1}
     AlphaCutoff: 0
+    NormalStrength: 0
   MatOffset: 1
   CachedTransforms:
   - WTL:
@@ -840,6 +832,7 @@ MonoBehaviour:
     Normals: []
     Tangents: []
     UVs: []
+    LightmapUVs: []
     MatDat: 
   TotalObjects: 1
   TransformIndexes:
@@ -857,7 +850,7 @@ MonoBehaviour:
   NodeInitializerKernel: 6
   CompactedMeshData: 0
   InstanceReferences: 0
-  NeedsToUpdate: 1
+  NeedsToUpdate: 0
   Assets: {fileID: 1948616041}
   FailureCount: 0
   TotalTriangles: 0
@@ -877,31 +870,14 @@ MonoBehaviour:
   SplitNodes: []
   AlbedoTexs:
   - {fileID: 2800000, guid: 5e0edc916bbc0034ca2c9a5ea501a907, type: 3}
-  AlbedoIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 1105671739}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
   NormalTexs:
   - {fileID: 2800000, guid: cd57e8098c5edcd4496551493524bbec, type: 3}
-  NormalIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 1105671739}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
   MetallicTexs: []
-  MetallicIndexes: []
   MetallicTexChannelIndex: 
   RoughnessTexs:
   - {fileID: 2800000, guid: 3a2bc42be79f3154cb4e795abba073ad, type: 3}
-  RoughnessIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 1105671739}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
   RoughnessTexChannelIndex: 00000000
   EmissionTexs: []
-  EmissionIndexes: []
   ChildObjectTransforms:
   - {fileID: 1105671737}
   center: {x: 0, y: 0, z: 0}
@@ -981,8 +957,6 @@ Transform:
   m_Children:
   - {fileID: 157207114}
   - {fileID: 802512351}
-  - {fileID: 432432461}
-  - {fileID: 2113371788}
   m_Father: {fileID: 1788443484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1389536466
@@ -1015,7 +989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0883c097b7ff21f4e8ef2af8dd2c0af1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deadInterface: {fileID: 1913721400}
+  deadInterface: {fileID: 0}
   defaultAudioSlot: 0
   defaultAudioChannel: 0
   commands:
@@ -1137,43 +1111,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &1447006723
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 1
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &1690059080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1235,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1913721396}
   - component: {fileID: 1913721398}
-  - component: {fileID: 1913721400}
   - component: {fileID: 1913721403}
   - component: {fileID: 1913721404}
   m_Layer: 0
@@ -1359,297 +1295,6 @@ MonoBehaviour:
     startingColorLight: {r: 0, g: 0, b: 0, a: 0}
     startingColorDark: {r: 0, g: 0, b: 0, a: 0}
   retryMap: 0
---- !u!114 &1913721400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1913721395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7266ff4cfe620c44ab175fb6a8b49a4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tapeRewindSpeed: -1.5
-  tapePlaySpeed: 1
-  fallbackPsi: 40
-  dataTransferUnit:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  activeShowtapeSlot: 0
-  commands:
-  - triggerString: Debug Log
-    function: 0
-  - triggerString: Play
-    function: 1
-  - triggerString: Pause
-    function: 2
-  - triggerString: Rewind
-    function: 3
-  dtuSet:
-    m_PersistentCalls:
-      m_Calls: []
-  commandSet:
-    m_PersistentCalls:
-      m_Calls: []
-  commandSetOnlyRecordables:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1913721403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1714,7 +1359,7 @@ MonoBehaviour:
   SampleCount: 0
   IndirectBoost: 1
   bouncecount: 7
-  UseSVGF: 0
+  ClayMode: 0
   UseRussianRoulette: 1
   UseNEE: 1
   DoTLASUpdates: 1
@@ -1725,6 +1370,7 @@ MonoBehaviour:
   AllowToneMap: 1
   AllowTAA: 1
   DoFAperature: 0
+  DoFAperatureScale: 1
   DoFFocal: 1
   RenderScale: 1
   BloomStrength: 104.96
@@ -1754,7 +1400,6 @@ MonoBehaviour:
   SceneBackgroundColor: {x: 1, y: 1, z: 1}
   SkyboxTexture: {fileID: 0}
   BackgroundIntensity: 1
-  SVGFAtrousKernelSizes: 4
   AtmoNumLayers: 4
 --- !u!114 &1948616041
 MonoBehaviour:
@@ -1769,9 +1414,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TotalParentObjectSize: 0
+  LightEnergyScale: 1
   AlbedoAtlasSize: 0
   VideoPlayerObject: {fileID: 0}
-  VideoTexture: {fileID: 1447006723}
+  VideoTexture: {fileID: 646261475}
   MaterialsChanged: []
   _Materials: []
   MyMeshesCompacted: []
@@ -1786,13 +1432,9 @@ MonoBehaviour:
   BuildQue:
   - {fileID: 1105671743}
   - {fileID: 2014073698}
-  - {fileID: 0}
   AddQue: []
   RemoveQue: []
-  UpdateQue:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  UpdateQue: []
   InstanceRenderQue: []
   InstanceUpdateQue: []
   InstanceRenderTransforms: []
@@ -1800,10 +1442,8 @@ MonoBehaviour:
   InstanceAddQue: []
   InstanceRemoveQue: []
   LightTransforms: []
-  DesiredRes: 16300
+  MainDesiredRes: 16300
   MatCount: 0
-  NormalSize: 0
-  EmissiveSize: 0
   LightMeshes: []
   MeshAABBs: []
   ParentCountHasChanged: 0
@@ -2079,11 +1719,11 @@ MonoBehaviour:
   AggIndexCount: 0
   AggBVHNodeCount: 0
   _Materials:
-  - AlbedoTex: {x: 0, y: 0, z: 0, w: 0}
-    NormalTex: {x: 0, y: 0, z: 0, w: 0}
+  - AlbedoTex: {x: 0, y: 0, z: 0, w: 1}
+    NormalTex: {x: 0, y: 0, z: 0, w: 1}
     EmissiveTex: {x: 0, y: 0, z: 0, w: 0}
     MetallicTex: {x: 0, y: 0, z: 0, w: 0}
-    RoughnessTex: {x: 0, y: 0, z: 0, w: 0}
+    RoughnessTex: {x: 0, y: 0, z: 0, w: 1}
     BaseColor: {x: 1, y: 1, z: 1}
     emmissive: 0
     EmissionColor: {x: 1, y: 1, z: 1}
@@ -2110,6 +1750,7 @@ MonoBehaviour:
     MetallicRemap: {x: 0, y: 1}
     RoughnessRemap: {x: 0, y: 1}
     AlphaCutoff: 0
+    NormalStrength: 0
   MatOffset: 1
   CachedTransforms:
   - WTL:
@@ -2154,6 +1795,7 @@ MonoBehaviour:
     Normals: []
     Tangents: []
     UVs: []
+    LightmapUVs: []
     MatDat: 
   TotalObjects: 1
   TransformIndexes:
@@ -2191,31 +1833,14 @@ MonoBehaviour:
   SplitNodes: []
   AlbedoTexs:
   - {fileID: 2800000, guid: 5e0edc916bbc0034ca2c9a5ea501a907, type: 3}
-  AlbedoIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 2014073699}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
   NormalTexs:
   - {fileID: 2800000, guid: cd57e8098c5edcd4496551493524bbec, type: 3}
-  NormalIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 2014073699}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
   MetallicTexs: []
-  MetallicIndexes: []
   MetallicTexChannelIndex: 
   RoughnessTexs:
   - {fileID: 2800000, guid: 3a2bc42be79f3154cb4e795abba073ad, type: 3}
-  RoughnessIndexes:
-  - RayObjectList:
-    - Obj: {fileID: 2014073699}
-      Terrain: {fileID: 0}
-      ObjIndex: 0
   RoughnessTexChannelIndex: 00000000
   EmissionTexs: []
-  EmissionIndexes: []
   ChildObjectTransforms:
   - {fileID: 2014073696}
   center: {x: 0, y: 0, z: 0}
@@ -2284,6 +1909,8 @@ MonoBehaviour:
   - 0
   AlphaCutoff:
   - 0.1
+  NormalStrength:
+  - 1
   IsSmoothness: 00
   Selected: 0
   Indexes: 00000000
@@ -2293,37 +1920,7 @@ MonoBehaviour:
   LocalMaterialIndex: 00000000
   JustCreated: 0
   TilingChanged: 0
---- !u!1 &2113371787
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2113371788}
-  m_Layer: 0
-  m_Name: Probes
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2113371788
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113371787}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1382779751}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  MatOffset: 0
 --- !u!1001 &8932283946087812659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2335,7 +1932,7 @@ PrefabInstance:
     - target: {fileID: 2219712907563678121, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
       propertyPath: deadInterface
       value: 
-      objectReference: {fileID: 1913721400}
+      objectReference: {fileID: 0}
     - target: {fileID: 3443166164764453272, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2439,7 +2036,7 @@ PrefabInstance:
     - target: {fileID: 9031352389853259661, guid: 1c330a5dda1766344b18a150867e4570, type: 3}
       propertyPath: deadInterface
       value: 
-      objectReference: {fileID: 1913721400}
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 0}

@@ -45,6 +45,8 @@ namespace TrueTrace {
 
         private RenderTexture Gradients;
 
+        private RenderTexture GISecondBounceA;
+        private RenderTexture GISecondBounceB;
 
         #if TTLightMapping
             public RenderTexture LightMapTemp; 
@@ -78,6 +80,7 @@ namespace TrueTrace {
         #endif
 
         private Texture3D ToneMapTex;
+        private Texture3D ToneMapTex2;
         private Material _addMaterial;
         private Material _FireFlyMaterial;
         private int _currentSample = 0;
@@ -95,7 +98,7 @@ namespace TrueTrace {
         private int uFirstFrame = 1;
         [HideInInspector] public float IndirectBoost = 1;
         [HideInInspector] public int bouncecount = 24;
-        [HideInInspector] public bool UseSVGF = false;
+        [HideInInspector] public bool ClayMode = false;
         [HideInInspector] public bool UseRussianRoulette = true;
         [HideInInspector] public bool UseNEE = true;
         [HideInInspector] public bool DoTLASUpdates = true;
@@ -106,6 +109,7 @@ namespace TrueTrace {
         [HideInInspector] public bool AllowToneMap = true;
         [HideInInspector] public bool AllowTAA = false;
         [HideInInspector] public float DoFAperature = 0.2f;
+        [HideInInspector] public float DoFAperatureScale = 1.0f;
         [HideInInspector] public float DoFFocal = 0.2f;
         [HideInInspector] public float RenderScale = 1.0f;
         [HideInInspector] public float BloomStrength = 32.0f;
@@ -140,8 +144,6 @@ namespace TrueTrace {
         private bool MeshOrderChanged = false;
 
 
-
-        [HideInInspector] public int SVGFAtrousKernelSizes = 6;
         [HideInInspector] public int AtmoNumLayers = 4;
         private float PrevResFactor;
         private int GenKernel;
@@ -195,6 +197,7 @@ namespace TrueTrace {
             ReCurDen = new ReCurDenoiser();
             ReSTIRASVGFCode = new ReSTIRASVGF();
             ToneMapTex = Resources.Load<Texture3D>("Utility/ToneMapTex");
+            ToneMapTex2 = Resources.Load<Texture3D>("Utility/AgXBC");
             if (ShadingShader == null) {ShadingShader = Resources.Load<ComputeShader>("MainCompute/RayTracingShader"); }
             if (IntersectionShader == null) {IntersectionShader = Resources.Load<ComputeShader>("MainCompute/IntersectionKernels"); }
             if (GenerateShader == null) {GenerateShader = Resources.Load<ComputeShader>("MainCompute/RayGenKernels"); }
@@ -217,7 +220,7 @@ namespace TrueTrace {
             FinalizeKernel = ShadingShader.FindKernel("kernel_finalize");
             HeightmapShadowKernel = IntersectionShader.FindKernel("kernel_shadow_heightmap");
             HeightmapKernel = IntersectionShader.FindKernel("kernel_heightmap");
-            GIReTraceKernel = ShadingShader.FindKernel("GIReTraceKernel");
+            GIReTraceKernel = GenerateShader.FindKernel("GIReTraceKernel");
             TransferKernel = ShadingShader.FindKernel("TransferKernel");
             CorrectedDistanceKernel = ShadingShader.FindKernel("DepthCopyKernel");
             ReSTIRCorectKernel = ShadingShader.FindKernel("ReSTIRCorectKernel");
@@ -333,7 +336,7 @@ namespace TrueTrace {
                         MeshOrderChanged = false;
                         cmd.BeginSample("Update Materials");
                         cmd.SetBufferData(_CompactedMeshData, Assets.MyMeshesCompacted);
-                        if (Assets.LightMeshCount != 0) cmd.SetBufferData(_LightMeshes, Assets.LightMeshes);
+                        if (Assets.LightMeshCount != 0 && Assets.LightMeshCount == _LightMeshes.count) cmd.SetBufferData(_LightMeshes, Assets.LightMeshes);
                         if (Assets.UnityLightCount != 0) cmd.SetBufferData(_UnityLights, Assets.UnityLights);
                         if(Assets.UpdateMaterials()) _MaterialDataBuffer.SetData(Assets._Materials);
                         cmd.EndSample("Update Materials");
@@ -415,8 +418,6 @@ namespace TrueTrace {
             else if ((!ReSTIRDenoiser || !UseReSTIRGI) && ReSTIRASVGFCode.Initialized) ReSTIRASVGFCode.ClearAll();
             if (UseASVGF && !ASVGFCode.Initialized) ASVGFCode.init(SourceWidth, SourceHeight);
             else if (!UseASVGF && ASVGFCode.Initialized) ASVGFCode.ClearAll();
-            if (UseSVGF && !Denoisers.SVGFInitialized && !UseASVGF) Denoisers.InitSVGF(SourceWidth, SourceHeight);
-            else if ((UseASVGF || !UseSVGF) && Denoisers.SVGFInitialized) Denoisers.ClearSVGF();
             if (!UseReCur && PrevReCur) ReCurDen.ClearAll();
             else if(!PrevReCur && UseReCur) ReCurDen.init(SourceWidth, SourceHeight);
             if(Denoisers.Initialized == false) Denoisers.init(SourceWidth, SourceHeight);
@@ -465,7 +466,7 @@ namespace TrueTrace {
             Shader.SetGlobalInt("PartialRenderingFactor", PartialRenderingFactor);
             SetFloat("FarPlane", _camera.farClipPlane);
             SetFloat("focal_distance", DoFFocal);
-            SetFloat("AperatureRadius", DoFAperature);
+            SetFloat("AperatureRadius", DoFAperature * DoFAperatureScale);
             SetFloat("sun_angular_radius", 0.1f);
             SetFloat("IndirectBoost", IndirectBoost);
             SetFloat("fps", 1.0f / Time.smoothDeltaTime);
@@ -482,7 +483,7 @@ namespace TrueTrace {
             SetInt("screen_width", SourceWidth, cmd);
             SetInt("screen_height", SourceHeight, cmd);
             SetInt("MaxBounce", bouncecount - 1, cmd);
-            SetInt("frames_accumulated", _currentSample, cmd);
+            SetInt("frames_accumulated", _currentSample % 65000, cmd);
             SetInt("ReSTIRGISpatialCount", ReSTIRGISpatialCount, cmd);
             SetInt("ReSTIRGITemporalMCap", ReSTIRGITemporalMCap, cmd);
             SetInt("curframe", FramesSinceStart2, cmd);
@@ -491,16 +492,13 @@ namespace TrueTrace {
             SetInt("TargetWidth", TargetWidth, cmd);
             SetInt("TargetHeight", TargetHeight, cmd);
             SetInt("RISCount", RISCount, cmd);
-            SetInt("NormalSize", Assets.NormalSize, cmd);
-            SetInt("EmissiveSize", Assets.EmissiveSize, cmd);
             SetInt("BackgroundType", BackgroundType, cmd);
             SetInt("MaterialCount", Assets.MatCount, cmd);
             SetInt("PartialRenderingFactor", PartialRenderingFactor, cmd);
-            SetFloat("AtlasSize", Assets.DesiredRes);
             SetFloat("BackgroundIntensity", BackgroundIntensity);
-            SetInt("AlbedoAtlasSize", Assets.AlbedoAtlasSize, cmd);
             SetInt("PartialRenderingFactor", DoPartialRendering ? PartialRenderingFactor : 1, cmd);
 
+            SetBool("ClayMode", ClayMode);
             SetBool("UseReCur", UseReCur);
             SetBool("ImprovedPrimaryHit", ImprovedPrimaryHit);
             SetBool("UseRussianRoulette", UseRussianRoulette);
@@ -536,7 +534,7 @@ namespace TrueTrace {
 
 
             ShadingShader.SetTextureFromGlobal(CorrectedDistanceKernel, "Depth", "_CameraDepthTexture");
-            ShadingShader.SetTextureFromGlobal(GIReTraceKernel, "MotionVectors", "_CameraMotionVectorsTexture");
+            GenerateShader.SetTextureFromGlobal(GIReTraceKernel, "MotionVectors", "_CameraMotionVectorsTexture");
             ReSTIRGI.SetTextureFromGlobal(ReSTIRGIKernel, "MotionVectors", "_CameraMotionVectorsTexture");
             ShadingShader.SetTextureFromGlobal(ShadeKernel, "MotionVectors", "_CameraMotionVectorsTexture");
 
@@ -582,7 +580,6 @@ namespace TrueTrace {
             GenerateShader.SetTexture(GenASVGFKernel, "WorldPosA", GIWorldPosA);
             GenerateShader.SetTexture(GenASVGFKernel, "NEEPosA", FlipFrame ? GINEEPosA : GINEEPosB);
 
-            GenerateShader.SetTexture(GenKernel, "CorrectedDepthTex", FlipFrame ? CorrectedDistanceTex : CorrectedDistanceTexB);
             GenerateShader.SetTexture(GenKernel, "RandomNums", (FramesSinceStart2 % 2 == 0) ? _RandomNums : _RandomNumsB);
             GenerateShader.SetComputeBuffer(GenKernel, "GlobalRays", _RayBuffer);
             GenerateShader.SetComputeBuffer(GenKernel, "GlobalColors", LightingBuffer);
@@ -651,6 +648,7 @@ namespace TrueTrace {
             ShadingShader.SetTexture(ShadeKernel, "TransmittanceTex", Atmo._TransmittanceLUT);
             ShadingShader.SetTexture(ShadeKernel, "TempAlbedoTex", _Albedo);
             ShadingShader.SetTexture(ShadeKernel, "VideoTex", Assets.VideoTexture);
+            ShadingShader.SetTexture(ShadeKernel, "ScreenSpaceInfoRead", FlipFrame ? ScreenSpaceInfo : ScreenSpaceInfoPrev);//this and the one below may break in dx11?
             ShadingShader.SetTexture(ShadeKernel, "ScreenSpaceInfo", FlipFrame ? ScreenSpaceInfo : ScreenSpaceInfoPrev);
             ShadingShader.SetComputeBuffer(ShadeKernel, "Terrains", Assets.TerrainBuffer);
             ShadingShader.SetComputeBuffer(ShadeKernel, "_LightMeshes", _LightMeshes);
@@ -672,16 +670,16 @@ namespace TrueTrace {
             ShadingShader.SetComputeBuffer(ReSTIRCorectKernel, "PrevGlobalColorsB", FlipFrame ? PrevLightingBufferB : PrevLightingBufferA);
 
 
-            ShadingShader.SetComputeBuffer(GIReTraceKernel, "GlobalRays", _RayBuffer);
-            ShadingShader.SetComputeBuffer(GIReTraceKernel, "GlobalColors", LightingBuffer);
-            ShadingShader.SetTexture(GIReTraceKernel, "WorldPosA", GIWorldPosA);
-            ShadingShader.SetTexture(GIReTraceKernel, "NEEPosA", FlipFrame ? GINEEPosA : GINEEPosB);
-            ShadingShader.SetComputeBuffer(GIReTraceKernel, "PrevGlobalColorsA", FlipFrame ? PrevLightingBufferA : PrevLightingBufferB);
-            ShadingShader.SetBuffer(GIReTraceKernel, "Rays", FlipFrame ? RaysBuffer : RaysBufferB);
-            ShadingShader.SetTexture(GIReTraceKernel, "RandomNumsWrite", FlipFrame ? _RandomNums : _RandomNumsB);
-            ShadingShader.SetTexture(GIReTraceKernel, "ReservoirA", !FlipFrame ? GIReservoirB : GIReservoirC);
-            ShadingShader.SetTexture(GIReTraceKernel, "RandomNums", !FlipFrame ? _RandomNums : _RandomNumsB);
-            ShadingShader.SetTexture(GIReTraceKernel, "ScreenSpaceInfo", !FlipFrame ? ScreenSpaceInfo : ScreenSpaceInfoPrev);
+            GenerateShader.SetComputeBuffer(GIReTraceKernel, "GlobalRays", _RayBuffer);
+            GenerateShader.SetComputeBuffer(GIReTraceKernel, "GlobalColors", LightingBuffer);
+            GenerateShader.SetTexture(GIReTraceKernel, "WorldPosA", GIWorldPosA);
+            GenerateShader.SetTexture(GIReTraceKernel, "NEEPosA", FlipFrame ? GINEEPosA : GINEEPosB);
+            GenerateShader.SetComputeBuffer(GIReTraceKernel, "PrevGlobalColorsA", FlipFrame ? PrevLightingBufferA : PrevLightingBufferB);
+            GenerateShader.SetBuffer(GIReTraceKernel, "Rays", FlipFrame ? RaysBuffer : RaysBufferB);
+            GenerateShader.SetTexture(GIReTraceKernel, "RandomNumsWrite", FlipFrame ? _RandomNums : _RandomNumsB);
+            GenerateShader.SetTexture(GIReTraceKernel, "ReservoirA", !FlipFrame ? GIReservoirB : GIReservoirC);
+            GenerateShader.SetTexture(GIReTraceKernel, "RandomNums", !FlipFrame ? _RandomNums : _RandomNumsB);
+            GenerateShader.SetTexture(GIReTraceKernel, "ScreenSpaceInfo", !FlipFrame ? ScreenSpaceInfo : ScreenSpaceInfoPrev);
 
 
             ReSTIRGI.SetComputeBuffer(ReSTIRGIKernel, "TLASBVH8Indices", Assets.TLASCWBVHIndexes);
@@ -697,6 +695,8 @@ namespace TrueTrace {
             ReSTIRGI.SetTexture(ReSTIRGIKernel, "RandomNums", FlipFrame ? _RandomNums : _RandomNumsB);
             ReSTIRGI.SetTexture(ReSTIRGIKernel, "PrevScreenSpaceInfo", FlipFrame ? ScreenSpaceInfoPrev : ScreenSpaceInfo);
             ReSTIRGI.SetTexture(ReSTIRGIKernel, "ScreenSpaceInfoRead", FlipFrame ? ScreenSpaceInfo : ScreenSpaceInfoPrev);
+            ReSTIRGI.SetTexture(ReSTIRGIKernel, "SecondaryScreenSpaceInfoRead", FlipFrame ? GISecondBounceA : GISecondBounceB);
+            ReSTIRGI.SetTexture(ReSTIRGIKernel, "PrevSecondaryScreenSpaceInfoRead", !FlipFrame ? GISecondBounceA : GISecondBounceB);
             ReSTIRGI.SetTexture(ReSTIRGIKernel, "GradientWrite", Gradients);
             ReSTIRGI.SetComputeBuffer(ReSTIRGIKernel, "PrevGlobalColorsA", FlipFrame ? PrevLightingBufferA : PrevLightingBufferB);
             ReSTIRGI.SetComputeBuffer(ReSTIRGIKernel, "PrevGlobalColorsB", FlipFrame ? PrevLightingBufferB : PrevLightingBufferA);
@@ -735,7 +735,6 @@ namespace TrueTrace {
                 PrevResFactor = RenderScale;
                 if(ReSTIRDenoiser && UseReSTIRGI) {ReSTIRASVGFCode.ClearAll(); ReSTIRASVGFCode.init(SourceWidth, SourceHeight);}
                 if (UseASVGF) {ASVGFCode.ClearAll(); ASVGFCode.init(SourceWidth, SourceHeight);}
-                if (UseSVGF && !UseASVGF) {Denoisers.ClearSVGF(); Denoisers.InitSVGF(SourceWidth, SourceHeight);}
                 if(UseReCur) {ReCurDen.ClearAll(); ReCurDen.init(SourceWidth, SourceHeight);}
                 if(Denoisers.Initialized) Denoisers.ClearAll();
                 Denoisers.init(SourceWidth, SourceHeight);
@@ -771,6 +770,16 @@ namespace TrueTrace {
                     CorrectedDistanceTexB.Release();
                     GIReservoirB.Release();
                     GIReservoirC.Release();
+                    GINEEPosA.Release();
+                    GINEEPosB.Release();
+                    GIWorldPosA.Release();
+                    GIWorldPosB.Release();
+                    GIWorldPosC.Release();
+                    _PrimaryTriangleInfo.Release();
+                    ScreenSpaceInfo.Release();
+                    ScreenSpaceInfoPrev.Release();
+                    GISecondBounceA.Release();
+                    GISecondBounceB.Release();
                     Gradients.Release();
                 }
                 CommonFunctions.CreateRenderTexture(ref _DebugTex, SourceWidth, SourceHeight, CommonFunctions.RTHalf4, RenderTextureReadWrite.sRGB);
@@ -790,6 +799,8 @@ namespace TrueTrace {
                 CommonFunctions.CreateRenderTexture(ref _PrimaryTriangleInfo, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
                 CommonFunctions.CreateRenderTexture(ref ScreenSpaceInfo, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
                 CommonFunctions.CreateRenderTexture(ref ScreenSpaceInfoPrev, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
+                CommonFunctions.CreateRenderTexture(ref GISecondBounceA, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
+                CommonFunctions.CreateRenderTexture(ref GISecondBounceB, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
                 CommonFunctions.CreateRenderTexture(ref Gradients, SourceWidth / 3, SourceHeight / 3, CommonFunctions.RTHalf2);
                 #if TTLightMapping
                     CommonFunctions.CreateRenderTexture(ref LightWorldIndex, SourceWidth, SourceHeight, CommonFunctions.RTFull4);
@@ -841,7 +852,7 @@ namespace TrueTrace {
             #else
                 if(UseReSTIRGI && ReSTIRGIUpdateRate != 0) {
                     cmd.BeginSample("ReSTIR GI Reproject");
-                    cmd.DispatchCompute(ShadingShader, GIReTraceKernel, Mathf.CeilToInt(SourceWidth / 24.0f), Mathf.CeilToInt(SourceHeight / 24.0f), 1);
+                    cmd.DispatchCompute(GenerateShader, GIReTraceKernel, Mathf.CeilToInt(SourceWidth / 16.0f), Mathf.CeilToInt(SourceHeight / 16.0f), 1);
                     cmd.EndSample("ReSTIR GI Reproject");
                 } else {
                     cmd.BeginSample("Primary Ray Generation");
@@ -855,6 +866,9 @@ namespace TrueTrace {
                 for (int i = 0; i < bouncecount; i++) {
                     var bouncebounce = i;
                     SetInt("CurBounce", bouncebounce, cmd);
+                    if(UseReSTIRGI && bouncebounce == 1) {
+                        cmd.SetComputeTextureParam(ShadingShader, ShadeKernel, "ScreenSpaceInfo", (FramesSinceStart2 % 2 == 0) ? GISecondBounceA : GISecondBounceB);
+                    }
                     cmd.BeginSample("Transfer Kernel: " + i);
                     cmd.DispatchCompute(ShadingShader, TransferKernel, 1, 1, 1);
                     cmd.EndSample("Transfer Kernel: " + i);
@@ -893,7 +907,7 @@ namespace TrueTrace {
             if (UseReSTIRGI) {
                 SetInt("CurBounce", 0, cmd);
                 cmd.BeginSample("ReSTIRGI Temporal Kernel");
-                cmd.DispatchCompute(ReSTIRGI, ReSTIRGIKernel, Mathf.CeilToInt(SourceWidth / 12.0f), Mathf.CeilToInt(SourceHeight / 12.0f), 1);
+                cmd.DispatchCompute(ReSTIRGI, ReSTIRGIKernel, Mathf.CeilToInt(SourceWidth / 16.0f), Mathf.CeilToInt(SourceHeight / 16.0f), 1);
                 cmd.EndSample("ReSTIRGI Temporal Kernel");
                 cmd.BeginSample("ReSTIRGI CorrectionKernel");
                 cmd.DispatchCompute(ShadingShader, ReSTIRCorectKernel, Mathf.CeilToInt(SourceWidth / 16.0f), Mathf.CeilToInt(SourceHeight / 16.0f), 1);
@@ -901,7 +915,7 @@ namespace TrueTrace {
 
             }
 
-            if (!UseSVGF && !UseASVGF && !UseReCur && !(UseReSTIRGI && ReSTIRDenoiser))
+            if (!UseASVGF && !UseReCur && !(UseReSTIRGI && ReSTIRDenoiser))
             {
                 cmd.BeginSample("Finalize Kernel");
                 cmd.DispatchCompute(ShadingShader, FinalizeKernel, Mathf.CeilToInt(SourceWidth / 16.0f), Mathf.CeilToInt(SourceHeight / 16.0f), 1);
@@ -913,27 +927,7 @@ namespace TrueTrace {
                 _addMaterial.SetFloat("_Sample", CurrentSample);
                 cmd.Blit(_target, _converged, _addMaterial);
                 cmd.EndSample("Finalize Kernel");
-            }
-            else if (!UseASVGF && !UseReCur && !(UseReSTIRGI && ReSTIRDenoiser))
-            {
-                cmd.BeginSample("SVGF");
-                SampleCount = 0;
-                Denoisers.ExecuteSVGF(FramesSinceStart2, 
-                                    SVGFAtrousKernelSizes, 
-                                    ref LightingBuffer, 
-                                    ref _converged, 
-                                    ref _Albedo, 
-                                    ((FramesSinceStart2 % 2 == 0) ? ScreenSpaceInfo : ScreenSpaceInfoPrev),
-                                    ((FramesSinceStart2 % 2 == 1) ? ScreenSpaceInfo : ScreenSpaceInfoPrev),
-                                    GIWorldPosA,
-                                    RenderScale != 1.0f, 
-                                    UseReSTIRGI,
-                                    cmd);
-                CurrentSample = 1;
-                cmd.EndSample("SVGF");
-            }
-            else if(!UseReCur && !(UseReSTIRGI && ReSTIRDenoiser))
-            {
+            } else if(!UseReCur && !(UseReSTIRGI && ReSTIRDenoiser)) {
                 cmd.BeginSample("ASVGF");
                 SampleCount = 0;
                 ASVGFCode.Do(ref LightingBuffer, ref _Albedo, ref _converged, RenderScale, (FramesSinceStart2 % 2 == 1) ? CorrectedDistanceTex : CorrectedDistanceTexB, ((FramesSinceStart2 % 2 == 0) ? ScreenSpaceInfo : ScreenSpaceInfoPrev), cmd, (FramesSinceStart2 % 2 == 0) ? CorrectedDistanceTex : CorrectedDistanceTexB, FramesSinceStart2, ref GIWorldPosA, DoPartialRendering ? PartialRenderingFactor : 1, Denoisers.ExposureBuffer, AllowAutoExpose, IndirectBoost, (FramesSinceStart2 % 2 == 0) ? _RandomNums : _RandomNumsB);
@@ -992,7 +986,7 @@ namespace TrueTrace {
                 Denoisers.ExecuteAutoExpose(ref _FinalTex, Exposure, cmd, DoExposureAuto);
             }
             if (AllowBloom) Denoisers.ExecuteBloom(ref _FinalTex, BloomStrength, cmd);
-            if(AllowToneMap) Denoisers.ExecuteToneMap(ref _FinalTex, cmd, ref ToneMapTex, ToneMapper);
+            if(AllowToneMap) Denoisers.ExecuteToneMap(ref _FinalTex, cmd, ref ToneMapTex, ref ToneMapTex2, ToneMapper);
             if (AllowTAA) Denoisers.ExecuteTAA(ref _FinalTex, _currentSample, cmd);
 
             cmd.Blit(_FinalTex, destination);
