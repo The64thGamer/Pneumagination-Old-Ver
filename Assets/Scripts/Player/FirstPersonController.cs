@@ -12,7 +12,6 @@ namespace StarterAssets
 
         [Header("Objects")]
         [SerializeField] Data_Manager dataManager;
-        [SerializeField] Player_UI editorUI;
         [SerializeField] Hammer_UI hammerUI;
         [SerializeField] Camera _mainCamera;
         [SerializeField] Camera _celCamera;
@@ -71,8 +70,6 @@ namespace StarterAssets
          bool inputJump;
          bool inputCrouch;
          bool inputCrouchAlreadyPressed;
-         bool inputEditorMenu;
-         bool inputEditorMenuAlreadyPressed;
          bool inputRun;
          bool inputFlyMenu;
          bool inputFlyMenuAlreadyPressed;
@@ -123,26 +120,15 @@ namespace StarterAssets
 
         void SwitchUIs(InputAction.CallbackContext context)
         {
-            currentmenu = (currentmenu + 1) % 3;
+            currentmenu = (currentmenu + 1) % 2;
             switch (currentmenu)
             {
                 case 0:
-                    editorUI.enabled = false;
-                    editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
                     hammerUI.enabled = true;
                     hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
                     SetFOV(false);
                     break;
                 case 1:
-                    editorUI.enabled = true;
-                    editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Visible;
-                    hammerUI.enabled = false;
-                    hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
-                    SetFOV(true);
-                    break;
-                case 2:
-                    editorUI.enabled = false;
-                    editorUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
                     hammerUI.enabled = false;
                     hammerUI.GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
                     SetFOV(true);
@@ -158,20 +144,14 @@ namespace StarterAssets
 
 
             //Menu
-            if (!inputFlyMenu)
-            {
-                EditorMenuCheck();
-            }
-            if (!inputEditorMenu)
-            {
-                FlyMenuChuck();
-            }
+            FlyMenuChuck();
+
 
             inputMovement = Vector2.zero;
             inputJump = false;
 
             //Mouselook
-            if (!inputEditorMenu && !inputFlyMenu)
+            if (!inputFlyMenu)
             {
                 GetPlayerCameraInputs();
                 GetPlayerMovingInputs();
@@ -433,50 +413,12 @@ namespace StarterAssets
             return currentPositionData;
         }
 
-        void EditorMenuCheck()
-        {
-            if (editorMenu.action.IsPressed() && !inputEditorMenuAlreadyPressed)
-            {
-                inputEditorMenuAlreadyPressed = true;
-                if (inputEditorMenu)
-                {
-                    inputEditorMenu = !editorUI.CheckIfCanExitMenu();
-                }
-                else
-                {
-                    inputEditorMenu = true;
-                }
-                if (inputEditorMenu)
-                {
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
-                else
-                {
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
-
-            }
-            else if (!editorMenu.action.IsPressed())
-            {
-                inputEditorMenuAlreadyPressed = false;
-            }
-        }
-
         void FlyMenuChuck()
         {
             if (flyMenu.action.IsPressed() && !inputFlyMenuAlreadyPressed)
             {
                 inputFlyMenuAlreadyPressed = true;
-                if (inputFlyMenu)
-                {
-                    inputFlyMenu = !editorUI.CheckIfCanExitMenu();
-                }
-                else
-                {
-                    inputFlyMenu = true;
-                }
+                inputFlyMenu = !inputFlyMenu;
                 if (inputFlyMenu)
                 {
                     Cursor.lockState = CursorLockMode.None;
@@ -527,11 +469,6 @@ namespace StarterAssets
             camOffet.localPosition = new Vector3(0, newHeight, 0);
             _controller.height = newHeight + 0.41f;
             _controller.center = new Vector3(0, (newHeight + 0.41f) / 2.0f, 0);
-        }
-
-        public bool CheckifPlayerInMenu()
-        {
-            return inputEditorMenu;
         }
 
         public void SetFOV(bool on)
