@@ -86,6 +86,11 @@ public class Data_Manager : MonoBehaviour
                 mapData.animatronics[i].position = g.transform.position;
                 mapData.animatronics[i].rotation = g.transform.rotation;
             }
+            PneumagiNode node = g.GetComponentInChildren<PneumagiNode>();
+            if (node != null)
+            {
+                mapData.animatronics[i].nodeData = node.GenerateSaveData();
+            }
         }
         for (int i = 0; i < mapData.propData.Count; i++)
         {
@@ -272,6 +277,21 @@ public class Data_Manager : MonoBehaviour
                 animatronic.AddComponent<PhysicsObject>();
                 Combo_Animatronic combo = animatronic.AddComponent<Combo_Animatronic>();
                 combo.ReassignFullSaveFile(mapData.animatronics[i]);
+
+                PneumagiNode node = animatronic.GetComponentInChildren<PneumagiNode>();
+
+                if (mapData.animatronics[i].nodeData != null && node != null)
+                {
+                    node.SetNodePosition(mapData.animatronics[i].nodeData.position);
+                    node.SetNodeVisibility(mapData.animatronics[i].nodeData.isVisible);
+                    for (int e = 0; e < mapData.animatronics[i].nodeData.outputs.Length; e++)
+                    {
+                        for (int f = 0; f < mapData.animatronics[i].nodeData.outputs[e].recieverNodes.Length; f++)
+                        {
+                            node.AddOutputs(mapData.animatronics[i].nodeData.outputs[e].outputID, mapData.animatronics[i].nodeData.outputs[e].recieverNodes[f].nodeHashID, mapData.animatronics[i].nodeData.outputs[e].recieverNodes[f].recieverInputIDs);
+                        }
+                    }
+                }
             }
         }
         if (addedNewGeoData)

@@ -224,4 +224,5 @@ public class Combo_Animatronic_SaveFile
     public Vector3 position;
     public Quaternion rotation;
     public List<Combo_Part_SaveFile> comboParts;
+    public CustomNodeData nodeData;
 }
