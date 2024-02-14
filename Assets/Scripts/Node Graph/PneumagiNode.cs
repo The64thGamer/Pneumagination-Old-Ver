@@ -7,8 +7,8 @@ using UnityEngine.Events;
 public class PneumagiNode : MonoBehaviour
 {
     [SerializeField]
-    protected List<InputHolder> nodeInputs = new List<InputHolder>();
-    protected List<OutputHolder> nodesToOutputTo = new List<OutputHolder>();
+    List<InputHolder> nodeInputs = new List<InputHolder>();
+    List<OutputHolder> nodesToOutputTo = new List<OutputHolder>();
     Vector2 nodePosition;
     bool nodeVisibility;
 
@@ -94,6 +94,11 @@ public class PneumagiNode : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void AddInputs(List<InputHolder> inputs)
+    {
+        nodeInputs.Concat(inputs);
     }
 
     public CustomNodeData GenerateSaveData()

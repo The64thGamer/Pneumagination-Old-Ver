@@ -7,7 +7,13 @@ public class NodeGraph : MonoBehaviour
 {
     [SerializeField] Transform backingPlane;
     [SerializeField] Camera mainCam;
-    
+    [SerializeField] Transform nodeHolder;
+
+    [Header("Prefabs")]
+    [SerializeField] GameObject blankNodePrefab;
+    [SerializeField] GameObject keyboardNodePrefab;
+
+
     int zoomLevel = 10;
     Vector2 screenRes;
 
@@ -18,6 +24,7 @@ public class NodeGraph : MonoBehaviour
     {
         screenRes = new Vector2(Screen.width, Screen.height);
         UpdateBackingPlane();
+        LoadNodes();
     }
 
     void Update()
@@ -79,5 +86,9 @@ public class NodeGraph : MonoBehaviour
         backingPlane.position = mainCam.transform.position + (mainCam.transform.forward * pos);
         float h = Mathf.Tan(mainCam.fieldOfView * Mathf.Deg2Rad * 0.5f) * pos * 2f;
         backingPlane.localScale = new Vector3(h * mainCam.aspect, h, 1f);
+    }
+
+    public void LoadNodes()
+    {
     }
 }

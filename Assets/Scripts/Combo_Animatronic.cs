@@ -98,7 +98,7 @@ public class Combo_Animatronic : PneumagiNode
             Debug.LogError("Some part of the animatronic couldn't find its bone");
         }
 
-
+        List<InputHolder> inputs = new List<InputHolder>();
         for (int i = 0; i < animatronicParts.Count; i++)
         {
             DEAD_Actuator[] actuators = animatronicParts[i].GetActuatorInfoCopy();
@@ -107,9 +107,10 @@ public class Combo_Animatronic : PneumagiNode
             {
                 InputHolder holder = new InputHolder { inputID = actuators[e].actuationName };
                 holder.inputListener.AddListener(animatronicParts[i].SetActuatorTargetValue);
-                nodeInputs.Add(holder);
+                inputs.Add(holder);
             }
         }
+        AddInputs(inputs);
     }
 
     void SetUpNewPart(Transform t, GameObject g, List<uint> tempPartIds, int index, int i, float scale)
