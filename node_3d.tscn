@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=3 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://WorldGen.cs" id="1_hnv23"]
+[ext_resource type="ArrayMesh" uid="uid://fxi4njtynfj1" path="res://sphere.tres" id="2_exlg8"]
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_hnv23")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.97805, 0.208373, 0, -0.208373, 0.97805, -2.92953, 3.01756, 6.37533)
+fov = 124.7
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 103.656, 0, 0)
+mesh = ExtResource("2_exlg8")

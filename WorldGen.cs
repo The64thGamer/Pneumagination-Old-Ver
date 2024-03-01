@@ -27,7 +27,7 @@ public partial class WorldGen : Node3D
 		chunk.brushes = new List<Brush>();
 
 		int size = 4;
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			int randomX = (int)(GD.Randi() % 128 - size);
 			int randomY = (int)GD.Randi() % 128- size;
@@ -149,7 +149,7 @@ public partial class WorldGen : Node3D
 		{
 			Vector3 vert = new Vector3(brush.vertices[i, 0], brush.vertices[i, 1], brush.vertices[i, 2]);
 			verts.Add(vert);
-			normals.Add((vert - origin).Normalized());
+			normals.Add(((vert - origin)).Normalized()*-1);
 			uvs.Add(new Vector2(0,0));
 		}
 
@@ -169,6 +169,8 @@ public partial class WorldGen : Node3D
 		var m = new MeshInstance3D();
 		m.Mesh = arrMesh;
 		AddChild(m);
+
+		ResourceSaver.Save(arrMesh, "res://sphere.tres", ResourceSaver.SaverFlags.Compress);
 	}
 
 	public struct Chunk
