@@ -102,7 +102,7 @@ public partial class WorldGen : Node3D
 			{
 				Vector3 vert = new Vector3(currentlyLoadedChunks[index].brushes[e].vertices[i, 0], currentlyLoadedChunks[index].brushes[e].vertices[i, 1], currentlyLoadedChunks[index].brushes[e].vertices[i, 2]);
 				verts.Add(vert);
-				normals.Add(((vert - origin)).Normalized() * -1);
+				normals.Add(((vert - origin)).Normalized());
 				uvs.Add(new Vector2(0, 0));
 			}
 
@@ -167,29 +167,23 @@ public partial class WorldGen : Node3D
 
 		brush.indicies = new byte[]
 		{
-				// Bottom face
-				(byte)(0), (byte)(1), (byte)(2),
-				(byte)(2), (byte)(3), (byte)(0),
+				(byte)(2), (byte)(1), (byte)(0),
+				(byte)(0), (byte)(3), (byte)(2),
 
-				// Front face
-				(byte)(3), (byte)(2), (byte)(6),
-				(byte)(6), (byte)(7), (byte)(3),
+				(byte)(6), (byte)(2), (byte)(3),
+				(byte)(3), (byte)(7), (byte)(6),
 
-				// Right face
-				(byte)(7), (byte)(6), (byte)(5),
-				(byte)(5), (byte)(4), (byte)(7),
+				(byte)(5), (byte)(6), (byte)(7),
+				(byte)(7), (byte)(4), (byte)(5),
 
-				// Back face
-				(byte)(4), (byte)(5), (byte)(1),
-				(byte)(1), (byte)(0), (byte)(4),
+				(byte)(1), (byte)(5), (byte)(4),
+				(byte)(4), (byte)(0), (byte)(1),
 
-				// Left face
-				(byte)(0), (byte)(3), (byte)(7),
-				(byte)(7), (byte)(4), (byte)(0),
+				(byte)(7), (byte)(3), (byte)(0),
+				(byte)(0), (byte)(4), (byte)(7),
 
-				// Top face
-				(byte)(1), (byte)(5), (byte)(6),
-				(byte)(6), (byte)(2), (byte)(1)
+				(byte)(6), (byte)(5), (byte)(1),
+				(byte)(1), (byte)(2), (byte)(6)
 		};
 
 		return brush;
