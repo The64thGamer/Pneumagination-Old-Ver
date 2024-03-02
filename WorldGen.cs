@@ -4,13 +4,20 @@ using System.Collections.Generic;
 
 public partial class WorldGen : Node3D
 {
-	[Export] private Material mat;
+	[Export] Material mat;
+	[Export] int chunkRenderSize = 3;
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		RenderChunk(GenerateChunk(0, 0));
+		for (int x = -chunkRenderSize; x < chunkRenderSize; x++)
+		{
+			for (int y = -chunkRenderSize; y < chunkRenderSize; y++)
+			{
+				RenderChunk(GenerateChunk(x,y));
+			}
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,9 +49,12 @@ public partial class WorldGen : Node3D
 
 	void RenderChunk(int index)
 	{
+		Node3D chunk = new Node3D();
+		chunk.GlobalPosition = new Vector3(currentlyLoadedChunks[index].positionX * 128,0, currentlyLoadedChunks[index].positionY * 128);
+		AddChild(chunk);
 		for (int i = 0; i < currentlyLoadedChunks[index].brushes.Count; i++)
 		{
-			RenderBrush(currentlyLoadedChunks[index].brushes[i]);
+			chunk.AddChild(RenderBrush(currentlyLoadedChunks[index].brushes[i]));
 		}
 	}
 
@@ -115,7 +125,7 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
-	void RenderBrush(Brush brush)
+	MeshInstance3D RenderBrush(Brush brush)
 	{
 		var surfaceArray = new Godot.Collections.Array();
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
@@ -166,12 +176,10 @@ public partial class WorldGen : Node3D
 
 		var arrMesh = new ArrayMesh();
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
-		var m = new MeshInstance3D();
-		m.Mesh = arrMesh;
 		arrMesh.SurfaceSetMaterial(0, mat);
-		AddChild(m);
-
-		ResourceSaver.Save(arrMesh, "res://sphere.tres", ResourceSaver.SaverFlags.Compress);
+		MeshInstance3D meshObject = new MeshInstance3D();
+		meshObject.Mesh = arrMesh;
+		return meshObject;
 	}
 
 	public struct Chunk
