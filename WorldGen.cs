@@ -41,7 +41,7 @@ public partial class WorldGen : Node3D
 		int size = 4;
 
 		FastNoiseLite noise = new FastNoiseLite();
-		noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2S);
 
 		for (int posX = 0; posX < 128/size; posX++)
 		{
@@ -49,9 +49,13 @@ public partial class WorldGen : Node3D
 			{
 				for (int posZ = 0; posZ < 128 / size; posZ++)
 				{
-					float noiseValue = noise.GetNoise((posX * size) + (128 * x), (posY * size) + (128 * y), (posZ * size));
+					float noiseValue = (noise.GetNoise((posX * size) + (128 * x), (posY * size) + (128 * y), (posZ * size))+1)/2.0f;
 
-					if (noiseValue > 0.5)
+					if(posY * size < 16)
+					{
+						noiseValue = 0;
+					}
+					if (noiseValue < 0.25)
 					{
 						chunk.brushes.Add(CreateBrush(new Vector3(posX * size, posY * size, posZ * size), new Vector3(size, size, size)));
 					}
