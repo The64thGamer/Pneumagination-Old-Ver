@@ -5,23 +5,42 @@ using System.Collections.Generic;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 3;
+	[Export] int chunkRenderSize = 7;
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
 	PackedScene cubePrefab;
 
 	//Noise
 	FastNoiseLite celNoise = new FastNoiseLite();
-	FastNoiseLite os2Noise = new FastNoiseLite();
+	FastNoiseLite os2NoiseA = new FastNoiseLite();
+	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		celNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		os2Noise.SetFrequency(.01f);
+		Random rnd = new Random();
+		int seed = rnd.Next();
 
-		os2Noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		os2Noise.SetFrequency(0.005f);
+		celNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		celNoise.SetFrequency(.01f);
+		celNoise.SetSeed(seed);
+		celNoise.SetFractalType(FastNoiseLite.FractalType.PingPong);
+		celNoise.SetFractalOctaves(1);
+		celNoise.SetFractalPingPongStrength(3.5f);
+
+		os2NoiseA.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		os2NoiseA.SetFrequency(0.002f);
+		os2NoiseA.SetSeed(seed);
+		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.PingPong);
+		os2NoiseA.SetFractalOctaves(1);
+		os2NoiseA.SetFractalPingPongStrength(3.5f);
+
+		os2NoiseB.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
+		os2NoiseB.SetFrequency(0.005f);
+		os2NoiseB.SetSeed(seed);
+		os2NoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
+		os2NoiseB.SetFractalOctaves(4);
+
 
 		cubePrefab = GD.Load<PackedScene>("res://Prefabs/block.tscn");
 
@@ -34,12 +53,6 @@ public partial class WorldGen : Node3D
 		}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-
-	}
-
 	//Chunks are 128x128x128
 	int GenerateChunk(int x, int z)
 	{
@@ -49,8 +62,6 @@ public partial class WorldGen : Node3D
 		chunk.brushes = new List<Brush>();
 
 		int size = 4;
-
-
 
 		for (int posX = 0; posX < 128 / size; posX++)
 		{
@@ -64,13 +75,16 @@ public partial class WorldGen : Node3D
 
 					float noiseValue = (GetClampedNoise(celNoise.GetNoise(newX, newY, newZ)));
 					noiseValue *= noiseValue * 20.0f * noiseValue;
-					noiseValue *= (1 - (posY * size / 128.0f)) * (GetClampedNoise(os2Noise.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
+					noiseValue *= (1 - (posY * size / 128.0f)) * (GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
 					noiseValue = 1 - noiseValue;
 
-					if(posY * size / 128.0f < 0.2f * GetClampedNoise(os2Noise.GetNoise(newX, newZ)))
+					if (posY * size / 128.0f < Math.Pow(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)), 3.0f))
 					{
 						noiseValue = 0;
-
+					}
+					if (posY * size / 128.0f < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ) * GetClampedNoise(os2NoiseB.GetNoise(newY, newZ)))) - 0.3f)
+					{
+						noiseValue = 0;
 					}
 					if (posY * size < 1)
 					{
