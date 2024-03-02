@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class WorldGen : Node3D
 {
-	[Export] public float bruh;
+	[Export] private Material mat;
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
 
 	// Called when the node enters the scene tree for the first time.
@@ -168,6 +168,7 @@ public partial class WorldGen : Node3D
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
 		var m = new MeshInstance3D();
 		m.Mesh = arrMesh;
+		arrMesh.SurfaceSetMaterial(0, mat);
 		AddChild(m);
 
 		ResourceSaver.Save(arrMesh, "res://sphere.tres", ResourceSaver.SaverFlags.Compress);
