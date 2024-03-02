@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 3;
+	[Export] int chunkRenderSize = 2;
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
 
 	// Called when the node enters the scene tree for the first time.
@@ -34,15 +34,25 @@ public partial class WorldGen : Node3D
 		chunk.brushes = new List<Brush>();
 
 		int size = 4;
-		for (int i = 0; i < 200; i++)
-		{ 
-			int randomX = Mathf.Clamp((int)(GD.Randi() % 128),0, 128 - size);
-			int randomY = Mathf.Clamp((int)(GD.Randi() % 128), 0, 128 - size);
-			int randomZ = Mathf.Clamp((int)(GD.Randi() % 128), 0, 128 - size);
 
-			chunk.brushes.Add(CreateBrush(new Vector3(randomX,randomY,randomZ),new Vector3(size, size, size)));
+        FastNoiseLite noise = new FastNoiseLite();
+        noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+
+		for (int posX = 0; posX < 128/size; posX++)
+		{
+			for (int posY = 0; posY < 128 / size; posY++)
+			{
+				for (int posZ = 0; posZ < 128 / size; posZ++)
+				{
+					float noiseValue = noise.GetNoise((posX * size) + (128 * x), (posY * size) + (128 * y), (posZ * size));
+
+					if (noiseValue > 0.5)
+					{
+						chunk.brushes.Add(CreateBrush(new Vector3(posX * size, posY * size, posZ * size), new Vector3(size, size, size)));
+					}
+                }
+            }
 		}
-
 		currentlyLoadedChunks.Add(chunk);
 		return currentlyLoadedChunks.Count - 1;
 	}
