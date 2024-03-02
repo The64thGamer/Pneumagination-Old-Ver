@@ -98,6 +98,9 @@ public partial class WorldGen : Node3D
 
 			Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 
+			int oldVertCount = verts.Count;
+
+
 			for (int i = 0; i < currentlyLoadedChunks[index].brushes[e].vertices.Length / 3; i++)
 			{
 				Vector3 vert = new Vector3(currentlyLoadedChunks[index].brushes[e].vertices[i, 0], currentlyLoadedChunks[index].brushes[e].vertices[i, 1], currentlyLoadedChunks[index].brushes[e].vertices[i, 2]);
@@ -108,7 +111,7 @@ public partial class WorldGen : Node3D
 
 			for (int i = 0; i < currentlyLoadedChunks[index].brushes[e].indicies.Length; i++)
 			{
-				indices.Add(verts.Count + currentlyLoadedChunks[index].brushes[e].indicies[i]);
+				indices.Add(oldVertCount + currentlyLoadedChunks[index].brushes[e].indicies[i]);
 			}
 		}
 		// Convert Lists to arrays and assign to surface array

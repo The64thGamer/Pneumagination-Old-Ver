@@ -1,10 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=4 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://WorldGen.cs" id="1_hnv23"]
 [ext_resource type="Material" uid="uid://oe6t0x1uogb3" path="res://Ground.tres" id="2_fqq8m"]
 [ext_resource type="Script" path="res://addons/freecam_3D/freecam.gd" id="3_6nmsw"]
-[ext_resource type="PackedScene" uid="uid://c6aey2fxq5b3p" path="res://Prefabs/block.tscn" id="4_kpya8"]
-[ext_resource type="Script" path="res://TestMeshVertices.cs" id="5_t6wa3"]
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_hnv23")
@@ -17,7 +15,3 @@ script = ExtResource("3_6nmsw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.519063, -0.340605, 0.78394, 0.838405, 0.381321, -0.38945, -0.166285, 0.859408, 0.483494, 0, 0, 0)
-
-[node name="Blocks2" parent="." instance=ExtResource("4_kpya8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.115686, 0, 2.48995)
-script = ExtResource("5_t6wa3")
