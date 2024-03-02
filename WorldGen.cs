@@ -35,10 +35,10 @@ public partial class WorldGen : Node3D
 
 		int size = 4;
 		for (int i = 0; i < 200; i++)
-		{
-			int randomX = (int)(GD.Randi() % 128 - size);
-			int randomY = (int)GD.Randi() % 128- size;
-			int randomZ = (int)GD.Randi() % 128 - size;
+		{ 
+			int randomX = Mathf.Clamp((int)(GD.Randi() % 128),0, 128 - size);
+			int randomY = Mathf.Clamp((int)(GD.Randi() % 128), 0, 128 - size);
+			int randomZ = Mathf.Clamp((int)(GD.Randi() % 128), 0, 128 - size);
 
 			chunk.brushes.Add(CreateBrush(new Vector3(randomX,randomY,randomZ),new Vector3(size, size, size)));
 		}
@@ -50,8 +50,8 @@ public partial class WorldGen : Node3D
 	void RenderChunk(int index)
 	{
 		Node3D chunk = new Node3D();
-		chunk.GlobalPosition = new Vector3(currentlyLoadedChunks[index].positionX * 128,0, currentlyLoadedChunks[index].positionY * 128);
 		AddChild(chunk);
+		chunk.GlobalPosition = new Vector3(currentlyLoadedChunks[index].positionX * 128, 0, currentlyLoadedChunks[index].positionY * 128);
 		for (int i = 0; i < currentlyLoadedChunks[index].brushes.Count; i++)
 		{
 			chunk.AddChild(RenderBrush(currentlyLoadedChunks[index].brushes[i]));
