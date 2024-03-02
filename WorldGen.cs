@@ -9,17 +9,27 @@ public partial class WorldGen : Node3D
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
 	PackedScene cubePrefab;
 
+	//Noise
+	FastNoiseLite celNoise = new FastNoiseLite();
+	FastNoiseLite os2Noise = new FastNoiseLite();
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		celNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		os2Noise.SetFrequency(.01f);
+
+		os2Noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		os2Noise.SetFrequency(0.005f);
+
 		cubePrefab = GD.Load<PackedScene>("res://Prefabs/block.tscn");
 
 		for (int x = -chunkRenderSize; x < chunkRenderSize; x++)
 		{
 			for (int y = -chunkRenderSize; y < chunkRenderSize; y++)
 			{
-				RenderChunk(GenerateChunk(x,y));
+				RenderChunk(GenerateChunk(x, y));
 			}
 		}
 	}
@@ -31,31 +41,42 @@ public partial class WorldGen : Node3D
 	}
 
 	//Chunks are 128x128x128
-	int GenerateChunk(int x, int y)
+	int GenerateChunk(int x, int z)
 	{
 		Chunk chunk = new Chunk();
 		chunk.positionX = x;
-		chunk.positionY = y;
+		chunk.positionZ = z;
 		chunk.brushes = new List<Brush>();
 
 		int size = 4;
 
-		FastNoiseLite noise = new FastNoiseLite();
-		noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2S);
 
-		for (int posX = 0; posX < 128/size; posX++)
+
+		for (int posX = 0; posX < 128 / size; posX++)
 		{
 			for (int posY = 0; posY < 128 / size; posY++)
 			{
 				for (int posZ = 0; posZ < 128 / size; posZ++)
 				{
-					float noiseValue = (noise.GetNoise((posX * size) + (128 * x), (posY * size) + (128 * y), (posZ * size))+1)/2.0f;
+					float newX = (posX * size) + (128 * x);
+					float newY = (posY * size);
+					float newZ = (posZ * size) + (128 * z);
 
-					if(posY * size < 16)
+					float noiseValue = (GetClampedNoise(celNoise.GetNoise(newX, newY, newZ)));
+					noiseValue *= noiseValue * 20.0f * noiseValue;
+					noiseValue *= (1 - (posY * size / 128.0f)) * (GetClampedNoise(os2Noise.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
+					noiseValue = 1 - noiseValue;
+
+					if(posY * size / 128.0f < 0.2f * GetClampedNoise(os2Noise.GetNoise(newX, newZ)))
+					{
+						noiseValue = 0;
+
+					}
+					if (posY * size < 1)
 					{
 						noiseValue = 0;
 					}
-					if (noiseValue < 0.25)
+					if (noiseValue <= 0.25f)
 					{
 						chunk.brushes.Add(CreateBrush(new Vector3(posX * size, posY * size, posZ * size), new Vector3(size, size, size)));
 					}
@@ -70,7 +91,7 @@ public partial class WorldGen : Node3D
 	{
 		Node3D chunk = new Node3D();
 		AddChild(chunk);
-		chunk.GlobalPosition = new Vector3(currentlyLoadedChunks[index].positionX * 128, 0, currentlyLoadedChunks[index].positionY * 128);
+		chunk.GlobalPosition = new Vector3(currentlyLoadedChunks[index].positionX * 128, 0, currentlyLoadedChunks[index].positionZ * 128);
 
 		var surfaceArray = new Godot.Collections.Array();
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
@@ -196,10 +217,15 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
+	float GetClampedNoise(float noise)
+	{
+		return (noise + 1.0f) / 2.0f;
+	}
+
 	public struct Chunk
 	{
 		public int positionX;
-		public int positionY;
+		public int positionZ;
 		public List<Brush> brushes;
 	}
 

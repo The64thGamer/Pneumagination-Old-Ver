@@ -9,9 +9,10 @@ script = ExtResource("1_hnv23")
 mat = ExtResource("2_fqq8m")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.97805, 0.208373, 0, -0.208373, 0.97805, -2.92953, 3.01756, 6.37533)
-fov = 124.7
+transform = Transform3D(1, 0, 0, 0, 0.97805, 0.208373, 0, -0.208373, 0.97805, -2.92953, 22.496, 6.37533)
+fov = 92.8
 script = ExtResource("3_6nmsw")
+overlay_text = false
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.519063, -0.340605, 0.78394, 0.838405, 0.381321, -0.38945, -0.166285, 0.859408, 0.483494, 0, 0, 0)
