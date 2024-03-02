@@ -5,12 +5,16 @@ using System.Collections.Generic;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 2;
+	[Export] int chunkRenderSize = 3;
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
+	PackedScene cubePrefab;
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		cubePrefab = GD.Load<PackedScene>("res://Prefabs/block.tscn");
+
 		for (int x = -chunkRenderSize; x < chunkRenderSize; x++)
 		{
 			for (int y = -chunkRenderSize; y < chunkRenderSize; y++)
@@ -23,6 +27,7 @@ public partial class WorldGen : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+
 	}
 
 	//Chunks are 128x128x128
@@ -35,8 +40,8 @@ public partial class WorldGen : Node3D
 
 		int size = 4;
 
-        FastNoiseLite noise = new FastNoiseLite();
-        noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		FastNoiseLite noise = new FastNoiseLite();
+		noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 
 		for (int posX = 0; posX < 128/size; posX++)
 		{
@@ -50,8 +55,8 @@ public partial class WorldGen : Node3D
 					{
 						chunk.brushes.Add(CreateBrush(new Vector3(posX * size, posY * size, posZ * size), new Vector3(size, size, size)));
 					}
-                }
-            }
+				}
+			}
 		}
 		currentlyLoadedChunks.Add(chunk);
 		return currentlyLoadedChunks.Count - 1;
@@ -62,10 +67,65 @@ public partial class WorldGen : Node3D
 		Node3D chunk = new Node3D();
 		AddChild(chunk);
 		chunk.GlobalPosition = new Vector3(currentlyLoadedChunks[index].positionX * 128, 0, currentlyLoadedChunks[index].positionY * 128);
-		for (int i = 0; i < currentlyLoadedChunks[index].brushes.Count; i++)
+
+		var surfaceArray = new Godot.Collections.Array();
+		surfaceArray.Resize((int)Mesh.ArrayType.Max);
+
+		// C# arrays cannot be resized or expanded, so use Lists to create geometry.
+		var verts = new List<Vector3>();
+		var uvs = new List<Vector2>();
+		var normals = new List<Vector3>();
+		var indices = new List<int>();
+
+		for (int e = 0; e < currentlyLoadedChunks[index].brushes.Count; e++)
 		{
-			chunk.AddChild(RenderBrush(currentlyLoadedChunks[index].brushes[i]));
+			int maxX = int.MinValue;
+			int maxY = int.MinValue;
+			int maxZ = int.MinValue;
+			int minX = int.MaxValue;
+			int minY = int.MaxValue;
+			int minZ = int.MaxValue;
+
+			for (int i = 0; i < currentlyLoadedChunks[index].brushes[e].vertices.Length / 3; i++)
+			{
+				maxX = Math.Max(maxX, currentlyLoadedChunks[index].brushes[e].vertices[i, 0]);
+				maxY = Math.Max(maxY, currentlyLoadedChunks[index].brushes[e].vertices[i, 1]);
+				maxZ = Math.Max(maxZ, currentlyLoadedChunks[index].brushes[e].vertices[i, 2]);
+				minX = Math.Min(minX, currentlyLoadedChunks[index].brushes[e].vertices[i, 0]);
+				minY = Math.Min(minY, currentlyLoadedChunks[index].brushes[e].vertices[i, 1]);
+				minZ = Math.Min(minZ, currentlyLoadedChunks[index].brushes[e].vertices[i, 2]);
+			}
+
+			Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+
+			for (int i = 0; i < currentlyLoadedChunks[index].brushes[e].vertices.Length / 3; i++)
+			{
+				Vector3 vert = new Vector3(currentlyLoadedChunks[index].brushes[e].vertices[i, 0], currentlyLoadedChunks[index].brushes[e].vertices[i, 1], currentlyLoadedChunks[index].brushes[e].vertices[i, 2]);
+				verts.Add(vert);
+				normals.Add(((vert - origin)).Normalized() * -1);
+				uvs.Add(new Vector2(0, 0));
+			}
+
+			for (int i = 0; i < currentlyLoadedChunks[index].brushes[e].indicies.Length; i++)
+			{
+				indices.Add(verts.Count + currentlyLoadedChunks[index].brushes[e].indicies[i]);
+			}
 		}
+		// Convert Lists to arrays and assign to surface array
+		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
+		surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
+		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
+		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
+
+		var arrMesh = new ArrayMesh();
+		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
+
+
+		MeshInstance3D meshObject = new MeshInstance3D();
+		meshObject.Mesh = arrMesh;
+		meshObject.Mesh.SurfaceSetMaterial(0, mat);
+
+		chunk.AddChild(meshObject);
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
@@ -133,63 +193,6 @@ public partial class WorldGen : Node3D
 		};
 
 		return brush;
-	}
-
-	MeshInstance3D RenderBrush(Brush brush)
-	{
-		var surfaceArray = new Godot.Collections.Array();
-		surfaceArray.Resize((int)Mesh.ArrayType.Max);
-
-		// C# arrays cannot be resized or expanded, so use Lists to create geometry.
-		var verts = new List<Vector3>();
-		var uvs = new List<Vector2>();
-		var normals = new List<Vector3>();
-		var indices = new List<int>();
-
-		int maxX = int.MinValue;
-		int maxY = int.MinValue;
-		int maxZ = int.MinValue;
-		int minX = int.MaxValue;
-		int minY = int.MaxValue;
-		int minZ = int.MaxValue;
-
-		for (int i = 0; i < brush.vertices.Length / 3; i++)
-		{
-			maxX = Math.Max(maxX, brush.vertices[i, 0]);
-			maxY = Math.Max(maxY, brush.vertices[i, 1]);
-			maxZ = Math.Max(maxZ, brush.vertices[i, 2]);
-			minX = Math.Min(minX, brush.vertices[i, 0]);
-			minY = Math.Min(minY, brush.vertices[i, 1]);
-			minZ = Math.Min(minZ, brush.vertices[i, 2]);
-		}
-
-		Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
-
-		for (int i = 0; i < brush.vertices.Length / 3; i++)
-		{
-			Vector3 vert = new Vector3(brush.vertices[i, 0], brush.vertices[i, 1], brush.vertices[i, 2]);
-			verts.Add(vert);
-			normals.Add(((vert - origin)).Normalized()*-1);
-			uvs.Add(new Vector2(0,0));
-		}
-
-		for (int i = 0; i < brush.indicies.Length; i++)
-		{
-			indices.Add(brush.indicies[i]);
-		}
-
-		// Convert Lists to arrays and assign to surface array
-		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
-
-		var arrMesh = new ArrayMesh();
-		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
-		arrMesh.SurfaceSetMaterial(0, mat);
-		MeshInstance3D meshObject = new MeshInstance3D();
-		meshObject.Mesh = arrMesh;
-		return meshObject;
 	}
 
 	public struct Chunk
