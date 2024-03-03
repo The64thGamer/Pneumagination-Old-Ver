@@ -67,18 +67,18 @@ public partial class WorldGen : Node3D
 				}
 			}
 
-			ConcurrentBag<ChunkRenderData> nodes = new ConcurrentBag<ChunkRenderData>();
+			ChunkRenderData[] nodes = new ChunkRenderData[chunks.Count];
 
 			Parallel.For(0, chunks.Count, i =>
 			{
-				nodes.Add(RenderChunk(GenerateChunk((int)chunks[i].X, (int)chunks[i].Y)));
+				nodes[i] = RenderChunk(GenerateChunk((int)chunks[i].X, (int)chunks[i].Y));
 			});
 
-			foreach (ChunkRenderData node in nodes)
+			for (int i = 0; i < nodes.Length; i++)
 			{
-				AddChild(node.chunkNode);
-				node.chunkNode.GlobalPosition = node.position;
-				node.chunkNode.AddChild(node.meshNode);
+				AddChild(nodes[i].chunkNode);
+				nodes[i].chunkNode.GlobalPosition = nodes[i].position;
+				nodes[i].chunkNode.AddChild(nodes[i].meshNode);
 			}
 		}
 	}
