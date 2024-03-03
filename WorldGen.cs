@@ -10,7 +10,8 @@ public partial class WorldGen : Node3D
 	PackedScene cubePrefab;
 
 	//Noise
-	FastNoiseLite celNoise = new FastNoiseLite();
+	FastNoiseLite celNoiseA = new FastNoiseLite();
+	FastNoiseLite celNoiseB = new FastNoiseLite();
 	FastNoiseLite os2NoiseA = new FastNoiseLite();
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
@@ -21,19 +22,24 @@ public partial class WorldGen : Node3D
 		Random rnd = new Random();
 		int seed = rnd.Next();
 
-		celNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		celNoise.SetFrequency(.01f);
-		celNoise.SetSeed(seed);
-		celNoise.SetFractalType(FastNoiseLite.FractalType.PingPong);
-		celNoise.SetFractalOctaves(1);
-		celNoise.SetFractalPingPongStrength(3.5f);
+		celNoiseA.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		celNoiseA.SetFrequency(.01f);
+		celNoiseA.SetSeed(seed);
+		celNoiseA.SetFractalType(FastNoiseLite.FractalType.PingPong);
+		celNoiseA.SetFractalOctaves(1);
+		celNoiseA.SetFractalPingPongStrength(1.5f);
+
+		celNoiseB.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		celNoiseB.SetFrequency(.02f);
+		celNoiseB.SetSeed(seed);
+		celNoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
+		celNoiseB.SetFractalOctaves(3);
 
 		os2NoiseA.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		os2NoiseA.SetFrequency(0.002f);
+		os2NoiseA.SetFrequency(0.001f);
 		os2NoiseA.SetSeed(seed);
-		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.PingPong);
-		os2NoiseA.SetFractalOctaves(1);
-		os2NoiseA.SetFractalPingPongStrength(3.5f);
+		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.FBm);
+		os2NoiseA.SetFractalOctaves(4);
 
 		os2NoiseB.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
 		os2NoiseB.SetFrequency(0.005f);
@@ -73,7 +79,8 @@ public partial class WorldGen : Node3D
 					float newY = (posY * size);
 					float newZ = (posZ * size) + (128 * z);
 
-					float noiseValue = (GetClampedNoise(celNoise.GetNoise(newX, newY, newZ)));
+					float noiseValue = (GetClampedNoise(celNoiseA.GetNoise(newX, newY, newZ)));
+					noiseValue += (GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)));
 					noiseValue *= noiseValue * 20.0f * noiseValue;
 					noiseValue *= (1 - (posY * size / 128.0f)) * (GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
 					noiseValue = 1 - noiseValue;
@@ -82,7 +89,7 @@ public partial class WorldGen : Node3D
 					{
 						noiseValue = 0;
 					}
-					if (posY * size / 128.0f < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ) * GetClampedNoise(os2NoiseB.GetNoise(newY, newZ)))) - 0.3f)
+					if (posY * size / 128.0f < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) - 0.4f)
 					{
 						noiseValue = 0;
 					}
