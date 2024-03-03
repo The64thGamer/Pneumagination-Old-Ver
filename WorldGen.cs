@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 7;
+	[Export] int chunkRenderSize = 1;
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
 	PackedScene cubePrefab;
 
@@ -182,57 +182,57 @@ public partial class WorldGen : Node3D
 		Brush brush = new Brush();
 		brush.vertices = new byte[8, 3];
 
-		brush.vertices[0, 0] = (byte)(0 + pos.X);
-		brush.vertices[0, 1] = (byte)(0 + pos.Y);
-		brush.vertices[0, 2] = (byte)(0 + pos.Z);
+		brush.vertices[0, 0] = (byte)(pos.X);
+		brush.vertices[0, 1] = (byte)(pos.Y);
+		brush.vertices[0, 2] = (byte)(pos.Z);
 
 		brush.vertices[1, 0] = (byte)((1 * size.X) + pos.X);
-		brush.vertices[1, 1] = (byte)(0 + pos.Y);
-		brush.vertices[1, 2] = (byte)(0 + pos.Z);
+		brush.vertices[1, 1] = (byte)(pos.Y);
+		brush.vertices[1, 2] = (byte)(pos.Z);
 
 		brush.vertices[2, 0] = (byte)((1 * size.X) + pos.X);
-		brush.vertices[2, 1] = (byte)(0 + pos.Y);
+		brush.vertices[2, 1] = (byte)(pos.Y);
 		brush.vertices[2, 2] = (byte)((1 * size.Z) + pos.Z);
 
-		brush.vertices[3, 0] = (byte)(0 + pos.X);
-		brush.vertices[3, 1] = (byte)(0 + pos.Y);
+		brush.vertices[3, 0] = (byte)(pos.X);
+		brush.vertices[3, 1] = (byte)(pos.Y);
 		brush.vertices[3, 2] = (byte)((1 * size.Z) + pos.Z);
 
-		brush.vertices[4, 0] = (byte)(0 + pos.X);
+		brush.vertices[4, 0] = (byte)(pos.X);
 		brush.vertices[4, 1] = (byte)((1 * size.Y) + pos.Y);
-		brush.vertices[4, 2] = (byte)(0 + pos.Z);
+		brush.vertices[4, 2] = (byte)(pos.Z);
 
 		brush.vertices[5, 0] = (byte)((1 * size.X) + pos.X);
 		brush.vertices[5, 1] = (byte)((1 * size.Y) + pos.Y);
-		brush.vertices[5, 2] = (byte)(0 + pos.Z);
+		brush.vertices[5, 2] = (byte)(pos.Z);
 
 		brush.vertices[6, 0] = (byte)((1 * size.X) + pos.X);
 		brush.vertices[6, 1] = (byte)((1 * size.Y) + pos.Y);
 		brush.vertices[6, 2] = (byte)((1 * size.Z) + pos.Z);
 
-		brush.vertices[7, 0] = (byte)(0 + pos.X);
+		brush.vertices[7, 0] = (byte)(pos.X);
 		brush.vertices[7, 1] = (byte)((1 * size.Y) + pos.Y);
 		brush.vertices[7, 2] = (byte)((1 * size.Z) + pos.Z);
 
 		brush.indicies = new byte[]
 		{
-				(byte)(2), (byte)(1), (byte)(0),
-				(byte)(0), (byte)(3), (byte)(2),
+                2, 1, 0,
+                0, 3, 2,
 
-				(byte)(6), (byte)(2), (byte)(3),
-				(byte)(3), (byte)(7), (byte)(6),
+				6, 2, 3,
+				3, 7, 6,
 
-				(byte)(5), (byte)(6), (byte)(7),
-				(byte)(7), (byte)(4), (byte)(5),
+				5, 6, 7,
+				7, 4, 5,
 
-				(byte)(1), (byte)(5), (byte)(4),
-				(byte)(4), (byte)(0), (byte)(1),
+				1, 5, 4,
+				4, 0, 1,
 
-				(byte)(7), (byte)(3), (byte)(0),
-				(byte)(0), (byte)(4), (byte)(7),
+				7, 3, 0,
+				0, 4, 7,
 
-				(byte)(6), (byte)(5), (byte)(1),
-				(byte)(1), (byte)(2), (byte)(6)
+				6, 5, 1,
+				1, 2, 6
 		};
 
 		return brush;
