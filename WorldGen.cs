@@ -1,11 +1,13 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 1;
+	[Export] int chunkRenderSize = 7;
 	List<Chunk> currentlyLoadedChunks = new List<Chunk>();
 	PackedScene cubePrefab;
 
@@ -49,13 +51,26 @@ public partial class WorldGen : Node3D
 
 
 		cubePrefab = GD.Load<PackedScene>("res://Prefabs/block.tscn");
-
-		for (int x = -chunkRenderSize; x < chunkRenderSize; x++)
+		if(chunkRenderSize <= 0)
 		{
-			for (int y = -chunkRenderSize; y < chunkRenderSize; y++)
+			RenderChunk(GenerateChunk(0, 0));
+		}
+		else
+		{
+			List<Vector2> chunks = new List<Vector2>();
+			for (int x = -chunkRenderSize; x < chunkRenderSize; x++)
 			{
-				RenderChunk(GenerateChunk(x, y));
+				for (int y = -chunkRenderSize; y < chunkRenderSize; y++)
+				{
+					chunks.Add(new Vector2(x,y));
+				}
 			}
+
+			int index = 0;
+			Parallel.For(index, chunks.Count, index =>
+			{
+				RenderChunk(GenerateChunk((int)chunks[index].X, (int)chunks[index].Y));
+			});
 		}
 	}
 
@@ -216,8 +231,8 @@ public partial class WorldGen : Node3D
 
 		brush.indicies = new byte[]
 		{
-                2, 1, 0,
-                0, 3, 2,
+				2, 1, 0,
+				0, 3, 2,
 
 				6, 2, 3,
 				3, 7, 6,
