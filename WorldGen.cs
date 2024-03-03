@@ -89,11 +89,12 @@ public partial class WorldGen : Node3D
 			{
 				for (int e = 0; e < ongoingChunkRenderData.Count; e++)
 				{
-					if (ongoingChunkRenderData[e] != null)
+					if (ongoingChunkRenderData[e].done)
 					{
 						AddChild(ongoingChunkRenderData[e].chunkNode);
 						ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
 						ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
+						ongoingChunkRenderData[e].done = false;
 					}
 				}
 				ongoingChunkThreads.RemoveAt(i);
@@ -111,19 +112,17 @@ public partial class WorldGen : Node3D
 
 	void RenderChunk(int x, int z)
 	{
-		ongoingChunkRenderData.Add(null);
-		Thread renderThread = new Thread(() => RenderChunkThread(x,z, ongoingChunkRenderData[ongoingChunkRenderData.Count - 1]));
+		ongoingChunkRenderData.Add(new ChunkRenderData() { done = false});
+		Thread renderThread = new Thread(() => RenderChunkThread(x, z, ongoingChunkRenderData.Count-1));
 		renderThread.Start();
 		ongoingChunkThreads.Add(renderThread);
 	}
 
-	async void RenderChunkThread(int x, int z, ChunkRenderData returnChunkData)
+	async void RenderChunkThread(int x, int z, int index)
 	{
 		Task<Chunk> generateTask = GenerateChunk(x,z);
 		Chunk chunk = await generateTask;
-
-		Task<ChunkRenderData> meshTask = GetChunkMesh(chunk);
-		returnChunkData = await meshTask; 
+		ongoingChunkRenderData[index] = await GetChunkMesh(chunk);
 	}
 
 	async Task<Chunk> GenerateChunk(int x, int z)
@@ -245,7 +244,7 @@ public partial class WorldGen : Node3D
 		meshObject.Mesh.SurfaceSetMaterial(0, mat);
 
 
-		return new ChunkRenderData() { chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * 128, 0, chunkData.positionZ * 128) };
+		return new ChunkRenderData() { done = true, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * 128, 0, chunkData.positionZ * 128) };
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
@@ -330,6 +329,7 @@ public partial class WorldGen : Node3D
 
 	public class ChunkRenderData
 	{
+		public bool done;
 		public Node3D chunkNode;
 		public MeshInstance3D meshNode;
 		public Vector3 position;
