@@ -83,55 +83,69 @@ public partial class WorldGen : Node3D
 
 	void CheckForAnyPendingFinishedChunks()
 	{
+		if (ongoingChunkRenderData.Count == 0)
+		{
+			return;
+		}
+
+		bool check = false;
 		for (int e = 0; e < ongoingChunkRenderData.Count; e++)
 		{
-			if (ongoingChunkRenderData[e].done)
+			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
 			{
 				AddChild(ongoingChunkRenderData[e].chunkNode);
-				ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
-				ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
-				ongoingChunkRenderData[e].done = false;
-				ongoingChunkRenderData.RemoveAt(e);
+                ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
+                ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
+				ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
 				GD.Print("Finishing Chunk (ID " + ongoingChunkRenderData[e].id + ")");
-				break;
 			}
+			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
+			{
+				check = true;
+			}
+		}
+
+		if (!check)
+		{
+			GD.Print("All Chunks Done Rendering");
+			ongoingChunkRenderData = new List<ChunkRenderData>();
 		}
 	}
 
 	void RenderChunk(int x, int z)
 	{
 		totalChunksRendered++;
-		ongoingChunkRenderData.Add(new ChunkRenderData() { done = false, id = totalChunksRendered });
+		int id = totalChunksRendered;
+		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id });
 		GD.Print("Generating Chunk (ID " + totalChunksRendered + "): X = " + x + " Z = " + z);
-		Thread renderThread = new Thread(() => RenderChunkThread(x, z, totalChunksRendered));
-		renderThread.Start();
-	}
 
-	async void RenderChunkThread(int x, int z, int id)
-	{
-		Chunk chunk = await Task.Run(() => GenerateChunk(x, z));
-		ChunkRenderData chunkData = await Task.Run(() => GetChunkMesh(chunk, id));
-		bool check = false;
-		for (int i = 0; i < ongoingChunkRenderData.Count; i++)
+		Task.Run(async () =>
 		{
-			if (ongoingChunkRenderData[i].id == id)
+			Chunk chunk = await GenerateChunk(x, z);
+			ChunkRenderData chunkData = await GetChunkMesh(chunk, id);
+			bool check = false;
+			for (int i = 0; i < ongoingChunkRenderData.Count; i++)
 			{
-				ongoingChunkRenderData[i] = chunkData;
-				check = true;
-				break;
+				if (ongoingChunkRenderData[i].id == id)
+				{
+					ongoingChunkRenderData[i] = chunkData;
+					check = true;
+					break;
+				}
 			}
-		}
 
-		if (!check)
-		{
-			GD.Print("Chunk Mesh Could Not Be Finalized (ID " + id + ")");
-		}
-			
+			if (!check)
+			{
+				GD.Print("Chunk Mesh Could Not Be Finalized (ID " + id + ")");
+			}
+
+		});
 	}
 
 
 	//Chunks are 128x128x128
-	Chunk GenerateChunk(int x, int z)
+	async Task<Chunk> GenerateChunk(int x, int z)
+
 	{
 		Chunk chunk = new Chunk();
 		chunk.positionX = x;
@@ -242,7 +256,7 @@ public partial class WorldGen : Node3D
 		meshObject.Mesh.SurfaceSetMaterial(0, mat);
 
 
-		return new ChunkRenderData() { id = id, done = true, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * 128, 0, chunkData.positionZ * 128) };
+		return new ChunkRenderData() { id = id, state = ChunkRenderDataState.ready, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * 128, 0, chunkData.positionZ * 128) };
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
@@ -311,6 +325,7 @@ public partial class WorldGen : Node3D
 		return (noise + 1.0f) / 2.0f;
 	}
 
+
 	public class Chunk
 	{
 		public int positionX;
@@ -328,10 +343,17 @@ public partial class WorldGen : Node3D
 	public class ChunkRenderData
 	{
 		public Thread thread;
-		public bool done;
+		public ChunkRenderDataState state;
 		public Node3D chunkNode;
 		public MeshInstance3D meshNode;
 		public Vector3 position;
 		public int id;
+	}
+
+	public enum ChunkRenderDataState
+	{
+		running,
+		ready,
+		garbageCollector,
 	}
 }
