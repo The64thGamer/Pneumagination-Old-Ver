@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 7;
+	[Export] int chunkRenderSize = 9;
 	PackedScene cubePrefab;
+	int totalChunksRendered = 0;
 
-	List<Thread> ongoingChunkThreads =	new List<Thread>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 
 	//Noise
@@ -20,7 +20,7 @@ public partial class WorldGen : Node3D
 	FastNoiseLite os2NoiseA = new FastNoiseLite();
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
-
+	//TODO: add crafting system where you get shako for 2 metal
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -83,28 +83,16 @@ public partial class WorldGen : Node3D
 
 	void CheckForAnyPendingFinishedChunks()
 	{
-		for (int i = 0; i < ongoingChunkThreads.Count; i++)
+		for (int e = 0; e < ongoingChunkRenderData.Count; e++)
 		{
-			if (!ongoingChunkThreads[i].IsAlive)
+			if (ongoingChunkRenderData[e].done)
 			{
-				for (int e = 0; e < ongoingChunkRenderData.Count; e++)
-				{
-					if (ongoingChunkRenderData[e].done)
-					{
-						AddChild(ongoingChunkRenderData[e].chunkNode);
-						ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
-						ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
-						ongoingChunkRenderData[e].done = false;
-					}
-				}
-				ongoingChunkThreads.RemoveAt(i);
-
-				//Really cheap way to deal with two unsynched Lists<> but probably not good if someone
-				//managed to keep rendering chunks constantly and this filled up RAM. Fix later when its monetarily viable.
-				if(ongoingChunkThreads.Count == 0 )
-				{
-					ongoingChunkRenderData = new List<ChunkRenderData>();
-				}
+				AddChild(ongoingChunkRenderData[e].chunkNode);
+				ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
+				ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
+				ongoingChunkRenderData[e].done = false;
+				ongoingChunkRenderData.RemoveAt(e);
+				GD.Print("Finishing Chunk (ID " + ongoingChunkRenderData[e].id + ")");
 				break;
 			}
 		}
@@ -112,28 +100,38 @@ public partial class WorldGen : Node3D
 
 	void RenderChunk(int x, int z)
 	{
-		ongoingChunkRenderData.Add(new ChunkRenderData() { done = false});
-		Thread renderThread = new Thread(() => RenderChunkThread(x, z, ongoingChunkRenderData.Count-1));
+		totalChunksRendered++;
+		ongoingChunkRenderData.Add(new ChunkRenderData() { done = false, id = totalChunksRendered });
+		GD.Print("Generating Chunk (ID " + totalChunksRendered + "): X = " + x + " Z = " + z);
+		Thread renderThread = new Thread(() => RenderChunkThread(x, z, totalChunksRendered));
 		renderThread.Start();
-		ongoingChunkThreads.Add(renderThread);
 	}
 
-	async void RenderChunkThread(int x, int z, int index)
+	async void RenderChunkThread(int x, int z, int id)
 	{
-		Task<Chunk> generateTask = GenerateChunk(x,z);
-		Chunk chunk = await generateTask;
-		ongoingChunkRenderData[index] = await GetChunkMesh(chunk);
-	}
+		Chunk chunk = await Task.Run(() => GenerateChunk(x, z));
+		ChunkRenderData chunkData = await Task.Run(() => GetChunkMesh(chunk, id));
+		bool check = false;
+		for (int i = 0; i < ongoingChunkRenderData.Count; i++)
+		{
+			if (ongoingChunkRenderData[i].id == id)
+			{
+				ongoingChunkRenderData[i] = chunkData;
+				check = true;
+				break;
+			}
+		}
 
-	async Task<Chunk> GenerateChunk(int x, int z)
-	{
-		Chunk chunk = await Task.Run(() => GenerateChunkThread(x,z));
-		return chunk;
+		if (!check)
+		{
+			GD.Print("Chunk Mesh Could Not Be Finalized (ID " + id + ")");
+		}
+			
 	}
 
 
 	//Chunks are 128x128x128
-	Chunk GenerateChunkThread(int x, int z)
+	Chunk GenerateChunk(int x, int z)
 	{
 		Chunk chunk = new Chunk();
 		chunk.positionX = x;
@@ -180,7 +178,7 @@ public partial class WorldGen : Node3D
 		return chunk;
 	}
 
-	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData)
+	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData, int id)
 	{
 		Node3D chunk = new Node3D();
 		var surfaceArray = new Godot.Collections.Array();
@@ -244,7 +242,7 @@ public partial class WorldGen : Node3D
 		meshObject.Mesh.SurfaceSetMaterial(0, mat);
 
 
-		return new ChunkRenderData() { done = true, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * 128, 0, chunkData.positionZ * 128) };
+		return new ChunkRenderData() { id = id, done = true, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * 128, 0, chunkData.positionZ * 128) };
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
@@ -329,9 +327,11 @@ public partial class WorldGen : Node3D
 
 	public class ChunkRenderData
 	{
+		public Thread thread;
 		public bool done;
 		public Node3D chunkNode;
 		public MeshInstance3D meshNode;
 		public Vector3 position;
+		public int id;
 	}
 }
