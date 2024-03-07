@@ -205,14 +205,27 @@ public partial class WorldGen : Node3D
 		var normals = new List<Vector3>();
 		var indices = new List<int>();
 
-		for (int e = 0; e < chunkData.brushes.Count; e++)
+		//Initialized Values
+		int maxX;
+		int maxY;
+		int maxZ;
+		int minX;
+		int minY;
+		int minZ;
+		Vector3 origin;
+		Vector3 vert;
+		int oldVertCount;
+		int[] newVertIndexNumbers;
+		int duplicateVert;
+
+        for (int e = 0; e < chunkData.brushes.Count; e++)
 		{
-			int maxX = int.MinValue;
-			int maxY = int.MinValue;
-			int maxZ = int.MinValue;
-			int minX = int.MaxValue;
-			int minY = int.MaxValue;
-			int minZ = int.MaxValue;
+			 maxX = int.MinValue;
+			 maxY = int.MinValue;
+			 maxZ = int.MinValue;
+			 minX = int.MaxValue;
+			 minY = int.MaxValue;
+			 minZ = int.MaxValue;
 
 			for (int i = 0; i < chunkData.brushes[e].vertices.Length / 3; i++)
 			{
@@ -224,22 +237,45 @@ public partial class WorldGen : Node3D
 				minZ = Math.Min(minZ, chunkData.brushes[e].vertices[i, 2]);
 			}
 
-			Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+			origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 
-			int oldVertCount = verts.Count;
+			oldVertCount = verts.Count;
 
+			newVertIndexNumbers = new int[chunkData.brushes[e].vertices.Length];
 
 			for (int i = 0; i < chunkData.brushes[e].vertices.Length / 3; i++)
 			{
-				Vector3 vert = new Vector3(chunkData.brushes[e].vertices[i, 0], chunkData.brushes[e].vertices[i, 1], chunkData.brushes[e].vertices[i, 2]);
-				verts.Add(vert);
-				normals.Add(((vert - origin)).Normalized());
-				uvs.Add(new Vector2(0, 0));
+				vert = new Vector3(chunkData.brushes[e].vertices[i, 0], chunkData.brushes[e].vertices[i, 1], chunkData.brushes[e].vertices[i, 2]);
+
+				//Check if duplicate vert
+				duplicateVert = -1;
+				for (int j = 0; j < verts.Count; j++)
+				{
+					if(vert.IsEqualApprox(verts[j]))
+					{
+						duplicateVert = j;
+						break;
+					}
+				}
+
+				if(duplicateVert < 0)
+				{
+					verts.Add(vert);
+					normals.Add(((vert - origin)).Normalized());
+					uvs.Add(new Vector2(0, 0));
+					newVertIndexNumbers[i] = oldVertCount + i;
+				}
+				else
+				{
+					newVertIndexNumbers[i] = duplicateVert;
+				}
+				
+
 			}
 
 			for (int i = 0; i < chunkData.brushes[e].indicies.Length; i++)
 			{
-				indices.Add(oldVertCount + chunkData.brushes[e].indicies[i]);
+				indices.Add(newVertIndexNumbers[chunkData.brushes[e].indicies[i]]);
 			}
 		}
 		// Convert Lists to arrays and assign to surface array
