@@ -287,6 +287,7 @@ public partial class WorldGen : Node3D
 			RecursiveFindAdjacentFaces(splitMeshIndiciesList[0], hitNormal, splitMeshIndiciesList, verts,indices,triangleNormals);
 			RecursiveFindAdjacentFaces(splitMeshIndiciesList[1], hitNormal, splitMeshIndiciesList, verts, indices, triangleNormals);
 			RecursiveFindAdjacentFaces(splitMeshIndiciesList[2], hitNormal, splitMeshIndiciesList, verts, indices, triangleNormals);
+			GD.Print("Pass Complete, " + indices.Count + " Left to Go");
 		}
 
 
@@ -339,13 +340,13 @@ public partial class WorldGen : Node3D
 		List<int> passThroughIndices = new List<int>();
 		for (int i = 0; i < connectedTrisIndexes.Count; i++)
 		{
-            passThroughIndices.Add(indices[connectedTrisIndexes[i]]);
-        }
-        triNormals.AddRange(connectedFaceNormals);
-        splitArrays.AddRange(passThroughIndices);
+			passThroughIndices.Add(indices[connectedTrisIndexes[i]]);
+		}
+		triNormals.AddRange(connectedFaceNormals);
+		splitArrays.AddRange(passThroughIndices);
 		
 		//Remove indicies from main mesh
-        foreach (int newIndex in connectedTrisIndexes.OrderByDescending(v => v))
+		foreach (int newIndex in connectedTrisIndexes.OrderByDescending(v => v))
 		{
 			indices.RemoveAt(newIndex);
 		}
