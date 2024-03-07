@@ -206,19 +206,11 @@ public partial class WorldGen : Node3D
 		var indices = new List<int>();
 
 		//Initialized Values
-		int maxX;
-		int maxY;
-		int maxZ;
-		int minX;
-		int minY;
-		int minZ;
-		Vector3 origin;
-		Vector3 vert;
-		int oldVertCount;
+		int maxX,maxY,maxZ,minX,minY,minZ,duplicateVert;
+		Vector3 origin,vert;
 		int[] newVertIndexNumbers;
-		int duplicateVert;
 
-        for (int e = 0; e < chunkData.brushes.Count; e++)
+		for (int e = 0; e < chunkData.brushes.Count; e++)
 		{
 			 maxX = int.MinValue;
 			 maxY = int.MinValue;
@@ -239,8 +231,6 @@ public partial class WorldGen : Node3D
 
 			origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 
-			oldVertCount = verts.Count;
-
 			newVertIndexNumbers = new int[chunkData.brushes[e].vertices.Length];
 
 			for (int i = 0; i < chunkData.brushes[e].vertices.Length / 3; i++)
@@ -251,10 +241,10 @@ public partial class WorldGen : Node3D
 				duplicateVert = -1;
 				for (int j = 0; j < verts.Count; j++)
 				{
-					if(vert.IsEqualApprox(verts[j]))
+					if(vert == verts[j])
 					{
-						duplicateVert = j;
-						break;
+                        newVertIndexNumbers[i] = j;
+                        break;
 					}
 				}
 
@@ -263,14 +253,8 @@ public partial class WorldGen : Node3D
 					verts.Add(vert);
 					normals.Add(((vert - origin)).Normalized());
 					uvs.Add(new Vector2(0, 0));
-					newVertIndexNumbers[i] = oldVertCount + i;
+					newVertIndexNumbers[i] = verts.Count-1;
 				}
-				else
-				{
-					newVertIndexNumbers[i] = duplicateVert;
-				}
-				
-
 			}
 
 			for (int i = 0; i < chunkData.brushes[e].indicies.Length; i++)
