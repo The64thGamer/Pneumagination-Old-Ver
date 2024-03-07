@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -200,17 +201,18 @@ public partial class WorldGen : Node3D
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
 
 		// C# arrays cannot be resized or expanded, so use Lists to create geometry.
-		var verts = new List<Vector3>();
-		var uvs = new List<Vector2>();
-		var normals = new List<Vector3>();
-		var indices = new List<int>();
+		List<Vector3> verts = new List<Vector3>();
+		Dictionary<Vector3,int> vertexHashTable = new Dictionary<Vector3,int>();
+		List<Vector2> uvs = new List<Vector2>();
+		List<Vector3> normals = new List<Vector3>();
+		List<int> indices = new List<int>();
 
 		//Initialized Values
 		int maxX,maxY,maxZ,minX,minY,minZ,duplicateVert;
 		Vector3 origin,vert;
 		int[] newVertIndexNumbers;
 
-		for (int e = 0; e < chunkData.brushes.Count; e++)
+		foreach (Brush currentBrush in chunkData.brushes)
 		{
 			 maxX = int.MinValue;
 			 maxY = int.MinValue;
@@ -219,47 +221,46 @@ public partial class WorldGen : Node3D
 			 minY = int.MaxValue;
 			 minZ = int.MaxValue;
 
-			for (int i = 0; i < chunkData.brushes[e].vertices.Length / 3; i++)
+			for (int i = 0; i < currentBrush.vertices.Length / 3; i++)
 			{
-				maxX = Math.Max(maxX, chunkData.brushes[e].vertices[i, 0]);
-				maxY = Math.Max(maxY, chunkData.brushes[e].vertices[i, 1]);
-				maxZ = Math.Max(maxZ, chunkData.brushes[e].vertices[i, 2]);
-				minX = Math.Min(minX, chunkData.brushes[e].vertices[i, 0]);
-				minY = Math.Min(minY, chunkData.brushes[e].vertices[i, 1]);
-				minZ = Math.Min(minZ, chunkData.brushes[e].vertices[i, 2]);
+				maxX = Math.Max(maxX, currentBrush.vertices[i, 0]);
+				maxY = Math.Max(maxY, currentBrush.vertices[i, 1]);
+				maxZ = Math.Max(maxZ, currentBrush.vertices[i, 2]);
+				minX = Math.Min(minX, currentBrush.vertices[i, 0]);
+				minY = Math.Min(minY, currentBrush.vertices[i, 1]);
+				minZ = Math.Min(minZ, currentBrush.vertices[i, 2]);
 			}
 
-			origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+			origin.X = (minX + maxX) / 2;
+			origin.Y = (minY + maxY) / 2;
+			origin.Z = (minZ + maxZ) / 2;
 
-			newVertIndexNumbers = new int[chunkData.brushes[e].vertices.Length];
+			newVertIndexNumbers = new int[currentBrush.vertices.Length];
 
-			for (int i = 0; i < chunkData.brushes[e].vertices.Length / 3; i++)
+			for (int i = 0; i < currentBrush.vertices.Length / 3; i++)
 			{
-				vert = new Vector3(chunkData.brushes[e].vertices[i, 0], chunkData.brushes[e].vertices[i, 1], chunkData.brushes[e].vertices[i, 2]);
+				vert.X = currentBrush.vertices[i, 0];
+				vert.Y = currentBrush.vertices[i, 1];
+				vert.Z = currentBrush.vertices[i, 2];
 
 				//Check if duplicate vert
-				duplicateVert = -1;
-				for (int j = 0; j < verts.Count; j++)
+				if(vertexHashTable.TryGetValue(vert, out int index))
 				{
-					if(vert == verts[j])
-					{
-                        newVertIndexNumbers[i] = j;
-                        break;
-					}
-				}
-
-				if(duplicateVert < 0)
+                    newVertIndexNumbers[i] = index;
+                }
+                else
 				{
-					verts.Add(vert);
-					normals.Add(((vert - origin)).Normalized());
-					uvs.Add(new Vector2(0, 0));
-					newVertIndexNumbers[i] = verts.Count-1;
-				}
+                    vertexHashTable.Add(vert, verts.Count);
+                    newVertIndexNumbers[i] = verts.Count;
+                    verts.Add(vert);
+                    normals.Add((vert - origin).Normalized());
+                    uvs.Add(Vector2.Zero);
+                }
 			}
 
-			for (int i = 0; i < chunkData.brushes[e].indicies.Length; i++)
+			for (int i = 0; i < currentBrush.indicies.Length; i++)
 			{
-				indices.Add(newVertIndexNumbers[chunkData.brushes[e].indicies[i]]);
+				indices.Add(newVertIndexNumbers[currentBrush.indicies[i]]);
 			}
 		}
 		// Convert Lists to arrays and assign to surface array
