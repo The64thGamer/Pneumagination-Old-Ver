@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 9;
+	[Export] int chunkRenderSize = 3;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
@@ -246,16 +246,16 @@ public partial class WorldGen : Node3D
 				//Check if duplicate vert
 				if(vertexHashTable.TryGetValue(vert, out int index))
 				{
-                    newVertIndexNumbers[i] = index;
-                }
-                else
+					newVertIndexNumbers[i] = index;
+				}
+				else
 				{
-                    vertexHashTable.Add(vert, verts.Count);
-                    newVertIndexNumbers[i] = verts.Count;
-                    verts.Add(vert);
-                    normals.Add((vert - origin).Normalized());
-                    uvs.Add(Vector2.Zero);
-                }
+					vertexHashTable.Add(vert, verts.Count);
+					newVertIndexNumbers[i] = verts.Count;
+					verts.Add(vert);
+					normals.Add((vert - origin).Normalized());
+					uvs.Add(Vector2.Zero);
+				}
 			}
 
 			for (int i = 0; i < currentBrush.indicies.Length; i++)
