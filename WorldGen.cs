@@ -200,18 +200,17 @@ public partial class WorldGen : Node3D
 		var surfaceArray = new Godot.Collections.Array();
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
 
-		// C# arrays cannot be resized or expanded, so use Lists to create geometry.
-		List<Vector3> verts = new List<Vector3>();
+        //Initialized Values
+        List<Vector3> verts = new List<Vector3>();
 		Dictionary<Vector3,int> vertexHashTable = new Dictionary<Vector3,int>();
 		List<Vector2> uvs = new List<Vector2>();
 		List<Vector3> normals = new List<Vector3>();
 		List<int> indices = new List<int>();
-
-		//Initialized Values
 		int maxX,maxY,maxZ,minX,minY,minZ,duplicateVert;
 		Vector3 origin,vert;
 		int[] newVertIndexNumbers;
 
+		//Collect all brush vertices, merge duplicate ones
 		foreach (Brush currentBrush in chunkData.brushes)
 		{
 			 maxX = int.MinValue;
@@ -263,22 +262,28 @@ public partial class WorldGen : Node3D
 				indices.Add(newVertIndexNumbers[currentBrush.indicies[i]]);
 			}
 		}
-		// Convert Lists to arrays and assign to surface array
-		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
+
+
+        // Convert Lists to arrays and assign to surface array
+        ArrayMesh arrMesh = new ArrayMesh();
+        surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
-
-		var arrMesh = new ArrayMesh();
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
 
-
+		//Assign the surface to a mesh and return
 		MeshInstance3D meshObject = new MeshInstance3D();
 		meshObject.Mesh = arrMesh;
 		meshObject.Mesh.SurfaceSetMaterial(0, mat);
-
-
-		return new ChunkRenderData() { id = id, state = ChunkRenderDataState.ready, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * chunkSize, 0, chunkData.positionZ * chunkSize) };
+		return new ChunkRenderData() 
+		{ 
+			id = id, 
+			state = ChunkRenderDataState.ready, 
+			chunkNode = chunk, 
+			meshNode = meshObject, 
+			position = new Vector3(chunkData.positionX * chunkSize, 0, chunkData.positionZ * chunkSize) 
+		};
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
