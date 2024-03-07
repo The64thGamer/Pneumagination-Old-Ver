@@ -20,6 +20,9 @@ public partial class WorldGen : Node3D
 	FastNoiseLite os2NoiseA = new FastNoiseLite();
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
+	const int bigBlockSize = 3;
+	const int chunkSize = 126;
+
 	//TODO: add crafting system where you get shako for 2 metal
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -94,8 +97,8 @@ public partial class WorldGen : Node3D
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
 			{
 				AddChild(ongoingChunkRenderData[e].chunkNode);
-                ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
-                ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
+				ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
+				ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
 				ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
 				GD.Print("Finishing Chunk (ID " + ongoingChunkRenderData[e].id + ")");
 			}
@@ -143,7 +146,7 @@ public partial class WorldGen : Node3D
 	}
 
 
-	//Chunks are 128x128x128
+	//Chunks are 126x126x126
 	async Task<Chunk> GenerateChunk(int x, int z)
 
 	{
@@ -152,39 +155,37 @@ public partial class WorldGen : Node3D
 		chunk.positionZ = z;
 		chunk.brushes = new List<Brush>();
 
-		int size = 4;
-
-		for (int posX = 0; posX < 128 / size; posX++)
+		for (int posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
-			for (int posY = 0; posY < 128 / size; posY++)
+			for (int posY = 0; posY < chunkSize / bigBlockSize; posY++)
 			{
-				for (int posZ = 0; posZ < 128 / size; posZ++)
+				for (int posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					float newX = (posX * size) + (128 * x);
-					float newY = (posY * size);
-					float newZ = (posZ * size) + (128 * z);
+					float newX = (posX * bigBlockSize) + (chunkSize * x);
+					float newY = (posY * bigBlockSize);
+					float newZ = (posZ * bigBlockSize) + (chunkSize * z);
 
 					float noiseValue = (GetClampedNoise(celNoiseA.GetNoise(newX, newY, newZ)));
 					noiseValue += (GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)));
 					noiseValue *= noiseValue * 20.0f * noiseValue;
-					noiseValue *= (1 - (posY * size / 128.0f)) * (GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
+					noiseValue *= (1 - (posY * bigBlockSize / (float)chunkSize)) * (GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
 					noiseValue = 1 - noiseValue;
 
-					if (posY * size / 128.0f < Math.Pow(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)), 3.0f))
+					if (posY * bigBlockSize / (float)chunkSize < Math.Pow(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)), 3.0f))
 					{
 						noiseValue = 0;
 					}
-					if (posY * size / 128.0f < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) - 0.4f)
+					if (posY * bigBlockSize / (float)chunkSize < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) - 0.4f)
 					{
 						noiseValue = 0;
 					}
-					if (posY * size < 1)
+					if (posY * bigBlockSize < 1)
 					{
 						noiseValue = 0;
 					}
 					if (noiseValue <= 0.25f)
 					{
-						chunk.brushes.Add(CreateBrush(new Vector3(posX * size, posY * size, posZ * size), new Vector3(size, size, size)));
+						chunk.brushes.Add(CreateBrush(new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize), new Vector3(bigBlockSize, bigBlockSize, bigBlockSize)));
 					}
 				}
 			}
@@ -256,7 +257,7 @@ public partial class WorldGen : Node3D
 		meshObject.Mesh.SurfaceSetMaterial(0, mat);
 
 
-		return new ChunkRenderData() { id = id, state = ChunkRenderDataState.ready, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * 128, 0, chunkData.positionZ * 128) };
+		return new ChunkRenderData() { id = id, state = ChunkRenderDataState.ready, chunkNode = chunk, meshNode = meshObject, position = new Vector3(chunkData.positionX * chunkSize, 0, chunkData.positionZ * chunkSize) };
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
