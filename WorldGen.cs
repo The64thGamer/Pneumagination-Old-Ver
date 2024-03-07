@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -200,8 +201,8 @@ public partial class WorldGen : Node3D
 		var surfaceArray = new Godot.Collections.Array();
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
 
-        //Initialized Values
-        List<Vector3> verts = new List<Vector3>();
+		//Initialized Values
+		List<Vector3> verts = new List<Vector3>();
 		Dictionary<Vector3,int> vertexHashTable = new Dictionary<Vector3,int>();
 		List<Vector2> uvs = new List<Vector2>();
 		List<Vector3> normals = new List<Vector3>();
@@ -266,29 +267,33 @@ public partial class WorldGen : Node3D
 		//Split the new mesh based on surface normal values
 		while(indices.Count > 0 && verts.Count > 0)
 		{
-            //Get the starting face and its normal
-            List<int> splitMeshIndiciesArray = new List<int>
-            {
-                indices[0],
-                indices[1],
-                indices[2]
-            };
-            Vector3 hitNormal = (verts[indices[1]] - verts[indices[0]]).Cross(verts[indices[2]] - verts[indices[0]]);
+			//Get the starting face and its normal
+			List<int> splitMeshIndiciesArray = new List<int>
+			{
+				indices[0],
+				indices[1],
+				indices[2]
+			};
+			Vector3 hitNormal = (verts[indices[1]] - verts[indices[0]]).Cross(verts[indices[2]] - verts[indices[0]]);
+			List<Vector3> triangleNormals = new List<Vector3>
+			{
+				hitNormal
+			};
 
 			//Recursively find all faces that share verticies but also are above hit angle
-			RecursiveFindAdjacentFaces(indices[0], hitNormal,splitMeshIndiciesArray,verts,indices);
+			RecursiveFindAdjacentFaces(indices[0], hitNormal,splitMeshIndiciesArray,verts,indices,triangleNormals);
 
 			//Remove verts from list before executing these two please
 			//so there isnt duplicate lookups
 
-            RecursiveFindAdjacentFaces(indices[1], hitNormal, splitMeshIndiciesArray, verts, indices);
-            RecursiveFindAdjacentFaces(indices[2], hitNormal, splitMeshIndiciesArray, verts, indices);
-        }
+			RecursiveFindAdjacentFaces(indices[1], hitNormal, splitMeshIndiciesArray, verts, indices, triangleNormals);
+			RecursiveFindAdjacentFaces(indices[2], hitNormal, splitMeshIndiciesArray, verts, indices, triangleNormals);
+		}
 
 
-        // Convert Lists to arrays and assign to surface array
-        ArrayMesh arrMesh = new ArrayMesh();
-        surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
+		// Convert Lists to arrays and assign to surface array
+		ArrayMesh arrMesh = new ArrayMesh();
+		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
@@ -308,25 +313,47 @@ public partial class WorldGen : Node3D
 		};
 	}
 
-	void RecursiveFindAdjacentFaces(int vertexIndex, Vector3 normalCompare, List<int> splitArrays, List<Vector3> verts, List<int> indices)
+	void RecursiveFindAdjacentFaces(int vertexIndex, Vector3 normalCompare, List<int> splitArrays, List<Vector3> verts, List<int> indices, List<Vector3> triNormals)
 	{
 		//Check for triangles with shared vertices
+		List<int> connectedTrisIndexes = new List<int>();
+		List<Vector3> connectedFaceNormals = new List<Vector3>();
 		for (int i = 0; i < indices.Count; i++)
 		{
 			if (indices[i] == vertexIndex)
 			{
 				//Compare angles
 				int startingIndex = i - (i % 3);
-                Vector3 hitNormal = (verts[indices[startingIndex + 1]] - verts[indices[startingIndex]]).Cross(verts[indices[startingIndex+2]] - verts[indices[startingIndex]]);
+				Vector3 hitNormal = (verts[indices[startingIndex + 1]] - verts[indices[startingIndex]]).Cross(verts[indices[startingIndex+2]] - verts[indices[startingIndex]]);
 				if(normalCompare.Dot(hitNormal) > 0)
 				{
-                    splitArrays.Add(startingIndex);
-                    splitArrays.Add(startingIndex+1);
-                    splitArrays.Add(startingIndex+2);
-                    indices.RemoveRange(startingIndex,3);
-                }
-            }
-        }
+					//Collect data of connected triangle for later
+					connectedTrisIndexes.Add(startingIndex);
+					connectedTrisIndexes.Add(startingIndex+1);
+					connectedTrisIndexes.Add(startingIndex+2);
+                    connectedFaceNormals.Add(hitNormal);
+				}
+			}
+		}
+
+		//Detatch all connected triangles from the main mesh and put them in the new one
+		splitArrays.AddRange(connectedTrisIndexes);
+		triNormals.AddRange(connectedFaceNormals);
+		foreach (int indice in connectedTrisIndexes.OrderByDescending(v => v))
+		{
+			indices.RemoveAt(indice);
+		}
+
+		//Recusive
+		for (int i = 0; i < connectedTrisIndexes.Count; i++)
+		{
+			//Make sure we're not wasting checks
+			if(indices[connectedTrisIndexes[i]] != vertexIndex)
+            {
+                int normalsIndex = Mathf.FloorToInt(i / 3.0f);
+				RecursiveFindAdjacentFaces(indices[connectedTrisIndexes[i]], connectedFaceNormals[normalsIndex], splitArrays, verts, indices, triNormals);
+			}
+		}
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
