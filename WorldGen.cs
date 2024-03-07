@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 3;
+	[Export] int chunkRenderSize = 0;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
@@ -265,7 +265,7 @@ public partial class WorldGen : Node3D
 		}
 
 		//Split the new mesh based on surface normal values
-		while(indices.Count > 0 && verts.Count > 0)
+		while(indices.Count > 0)
 		{
 			//Move the starting face into a new mesh
 			List<int> splitMeshIndiciesList = new List<int>
@@ -274,9 +274,9 @@ public partial class WorldGen : Node3D
 				indices[1],
 				indices[2]
 			};
-            indices.RemoveRange(0, 3);
+			indices.RemoveRange(0, 3);
 
-            //Get the starting face normal
+			//Get the starting face normal
 			Vector3 hitNormal = (verts[splitMeshIndiciesList[1]] - verts[splitMeshIndiciesList[0]]).Cross(verts[splitMeshIndiciesList[2]] - verts[splitMeshIndiciesList[0]]);
 			List<Vector3> triangleNormals = new List<Vector3>
 			{
@@ -330,27 +330,34 @@ public partial class WorldGen : Node3D
 					connectedTrisIndexes.Add(startingIndex);
 					connectedTrisIndexes.Add(startingIndex+1);
 					connectedTrisIndexes.Add(startingIndex+2);
-                    connectedFaceNormals.Add(hitNormal);
+					connectedFaceNormals.Add(hitNormal);
 				}
 			}
 		}
 
-		//Detatch all connected triangles from the main mesh and put them in the new one
-		splitArrays.AddRange(connectedTrisIndexes);
-		triNormals.AddRange(connectedFaceNormals);
-		foreach (int indice in connectedTrisIndexes.OrderByDescending(v => v))
+		//Add data to new meshes
+		List<int> passThroughIndices = new List<int>();
+		for (int i = 0; i < connectedTrisIndexes.Count; i++)
 		{
-			indices.RemoveAt(indice);
+            passThroughIndices.Add(indices[connectedTrisIndexes[i]]);
+        }
+        triNormals.AddRange(connectedFaceNormals);
+        splitArrays.AddRange(passThroughIndices);
+		
+		//Remove indicies from main mesh
+        foreach (int newIndex in connectedTrisIndexes.OrderByDescending(v => v))
+		{
+			indices.RemoveAt(newIndex);
 		}
 
 		//Recusive
-		for (int i = 0; i < connectedTrisIndexes.Count; i++)
+		for (int i = 0; i < passThroughIndices.Count; i++)
 		{
 			//Make sure we're not wasting checks
-			if(indices[connectedTrisIndexes[i]] != vertexIndex)
-            {
-                int normalsIndex = Mathf.FloorToInt(i / 3.0f);
-				RecursiveFindAdjacentFaces(indices[connectedTrisIndexes[i]], connectedFaceNormals[normalsIndex], splitArrays, verts, indices, triNormals);
+			if(passThroughIndices[i] != vertexIndex)
+			{
+				int normalsIndex = Mathf.FloorToInt(i / 3.0f);
+				RecursiveFindAdjacentFaces(passThroughIndices[i], connectedFaceNormals[normalsIndex], splitArrays, verts, indices, triNormals);
 			}
 		}
 	}
