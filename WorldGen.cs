@@ -205,7 +205,6 @@ public partial class WorldGen : Node3D
 		List<Vector3> verts = new List<Vector3>();
 		Dictionary<Vector3,int> vertexHashTable = new Dictionary<Vector3,int>();
 		List<Vector2> uvs = new List<Vector2>();
-		List<Vector3> normals = new List<Vector3>();
 		List<int> indices = new List<int>();
 		int maxX,maxY,maxZ,minX,minY,minZ;
 		Vector3 origin,vert;
@@ -253,7 +252,6 @@ public partial class WorldGen : Node3D
 					vertexHashTable.Add(vert, verts.Count);
 					newVertIndexNumbers[i] = verts.Count;
 					verts.Add(vert);
-					normals.Add((vert - origin).Normalized());
 					uvs.Add(Vector2.Zero);
 				}
 			}
@@ -265,9 +263,11 @@ public partial class WorldGen : Node3D
 		}
 
 		List<int> newIndicies = new List<int>();
+		List<Vector3> newVerts = new List<Vector3>();
+        List<Vector3> normals = new List<Vector3>();
 
-		//Split the new mesh based on surface normal values
-		while(indices.Count > 0)
+        //Split the new mesh based on surface normal values
+        while (indices.Count > 0)
 		{
 			//Move the starting face into a new mesh
 			List<int> splitMeshIndiciesList = new List<int>
@@ -291,14 +291,26 @@ public partial class WorldGen : Node3D
 			RecursiveFindAdjacentFaces(splitMeshIndiciesList[2], hitNormal, splitMeshIndiciesList, verts, indices, triangleNormals);
 			GD.Print("Pass Complete, " + indices.Count + " Left to Go");
 
-			newIndicies.AddRange(splitMeshIndiciesList);
+			for (int i = 0; i < splitMeshIndiciesList.Count; i++)
+            {    
+				//Hello you have to somehow change all the splitmeshindicieslist values to
+				//remove any gaps in the indexes, and then you get all the new verts
+				//for the mesh and do the same thing, but using the old splitmeshindicieslist values
+				//and what they are now. Maybe a dictionary lookup? idfk
+
+
+                newVerts.Add(verts[splitMeshIndiciesList[i]]);
+				normals.Add(Vector3.One);
+            }
+
+            newIndicies.AddRange(splitMeshIndiciesList);
 		}
 
 
 
 		// Convert Lists to arrays and assign to surface array
 		ArrayMesh arrMesh = new ArrayMesh();
-		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
+		surfaceArray[(int)Mesh.ArrayType.Vertex] = newVerts.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Index] = newIndicies.ToArray();
