@@ -267,27 +267,26 @@ public partial class WorldGen : Node3D
 		//Split the new mesh based on surface normal values
 		while(indices.Count > 0 && verts.Count > 0)
 		{
-			//Get the starting face and its normal
-			List<int> splitMeshIndiciesArray = new List<int>
+			//Move the starting face into a new mesh
+			List<int> splitMeshIndiciesList = new List<int>
 			{
 				indices[0],
 				indices[1],
 				indices[2]
 			};
-			Vector3 hitNormal = (verts[indices[1]] - verts[indices[0]]).Cross(verts[indices[2]] - verts[indices[0]]);
+            indices.RemoveRange(0, 3);
+
+            //Get the starting face normal
+			Vector3 hitNormal = (verts[splitMeshIndiciesList[1]] - verts[splitMeshIndiciesList[0]]).Cross(verts[splitMeshIndiciesList[2]] - verts[splitMeshIndiciesList[0]]);
 			List<Vector3> triangleNormals = new List<Vector3>
 			{
 				hitNormal
 			};
 
 			//Recursively find all faces that share verticies but also are above hit angle
-			RecursiveFindAdjacentFaces(indices[0], hitNormal,splitMeshIndiciesArray,verts,indices,triangleNormals);
-
-			//Remove verts from list before executing these two please
-			//so there isnt duplicate lookups
-
-			RecursiveFindAdjacentFaces(indices[1], hitNormal, splitMeshIndiciesArray, verts, indices, triangleNormals);
-			RecursiveFindAdjacentFaces(indices[2], hitNormal, splitMeshIndiciesArray, verts, indices, triangleNormals);
+			RecursiveFindAdjacentFaces(splitMeshIndiciesList[0], hitNormal, splitMeshIndiciesList, verts,indices,triangleNormals);
+			RecursiveFindAdjacentFaces(splitMeshIndiciesList[1], hitNormal, splitMeshIndiciesList, verts, indices, triangleNormals);
+			RecursiveFindAdjacentFaces(splitMeshIndiciesList[2], hitNormal, splitMeshIndiciesList, verts, indices, triangleNormals);
 		}
 
 
