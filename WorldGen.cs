@@ -264,6 +264,8 @@ public partial class WorldGen : Node3D
 			}
 		}
 
+		List<int> newIndicies = new List<int>();
+
 		//Split the new mesh based on surface normal values
 		while(indices.Count > 0)
 		{
@@ -288,7 +290,10 @@ public partial class WorldGen : Node3D
 			RecursiveFindAdjacentFaces(splitMeshIndiciesList[1], hitNormal, splitMeshIndiciesList, verts, indices, triangleNormals);
 			RecursiveFindAdjacentFaces(splitMeshIndiciesList[2], hitNormal, splitMeshIndiciesList, verts, indices, triangleNormals);
 			GD.Print("Pass Complete, " + indices.Count + " Left to Go");
+
+			newIndicies.AddRange(splitMeshIndiciesList);
 		}
+
 
 
 		// Convert Lists to arrays and assign to surface array
@@ -296,7 +301,7 @@ public partial class WorldGen : Node3D
 		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
+		surfaceArray[(int)Mesh.ArrayType.Index] = newIndicies.ToArray();
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
 
 		//Assign the surface to a mesh and return
