@@ -206,7 +206,7 @@ public partial class WorldGen : Node3D
 		List<Vector2> uvs = new List<Vector2>();
 		List<Vector3> normals = new List<Vector3>();
 		List<int> indices = new List<int>();
-		int maxX,maxY,maxZ,minX,minY,minZ,duplicateVert;
+		int maxX,maxY,maxZ,minX,minY,minZ;
 		Vector3 origin,vert;
 		int[] newVertIndexNumbers;
 
@@ -263,6 +263,28 @@ public partial class WorldGen : Node3D
 			}
 		}
 
+		//Split the new mesh based on surface normal values
+		while(indices.Count > 0 && verts.Count > 0)
+		{
+            //Get the starting face and its normal
+            List<int> splitMeshIndiciesArray = new List<int>
+            {
+                indices[0],
+                indices[1],
+                indices[2]
+            };
+            Vector3 hitNormal = (verts[indices[1]] - verts[indices[0]]).Cross(verts[indices[2]] - verts[indices[0]]);
+
+			//Recursively find all faces that share verticies but also are above hit angle
+			RecursiveFindAdjacentFaces(indices[0], hitNormal,splitMeshIndiciesArray,verts,indices);
+
+			//Remove verts from list before executing these two please
+			//so there isnt duplicate lookups
+
+            RecursiveFindAdjacentFaces(indices[1], hitNormal, splitMeshIndiciesArray, verts, indices);
+            RecursiveFindAdjacentFaces(indices[2], hitNormal, splitMeshIndiciesArray, verts, indices);
+        }
+
 
         // Convert Lists to arrays and assign to surface array
         ArrayMesh arrMesh = new ArrayMesh();
@@ -284,6 +306,27 @@ public partial class WorldGen : Node3D
 			meshNode = meshObject, 
 			position = new Vector3(chunkData.positionX * chunkSize, 0, chunkData.positionZ * chunkSize) 
 		};
+	}
+
+	void RecursiveFindAdjacentFaces(int vertexIndex, Vector3 normalCompare, List<int> splitArrays, List<Vector3> verts, List<int> indices)
+	{
+		//Check for triangles with shared vertices
+		for (int i = 0; i < indices.Count; i++)
+		{
+			if (indices[i] == vertexIndex)
+			{
+				//Compare angles
+				int startingIndex = i - (i % 3);
+                Vector3 hitNormal = (verts[indices[startingIndex + 1]] - verts[indices[startingIndex]]).Cross(verts[indices[startingIndex+2]] - verts[indices[startingIndex]]);
+				if(normalCompare.Dot(hitNormal) > 0)
+				{
+                    splitArrays.Add(startingIndex);
+                    splitArrays.Add(startingIndex+1);
+                    splitArrays.Add(startingIndex+2);
+                    indices.RemoveRange(startingIndex,3);
+                }
+            }
+        }
 	}
 
 	Brush CreateBrush(Vector3 pos, Vector3 size)
