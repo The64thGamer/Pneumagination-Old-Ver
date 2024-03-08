@@ -3,6 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://d3q5as6tnbfs7" path="res://testtexture.png" id="1_0608e"]
 
 [resource]
-albedo_color = Color(0.596078, 0.396078, 0.941176, 1)
 albedo_texture = ExtResource("1_0608e")
 roughness = 0.31
