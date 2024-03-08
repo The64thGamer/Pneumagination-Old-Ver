@@ -286,10 +286,12 @@ public partial class WorldGen : Node3D
 			}
 		}
 
+        //Setup normals
+        List<Vector3> normals = new List<Vector3>(verts.Count);
+
 		//Vertex Splitter
 		List<int> adjacentTriangleIndices = new List<int>();
 		List<Vector3> adjacentFaceNormals = new List<Vector3>();
-
 		int oldVertCount = verts.Count;
 
 		for (int x = 0; x < oldVertCount; x++)
@@ -332,6 +334,8 @@ public partial class WorldGen : Node3D
 				//- by modifying indices[adjacentTriangleIndices[????]-
 				//- where ???? = the current triangle of adjacenttriangleindices's vertex that matches "currentvert" out of the 3.
 
+				bool splitCheck = false;
+
 				for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
 				{
 					for (int e = 0; e < 3; e++)
@@ -351,7 +355,9 @@ public partial class WorldGen : Node3D
 							}
 							if (otherTriangleStartingIndex >= 0 && adjacentFaceNormals[i / 3].Dot(adjacentFaceNormals[otherTriangleStartingIndex / 3]) <= 0)
 							{
+								splitCheck = true;
 								verts.Add(currentVert);
+								normals.Add(Vector3.Zero);
 								for (int k = 0; k < 3; k++)
 								{
 									if (indices[adjacentTriangleIndices[i + k]] == currentVertIndiciesNumber)
@@ -365,48 +371,60 @@ public partial class WorldGen : Node3D
 					}
 				}
 
-
-				//Okay we're out of the for loop, verts are split
-				//Next you wanna copy waaaay up above the "fast lookup table for adjacent triangles"
-				//This one is now gonna iterate through "adjacenttriangleindices"
-				//BUT, its gonna skip adding to the dictionary if the vertex POSITION does not match "currentvert"-
-				//because we just care about which tris now belong to which split groups of verts, they all still-
-				//potentially connect through the other verts right now.
-				//In the value of the dictionary, JUST have it save a list of the indexes of the current triangles -> / 3.0f and Mathf.ToFloorInt()
-
-				Dictionary<Vector3, List<int>> finalAdjacencyList = new Dictionary<Vector3, List<int>>();
-				for (int i = 0; i < adjacentTriangleIndices.Count; i++)
+				if (splitCheck)
 				{
-					lookupVertex = verts[indices[adjacentTriangleIndices[i]]];
-					if (lookupVertex == currentVert)
+					//Okay we're out of the for loop, verts are split
+					//Next you wanna copy waaaay up above the "fast lookup table for adjacent triangles"
+					//This one is now gonna iterate through "adjacenttriangleindices"
+					//BUT, its gonna skip adding to the dictionary if the vertex POSITION does not match "currentvert"-
+					//because we just care about which tris now belong to which split groups of verts, they all still-
+					//potentially connect through the other verts right now.
+					//In the value of the dictionary, JUST have it save a list of the indexes of the current triangles -> / 3.0f and Mathf.ToFloorInt()
+
+					Dictionary<Vector3, List<int>> finalAdjacencyList = new Dictionary<Vector3, List<int>>();
+					for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 					{
-						startIndex = i - (i % 3);
-						if (finalAdjacencyList.ContainsKey(lookupVertex))
+						lookupVertex = verts[indices[adjacentTriangleIndices[i]]];
+						if (lookupVertex == currentVert)
 						{
-							finalAdjacencyList[lookupVertex].Add(startIndex);
-							finalAdjacencyList[lookupVertex].Add(startIndex + 1);
-							finalAdjacencyList[lookupVertex].Add(startIndex + 2);
-						}
-						else
-						{
-							finalAdjacencyList.Add(lookupVertex, new List<int>()
+							startIndex = i - (i % 3);
+							if (finalAdjacencyList.ContainsKey(lookupVertex))
+							{
+								finalAdjacencyList[lookupVertex].Add(startIndex);
+								finalAdjacencyList[lookupVertex].Add(startIndex + 1);
+								finalAdjacencyList[lookupVertex].Add(startIndex + 2);
+							}
+							else
+							{
+								finalAdjacencyList.Add(lookupVertex, new List<int>()
 							{
 								startIndex,
 								startIndex+1,
 								startIndex+2,
 							});
+							}
 						}
 					}
+
+					//Out of that for loop, into another one.
+					//Iterate through every part of the dictionary to get the List<int> values
+					//Use each of these indexes to sample from adjacentFaceNormals and average them together
+					//DONT normalize anything, we want the magnitude to weight the normals
+					//AFTER the average is calculated, normalize it.
+					//Apply this normal value to the vertex 
+
+					//YOU ARE DONE VERTEX SPLITTING
 				}
-
-				//Out of that for loop, into another one.
-				//Iterate through every part of the dictionary to get the List<int> values
-				//Use each of these indexes to sample from adjacentFaceNormals and average them together
-				//DONT normalize anything, we want the magnitude to weight the normals
-				//AFTER the average is calculated, normalize it.
-				//Apply this normal value to the vertex 
-
-				//YOU ARE DONE VERTEX SPLITTING
+				else
+				{
+					//No split occured, average all normals in the whole list and apply it.'
+					Vector3 finalNormal = Vector3.Zero;
+					for (int k = 0; k < adjacentFaceNormals.Count; k++)
+					{
+						finalNormal += adjacentFaceNormals[k];
+					}
+					normals[x] = finalNormal.Normalized();
+				}
 			}
 		}
 
@@ -414,7 +432,7 @@ public partial class WorldGen : Node3D
 		ArrayMesh arrMesh = new ArrayMesh();
 		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[verts.Count];
-		surfaceArray[(int)Mesh.ArrayType.Normal] = new Vector3[verts.Count];
+		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
 
