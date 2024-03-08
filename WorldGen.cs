@@ -271,27 +271,72 @@ public partial class WorldGen : Node3D
 
 			if (triangleAdjacencyList.ContainsKey(currentVertex))
 			{
-				triangleAdjacencyList[currentVertex].Add(indices[startIndex]);
-				triangleAdjacencyList[currentVertex].Add(indices[startIndex+1]);
-				triangleAdjacencyList[currentVertex].Add(indices[startIndex+2]);
+				triangleAdjacencyList[currentVertex].Add(startIndex);
+				triangleAdjacencyList[currentVertex].Add(startIndex+1);
+				triangleAdjacencyList[currentVertex].Add(startIndex+2);
 			}
 			else
 			{
 				triangleAdjacencyList.Add(currentVertex, new List<int>()
 				{
-					indices[startIndex],
-					indices[startIndex+1],
-					indices[startIndex+2],
+					startIndex,
+					startIndex+1,
+					startIndex+2,
 				});
 			}
 		}
 
-		//Edge Splitter
-		foreach (Vector3 currentVert in verts)
+		//Vertex Splitter
+		List<int> adjacentTriangleIndices = new List<int>();
+		List<Vector3> adjacentFaceNormals = new List<Vector3>();
+        foreach (Vector3 currentVert in verts)
 		{
+            if(triangleAdjacencyList.TryGetValue(currentVert, out adjacentTriangleIndices))
+			{
+				//Gather all face normals
+				adjacentFaceNormals = new List<Vector3>();
+				for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
+				{
+					adjacentFaceNormals.Add((
+						verts[indices[adjacentTriangleIndices[i + 1]]] - 
+						verts[indices[adjacentTriangleIndices[i]]]).
+						Cross(verts[indices[adjacentTriangleIndices[i + 2]]] - 
+						verts[indices[adjacentTriangleIndices[i]]]
+						));
+				}
 
-		}
 
+                //REMEMBER THAT "adjacentTriangleindices" is an INDEX for "indices", NOT a pointer to a vertex
+                //This is REQUIRED for edge splitting
+
+
+                //For loop of all other vertices (generate this from unique values in for loop(i) -> indices[adjacenttriangleindices[i]])
+                //On current vert, find triangle that matches the vertex. If none found, skip
+                //Once a match is found, compare normal angles and see if vertex split is needed
+                //If so, split the MAIN "currentVert" vert, not the one used to match the tris.
+                //Do this by adding a new vert entry to verts.
+                //Change the first of the two selected tris to point to this new vert-
+                //- by modifying indices[adjacentTriangleIndices[????]-
+                //- where ???? = the current triangle of adjacenttriangleindices's vertex that matches "currentvert" out of the 3.
+
+                //Okay we're out of the for loop, verts are split
+                //Next you wanna copy waaaay up above the "fast lookup table for adjacent triangles"
+                //This one is now gonna iterate through "adjacenttriangleindices"
+                //BUT, its gonna skip adding to the dictionary if the vertex POSITION does not match "currentvert"-
+                //because we just care about which tris now belong to which split groups of verts, they all still-
+                //potentially connect through the other verts right now.
+                //In the value of the dictionary, JUST have it save a list of the indexes of the current triangles -> / 3.0f and Mathf.ToFloorInt()
+				
+				//Out of that for loop, into another one.
+				//Iterate through every part of the dictionary to get the List<int> values
+				//Use each of these indexes to sample from adjacentFaceNormals and average them together
+				//DONT normalize anything, we want the magnitude to weight the normals
+				//AFTER the average is calculated, normalize it.
+				//Apply this normal value to the vertex 
+
+				//YOU ARE DONE VERTEX SPLITTING
+            }
+        }
 
 		// Convert Lists to arrays and assign to surface array
 		ArrayMesh arrMesh = new ArrayMesh();
