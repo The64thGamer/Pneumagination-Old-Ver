@@ -260,9 +260,9 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-        //Create a fast lookup table for adjacent triangles
-        Dictionary<Vector3, List<int>> triangleAdjacencyList = new Dictionary<Vector3, List<int>>();
-        Vector3 lookupVertex;
+		//Create a fast lookup table for adjacent triangles
+		Dictionary<Vector3, List<int>> triangleAdjacencyList = new Dictionary<Vector3, List<int>>();
+		Vector3 lookupVertex;
 		int startIndex;
 		for (int i = 0; i < indices.Count; i++)
 		{
@@ -306,19 +306,19 @@ public partial class WorldGen : Node3D
 				}
 
 
-                //REMEMBER THAT "adjacentTriangleindices" is an INDEX for "indices", NOT a pointer to a vertex
-                //This is REQUIRED for edge splitting
+				//REMEMBER THAT "adjacentTriangleindices" is an INDEX for "indices", NOT a pointer to a vertex
+				//This is REQUIRED for edge splitting
 
-                //For loop of all triangles
-                //On current vert, find triangle that matches the vertex. If none found, skip
-                //Once a match is found, compare normal angles and see if vertex split is needed
-                //If so, split the MAIN "currentVert" vert, not the one used to match the tris.
-                //Do this by adding a new vert entry to verts.
-                //Change the first of the two selected tris to point to this new vert-
-                //- by modifying indices[adjacentTriangleIndices[????]-
-                //- where ???? = the current triangle of adjacenttriangleindices's vertex that matches "currentvert" out of the 3.
+				//For loop of all triangles
+				//On current vert, find triangle that matches the vertex. If none found, skip
+				//Once a match is found, compare normal angles and see if vertex split is needed
+				//If so, split the MAIN "currentVert" vert, not the one used to match the tris.
+				//Do this by adding a new vert entry to verts.
+				//Change the first of the two selected tris to point to this new vert-
+				//- by modifying indices[adjacentTriangleIndices[????]-
+				//- where ???? = the current triangle of adjacenttriangleindices's vertex that matches "currentvert" out of the 3.
 
-                for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
+				for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
 				{
 					for (int e = 0; e < 3; e++)
 					{
@@ -331,8 +331,8 @@ public partial class WorldGen : Node3D
 								otherTriangleStartingIndex = k - (k%3);
 								break;
 							}
-                        }
-						if(otherTriangleStartingIndex >= 0)
+						}
+						if(otherTriangleStartingIndex >= 0 && adjacentFaceNormals[i/3].Dot(adjacentFaceNormals[otherTriangleStartingIndex/3]) <= 0)
 						{
 
 						}
