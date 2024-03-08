@@ -7,7 +7,7 @@
 [sub_resource type="Environment" id="Environment_f6ua2"]
 fog_enabled = true
 fog_light_color = Color(0.752941, 0.843137, 1, 1)
-fog_density = 0.002
+fog_density = 0.0005
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_hnv23")
@@ -20,4 +20,8 @@ fov = 92.8
 script = ExtResource("3_6nmsw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.519063, -0.340605, 0.78394, 0.838405, 0.381321, -0.38945, -0.166285, 0.859408, 0.483494, 0, 0, 0)
+transform = Transform3D(-0.64011, 0.608703, 0.468764, -1.06681e-07, -0.610145, 0.79229, 0.768284, 0.507152, 0.39056, 0, 0, 0)
+light_energy = 15.0
+shadow_enabled = true
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 2374.0

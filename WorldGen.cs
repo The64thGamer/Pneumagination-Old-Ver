@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 1;
+	[Export] int chunkRenderSize = 2;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
@@ -197,6 +197,8 @@ public partial class WorldGen : Node3D
 
 	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData, int id)
 	{
+		Random rnd = new Random();
+
 		Node3D chunk = new Node3D();
 		var surfaceArray = new Godot.Collections.Array();
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
@@ -292,6 +294,11 @@ public partial class WorldGen : Node3D
 		{
 			normals.Add(Vector3.One);
 		}
+		List<Vector2> uvs = new List<Vector2>();
+		for (int i = 0; i < verts.Count; i++)
+		{
+			uvs.Add(Vector2.One);
+		}
 
 		//Vertex Splitter
 		List<int> adjacentTriangleIndices = new List<int>();
@@ -362,6 +369,7 @@ public partial class WorldGen : Node3D
 								splitCheck = true;
 								verts.Add(currentVert);
 								normals.Add(Vector3.One);
+								uvs.Add(Vector2.One);
 								for (int k = 0; k < 3; k++)
 								{
 									if (indices[adjacentTriangleIndices[i + k]] == currentVertIndiciesNumber)
@@ -420,27 +428,29 @@ public partial class WorldGen : Node3D
 
 					foreach ((Vector3 key, List<int> value) in finalAdjacencyList)
 					{
+						Vector2 randVec = new Vector2((float)rnd.NextDouble(), (float)rnd.NextDouble());
 						Vector3 finalNormal = Vector3.Zero;
-						for (int k = 0; k < value.Count; k++)
+						for (int k = 0; k < value.Count; k += 3)
 						{
-							finalNormal += adjacentFaceNormals[Mathf.FloorToInt(value[k] / 3.0f)];
+							finalNormal += adjacentFaceNormals[value[k] / 3];
 						}
 
 						for (int k = 0; k < value.Count; k++)
 						{
-							if(currentVert == verts[indices[adjacentTriangleIndices[value[k]]]])
+							uvs[indices[adjacentTriangleIndices[value[k]]]] = randVec;
+							if (currentVert == verts[indices[adjacentTriangleIndices[value[k]]]])
 							{
-								normals[indices[adjacentTriangleIndices[value[k]]]] = finalNormal;
+								normals[indices[adjacentTriangleIndices[value[k]]]] = finalNormal.Normalized();
 								break;
 							}
 						}
 					}
-
-					//YOU ARE DONE VERTEX SPLITTING
 				}
 				else
 				{
-					//No split occured, average all normals in the whole list and apply it.'
+					//No split occured, average all normals in the whole list and apply it.
+					//This will never run if the world is generated full of right angled cubes.
+
 					Vector3 finalNormal = Vector3.Zero;
 					for (int k = 0; k < adjacentFaceNormals.Count; k++)
 					{
@@ -454,7 +464,7 @@ public partial class WorldGen : Node3D
 		// Convert Lists to arrays and assign to surface array
 		ArrayMesh arrMesh = new ArrayMesh();
 		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[verts.Count];
+		surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
