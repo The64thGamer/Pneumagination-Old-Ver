@@ -374,6 +374,31 @@ public partial class WorldGen : Node3D
 				//potentially connect through the other verts right now.
 				//In the value of the dictionary, JUST have it save a list of the indexes of the current triangles -> / 3.0f and Mathf.ToFloorInt()
 
+				Dictionary<Vector3, List<int>> finalAdjacencyList = new Dictionary<Vector3, List<int>>();
+				for (int i = 0; i < adjacentTriangleIndices.Count; i++)
+				{
+					lookupVertex = verts[indices[adjacentTriangleIndices[i]]];
+					if (lookupVertex == currentVert)
+					{
+						startIndex = i - (i % 3);
+						if (finalAdjacencyList.ContainsKey(lookupVertex))
+						{
+							finalAdjacencyList[lookupVertex].Add(startIndex);
+							finalAdjacencyList[lookupVertex].Add(startIndex + 1);
+							finalAdjacencyList[lookupVertex].Add(startIndex + 2);
+						}
+						else
+						{
+							finalAdjacencyList.Add(lookupVertex, new List<int>()
+							{
+								startIndex,
+								startIndex+1,
+								startIndex+2,
+							});
+						}
+					}
+				}
+
 				//Out of that for loop, into another one.
 				//Iterate through every part of the dictionary to get the List<int> values
 				//Use each of these indexes to sample from adjacentFaceNormals and average them together
