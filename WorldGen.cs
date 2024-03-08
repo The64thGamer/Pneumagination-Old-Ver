@@ -329,7 +329,6 @@ public partial class WorldGen : Node3D
     {
         //Check for triangles with shared vertices
         List<int> connectedTrisIndexes = new List<int>();
-        List<Vector3> connectedFaceNormals = new List<Vector3>();
         for (int i = 0; i < input.oldIndices.Count; i++)
         {
             if (input.oldIndices[i] == vertexIndex)
@@ -340,20 +339,20 @@ public partial class WorldGen : Node3D
                 if (normalCompare.Dot(hitNormal) > 0)
                 {
                     //Check if duplicate vert
-                    if (output.newVertexHashTable.TryGetValue(input.oldVerts[input.oldIndices[startingIndex]], out int index))
+                    for (int k = 0; k < 3; k++)
                     {
-                        connectedTrisIndexes.Add(index);
+                        connectedTrisIndexes.Add(startingIndex + k);
+                        if (output.newVertexHashTable.TryGetValue(input.oldVerts[input.oldIndices[startingIndex + k]], out int index))
+                        {
+                            output.newMeshIndicies.Add(index);
+                        }
+                        else
+                        {
+                            output.newVertexHashTable.Add(input.oldVerts[input.oldIndices[startingIndex + k]], input.oldVerts.Count);
+                            output.newMeshIndicies.Add(input.oldVerts.Count);
+                        }
                     }
-                    else
-                    {
-                        output.newVertexHashTable.Add(input.oldVerts[input.oldIndices[startingIndex]], input.oldVerts.Count);
-                        connectedTrisIndexes.Add(startingIndex);
-
-                    }
-                    //Collect data of connected triangle for later
-                    connectedTrisIndexes.Add(startingIndex + 1);
-                    connectedTrisIndexes.Add(startingIndex + 2);
-                    connectedFaceNormals.Add(hitNormal);
+                    output.triNormals.Add(hitNormal);
                 }
             }
         }
@@ -364,7 +363,6 @@ public partial class WorldGen : Node3D
         {
             passThroughIndices.Add(input.oldIndices[connectedTrisIndexes[i]]);
         }
-        output.triNormals.AddRange(connectedFaceNormals);
         output.newMeshIndicies.AddRange(passThroughIndices);
 
         //Remove indicies from main mesh
@@ -380,7 +378,7 @@ public partial class WorldGen : Node3D
             if (passThroughIndices[i] != vertexIndex)
             {
                 int normalsIndex = Mathf.FloorToInt(i / 3.0f);
-                RecursiveFindAdjacentFaces(passThroughIndices[i], connectedFaceNormals[normalsIndex], input, output);
+                RecursiveFindAdjacentFaces(passThroughIndices[i], output.triNormals[normalsIndex], input, output);
             }
         }
     }
