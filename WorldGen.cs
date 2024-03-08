@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 0;
+	[Export] int chunkRenderSize = 1;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
@@ -258,6 +258,38 @@ public partial class WorldGen : Node3D
 			{
 				indices.Add(newVertIndexNumbers[currentBrush.indicies[i]]);
 			}
+		}
+
+		//Create a fast lookup table for adjacent triangles
+		Dictionary<Vector3, List<int>> triangleAdjacencyList = new Dictionary<Vector3, List<int>>();
+		Vector3 currentVertex;
+		int startIndex;
+		for (int i = 0; i < indices.Count; i++)
+		{
+			currentVertex = verts[indices[i]];
+			startIndex = i - (i % 3);
+
+			if (triangleAdjacencyList.ContainsKey(currentVertex))
+			{
+				triangleAdjacencyList[currentVertex].Add(indices[startIndex]);
+				triangleAdjacencyList[currentVertex].Add(indices[startIndex+1]);
+				triangleAdjacencyList[currentVertex].Add(indices[startIndex+2]);
+			}
+			else
+			{
+				triangleAdjacencyList.Add(currentVertex, new List<int>()
+				{
+					indices[startIndex],
+					indices[startIndex+1],
+					indices[startIndex+2],
+				});
+			}
+		}
+
+		//Edge Splitter
+		foreach (Vector3 currentVert in verts)
+		{
+
 		}
 
 
