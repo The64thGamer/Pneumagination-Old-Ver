@@ -286,8 +286,12 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-        //Setup normals
-        List<Vector3> normals = new List<Vector3>(verts.Count);
+		//Setup normals
+		List<Vector3> normals = new List<Vector3>();
+		for (int i = 0; i < verts.Count; i++)
+		{
+			normals.Add(Vector3.One);
+		}
 
 		//Vertex Splitter
 		List<int> adjacentTriangleIndices = new List<int>();
@@ -357,7 +361,7 @@ public partial class WorldGen : Node3D
 							{
 								splitCheck = true;
 								verts.Add(currentVert);
-								normals.Add(Vector3.Zero);
+								normals.Add(Vector3.One);
 								for (int k = 0; k < 3; k++)
 								{
 									if (indices[adjacentTriangleIndices[i + k]] == currentVertIndiciesNumber)
@@ -381,6 +385,7 @@ public partial class WorldGen : Node3D
 					//potentially connect through the other verts right now.
 					//In the value of the dictionary, JUST have it save a list of the indexes of the current triangles -> / 3.0f and Mathf.ToFloorInt()
 
+
 					Dictionary<Vector3, List<int>> finalAdjacencyList = new Dictionary<Vector3, List<int>>();
 					for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 					{
@@ -397,11 +402,11 @@ public partial class WorldGen : Node3D
 							else
 							{
 								finalAdjacencyList.Add(lookupVertex, new List<int>()
-							{
-								startIndex,
-								startIndex+1,
-								startIndex+2,
-							});
+								{
+									startIndex,
+									startIndex+1,
+									startIndex+2,
+								});
 							}
 						}
 					}
@@ -412,6 +417,24 @@ public partial class WorldGen : Node3D
 					//DONT normalize anything, we want the magnitude to weight the normals
 					//AFTER the average is calculated, normalize it.
 					//Apply this normal value to the vertex 
+
+					foreach ((Vector3 key, List<int> value) in finalAdjacencyList)
+					{
+						Vector3 finalNormal = Vector3.Zero;
+						for (int k = 0; k < value.Count; k++)
+						{
+							finalNormal += adjacentFaceNormals[Mathf.FloorToInt(value[k] / 3.0f)];
+						}
+
+						for (int k = 0; k < value.Count; k++)
+						{
+							if(currentVert == verts[indices[adjacentTriangleIndices[value[k]]]])
+							{
+								normals[indices[adjacentTriangleIndices[value[k]]]] = finalNormal;
+								break;
+							}
+						}
+					}
 
 					//YOU ARE DONE VERTEX SPLITTING
 				}
