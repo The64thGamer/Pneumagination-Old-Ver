@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 2;
+	[Export] int chunkRenderSize = 0;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
@@ -322,17 +322,6 @@ public partial class WorldGen : Node3D
 						));
 				}
 
-				//Get two useful values for later
-				int currentVertHash = currentVert.GetHashCode();
-				int currentVertIndiciesNumber = -1;
-				for (int i = 0; i < 3; i++)
-				{
-					if (verts[indices[adjacentTriangleIndices[i]]].GetHashCode() == currentVertHash)
-					{
-						currentVertIndiciesNumber = indices[adjacentTriangleIndices[i]];
-					}
-				}
-
 				//REMEMBER THAT "adjacentTriangleindices" is an INDEX for "indices", NOT a pointer to a vertex
 				//This is REQUIRED for edge splitting
 
@@ -351,14 +340,13 @@ public partial class WorldGen : Node3D
 				{
 					for (int e = 0; e < 3; e++)
 					{
-						int workingVertHash = verts[indices[adjacentTriangleIndices[i + e]]].GetHashCode();
 
-						if (workingVertHash != currentVertHash)
+						if (indices[adjacentTriangleIndices[i + e]] != x)
 						{
 							int otherTriangleStartingIndex = -1;
 							for (int k = 0; k < adjacentTriangleIndices.Count; k++)
 							{
-								if (k != (i + e) && workingVertHash == verts[indices[adjacentTriangleIndices[k]]].GetHashCode())
+								if (k != (i + e) && indices[adjacentTriangleIndices[i + e]] == indices[adjacentTriangleIndices[k]])
 								{
 									otherTriangleStartingIndex = k - (k % 3);
 									break;
@@ -372,7 +360,7 @@ public partial class WorldGen : Node3D
 								uvs.Add(Vector2.One);
 								for (int k = 0; k < 3; k++)
 								{
-									if (indices[adjacentTriangleIndices[i + k]] == currentVertIndiciesNumber)
+									if (indices[adjacentTriangleIndices[i + k]] == x)
 									{
 										indices[adjacentTriangleIndices[i + k]] = verts.Count - 1;
 										break;
@@ -438,8 +426,16 @@ public partial class WorldGen : Node3D
 						for (int k = 0; k < value.Count; k++)
 						{
 							uvs[indices[adjacentTriangleIndices[value[k]]]] = randVec;
-							if (currentVert == verts[indices[adjacentTriangleIndices[value[k]]]])
+							if (currentVert.IsEqualApprox(verts[indices[adjacentTriangleIndices[value[k]]]]))
 							{
+								if(x != indices[adjacentTriangleIndices[value[k]]])
+								{
+									GD.Print("?????");
+								}
+								else
+								{
+									GD.Print(x + " C " + adjacentTriangleIndices[value[k]]);
+								}
 								normals[indices[adjacentTriangleIndices[value[k]]]] = finalNormal.Normalized();
 								break;
 							}
