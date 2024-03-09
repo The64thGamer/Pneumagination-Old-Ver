@@ -295,7 +295,7 @@ public partial class WorldGen : Node3D
 		List<Vector3> normals = new List<Vector3>();
 		for (int i = 0; i < verts.Count; i++)
 		{
-			normals.Add(Vector3.One);
+			normals.Add(new Vector3(0,1,0));
 		}
 
 
@@ -395,7 +395,7 @@ public partial class WorldGen : Node3D
 							{
 								splitCheck = true;
 								verts.Add(currentVert);
-								normals.Add(Vector3.One);
+								normals.Add(new Vector3(0, -1, 0));
 								for (int k = 0; k < 3; k++)
 								{
 									if(indices[adjacentTriangleIndices[otherTriangleStartingIndex+k]] == x)
@@ -484,15 +484,21 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		for (int i = 0; i < verts.Count; i++)
+		for (int i = 3000; i < 3300; i += 3)
 		{
-			DrawLine3D.Instance.DrawLine(
-verts[i],
-	normals[i] + verts[i],
-	new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1),
-	10000,
-	-1
-);
+			Color c = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1);
+			for (int e = 0; e < 3; e++)
+			{
+				Vector3 pos = (verts[newIndices[i]] + verts[newIndices[i+1]] + verts[newIndices[i+2]])/3;
+				DrawLine3D.Instance.DrawLine(
+					(verts[newIndices[i+e]] +  pos + pos + pos + pos) / 5,
+					normals[newIndices[i + e]] + ((verts[newIndices[i + e]] + pos + pos + pos + pos) / 5),
+					c,
+					10000,
+					-1
+				);
+			}
+
 		}
 
 		// Convert Lists to arrays and assign to surface array
