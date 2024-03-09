@@ -22,7 +22,7 @@ fov = 92.8
 script = ExtResource("3_6nmsw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.279008, -0.959938, 0.0259391, 0.609554, -0.156166, 0.777211, -0.742023, 0.232659, 0.628706, 0, 0, 0)
+transform = Transform3D(0.790186, 0.19839, -0.579868, 0.609554, -0.156167, 0.77721, 0.0636346, -0.967602, -0.244331, 0, 0, 0)
 light_energy = 6.915
 shadow_enabled = true
 directional_shadow_blend_splits = true

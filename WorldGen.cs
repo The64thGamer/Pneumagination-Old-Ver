@@ -444,6 +444,7 @@ public partial class WorldGen : Node3D
 									startIndex+2,
 								});
 							}
+							i = startIndex + 2;
 						}
 					}
 
@@ -454,8 +455,6 @@ public partial class WorldGen : Node3D
 					//AFTER the average is calculated, normalize it.
 					//Apply this normal value to the vertex 
 
-					//GD.Print("List " + finalAdjacencyList.Count);
-					string additions = "Count = " + oldVertCount + " CurrentVert = " + x + " - ";
 					foreach ((int key, List<int> value) in finalAdjacencyList)
 					{
 						Vector3 finalNormal = Vector3.Zero;
@@ -463,17 +462,18 @@ public partial class WorldGen : Node3D
 						{
 							finalNormal += adjacentFaceNormals[value[k] / 3];
 						}
-						finalNormal = finalNormal.Normalized();
-						additions += key + ", ";
-						normals[key] = finalNormal;
+						if (value.Count / 3 != 1)
+						{
+							GD.Print(value.Count / 3);
+						}
+						normals[key] = finalNormal.Normalized();
 					}
-					//GD.Print(additions);
 				}
 				else
 				{
 					//No split occured, average all normals in the whole list and apply it.
 					//This will never run if the world is generated full of right angled cubes.
-
+					GD.Print("Rare call?");
 					Vector3 finalNormal = Vector3.Zero;
 					for (int k = 0; k < adjacentFaceNormals.Count; k++)
 					{
@@ -498,7 +498,11 @@ public partial class WorldGen : Node3D
 					-1
 				);
 			}
+		}
 
+		for (int i = 0; i < verts.Count; i++)
+		{
+			verts[i] += (new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f))/2;
 		}
 
 		// Convert Lists to arrays and assign to surface array
