@@ -364,6 +364,7 @@ public partial class WorldGen : Node3D
 					}
 				}
 
+
 				if (splitCheck)
 				{
 					//Okay we're out of the for loop, verts are split
@@ -416,12 +417,11 @@ public partial class WorldGen : Node3D
 						{
 							finalNormal += adjacentFaceNormals[value[k] / 3];
 						}
-						finalNormal = finalNormal.Normalized();
+						finalNormal = -finalNormal.Normalized();
 						additions += key + ", ";
 						normals[key] = finalNormal;
-
 					}
-					GD.Print(additions);
+					//GD.Print(additions);
 				}
 				else
 				{
@@ -433,7 +433,7 @@ public partial class WorldGen : Node3D
 					{
 						finalNormal += adjacentFaceNormals[k];
 					}
-					normals[x] = finalNormal.Normalized();
+					normals[x] = -finalNormal.Normalized();
 				}
 			}
 		}
