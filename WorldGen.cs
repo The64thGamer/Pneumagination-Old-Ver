@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 1;
+	[Export] int chunkRenderSize = 0;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
@@ -260,6 +260,45 @@ public partial class WorldGen : Node3D
 			}
 		}
 
+		/*
+		//NEW MESH
+		verts = new List<Vector3>()
+		{
+			new Vector3(0			,0	,0),
+			new Vector3(0			,0	,1),
+			new Vector3(0.866025f	,0	,0.5f),
+			new Vector3(0.866025f	,1	,-0.5f),
+			new Vector3(0			,0	,-1),
+			new Vector3(-0.866025f	,1	,-0.5f),
+			new Vector3(-0.866025f	,0	,0.5f),
+		};
+
+		indices = new List<int>()
+		{
+			0,2,1,
+			0,3,2,
+			0,4,3,
+			0,5,4,
+			0,6,5,
+			0,1,6
+		};
+		*/
+
+		//Create index copy to not mess up algoritm
+		List<int> newIndices = new List<int>();
+		for (int i = 0; i < indices.Count; i++)
+		{
+			newIndices.Add(indices[i]);
+		}
+
+		//Setup normals
+		List<Vector3> normals = new List<Vector3>();
+		for (int i = 0; i < verts.Count; i++)
+		{
+			normals.Add(Vector3.One);
+		}
+
+
 		//Create a fast lookup table for adjacent triangles
 		Dictionary<Vector3, List<int>> triangleAdjacencyList = new Dictionary<Vector3, List<int>>();
 		Vector3 lookupVertex;
@@ -286,17 +325,11 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		//Setup normals
-		List<Vector3> normals = new List<Vector3>();
-		for (int i = 0; i < verts.Count; i++)
-		{
-			normals.Add(Vector3.One);
-		}
-
 		//Vertex Splitter
 		List<int> adjacentTriangleIndices = new List<int>();
 		List<Vector3> adjacentFaceNormals = new List<Vector3>();
 		int oldVertCount = verts.Count;
+		Random rnd = new Random();
 
 		for (int x = 0; x < oldVertCount; x++)
 		{
@@ -308,11 +341,24 @@ public partial class WorldGen : Node3D
 				for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
 				{
 					adjacentFaceNormals.Add((
-						verts[indices[adjacentTriangleIndices[i + 1]]] -
-						verts[indices[adjacentTriangleIndices[i]]]).
+						verts[indices[adjacentTriangleIndices[i]]] -
+						verts[indices[adjacentTriangleIndices[i + 1]]]).
 						Cross(verts[indices[adjacentTriangleIndices[i + 2]]] -
-						verts[indices[adjacentTriangleIndices[i]]]
+						verts[indices[adjacentTriangleIndices[i + 1]]]
 						));
+					Vector3 pos = (verts[indices[adjacentTriangleIndices[i]]]
+					+ verts[indices[adjacentTriangleIndices[i + 1]]]
+					+ verts[indices[adjacentTriangleIndices[i + 2]]]) / 3.0f;
+					
+					/*
+					DrawLine3D.Instance.DrawLine(
+						pos,
+						adjacentFaceNormals[adjacentFaceNormals.Count - 1].Normalized() + pos,
+						new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1),
+						10000,
+						-1
+					);
+					*/
 				}
 
 				//REMEMBER THAT "adjacentTriangleindices" is an INDEX for "indices", NOT a pointer to a vertex
@@ -354,7 +400,7 @@ public partial class WorldGen : Node3D
 								{
 									if(indices[adjacentTriangleIndices[otherTriangleStartingIndex+k]] == x)
 									{
-										indices[adjacentTriangleIndices[otherTriangleStartingIndex + k]] = verts.Count - 1;
+										newIndices[adjacentTriangleIndices[otherTriangleStartingIndex + k]] = verts.Count - 1;
 										break;
 									}
 								}
@@ -378,7 +424,7 @@ public partial class WorldGen : Node3D
 					Dictionary<int, List<int>> finalAdjacencyList = new Dictionary<int, List<int>>();
 					for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 					{
-						int lookupIndex = indices[adjacentTriangleIndices[i]];
+						int lookupIndex = newIndices[adjacentTriangleIndices[i]];
 
 						if (currentVert.IsEqualApprox(verts[lookupIndex]))
 						{
@@ -417,7 +463,7 @@ public partial class WorldGen : Node3D
 						{
 							finalNormal += adjacentFaceNormals[value[k] / 3];
 						}
-						finalNormal = -finalNormal.Normalized();
+						finalNormal = finalNormal.Normalized();
 						additions += key + ", ";
 						normals[key] = finalNormal;
 					}
@@ -433,9 +479,20 @@ public partial class WorldGen : Node3D
 					{
 						finalNormal += adjacentFaceNormals[k];
 					}
-					normals[x] = -finalNormal.Normalized();
+					normals[x] = finalNormal.Normalized();
 				}
 			}
+		}
+
+		for (int i = 0; i < verts.Count; i++)
+		{
+			DrawLine3D.Instance.DrawLine(
+verts[i],
+	normals[i] + verts[i],
+	new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1),
+	10000,
+	-1
+);
 		}
 
 		// Convert Lists to arrays and assign to surface array
@@ -443,7 +500,7 @@ public partial class WorldGen : Node3D
 		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[verts.Count];
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
+		surfaceArray[(int)Mesh.ArrayType.Index] = newIndices.ToArray();
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
 
 		//Assign the surface to a mesh and return

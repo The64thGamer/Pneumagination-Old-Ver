@@ -15,6 +15,10 @@ run/main_scene="res://node_3d.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+DrawLine3D="*res://DrawLine3D.cs"
+
 [dotnet]
 
 project/assembly_name="Pneumagination"
