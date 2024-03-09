@@ -316,11 +316,9 @@ public partial class WorldGen : Node3D
 
 		//Vertex Splitter
 		List<Vector3> adjacentFaceNormals = new List<Vector3>();
-		int oldVertCount = verts.Count;
 
 		foreach ((Vector3 currentVert, List<int> adjacentTriangleIndices) in triangleAdjacencyList)
 		{
-
 			//Gather all face normals
 			adjacentFaceNormals = new List<Vector3>();
 			for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
@@ -334,36 +332,16 @@ public partial class WorldGen : Node3D
 			}
 
 			//Check if verts should be merged
-			for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
+			for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 			{
-				for (int e = 0; e < 3; e++)
+				if (verts[indices[adjacentTriangleIndices[i]]].IsEqualApprox(currentVert))
 				{
-					if (!verts[indices[adjacentTriangleIndices[i + e]]].IsEqualApprox(currentVert))
+					for (int k = 0; k < adjacentTriangleIndices.Count; k++)
 					{
-						for (int k = 0; k < adjacentTriangleIndices.Count; k++)
+						if (currentVert.IsEqualApprox(verts[indices[adjacentTriangleIndices[k]]])
+							&& adjacentFaceNormals[(i - (i % 3)) / 3].Dot(adjacentFaceNormals[(k - (k % 3)) / 3]) > 0.9f)
 						{
-							int kStarter = k - (k % 3);
-
-							if (verts[indices[adjacentTriangleIndices[i + e]]].IsEqualApprox(verts[indices[adjacentTriangleIndices[k]]])
-								&& adjacentFaceNormals[i / 3].Dot(adjacentFaceNormals[kStarter / 3]) > 0.4)
-							{
-								for (int j = 0; j < 3; j++)
-								{
-									if (verts[indices[adjacentTriangleIndices[i + j]]].IsEqualApprox(currentVert))
-									{
-										for (int l = kStarter; l < kStarter + 3; l++)
-										{
-											if (verts[indices[adjacentTriangleIndices[l]]].IsEqualApprox(currentVert))
-											{
-												indices[adjacentTriangleIndices[i + j]] = indices[adjacentTriangleIndices[l]];
-												break;
-											}
-										}
-										break;
-									}
-								}
-								break;
-							}
+							indices[adjacentTriangleIndices[k]] = indices[adjacentTriangleIndices[i]];
 						}
 					}
 				}
@@ -396,7 +374,7 @@ public partial class WorldGen : Node3D
 			foreach ((int key, List<int> value) in finalAdjacencyList)
 			{
 				Vector3 finalNormal = Vector3.Zero;
-				for (int k = 0; k < value.Count; k ++)
+				for (int k = 0; k < value.Count; k++)
 				{
 					finalNormal += adjacentFaceNormals[value[k] / 3];
 				}
