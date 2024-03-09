@@ -278,7 +278,7 @@ public partial class WorldGen : Node3D
 		List<Vector3> normals = new List<Vector3>();
 		for (int i = 0; i < verts.Count; i++)
 		{
-			normals.Add(new Vector3(0,1,0));
+			normals.Add(new Vector3(0, 1, 0));
 		}
 
 		/*
@@ -334,34 +334,24 @@ public partial class WorldGen : Node3D
 						Cross(verts[indices[adjacentTriangleIndices[i + 2]]] -
 						verts[indices[adjacentTriangleIndices[i + 1]]]
 						));
-					Vector3 pos = (verts[indices[adjacentTriangleIndices[i]]]
-					+ verts[indices[adjacentTriangleIndices[i + 1]]]
-					+ verts[indices[adjacentTriangleIndices[i + 2]]]) / 3.0f;
-					
 					/*
-					DrawLine3D.Instance.DrawLine(
-						pos,
-						adjacentFaceNormals[adjacentFaceNormals.Count - 1].Normalized() + pos,
-						new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1),
-						10000,
-						-1
-					);
-					*/
+	Vector3 pos = (verts[indices[adjacentTriangleIndices[i]]]
+	+ verts[indices[adjacentTriangleIndices[i + 1]]]
+	+ verts[indices[adjacentTriangleIndices[i + 2]]]) / 3.0f;
+
+
+	DrawLine3D.Instance.DrawLine(
+		pos,
+		adjacentFaceNormals[adjacentFaceNormals.Count - 1].Normalized() + pos,
+		new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1),
+		10000,
+		-1
+	);
+	*/
 				}
 
-				//REMEMBER THAT "adjacentTriangleindices" is an INDEX for "indices", NOT a pointer to a vertex
-				//This is REQUIRED for edge splitting
-
-				//For loop of all triangles
-				//On current vert, find triangle that matches the vertex. If none found, skip
-				//Once a match is found, compare normal angles and see if vertex split is needed
-				//If so, split the MAIN "currentVert" vert, not the one used to match the tris.
-				//Do this by adding a new vert entry to verts.
-				//Change the first of the two selected tris to point to this new vert-
-				//- by modifying indices[adjacentTriangleIndices[????]-
-				//- where ???? = the current triangle of adjacenttriangleindices's vertex that matches "currentvert" out of the 3.
-
-				bool splitCheck = false;
+				//Check if verts should be merged
+				bool mergeCheck = false;
 
 				for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
 				{
@@ -372,105 +362,66 @@ public partial class WorldGen : Node3D
 							int otherTriangleStartingIndex = -1;
 							for (int k = 0; k < adjacentTriangleIndices.Count; k++)
 							{
-								if (k != (i + e) && indices[adjacentTriangleIndices[i + e]] == indices[adjacentTriangleIndices[k]])
+								if (k != (i + e) && verts[indices[adjacentTriangleIndices[i + e]]].IsEqualApprox(verts[indices[adjacentTriangleIndices[k]]]))
 								{
 									otherTriangleStartingIndex = k - (k % 3);
 									break;
 								}
 							}
-							if (otherTriangleStartingIndex >= 0 && adjacentFaceNormals[i / 3].Dot(adjacentFaceNormals[otherTriangleStartingIndex / 3]) <= 0)
+							if (otherTriangleStartingIndex >= 0 && adjacentFaceNormals[i / 3].Dot(adjacentFaceNormals[otherTriangleStartingIndex / 3]) > 0.4)
 							{
-								splitCheck = true;
-
-								verts.Add(currentVert);
-								normals.Add(new Vector3(0, -1, 0));
+								mergeCheck = true;
 								for (int k = 0; k < 3; k++)
 								{
-									if (indices[adjacentTriangleIndices[i + k]] == x)
+									if (currentVert.IsEqualApprox(verts[indices[adjacentTriangleIndices[otherTriangleStartingIndex + k]]]))
 									{
-										indices[adjacentTriangleIndices[i + k]] = verts.Count - 1;
-										break;
+										indices[adjacentTriangleIndices[otherTriangleStartingIndex + k]] = x;
 									}
 								}
 
-
-								verts.Add(verts[indices[adjacentTriangleIndices[i + e]]]);
-								normals.Add(new Vector3(0, -1, 0));
-								indices[adjacentTriangleIndices[i + e]] = verts.Count - 1;
-
-
-
+								//REMINDER remove unused vertex
 							}
 						}
 					}
 				}
 
-
-				if (splitCheck)
+				Dictionary<int, List<int>> finalAdjacencyList = new Dictionary<int, List<int>>();
+				for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 				{
-					//Okay we're out of the for loop, verts are split
-					//Next you wanna copy waaaay up above the "fast lookup table for adjacent triangles"
-					//This one is now gonna iterate through "adjacenttriangleindices"
-					//BUT, its gonna skip adding to the dictionary if the vertex POSITION does not match "currentvert"-
-					//because we just care about which tris now belong to which split groups of verts, they all still-
-					//potentially connect through the other verts right now.
-					//In the value of the dictionary, JUST have it save a list of the indexes of the current triangles -> / 3.0f and Mathf.ToFloorInt()
+					int lookupIndex = indices[adjacentTriangleIndices[i]];
 
-					Dictionary<int, List<int>> finalAdjacencyList = new Dictionary<int, List<int>>();
-					for (int i = 0; i < adjacentTriangleIndices.Count; i++)
+					if (x == lookupIndex)
 					{
-						int lookupIndex = indices[adjacentTriangleIndices[i]];
-
-						if (currentVert.IsEqualApprox(verts[lookupIndex]))
+						startIndex = i - (i % 3);
+						if (finalAdjacencyList.ContainsKey(lookupIndex))
 						{
-							startIndex = i - (i % 3);
-							if (finalAdjacencyList.ContainsKey(lookupIndex))
-							{
-								finalAdjacencyList[lookupIndex].Add(startIndex);
-								finalAdjacencyList[lookupIndex].Add(startIndex + 1);
-								finalAdjacencyList[lookupIndex].Add(startIndex + 2);
-							}
-							else
-							{
-								finalAdjacencyList.Add(lookupIndex, new List<int>()
+							finalAdjacencyList[lookupIndex].Add(startIndex);
+							finalAdjacencyList[lookupIndex].Add(startIndex + 1);
+							finalAdjacencyList[lookupIndex].Add(startIndex + 2);
+						}
+						else
+						{
+							finalAdjacencyList.Add(lookupIndex, new List<int>()
 								{
 									startIndex,
 									startIndex+1,
 									startIndex+2,
 								});
-							}
-							i = startIndex + 2;
 						}
-					}
-
-					//Out of that for loop, into another one.
-					//Iterate through every part of the dictionary to get the List<int> values
-					//Use each of these indexes to sample from adjacentFaceNormals and average them together
-					//DONT normalize anything, we want the magnitude to weight the normals
-					//AFTER the average is calculated, normalize it.
-					//Apply this normal value to the vertex 
-
-					foreach ((int key, List<int> value) in finalAdjacencyList)
-					{
-						Vector3 finalNormal = Vector3.Zero;
-						for (int k = 0; k < value.Count; k += 3)
-						{
-							finalNormal += adjacentFaceNormals[value[k] / 3];
-						}
-						normals[key] = finalNormal.Normalized();
+						i = startIndex + 2;
 					}
 				}
-				else
+
+				foreach ((int key, List<int> value) in finalAdjacencyList)
 				{
-					//No split occured, average all normals in the whole list and apply it.
-					//This will never run if the world is generated full of right angled cubes.
 					Vector3 finalNormal = Vector3.Zero;
-					for (int k = 0; k < adjacentFaceNormals.Count; k++)
+					for (int k = 0; k < value.Count; k += 3)
 					{
-						finalNormal += adjacentFaceNormals[k];
+						finalNormal += adjacentFaceNormals[value[k] / 3];
 					}
-					normals[x] = finalNormal.Normalized();
+					normals[key] = finalNormal.Normalized();
 				}
+
 			}
 		}
 
@@ -479,9 +430,9 @@ public partial class WorldGen : Node3D
 			Color c = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1);
 			for (int e = 0; e < 3; e++)
 			{
-				Vector3 pos = (verts[indices[i]] + verts[indices[i+1]] + verts[indices[i+2]])/3;
+				Vector3 pos = (verts[indices[i]] + verts[indices[i + 1]] + verts[indices[i + 2]]) / 3;
 				DrawLine3D.Instance.DrawLine(
-					(verts[indices[i+e]] +  pos + pos + pos + pos) / 5,
+					(verts[indices[i + e]] + pos + pos + pos + pos) / 5,
 					normals[indices[i + e]] + ((verts[indices[i + e]] + pos + pos + pos + pos) / 5),
 					c,
 					10000,
