@@ -235,30 +235,18 @@ public partial class WorldGen : Node3D
 			origin.Y = (minY + maxY) / 2;
 			origin.Z = (minZ + maxZ) / 2;
 
-			newVertIndexNumbers = new int[currentBrush.vertices.Length];
 
 			for (int i = 0; i < currentBrush.vertices.Length / 3; i++)
 			{
 				vert.X = currentBrush.vertices[i, 0];
 				vert.Y = currentBrush.vertices[i, 1];
 				vert.Z = currentBrush.vertices[i, 2];
-
-				//Check if duplicate vert
-				if (vertexHashTable.TryGetValue(vert, out int index))
-				{
-					newVertIndexNumbers[i] = index;
-				}
-				else
-				{
-					vertexHashTable.Add(vert, verts.Count);
-					newVertIndexNumbers[i] = verts.Count;
-					verts.Add(vert);
-				}
+				verts.Add(vert);
 			}
 
 			for (int i = 0; i < currentBrush.indicies.Length; i++)
 			{
-				indices.Add(newVertIndexNumbers[currentBrush.indicies[i]]);
+				indices.Add(verts.Count - (currentBrush.vertices.Length / 3) + currentBrush.indicies[i]);
 			}
 		}
 
