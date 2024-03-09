@@ -352,12 +352,13 @@ public partial class WorldGen : Node3D
 								normals.Add(Vector3.One);
 								for (int k = 0; k < 3; k++)
 								{
-									if (indices[adjacentTriangleIndices[i + k]] == x)
+									if(indices[adjacentTriangleIndices[otherTriangleStartingIndex+k]] == x)
 									{
-										indices[adjacentTriangleIndices[i + k]] = verts.Count - 1;
+										indices[adjacentTriangleIndices[otherTriangleStartingIndex + k]] = verts.Count - 1;
 										break;
 									}
 								}
+
 							}
 						}
 					}
