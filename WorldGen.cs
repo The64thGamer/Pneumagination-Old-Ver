@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 0;
+	[Export] int chunkRenderSize = 3;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
