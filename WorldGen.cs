@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 0;
+	[Export] int chunkRenderSize = 1;
 	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
@@ -376,19 +376,20 @@ public partial class WorldGen : Node3D
 					Dictionary<int, List<int>> finalAdjacencyList = new Dictionary<int, List<int>>();
 					for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 					{
-						lookupVertex = verts[indices[adjacentTriangleIndices[i]]];
-						if (currentVert.IsEqualApprox(lookupVertex))
+						int lookupIndex = indices[adjacentTriangleIndices[i]];
+
+						if (currentVert.IsEqualApprox(verts[lookupIndex]))
 						{
 							startIndex = i - (i % 3);
-							if (finalAdjacencyList.ContainsKey(indices[adjacentTriangleIndices[i]]))
+							if (finalAdjacencyList.ContainsKey(lookupIndex))
 							{
-								finalAdjacencyList[indices[adjacentTriangleIndices[i]]].Add(startIndex);
-								finalAdjacencyList[indices[adjacentTriangleIndices[i]]].Add(startIndex + 1);
-								finalAdjacencyList[indices[adjacentTriangleIndices[i]]].Add(startIndex + 2);
+								finalAdjacencyList[lookupIndex].Add(startIndex);
+								finalAdjacencyList[lookupIndex].Add(startIndex + 1);
+								finalAdjacencyList[lookupIndex].Add(startIndex + 2);
 							}
 							else
 							{
-								finalAdjacencyList.Add(indices[adjacentTriangleIndices[i]], new List<int>()
+								finalAdjacencyList.Add(lookupIndex, new List<int>()
 								{
 									startIndex,
 									startIndex+1,
@@ -405,36 +406,21 @@ public partial class WorldGen : Node3D
 					//AFTER the average is calculated, normalize it.
 					//Apply this normal value to the vertex 
 
-					GD.Print("List " + finalAdjacencyList.Count);
-
+					//GD.Print("List " + finalAdjacencyList.Count);
+					string additions = "Count = " + oldVertCount + " CurrentVert = " + x + " - ";
 					foreach ((int key, List<int> value) in finalAdjacencyList)
 					{
-						if (currentVert.IsEqualApprox(verts[key]))
+						Vector3 finalNormal = Vector3.Zero;
+						for (int k = 0; k < value.Count; k += 3)
 						{
-							Vector3 finalNormal = Vector3.Zero;
-							string addition = "Tri Count: " + (value.Count / 3) + " Addition: ";
-							for (int k = 0; k < value.Count; k += 3)
-							{
-								addition += " + " + adjacentFaceNormals[value[k] / 3];
-								finalNormal += adjacentFaceNormals[value[k] / 3];
-							}
-							finalNormal = finalNormal.Normalized();
-							//GD.Print(addition + " = " + finalNormal);
-
-							for (int k = 0; k < value.Count; k++)
-							{
-								if (currentVert.IsEqualApprox(verts[indices[adjacentTriangleIndices[value[k]]]]))
-								{
-									if (x != indices[adjacentTriangleIndices[value[k]]])
-									{
-										//GD.Print("?????");
-									}
-									normals[indices[adjacentTriangleIndices[value[k]]]] = finalNormal;
-									break;
-								}
-							}
+							finalNormal += adjacentFaceNormals[value[k] / 3];
 						}
+						finalNormal = finalNormal.Normalized();
+						additions += key + ", ";
+						normals[key] = finalNormal;
+
 					}
+					GD.Print(additions);
 				}
 				else
 				{
