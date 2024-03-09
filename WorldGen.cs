@@ -197,8 +197,6 @@ public partial class WorldGen : Node3D
 
 	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData, int id)
 	{
-		Random rnd = new Random();
-
 		Node3D chunk = new Node3D();
 		var surfaceArray = new Godot.Collections.Array();
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
@@ -284,7 +282,7 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		//Vertex Splitter
+		//Vertex Merger
 		List<Vector3> adjacentFaceNormals = new List<Vector3>();
 
 		foreach ((Vector3 currentVert, List<int> adjacentTriangleIndices) in triangleAdjacencyList)
@@ -351,22 +349,6 @@ public partial class WorldGen : Node3D
 				normals[key] = finalNormal.Normalized();
 			}
 
-		}
-
-		for (int i = 3000; i < 3300; i += 3)
-		{
-			Color c = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1);
-			for (int e = 0; e < 3; e++)
-			{
-				Vector3 pos = (verts[indices[i]] + verts[indices[i + 1]] + verts[indices[i + 2]]) / 3;
-				DrawLine3D.Instance.DrawLine(
-					(verts[indices[i + e]] + pos + pos + pos + pos) / 5,
-					normals[indices[i + e]] + ((verts[indices[i + e]] + pos + pos + pos + pos) / 5),
-					c,
-					10000,
-					-1
-				);
-			}
 		}
 
 		// Convert Lists to arrays and assign to surface array
