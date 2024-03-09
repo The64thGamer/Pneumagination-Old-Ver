@@ -286,13 +286,6 @@ public partial class WorldGen : Node3D
 		};
 		*/
 
-		//Create index copy to not mess up algoritm
-		List<int> newIndices = new List<int>();
-		for (int i = 0; i < indices.Count; i++)
-		{
-			newIndices.Add(indices[i]);
-		}
-
 		//Setup normals
 		List<Vector3> normals = new List<Vector3>();
 		for (int i = 0; i < verts.Count; i++)
@@ -300,12 +293,12 @@ public partial class WorldGen : Node3D
 			normals.Add(new Vector3(0,1,0));
 		}
 
-
+		/*
 		for (int i = 0; i < verts.Count; i++)
 		{
 			verts[i] += (new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f)) / 2;
 		}
-
+		*/
 
 		//Create a fast lookup table for adjacent triangles
 		Dictionary<Vector3, List<int>> triangleAdjacencyList = new Dictionary<Vector3, List<int>>();
@@ -400,16 +393,24 @@ public partial class WorldGen : Node3D
 							if (otherTriangleStartingIndex >= 0 && adjacentFaceNormals[i / 3].Dot(adjacentFaceNormals[otherTriangleStartingIndex / 3]) <= 0)
 							{
 								splitCheck = true;
+
 								verts.Add(currentVert);
 								normals.Add(new Vector3(0, -1, 0));
 								for (int k = 0; k < 3; k++)
 								{
-									if(indices[adjacentTriangleIndices[i+k]] == x)
+									if (indices[adjacentTriangleIndices[i + k]] == x)
 									{
-										newIndices[adjacentTriangleIndices[i + k]] = verts.Count - 1;
+										indices[adjacentTriangleIndices[i + k]] = verts.Count - 1;
 										break;
 									}
 								}
+
+
+								verts.Add(verts[indices[adjacentTriangleIndices[i + e]]]);
+								normals.Add(new Vector3(0, -1, 0));
+								indices[adjacentTriangleIndices[i + e]] = verts.Count - 1;
+
+
 
 							}
 						}
@@ -430,7 +431,7 @@ public partial class WorldGen : Node3D
 					Dictionary<int, List<int>> finalAdjacencyList = new Dictionary<int, List<int>>();
 					for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 					{
-						int lookupIndex = newIndices[adjacentTriangleIndices[i]];
+						int lookupIndex = indices[adjacentTriangleIndices[i]];
 
 						if (currentVert.IsEqualApprox(verts[lookupIndex]))
 						{
@@ -468,10 +469,6 @@ public partial class WorldGen : Node3D
 						{
 							finalNormal += adjacentFaceNormals[value[k] / 3];
 						}
-						if (value.Count / 3 != 1)
-						{
-							GD.Print(value.Count / 3);
-						}
 						normals[key] = finalNormal.Normalized();
 					}
 				}
@@ -479,7 +476,6 @@ public partial class WorldGen : Node3D
 				{
 					//No split occured, average all normals in the whole list and apply it.
 					//This will never run if the world is generated full of right angled cubes.
-					GD.Print("Rare call?");
 					Vector3 finalNormal = Vector3.Zero;
 					for (int k = 0; k < adjacentFaceNormals.Count; k++)
 					{
@@ -495,10 +491,10 @@ public partial class WorldGen : Node3D
 			Color c = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1);
 			for (int e = 0; e < 3; e++)
 			{
-				Vector3 pos = (verts[newIndices[i]] + verts[newIndices[i+1]] + verts[newIndices[i+2]])/3;
+				Vector3 pos = (verts[indices[i]] + verts[indices[i+1]] + verts[indices[i+2]])/3;
 				DrawLine3D.Instance.DrawLine(
-					(verts[newIndices[i+e]] +  pos + pos + pos + pos) / 5,
-					normals[newIndices[i + e]] + ((verts[newIndices[i + e]] + pos + pos + pos + pos) / 5),
+					(verts[indices[i+e]] +  pos + pos + pos + pos) / 5,
+					normals[indices[i + e]] + ((verts[indices[i + e]] + pos + pos + pos + pos) / 5),
 					c,
 					10000,
 					-1
@@ -506,19 +502,17 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		/*
 		for (int i = 0; i < verts.Count; i++)
 		{
 			verts[i] += (new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f))/2;
 		}
-		*/
 
 		// Convert Lists to arrays and assign to surface array
 		ArrayMesh arrMesh = new ArrayMesh();
 		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[verts.Count];
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.Index] = newIndices.ToArray();
+		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
 		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
 
 		//Assign the surface to a mesh and return
