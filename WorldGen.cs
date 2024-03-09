@@ -197,6 +197,8 @@ public partial class WorldGen : Node3D
 
 	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData, int id)
 	{
+		Random rnd = new Random();
+
 		Node3D chunk = new Node3D();
 		var surfaceArray = new Godot.Collections.Array();
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
@@ -299,6 +301,12 @@ public partial class WorldGen : Node3D
 		}
 
 
+		for (int i = 0; i < verts.Count; i++)
+		{
+			verts[i] += (new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f)) / 2;
+		}
+
+
 		//Create a fast lookup table for adjacent triangles
 		Dictionary<Vector3, List<int>> triangleAdjacencyList = new Dictionary<Vector3, List<int>>();
 		Vector3 lookupVertex;
@@ -329,7 +337,6 @@ public partial class WorldGen : Node3D
 		List<int> adjacentTriangleIndices = new List<int>();
 		List<Vector3> adjacentFaceNormals = new List<Vector3>();
 		int oldVertCount = verts.Count;
-		Random rnd = new Random();
 
 		for (int x = 0; x < oldVertCount; x++)
 		{
@@ -379,7 +386,6 @@ public partial class WorldGen : Node3D
 				{
 					for (int e = 0; e < 3; e++)
 					{
-
 						if (indices[adjacentTriangleIndices[i + e]] != x)
 						{
 							int otherTriangleStartingIndex = -1;
@@ -398,9 +404,9 @@ public partial class WorldGen : Node3D
 								normals.Add(new Vector3(0, -1, 0));
 								for (int k = 0; k < 3; k++)
 								{
-									if(indices[adjacentTriangleIndices[otherTriangleStartingIndex+k]] == x)
+									if(indices[adjacentTriangleIndices[i+k]] == x)
 									{
-										newIndices[adjacentTriangleIndices[otherTriangleStartingIndex + k]] = verts.Count - 1;
+										newIndices[adjacentTriangleIndices[i + k]] = verts.Count - 1;
 										break;
 									}
 								}
@@ -500,10 +506,12 @@ public partial class WorldGen : Node3D
 			}
 		}
 
+		/*
 		for (int i = 0; i < verts.Count; i++)
 		{
 			verts[i] += (new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f))/2;
 		}
+		*/
 
 		// Convert Lists to arrays and assign to surface array
 		ArrayMesh arrMesh = new ArrayMesh();
