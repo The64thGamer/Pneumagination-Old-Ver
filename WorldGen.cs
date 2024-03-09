@@ -236,43 +236,20 @@ public partial class WorldGen : Node3D
 			origin.Z = (minZ + maxZ) / 2;
 
 
-			for (int i = 0; i < currentBrush.vertices.Length / 3; i++)
-			{
-				vert.X = currentBrush.vertices[i, 0];
-				vert.Y = currentBrush.vertices[i, 1];
-				vert.Z = currentBrush.vertices[i, 2];
-				verts.Add(vert);
-			}
+			currentBrush.vertices[5, 0] -= 1;
+			currentBrush.vertices[5, 1] -= 1;
+			currentBrush.vertices[6, 0] -= 1;
+			currentBrush.vertices[6, 1] -= 1;
 
 			for (int i = 0; i < currentBrush.indicies.Length; i++)
 			{
-				indices.Add(verts.Count - (currentBrush.vertices.Length / 3) + currentBrush.indicies[i]);
+				vert.X = currentBrush.vertices[currentBrush.indicies[i], 0];
+				vert.Y = currentBrush.vertices[currentBrush.indicies[i], 1];
+				vert.Z = currentBrush.vertices[currentBrush.indicies[i], 2];
+				indices.Add(verts.Count);
+				verts.Add(vert);
 			}
 		}
-
-		/*
-		//NEW MESH
-		verts = new List<Vector3>()
-		{
-			new Vector3(0			,0	,0),
-			new Vector3(0			,0	,1),
-			new Vector3(0.866025f	,0	,0.5f),
-			new Vector3(0.866025f	,1	,-0.5f),
-			new Vector3(0			,0	,-1),
-			new Vector3(-0.866025f	,1	,-0.5f),
-			new Vector3(-0.866025f	,0	,0.5f),
-		};
-
-		indices = new List<int>()
-		{
-			0,2,1,
-			0,3,2,
-			0,4,3,
-			0,5,4,
-			0,6,5,
-			0,1,6
-		};
-		*/
 
 		//Setup normals
 		List<Vector3> normals = new List<Vector3>();
@@ -280,13 +257,6 @@ public partial class WorldGen : Node3D
 		{
 			normals.Add(new Vector3(0, 1, 0));
 		}
-
-		/*
-		for (int i = 0; i < verts.Count; i++)
-		{
-			verts[i] += (new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f)) / 2;
-		}
-		*/
 
 		//Create a fast lookup table for adjacent triangles
 		Dictionary<Vector3, List<int>> triangleAdjacencyList = new Dictionary<Vector3, List<int>>();
@@ -339,7 +309,7 @@ public partial class WorldGen : Node3D
 					for (int k = 0; k < adjacentTriangleIndices.Count; k++)
 					{
 						if (currentVert.IsEqualApprox(verts[indices[adjacentTriangleIndices[k]]])
-							&& adjacentFaceNormals[(i - (i % 3)) / 3].Dot(adjacentFaceNormals[(k - (k % 3)) / 3]) > 0.9f)
+							&& adjacentFaceNormals[(i - (i % 3)) / 3].Dot(adjacentFaceNormals[(k - (k % 3)) / 3]) > 0)
 						{
 							indices[adjacentTriangleIndices[k]] = indices[adjacentTriangleIndices[i]];
 						}
@@ -397,11 +367,6 @@ public partial class WorldGen : Node3D
 					-1
 				);
 			}
-		}
-
-		for (int i = 0; i < verts.Count; i++)
-		{
-			verts[i] += (new Vector3((float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f, (float)rnd.NextDouble() - 0.5f)) / 2;
 		}
 
 		// Convert Lists to arrays and assign to surface array
