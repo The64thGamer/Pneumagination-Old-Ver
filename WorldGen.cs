@@ -211,9 +211,9 @@ public partial class WorldGen : Node3D
 					{
 						chunk.brushes.Add(
 							CreateBrush(
-								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize), 
+								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize),
-								CheckBrushVisibility(bigBlockArray,posX,posY,posZ)
+								CheckBrushVisibility(bigBlockArray, posX, posY, posZ)
 								));
 					}
 				}
@@ -226,28 +226,22 @@ public partial class WorldGen : Node3D
 	bool CheckBrushVisibility(bool[,,] bigBlockArray, int x, int y, int z)
 	{
 		//Check if block on chunk boundary
-		bool check = CheckIndexInvalidity(x, bigBlockArray.GetLength(0));
-		check = check || CheckIndexInvalidity(y, bigBlockArray.GetLength(1));
-		check = check || CheckIndexInvalidity(z , bigBlockArray.GetLength(2));
-
-		if(check)
+		if (CheckIndexInvalidity(x, bigBlockArray.GetLength(0)) || CheckIndexInvalidity(y, bigBlockArray.GetLength(1)) || CheckIndexInvalidity(z, bigBlockArray.GetLength(2)))
 		{
 			return false;
 		}
 
-		check = check || !bigBlockArray[x - 1, y, z];
-		check = check || !bigBlockArray[x + 1, y, z];
-		check = check || !bigBlockArray[x, y - 1, z];
-		check = check || !bigBlockArray[x, y + 1, z];
-		check = check || !bigBlockArray[x, y, z - 1];
-		check = check || !bigBlockArray[x, y, z + 1];
-
-		return check;
+		return	bigBlockArray[x - 1, y, z] &&
+				bigBlockArray[x + 1, y, z] &&
+				bigBlockArray[x, y - 1, z] &&
+				bigBlockArray[x, y + 1, z] &&
+				bigBlockArray[x, y, z - 1] &&
+				bigBlockArray[x, y, z + 1];
 	}
 
 	bool CheckIndexInvalidity(int index, int length)
 	{
-		if(index == 0 || index == length - 1)
+		if (index == 0 || index == length - 1)
 		{
 			return true;
 		}
