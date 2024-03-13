@@ -128,6 +128,10 @@ public partial class WorldGen : Node3D
 		{
 			Chunk chunk = await GenerateChunk(x, z);
 			ChunkRenderData chunkData = await GetChunkMesh(chunk, id);
+			if(chunkData == null)
+			{
+				return;
+			}
 			bool check = false;
 			for (int i = 0; i < ongoingChunkRenderData.Count; i++)
 			{
@@ -187,7 +191,7 @@ public partial class WorldGen : Node3D
 					}
 					if (noiseValue <= 0.25f)
 					{
-						chunk.brushes.Add(CreateBrush(new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize), new Vector3(bigBlockSize, bigBlockSize, bigBlockSize)));
+						chunk.brushes.Add(CreateBrush(new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize), new Vector3(bigBlockSize, bigBlockSize, bigBlockSize),true));
 					}
 				}
 			}
@@ -212,6 +216,10 @@ public partial class WorldGen : Node3D
 		//Collect all brush vertices, merge duplicate ones
 		foreach (Brush currentBrush in chunkData.brushes)
 		{
+			if(currentBrush.hiddenFlag)
+			{
+				continue;
+			}
 			maxX = int.MinValue;
 			maxY = int.MinValue;
 			maxZ = int.MinValue;
@@ -233,12 +241,6 @@ public partial class WorldGen : Node3D
 			origin.Y = (minY + maxY) / 2;
 			origin.Z = (minZ + maxZ) / 2;
 
-
-			currentBrush.vertices[5, 0] -= 1;
-			currentBrush.vertices[5, 1] -= 1;
-			currentBrush.vertices[6, 0] -= 1;
-			currentBrush.vertices[6, 1] -= 1;
-
 			for (int i = 0; i < currentBrush.indicies.Length; i++)
 			{
 				vert.X = currentBrush.vertices[currentBrush.indicies[i], 0];
@@ -247,6 +249,12 @@ public partial class WorldGen : Node3D
 				indices.Add(verts.Count);
 				verts.Add(vert);
 			}
+		}
+
+		if(verts.Count == 0)
+		{
+			GD.Print("Chunk had no blocks / no visible blocks.");
+			return null;
 		}
 
 		//Setup normals
@@ -375,9 +383,11 @@ public partial class WorldGen : Node3D
 
 
 
-	Brush CreateBrush(Vector3 pos, Vector3 size)
+	Brush CreateBrush(Vector3 pos, Vector3 size, bool hiddenFlag)
 	{
 		Brush brush = new Brush();
+		brush.hiddenFlag = hiddenFlag;
+
 		brush.vertices = new byte[8, 3];
 
 		brush.vertices[0, 0] = (byte)(pos.X);
@@ -453,6 +463,7 @@ public partial class WorldGen : Node3D
 		public byte[,] vertices;
 		public byte[] indicies;
 		public uint[] textures;
+		public bool hiddenFlag;
 	}
 
 	public class ChunkRenderData
