@@ -239,11 +239,6 @@ public partial class WorldGen : Node3D
 						int bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ);
 						if (bitMask != 0)
 						{
-							if (bitMask > 1111111)
-							{
-								GD.Print(Convert.ToString(bitMask, 2).PadLeft(26, '0'));
-							}
-
 							chunk.brushes.AddRange(CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize)));
 						}
 					}
@@ -260,9 +255,9 @@ public partial class WorldGen : Node3D
 		int bitWise = 0;
 		int newX, newY, newZ;
 
-		for (newY = -1; newY < 2; newY++)
+		for (newY = 1; newY > -2; newY--)
 		{
-			for (newZ = -1; newZ < 2; newZ++)
+			for (newZ = 1; newZ > -2; newZ--)
 			{
 				for (newX = -1; newX < 2; newX++)
 				{
