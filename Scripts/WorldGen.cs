@@ -1,7 +1,9 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static WorldGen;
@@ -11,11 +13,11 @@ public partial class WorldGen : Node3D
 	[Export] Material mat;
 	[Export] int chunkRenderSize = 3;
 	[Export] bool hideBigBlocks = false;
-    int seedA = 0;
-    int seedB = 0;
-    int seedC = 0;
-    int seedD = 0;
-    int totalChunksRendered = 0;
+	int seedA = 0;
+	int seedB = 0;
+	int seedC = 0;
+	int seedD = 0;
+	int totalChunksRendered = 0;
 
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 
@@ -54,25 +56,25 @@ public partial class WorldGen : Node3D
 	{
 		SetSurfaceBrushCache();
 
-        Random rnd = new Random();
-        if (seedA == 0)
-        {
-            seedA = rnd.Next();
-        }
-        if (seedB == 0)
-        {
-            seedB = rnd.Next();
-        }
-        if (seedC == 0)
-        {
-            seedC = rnd.Next();
-        }
-        if (seedD == 0)
-        {
-            seedD = rnd.Next();
-        }
+		Random rnd = new Random();
+		if (seedA == 0)
+		{
+			seedA = rnd.Next();
+		}
+		if (seedB == 0)
+		{
+			seedB = rnd.Next();
+		}
+		if (seedC == 0)
+		{
+			seedC = rnd.Next();
+		}
+		if (seedD == 0)
+		{
+			seedD = rnd.Next();
+		}
 
-        celNoiseA.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		celNoiseA.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		celNoiseA.SetFrequency(.01f);
 		celNoiseA.SetSeed(seedA);
 		celNoiseA.SetFractalType(FastNoiseLite.FractalType.PingPong);
@@ -120,7 +122,7 @@ public partial class WorldGen : Node3D
 		}
 	}
 
-    public override void _Process(double delta)
+	public override void _Process(double delta)
 	{
 		CheckForAnyPendingFinishedChunks();
 	}
@@ -551,13 +553,13 @@ public partial class WorldGen : Node3D
 		List<Brush> brushCopies = new List<Brush>();
 		if (surfaceBrushes.TryGetValue(id, out byte[] verts))
 		{
-			for (int i = 0; i < verts.Length/24; i++)
+			for (int i = 0; i < verts.Length / 24; i++)
 			{
 				Brush b = new Brush { hiddenFlag = false, vertices = new byte[24] };
 				for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = verts[e + (i * 24)];
-                }
+				}
 				brushCopies.Add(b);
 
 			}
@@ -627,23 +629,69 @@ public partial class WorldGen : Node3D
 		garbageCollector,
 	}
 
-    /*Norm       X-Rot
-    23 24 25	17 20 23	
-    20 21 22	18 21 24	
-    17 18 19	19 22 25	
+	/*Norm       
+	24 25 26	
+	21 22 23	
+	18 19 20	
 
-    14 15 16	9  12 14	
-    12 -- 13	10 -- 15	
-    9  10 11	11 13 16	
+	15 16 17	
+	12 13 14	
+	9  10 11	
 
-    6  7  8		0  3  6		
-    3  4  5		1  4  7		
-    0  1  2		2  5  8		
+	6  7  8		
+	3  4  5		
+	0  1  2		
 */
-    void SetSurfaceBrushCache()
+	void SetSurfaceBrushCache()
 	{
-		//just have the arrays in different X Y Z for loops to rotate
+		for (int i = 0; i < cachedBrushes.Length; i++)
+		{
+			GD.Print("OG   - " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
+			RotateSquareMatrixX(cachedBrushes[i].bitMask);
+			GD.Print("ROT 1- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
+			RotateSquareMatrixX(cachedBrushes[i].bitMask);
+			GD.Print("ROT 2- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
+			RotateSquareMatrixX(cachedBrushes[i].bitMask);
+			GD.Print("ROT 3- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
+			RotateSquareMatrixX(cachedBrushes[i].bitMask);
+			GD.Print("ROT 4- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
+		}
 	}
+	void RotateSquareMatrixX<T>(T[,,] a)
+	{
+		int N = a.GetLength(0);
+		for (int z = 0; z < N; z++)
+		{
+			for (int i = 0; i < N / 2; i++)
+			{
+				for (int j = i; j < N - i - 1; j++)
+				{
+					var temp = a[i, j, z];
+					a[i, j, z] = a[N - 1 - j, i, z];
+					a[N - 1 - j, i, z] = a[N - 1 - i, N - 1 - j, z];
+					a[N - 1 - i, N - 1 - j, z] = a[j, N - 1 - i, z];
+					a[j, N - 1 - i, z] = temp;
+				}
+			}
+		}
+	}
+
+	struct CachedSurfaceBrush
+	{
+		public byte[,,] bitMask;
+		public Vector3[,,] verticesX;
+	}
+
+	CachedSurfaceBrush[] cachedBrushes = new CachedSurfaceBrush[] {
+		new CachedSurfaceBrush(){
+			bitMask = new byte[,,]{
+				{ { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } },
+				{ { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } },
+				{ { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } } },
+			verticesX = new Vector3[,,]{
+				{ {new Vector3(0,0,0),new Vector3(6,0,0) }, {new Vector3(6,0,6),new Vector3(0,0,6) }, },
+				{ {new Vector3(0,1,0),new Vector3(6,1,0) }, {new Vector3(6,1,6),new Vector3(0,1,6) } }}}
+	};
 
 	System.Collections.Generic.Dictionary<int, byte[]> surfaceBrushes = new System.Collections.Generic.Dictionary<int, byte[]>
 	{
