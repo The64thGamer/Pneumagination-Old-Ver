@@ -10,6 +10,7 @@ public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
 	[Export] int chunkRenderSize = 3;
+	[Export] bool hideBigBlocks = false;
 	int totalChunksRendered = 0;
 
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
@@ -235,7 +236,16 @@ public partial class WorldGen : Node3D
 					}
 					else
 					{
-						chunk.brushes.AddRange(CreateSurfaceBrushes(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ), (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize)));
+						int bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ);
+						if (bitMask != 0)
+						{
+							if (bitMask > 1111111)
+							{
+								GD.Print(Convert.ToString(bitMask, 2).PadLeft(26, '0'));
+							}
+
+							chunk.brushes.AddRange(CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize)));
+						}
 					}
 				}
 			}
@@ -244,44 +254,46 @@ public partial class WorldGen : Node3D
 		return chunk;
 	}
 
-	byte CheckSurfaceBrushType(bool[,,] bigBlockArray, int x, int y, int z)
+	int CheckSurfaceBrushType(bool[,,] bigBlockArray, int x, int y, int z)
 	{
 		int bitmask = 0;
-		//North
-		if (z < bigBlockArray.GetLength(2) - 1 && bigBlockArray[x, y, z + 1])
+		int bitWise = 0;
+		int newX, newY, newZ;
+
+		for (newY = -1; newY < 2; newY++)
 		{
-			bitmask |= 1 << 5;
+			for (newZ = -1; newZ < 2; newZ++)
+			{
+				for (newX = -1; newX < 2; newX++)
+				{
+					if (!(newX == 0 && newY == 0 && newZ == 0))
+					{
+						if (x + newX < bigBlockArray.GetLength(0) &&
+						   y + newY < bigBlockArray.GetLength(1) &&
+						   z + newZ < bigBlockArray.GetLength(2) &&
+						   x + newX >= 0 &&
+						   y + newY >= 0 &&
+						   z + newZ >= 0 &&
+						   bigBlockArray[x + newX, y + newY, z + newZ]
+						   )
+						{
+							bitmask |= 1 << bitWise;
+						}
+						bitWise++;
+					}
+				}
+			}
 		}
-		//East
-		if (x < bigBlockArray.GetLength(0) - 1 && bigBlockArray[x + 1, y, z])
-		{
-			bitmask |= 1 << 4;
-		}
-		//South
-		if (z > 0 && bigBlockArray[x, y, z - 1])
-		{
-			bitmask |= 1 << 3;
-		}
-		//West
-		if (x > 0 && bigBlockArray[x - 1, y, z])
-		{
-			bitmask |= 1 << 2;
-		}
-		//Top
-		if (y < bigBlockArray.GetLength(1) - 1 && bigBlockArray[x, y + 1, z])
-		{
-			bitmask |= 1 << 1;
-		}
-		//Bottom
-		if (y > 0 && bigBlockArray[x, y - 1, z])
-		{
-			bitmask |= 1 << 0;
-		}
-		return (byte)bitmask;
+		return bitmask;
 	}
 
 	bool CheckBrushVisibility(bool[,,] bigBlockArray, int x, int y, int z)
 	{
+		if(hideBigBlocks)
+		{
+			return true;
+		}
+
 		//Check if block on chunk boundary
 		if (CheckIndexInvalidity(x, bigBlockArray.GetLength(0)) || CheckIndexInvalidity(y, bigBlockArray.GetLength(1)) || CheckIndexInvalidity(z, bigBlockArray.GetLength(2)))
 		{
@@ -514,15 +526,28 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
-	//"ID" = North, East, South, West, Top, Bottom - as each byte
-	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ)
+	/*
+		23 24 25
+		20 21 22
+		17 18 19
+		
+		14 15 16
+		12 -- 13
+		9  10 11
+		
+		6  7  8
+		3  4  5
+		0  1  2
+	*/
+	List<Brush> CreateSurfaceBrushes(int id, byte posX, byte posY, byte posZ)
 	{
 		List<Brush> brushes = new List<Brush>();
 
 		switch (id)
 		{
-			case 0b000001:
-				brushes.Add(new Brush() { 
+			case 0b11111111100000000000000000:
+				brushes.Add(new Brush()
+				{
 					hiddenFlag = false,
 					vertices = new byte[24]
 					{
@@ -531,6 +556,45 @@ public partial class WorldGen : Node3D
 					},
 				});
 				break;
+			case 0b00000000000000000111111111:
+				brushes.Add(new Brush()
+				{
+					hiddenFlag = false,
+					vertices = new byte[24]
+					{
+						0,5,0, 6,5,0, 6,5,6, 0,5,6,
+						0,6,0, 6,6,0, 6,6,6, 0,6,6,
+					},
+				});
+				break;
+			case 0b11111111100000111000000000:
+				brushes.Add(new Brush()
+				{
+					hiddenFlag = false,
+					vertices = new byte[24]
+					{
+						0,0,0, 6,0,0, 6,0,3, 0,0,3,
+						0,1,0, 6,1,0, 6,2,2, 0,2,2,
+					},
+				});
+				brushes.Add(new Brush()
+				{
+					hiddenFlag = false,
+					vertices = new byte[24]
+	{
+						0,0,3, 6,0,3, 6,0,6, 0,0,6,
+						0,2,2, 6,2,2, 6,4,4, 0,4,4,
+	},
+				});
+				brushes.Add(new Brush()
+				{
+					hiddenFlag = false,
+					vertices = new byte[24]
+	{
+						0,4,4, 6,4,4, 6,0,6, 0,0,6,
+						0,6,5, 6,6,5, 6,6,6, 0,6,6,
+	},
+				}); break;
 			default:
 				break;
 		}
@@ -544,7 +608,7 @@ public partial class WorldGen : Node3D
 				brushes[e].vertices[i + 2] += posZ;
 			}
 		}
-		
+
 
 		return brushes;
 	}
