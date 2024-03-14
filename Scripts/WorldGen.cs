@@ -11,7 +11,11 @@ public partial class WorldGen : Node3D
 	[Export] Material mat;
 	[Export] int chunkRenderSize = 3;
 	[Export] bool hideBigBlocks = false;
-	int totalChunksRendered = 0;
+    int seedA = 0;
+    int seedB = 0;
+    int seedC = 0;
+    int seedD = 0;
+    int totalChunksRendered = 0;
 
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 
@@ -48,31 +52,48 @@ public partial class WorldGen : Node3D
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{
-		Random rnd = new Random();
-		int seed = rnd.Next();
+		SetSurfaceBrushCache();
 
-		celNoiseA.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+        Random rnd = new Random();
+        if (seedA == 0)
+        {
+            seedA = rnd.Next();
+        }
+        if (seedB == 0)
+        {
+            seedB = rnd.Next();
+        }
+        if (seedC == 0)
+        {
+            seedC = rnd.Next();
+        }
+        if (seedD == 0)
+        {
+            seedD = rnd.Next();
+        }
+
+        celNoiseA.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		celNoiseA.SetFrequency(.01f);
-		celNoiseA.SetSeed(seed);
+		celNoiseA.SetSeed(seedA);
 		celNoiseA.SetFractalType(FastNoiseLite.FractalType.PingPong);
 		celNoiseA.SetFractalOctaves(1);
 		celNoiseA.SetFractalPingPongStrength(1.5f);
 
 		celNoiseB.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		celNoiseB.SetFrequency(.02f);
-		celNoiseB.SetSeed(seed);
+		celNoiseB.SetSeed(seedB);
 		celNoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
 		celNoiseB.SetFractalOctaves(3);
 
 		os2NoiseA.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		os2NoiseA.SetFrequency(0.001f);
-		os2NoiseA.SetSeed(seed);
+		os2NoiseA.SetSeed(seedC);
 		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseA.SetFractalOctaves(4);
 
 		os2NoiseB.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
 		os2NoiseB.SetFrequency(0.005f);
-		os2NoiseB.SetSeed(seed);
+		os2NoiseB.SetSeed(seedD);
 		os2NoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseB.SetFractalOctaves(4);
 
@@ -99,7 +120,7 @@ public partial class WorldGen : Node3D
 		}
 	}
 
-	public override void _Process(double delta)
+    public override void _Process(double delta)
 	{
 		CheckForAnyPendingFinishedChunks();
 	}
@@ -525,19 +546,6 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
-	/*
-		23 24 25
-		20 21 22
-		17 18 19
-		
-		14 15 16
-		12 -- 13
-		9  10 11
-		
-		6  7  8
-		3  4  5
-		0  1  2
-	*/
 	List<Brush> CreateSurfaceBrushes(int id, byte posX, byte posY, byte posZ)
 	{
 		List<Brush> brushCopies = new List<Brush>();
@@ -617,6 +625,24 @@ public partial class WorldGen : Node3D
 		running,
 		ready,
 		garbageCollector,
+	}
+
+    /*Norm       X-Rot
+    23 24 25	17 20 23	
+    20 21 22	18 21 24	
+    17 18 19	19 22 25	
+
+    14 15 16	9  12 14	
+    12 -- 13	10 -- 15	
+    9  10 11	11 13 16	
+
+    6  7  8		0  3  6		
+    3  4  5		1  4  7		
+    0  1  2		2  5  8		
+*/
+    void SetSurfaceBrushCache()
+	{
+		//just have the arrays in different X Y Z for loops to rotate
 	}
 
 	System.Collections.Generic.Dictionary<int, byte[]> surfaceBrushes = new System.Collections.Generic.Dictionary<int, byte[]>
