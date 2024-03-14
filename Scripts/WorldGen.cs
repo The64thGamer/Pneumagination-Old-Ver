@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +12,6 @@ public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
 	[Export] int chunkRenderSize = 3;
-	PackedScene cubePrefab;
 	int totalChunksRendered = 0;
 
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
@@ -26,7 +26,6 @@ public partial class WorldGen : Node3D
 	const int chunkSize = 126;
 
 	//TODO: add crafting system where you get shako for 2 metal
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		Random rnd = new Random();
@@ -58,7 +57,6 @@ public partial class WorldGen : Node3D
 		os2NoiseB.SetFractalOctaves(4);
 
 
-		cubePrefab = GD.Load<PackedScene>("res://Prefabs/block.tscn");
 		if (chunkRenderSize <= 0)
 		{
 			RenderChunk(0, 0);
@@ -434,64 +432,8 @@ public partial class WorldGen : Node3D
 
 	Brush CreateBrush(Vector3 pos, Vector3 size, bool hiddenFlag)
 	{
-		Brush brush = new Brush();
+		Brush brush = new Brush(63,pos);
 		brush.hiddenFlag = hiddenFlag;
-
-		brush.vertices = new byte[8, 3];
-
-		brush.vertices[0, 0] = (byte)(pos.X);
-		brush.vertices[0, 1] = (byte)(pos.Y);
-		brush.vertices[0, 2] = (byte)(pos.Z);
-
-		brush.vertices[1, 0] = (byte)((1 * size.X) + pos.X);
-		brush.vertices[1, 1] = (byte)(pos.Y);
-		brush.vertices[1, 2] = (byte)(pos.Z);
-
-		brush.vertices[2, 0] = (byte)((1 * size.X) + pos.X);
-		brush.vertices[2, 1] = (byte)(pos.Y);
-		brush.vertices[2, 2] = (byte)((1 * size.Z) + pos.Z);
-
-		brush.vertices[3, 0] = (byte)(pos.X);
-		brush.vertices[3, 1] = (byte)(pos.Y);
-		brush.vertices[3, 2] = (byte)((1 * size.Z) + pos.Z);
-
-		brush.vertices[4, 0] = (byte)(pos.X);
-		brush.vertices[4, 1] = (byte)((1 * size.Y) + pos.Y);
-		brush.vertices[4, 2] = (byte)(pos.Z);
-
-		brush.vertices[5, 0] = (byte)((1 * size.X) + pos.X);
-		brush.vertices[5, 1] = (byte)((1 * size.Y) + pos.Y);
-		brush.vertices[5, 2] = (byte)(pos.Z);
-
-		brush.vertices[6, 0] = (byte)((1 * size.X) + pos.X);
-		brush.vertices[6, 1] = (byte)((1 * size.Y) + pos.Y);
-		brush.vertices[6, 2] = (byte)((1 * size.Z) + pos.Z);
-
-		brush.vertices[7, 0] = (byte)(pos.X);
-		brush.vertices[7, 1] = (byte)((1 * size.Y) + pos.Y);
-		brush.vertices[7, 2] = (byte)((1 * size.Z) + pos.Z);
-
-		brush.indicies = new byte[]
-		{
-				2, 1, 0,
-				0, 3, 2,
-
-				6, 2, 3,
-				3, 7, 6,
-
-				5, 6, 7,
-				7, 4, 5,
-
-				1, 5, 4,
-				4, 0, 1,
-
-				7, 3, 0,
-				0, 4, 7,
-
-				6, 5, 1,
-				1, 2, 6
-		};
-
 		return brush;
 	}
 
@@ -513,6 +455,126 @@ public partial class WorldGen : Node3D
 		public byte[] indicies;
 		public uint[] textures;
 		public bool hiddenFlag;
+
+		public Brush(int defaultShape, Vector3 pos)
+		{
+			switch (defaultShape)
+			{
+				case 63://3x3x3 Cube
+										
+					vertices = new byte[8, 3];
+
+					vertices[0, 0] = (byte)(pos.X);
+					vertices[0, 1] = (byte)(pos.Y);
+					vertices[0, 2] = (byte)(pos.Z);
+
+					vertices[1, 0] = (byte)(3 + pos.X);
+					vertices[1, 1] = (byte)(pos.Y);
+					vertices[1, 2] = (byte)(pos.Z);
+
+					vertices[2, 0] = (byte)(3 + pos.X);
+					vertices[2, 1] = (byte)(pos.Y);
+					vertices[2, 2] = (byte)(3 + pos.Z);
+
+					vertices[3, 0] = (byte)(pos.X);
+					vertices[3, 1] = (byte)(pos.Y);
+					vertices[3, 2] = (byte)(3 + pos.Z);
+
+					vertices[4, 0] = (byte)(pos.X);
+					vertices[4, 1] = (byte)(3 + pos.Y);
+					vertices[4, 2] = (byte)(pos.Z);
+
+					vertices[5, 0] = (byte)(3 + pos.X);
+					vertices[5, 1] = (byte)(3 + pos.Y);
+					vertices[5, 2] = (byte)(pos.Z);
+
+					vertices[6, 0] = (byte)(3 + pos.X);
+					vertices[6, 1] = (byte)(3 + pos.Y);
+					vertices[6, 2] = (byte)(3 + pos.Z);
+
+					vertices[7, 0] = (byte)(pos.X);
+					vertices[7, 1] = (byte)(3 + pos.Y);
+					vertices[7, 2] = (byte)(3 + pos.Z);
+
+					indicies = new byte[]
+					{
+						2, 1, 0,
+						0, 3, 2,
+
+						6, 2, 3,
+						3, 7, 6,
+
+						5, 6, 7,
+						7, 4, 5,
+
+						1, 5, 4,
+						4, 0, 1,
+
+						7, 3, 0,
+						0, 4, 7,
+
+						6, 5, 1,
+						1, 2, 6
+					};
+					break;
+				default: //1x1x1ft Cube
+					vertices = new byte[8, 3];
+
+					vertices[0, 0] = (byte)(pos.X);
+					vertices[0, 1] = (byte)(pos.Y);
+					vertices[0, 2] = (byte)(pos.Z);
+
+					vertices[1, 0] = (byte)(1 + pos.X);
+					vertices[1, 1] = (byte)(pos.Y);
+					vertices[1, 2] = (byte)(pos.Z);
+
+					vertices[2, 0] = (byte)(1 + pos.X);
+					vertices[2, 1] = (byte)(pos.Y);
+					vertices[2, 2] = (byte)(1 + pos.Z);
+
+					vertices[3, 0] = (byte)(pos.X);
+					vertices[3, 1] = (byte)(pos.Y);
+					vertices[3, 2] = (byte)(1 + pos.Z);
+
+					vertices[4, 0] = (byte)(pos.X);
+					vertices[4, 1] = (byte)(1 + pos.Y);
+					vertices[4, 2] = (byte)(pos.Z);
+
+					vertices[5, 0] = (byte)(1 + pos.X);
+					vertices[5, 1] = (byte)(1 + pos.Y);
+					vertices[5, 2] = (byte)(pos.Z);
+
+					vertices[6, 0] = (byte)(1 + pos.X);
+					vertices[6, 1] = (byte)(1 + pos.Y);
+					vertices[6, 2] = (byte)(1 + pos.Z);
+
+					vertices[7, 0] = (byte)(pos.X);
+					vertices[7, 1] = (byte)(1 + pos.Y);
+					vertices[7, 2] = (byte)(1 + pos.Z);
+
+					indicies = new byte[]
+					{
+						2, 1, 0,
+						0, 3, 2,
+
+						6, 2, 3,
+						3, 7, 6,
+
+						5, 6, 7,
+						7, 4, 5,
+
+						1, 5, 4,
+						4, 0, 1,
+
+						7, 3, 0,
+						0, 4, 7,
+
+						6, 5, 1,
+						1, 2, 6
+					};
+					break;
+			}
+		}
 	}
 
 	public class ChunkRenderData

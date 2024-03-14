@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://b33cy5ihrg8qq"]
 
-[ext_resource type="Script" path="res://WorldGen.cs" id="1_hnv23"]
-[ext_resource type="Material" uid="uid://oe6t0x1uogb3" path="res://Ground.tres" id="2_fqq8m"]
-[ext_resource type="Script" path="res://addons/freecam_3D/freecam.gd" id="3_6nmsw"]
+[ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
+[ext_resource type="Material" uid="uid://oe6t0x1uogb3" path="res://Materials/Ground.tres" id="2_p4t7p"]
+[ext_resource type="Script" path="res://addons/freecam_3D/freecam.gd" id="3_pv62p"]
 
 [sub_resource type="Environment" id="Environment_f6ua2"]
 fog_enabled = true
@@ -10,14 +10,14 @@ fog_light_color = Color(0.752941, 0.843137, 1, 1)
 fog_density = 0.0005
 
 [node name="Node3D" type="Node3D"]
-script = ExtResource("1_hnv23")
-mat = ExtResource("2_fqq8m")
+script = ExtResource("1_qvi55")
+mat = ExtResource("2_p4t7p")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.97805, 0.208373, 0, -0.208373, 0.97805, -2.92953, 22.496, 6.37533)
 environment = SubResource("Environment_f6ua2")
 fov = 92.8
-script = ExtResource("3_6nmsw")
+script = ExtResource("3_pv62p")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.790186, 0.19839, -0.579868, 0.609554, -0.156167, 0.77721, 0.0636346, -0.967602, -0.244331, 0, 0, 0)

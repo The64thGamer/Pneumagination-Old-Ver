@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Pneumagination"
-run/main_scene="res://node_3d.tscn"
+run/main_scene="res://Scenes/node_3d.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-DrawLine3D="*res://DrawLine3D.cs"
+DrawLine3D="*res://Scripts/DrawLine3D.cs"
 
 [dotnet]
 

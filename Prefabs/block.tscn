@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c6aey2fxq5b3p"]
-
-[ext_resource type="ArrayMesh" uid="uid://bhrusnaelp51w" path="res://Models/Blocks.obj" id="1_ft5ox"]
-
-[node name="Blocks" type="MeshInstance3D"]
-mesh = ExtResource("1_ft5ox")
