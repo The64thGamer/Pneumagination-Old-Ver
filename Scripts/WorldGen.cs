@@ -239,7 +239,11 @@ public partial class WorldGen : Node3D
 						int bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ);
 						if (bitMask != 0)
 						{
-							chunk.brushes.AddRange(CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize)));
+							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize));
+							if (brushes != null)
+							{
+								chunk.brushes.AddRange(brushes);
+							}
 						}
 					}
 				}
@@ -284,7 +288,7 @@ public partial class WorldGen : Node3D
 
 	bool CheckBrushVisibility(bool[,,] bigBlockArray, int x, int y, int z)
 	{
-		if(hideBigBlocks)
+		if (hideBigBlocks)
 		{
 			return true;
 		}
@@ -536,76 +540,34 @@ public partial class WorldGen : Node3D
 	*/
 	List<Brush> CreateSurfaceBrushes(int id, byte posX, byte posY, byte posZ)
 	{
-		List<Brush> brushes = new List<Brush>();
-
-		switch (id)
+		List<Brush> brushCopies = new List<Brush>();
+		if (surfaceBrushes.TryGetValue(id, out byte[] verts))
 		{
-			case 0b11111111100000000000000000:
-				brushes.Add(new Brush()
-				{
-					hiddenFlag = false,
-					vertices = new byte[24]
-					{
-						0,0,0, 6,0,0, 6,0,6, 0,0,6,
-						0,1,0, 6,1,0, 6,1,6, 0,1,6,
-					},
-				});
-				break;
-			case 0b00000000000000000111111111:
-				brushes.Add(new Brush()
-				{
-					hiddenFlag = false,
-					vertices = new byte[24]
-					{
-						0,5,0, 6,5,0, 6,5,6, 0,5,6,
-						0,6,0, 6,6,0, 6,6,6, 0,6,6,
-					},
-				});
-				break;
-			case 0b11111111100000111000000000:
-				brushes.Add(new Brush()
-				{
-					hiddenFlag = false,
-					vertices = new byte[24]
-					{
-						0,0,0, 6,0,0, 6,0,3, 0,0,3,
-						0,1,0, 6,1,0, 6,2,2, 0,2,2,
-					},
-				});
-				brushes.Add(new Brush()
-				{
-					hiddenFlag = false,
-					vertices = new byte[24]
-	{
-						0,0,3, 6,0,3, 6,0,6, 0,0,6,
-						0,2,2, 6,2,2, 6,4,4, 0,4,4,
-	},
-				});
-				brushes.Add(new Brush()
-				{
-					hiddenFlag = false,
-					vertices = new byte[24]
-	{
-						0,4,4, 6,4,4, 6,0,6, 0,0,6,
-						0,6,5, 6,6,5, 6,6,6, 0,6,6,
-	},
-				}); break;
-			default:
-				break;
-		}
-
-		for (int e = 0; e < brushes.Count; e++)
-		{
-			for (int i = 0; i < brushes[e].vertices.Length; i += 3)
+			for (int i = 0; i < verts.Length/24; i++)
 			{
-				brushes[e].vertices[i] += posX;
-				brushes[e].vertices[i + 1] += posY;
-				brushes[e].vertices[i + 2] += posZ;
+				Brush b = new Brush { hiddenFlag = false, vertices = new byte[24] };
+				for (int e = 0; e < 24; e++)
+				{
+					b.vertices[e] = verts[e + (i * 24)];
+                }
+				brushCopies.Add(b);
+
 			}
+
+			for (int e = 0; e < brushCopies.Count; e++)
+			{
+				for (int i = 0; i < brushCopies[e].vertices.Length; i += 3)
+				{
+					brushCopies[e].vertices[i] += posX;
+					brushCopies[e].vertices[i + 1] += posY;
+					brushCopies[e].vertices[i + 2] += posZ;
+				}
+			}
+
+			return brushCopies;
 		}
 
-
-		return brushes;
+		return null;
 	}
 
 	float GetClampedNoise(float noise)
@@ -656,4 +618,26 @@ public partial class WorldGen : Node3D
 		ready,
 		garbageCollector,
 	}
+
+	System.Collections.Generic.Dictionary<int, byte[]> surfaceBrushes = new System.Collections.Generic.Dictionary<int, byte[]>
+	{
+		{0b11111111100000000000000000,new byte[]{
+					0,0,0, 6,0,0, 6,0,6, 0,0,6,
+					0,1,0, 6,1,0, 6,1,6, 0,1,6,
+		}},
+		{ 0b00000000000000000111111111,new byte[]{
+					0,5,0, 6,5,0, 6,5,6, 0,5,6,
+					0,6,0, 6,6,0, 6,6,6, 0,6,6,
+		}},
+		{ 0b11111111100000111000000000,new byte[]{
+					0,0,0, 6,0,0, 6,0,3, 0,0,3,
+					0,1,0, 6,1,0, 6,2,2, 0,2,2,
+
+					0,0,3, 6,0,3, 6,0,6, 0,0,6,
+					0,2,2, 6,2,2, 6,4,4, 0,4,4,
+
+					0,4,4, 6,4,4, 6,0,6, 0,0,6,
+					0,6,5, 6,6,5, 6,6,6, 0,6,6,
+		}}
+	};
 }
