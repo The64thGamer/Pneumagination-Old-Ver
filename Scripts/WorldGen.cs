@@ -288,21 +288,19 @@ public partial class WorldGen : Node3D
 			{
 				for (newX = -1; newX < 2; newX++)
 				{
-					if (!(newX == 0 && newY == 0 && newZ == 0))
+
+					if (x + newX < bigBlockArray.GetLength(0) &&
+					   y + newY < bigBlockArray.GetLength(1) &&
+					   z + newZ < bigBlockArray.GetLength(2) &&
+					   x + newX >= 0 &&
+					   y + newY >= 0 &&
+					   z + newZ >= 0 &&
+					   bigBlockArray[x + newX, y + newY, z + newZ]
+					   )
 					{
-						if (x + newX < bigBlockArray.GetLength(0) &&
-						   y + newY < bigBlockArray.GetLength(1) &&
-						   z + newZ < bigBlockArray.GetLength(2) &&
-						   x + newX >= 0 &&
-						   y + newY >= 0 &&
-						   z + newZ >= 0 &&
-						   bigBlockArray[x + newX, y + newY, z + newZ]
-						   )
-						{
-							bitmask |= 1 << bitWise;
-						}
-						bitWise++;
+						bitmask |= 1 << bitWise;
 					}
+					bitWise++;
 				}
 			}
 		}
@@ -646,15 +644,50 @@ public partial class WorldGen : Node3D
 	{
 		for (int i = 0; i < cachedBrushes.Length; i++)
 		{
-			GD.Print("OG   - " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
-			RotateSquareMatrixX(cachedBrushes[i].bitMask);
-			GD.Print("ROT 1- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
-			RotateSquareMatrixX(cachedBrushes[i].bitMask);
-			GD.Print("ROT 2- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
-			RotateSquareMatrixX(cachedBrushes[i].bitMask);
-			GD.Print("ROT 3- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
-			RotateSquareMatrixX(cachedBrushes[i].bitMask);
-			GD.Print("ROT 4- " + String.Join(" ", cachedBrushes[i].bitMask.Cast<byte>()));
+			byte[,,] newBitMask = new byte[3, 3, 3];
+			for (int x = 0; x < 3; x++)
+			{
+				for (int y = 0; y < 3; y++)
+				{
+					for (int z = 0; z < 3; z++)
+					{
+						newBitMask[x, y, z] = cachedBrushes[i].bitMask[x, y, z];
+					}
+				}
+			}
+			Vector3[,,] newVertices = new Vector3[2, 2, 2];
+			for (int x = 0; x < 2; x++)
+			{
+				for (int y = 0; y < 2; y++)
+				{
+					for (int z = 0; z < 2; z++)
+					{
+						newVertices[x, y, z] = cachedBrushes[i].vertices[x, y, z];
+					}
+				}
+			}
+			GD.Print(String.Join("", newBitMask.Cast<byte>()));
+
+			RotateSquareMatrixX(newBitMask);
+			//RotateSquareMatrixX(newVertices);
+
+			byte[] finalVerts = new byte[24];
+			int e = 0;
+			for (int x = 0; x < 2; x++)
+			{
+				for (int y = 0; y < 2; y++)
+				{
+					for (int z = 0; z < 2; z++)
+					{
+						finalVerts[e] = (byte)newVertices[x, y, z].X;
+						finalVerts[e+1] = (byte)newVertices[x, y, z].Y;
+						finalVerts[e+2] = (byte)newVertices[x, y, z].Z;
+						e += 3;
+					}
+				}
+			}
+			surfaceBrushes.Add(Convert.ToInt32(String.Join("", newBitMask.Cast<byte>()), 2),finalVerts);
+			GD.Print(String.Join("", newBitMask.Cast<byte>()));
 		}
 	}
 	void RotateSquareMatrixX<T>(T[,,] a)
@@ -679,31 +712,39 @@ public partial class WorldGen : Node3D
 	struct CachedSurfaceBrush
 	{
 		public byte[,,] bitMask;
-		public Vector3[,,] verticesX;
+		public Vector3[,,] vertices;
 	}
 
 	CachedSurfaceBrush[] cachedBrushes = new CachedSurfaceBrush[] {
 		new CachedSurfaceBrush(){
 			bitMask = new byte[,,]{
+				{ { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } },
 				{ { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } },
-				{ { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } },
-				{ { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } } },
-			verticesX = new Vector3[,,]{
+				{ { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } } },
+			vertices = new Vector3[,,]{
 				{ {new Vector3(0,0,0),new Vector3(6,0,0) }, {new Vector3(6,0,6),new Vector3(0,0,6) }, },
-				{ {new Vector3(0,1,0),new Vector3(6,1,0) }, {new Vector3(6,1,6),new Vector3(0,1,6) } }}}
-	};
+				{ {new Vector3(0,1,0),new Vector3(6,1,0) }, {new Vector3(6,1,6),new Vector3(0,1,6) } }}},
+        new CachedSurfaceBrush(){
+            bitMask = new byte[,,]{
+                { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } },
+                { { 0, 0, 0 }, { 0, 0, 0 }, { 1, 1, 0 } },
+                { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } } },
+            vertices = new Vector3[,,]{
+                { {new Vector3(0,0,0),new Vector3(6,0,0) }, {new Vector3(6,0,6),new Vector3(0,0,6) }, },
+                { {new Vector3(0,1,0),new Vector3(6,1,0) }, {new Vector3(6,1,6),new Vector3(0,1,6) } }}},
+    };
 
 	System.Collections.Generic.Dictionary<int, byte[]> surfaceBrushes = new System.Collections.Generic.Dictionary<int, byte[]>
 	{
-		{0b11111111100000000000000000,new byte[]{
+		{0b111111111000000000000000000,new byte[]{
 					0,0,0, 6,0,0, 6,0,6, 0,0,6,
 					0,1,0, 6,1,0, 6,1,6, 0,1,6,
 		}},
-		{ 0b00000000000000000111111111,new byte[]{
+		{ 0b000000000000000000111111111,new byte[]{
 					0,5,0, 6,5,0, 6,5,6, 0,5,6,
 					0,6,0, 6,6,0, 6,6,6, 0,6,6,
 		}},
-		{ 0b11111111100000111000000000,new byte[]{
+		{ 0b111111111000000111000000000,new byte[]{
 					0,0,0, 6,0,0, 6,0,3, 0,0,3,
 					0,1,0, 6,1,0, 6,2,2, 0,2,2,
 
