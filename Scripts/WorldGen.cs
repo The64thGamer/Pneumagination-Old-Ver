@@ -250,32 +250,32 @@ public partial class WorldGen : Node3D
 		//North
 		if (z < bigBlockArray.GetLength(2) - 1 && bigBlockArray[x, y, z + 1])
 		{
-			bitmask |= 1 << 0;
+			bitmask |= 1 << 5;
 		}
 		//East
 		if (x < bigBlockArray.GetLength(0) - 1 && bigBlockArray[x + 1, y, z])
 		{
-			bitmask |= 1 << 1;
+			bitmask |= 1 << 4;
 		}
 		//South
 		if (z > 0 && bigBlockArray[x, y, z - 1])
 		{
-			bitmask |= 1 << 2;
+			bitmask |= 1 << 3;
 		}
 		//West
 		if (x > 0 && bigBlockArray[x - 1, y, z])
 		{
-			bitmask |= 1 << 3;
+			bitmask |= 1 << 2;
 		}
 		//Top
 		if (y < bigBlockArray.GetLength(1) - 1 && bigBlockArray[x, y + 1, z])
 		{
-			bitmask |= 1 << 4;
+			bitmask |= 1 << 1;
 		}
 		//Bottom
 		if (y > 0 && bigBlockArray[x, y - 1, z])
 		{
-			bitmask |= 1 << 5;
+			bitmask |= 1 << 0;
 		}
 		return (byte)bitmask;
 	}
