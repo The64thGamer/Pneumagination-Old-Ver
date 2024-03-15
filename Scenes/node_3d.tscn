@@ -30,7 +30,7 @@ mat = ExtResource("2_p4t7p")
 
 [node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("head", "camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.93, 716.041, 6.375)
-floor_max_angle = 1.0472
+floor_max_angle = 1.39626
 safe_margin = 0.01
 script = ExtResource("3_m8gbp")
 head = NodePath("Player Head")
