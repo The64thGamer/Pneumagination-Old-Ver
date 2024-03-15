@@ -6,17 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static WorldGen;
 
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
 	[Export] int chunkRenderSize = 3;
 	[Export] bool hideBigBlocks = false;
-	int seedA = 0;
-	int seedB = 0;
-	int seedC = 0;
-	int seedD = 0;
+	public static uint seedA = 0;
+	public static uint seedB = 0;
+	public static uint seedC = 0;
+	public static uint seedD = 0;
 	int totalChunksRendered = 0;
 
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
@@ -57,43 +56,43 @@ public partial class WorldGen : Node3D
 		Random rnd = new Random();
 		if (seedA == 0)
 		{
-			seedA = rnd.Next();
+			seedA = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
 		}
 		if (seedB == 0)
 		{
-			seedB = rnd.Next();
+			seedB = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
 		}
 		if (seedC == 0)
 		{
-			seedC = rnd.Next();
+			seedC = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
 		}
 		if (seedD == 0)
 		{
-			seedD = rnd.Next();
+			seedD = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
 		}
 
 		celNoiseA.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		celNoiseA.SetFrequency(.01f);
-		celNoiseA.SetSeed(seedA);
+		celNoiseA.SetSeed((int)seedA);
 		celNoiseA.SetFractalType(FastNoiseLite.FractalType.PingPong);
 		celNoiseA.SetFractalOctaves(1);
 		celNoiseA.SetFractalPingPongStrength(1.5f);
 
 		celNoiseB.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		celNoiseB.SetFrequency(.02f);
-		celNoiseB.SetSeed(seedB);
+		celNoiseB.SetSeed((int)seedB);
 		celNoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
 		celNoiseB.SetFractalOctaves(3);
 
 		os2NoiseA.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		os2NoiseA.SetFrequency(0.001f);
-		os2NoiseA.SetSeed(seedC);
+		os2NoiseA.SetSeed((int)seedC);
 		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseA.SetFractalOctaves(4);
 
 		os2NoiseB.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
 		os2NoiseB.SetFrequency(0.005f);
-		os2NoiseB.SetSeed(seedD);
+		os2NoiseB.SetSeed((int)seedD);
 		os2NoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseB.SetFractalOctaves(4);
 
@@ -141,6 +140,9 @@ public partial class WorldGen : Node3D
 				ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
 				ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
 				ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
+				ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
+				ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
+				
 				GD.Print("Finishing Chunk (ID " + ongoingChunkRenderData[e].id + ")");
 			}
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
@@ -552,13 +554,25 @@ public partial class WorldGen : Node3D
 		MeshInstance3D meshObject = new MeshInstance3D();
 		meshObject.Mesh = arrMesh;
 		meshObject.Mesh.SurfaceSetMaterial(0, mat);
+
+		//Assign Collision
+		ConcavePolygonShape3D collisionMesh = new ConcavePolygonShape3D();
+		collisionMesh.Data = arrMesh.GetFaces();
+
+		CollisionShape3D collisionShape = new CollisionShape3D();
+		collisionShape.Shape = collisionMesh;
+
+		StaticBody3D body = new StaticBody3D();
+
 		return new ChunkRenderData()
 		{
 			id = id,
 			state = ChunkRenderDataState.ready,
 			chunkNode = chunk,
 			meshNode = meshObject,
-			position = new Vector3(chunkData.positionX * chunkSize, 0, chunkData.positionZ * chunkSize)
+			position = new Vector3(chunkData.positionX * chunkSize, 0, chunkData.positionZ * chunkSize),
+			collisionShape = collisionShape,
+			staticBody = body,
 		};
 	}
 
@@ -692,6 +706,8 @@ public partial class WorldGen : Node3D
 		public MeshInstance3D meshNode;
 		public Vector3 position;
 		public int id;
+		public CollisionShape3D collisionShape;
+		public StaticBody3D staticBody;
 	}
 
 	public enum ChunkRenderDataState
@@ -766,6 +782,47 @@ public partial class WorldGen : Node3D
 
 					3,4,6, 6,4,3, 6,4,6, 6,4,6,
 					4,5,6, 6,5,4, 6,6,6, 6,6,6,
+		}},
+		{ 0b110101,new byte[]{ //North Ramp 3-Direction Smushed
+					0,0,0, 6,0,0, 6,0,3, 0,0,3,
+					0,1,2, 6,1,2, 6,1,2, 0,1,2,
+
+					0,0,3, 6,0,3, 6,0,6, 0,0,6,
+					0,1,2, 6,1,2, 6,4,3, 0,4,3,
+
+					0,4,3, 6,4,3, 6,0,6, 0,0,6,
+					0,5,4, 6,5,4, 6,6,6, 0,6,6,
+		}},
+		{ 0b111001,new byte[]{ //East Ramp 3-Direction Smushed
+					0,0,0, 3,0,0, 3,0,6, 0,0,6,
+					2,1,0, 2,1,0, 2,1,6, 2,1,6,
+
+					3,0,0, 6,0,0, 6,0,6, 3,0,6,
+					2,1,0, 3,4,0, 3,4,6, 2,1,6,
+
+					3,4,0, 6,0,0, 6,0,6, 3,4,6,
+					4,5,0, 6,6,0, 6,6,6, 4,5,6,
+		}},
+		{ 0b011101,new byte[]{ //South Ramp 3-Direction Smushed
+
+					0,0,3, 6,0,3, 6,0,6, 0,0,6,
+					0,1,4, 6,1,4, 6,1,4, 0,1,4,
+
+					0,0,0, 6,0,0, 6,0,3, 0,0,3,
+					0,4,3, 6,4,3, 6,1,4, 0,1,4,
+
+					0,0,0, 6,0,0, 6,4,3, 0,4,3,
+					0,6,0, 6,6,0, 6,5,2, 0,5,2,
+		}},
+		{ 0b101101,new byte[]{ //West Ramp 3-Direction Smushed
+					3,0,0, 6,0,0, 6,0,6, 3,0,6,
+					4,1,0, 4,1,0, 4,1,6, 4,1,6,
+
+					0,0,0, 3,0,0, 3,0,6, 0,0,6,
+					3,4,0, 4,1,0, 4,1,6, 3,4,6,
+
+					0,0,0, 3,4,0, 3,4,6, 0,0,6,
+					0,6,0, 2,5,0, 2,5,6, 0,6,6,
 		}},
 	};
 
