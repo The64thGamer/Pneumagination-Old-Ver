@@ -32,7 +32,20 @@ public partial class PlayerMovement : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
 	{
-		Vector3 velocity = Velocity;
+		// Tab out
+		if (Input.IsActionJustPressed("Pause"))
+		{
+			if (Input.MouseMode == Input.MouseModeEnum.Captured)
+			{
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+            }
+            else
+			{
+                Input.MouseMode = Input.MouseModeEnum.Captured;
+            }
+        }
+
+        Vector3 velocity = Velocity;
 
 		// Add the gravity.
 		if (!IsOnFloor())

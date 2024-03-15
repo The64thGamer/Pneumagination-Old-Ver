@@ -14,7 +14,7 @@ config/name="Pneumagination"
 config/version="0.8a"
 run/main_scene="res://Scenes/node_3d.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Textures/testtexture.png"
 
 [autoload]
 
