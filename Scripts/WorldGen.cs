@@ -462,9 +462,11 @@ public partial class WorldGen : Node3D
 
 		//Vertex Merger
 		List<Vector3> adjacentFaceNormals = new List<Vector3>();
-
+		System.Collections.Generic.Dictionary<int, List<int>> finalAdjacencyList;
+		int k, j;
 		foreach ((Vector3 currentVert, List<int> adjacentTriangleIndices) in triangleAdjacencyList)
 		{
+
 			//Gather all face normals
 			adjacentFaceNormals = new List<Vector3>();
 			for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
@@ -477,34 +479,43 @@ public partial class WorldGen : Node3D
 					));
 			}
 
-			//Check if verts should be merged
-			for (int i = 0; i < adjacentTriangleIndices.Count; i++)
+			for (int i = 0; i < adjacentFaceNormals.Count; i++)
 			{
-				if (verts[indices[adjacentTriangleIndices[i]]].IsEqualApprox(currentVert))
+				for (int e = 0; e < adjacentFaceNormals.Count; e++)
 				{
-					for (int k = 0; k < adjacentTriangleIndices.Count; k++)
+					if (adjacentFaceNormals[i].Normalized().Dot(adjacentFaceNormals[e].Normalized()) > 0.45)
 					{
-						if (currentVert.IsEqualApprox(verts[indices[adjacentTriangleIndices[k]]])
-							&& adjacentFaceNormals[(i - (i % 3)) / 3].Dot(adjacentFaceNormals[(k - (k % 3)) / 3]) > 0)
+						for (k = 0; k < 3; k++)
 						{
-							indices[adjacentTriangleIndices[k]] = indices[adjacentTriangleIndices[i]];
+							if(currentVert.Equals(verts[indices[adjacentTriangleIndices[(i * 3) + k]]]))
+							{
+								for (j = 0; j < 3; j++)
+								{
+									if (currentVert.Equals(verts[indices[adjacentTriangleIndices[(e * 3) + j]]]))
+									{
+										indices[adjacentTriangleIndices[(e * 3) + j]] = indices[adjacentTriangleIndices[(i * 3) + k]];
+										break;
+									}
+								}
+								break;
+							}
 						}
+						
 					}
 				}
 			}
 
-			System.Collections.Generic.Dictionary<int, List<int>> finalAdjacencyList = new System.Collections.Generic.Dictionary<int, List<int>>();
+			finalAdjacencyList = new System.Collections.Generic.Dictionary<int, List<int>>();
 			for (int i = 0; i < adjacentTriangleIndices.Count; i++)
 			{
 				int lookupIndex = indices[adjacentTriangleIndices[i]];
 
-				if (verts[lookupIndex].IsEqualApprox(currentVert))
+				if (verts[lookupIndex].Equals(currentVert))
 				{
 					startIndex = i - (i % 3);
 					if (finalAdjacencyList.ContainsKey(lookupIndex))
 					{
 						finalAdjacencyList[lookupIndex].Add(startIndex);
-
 					}
 					else
 					{
@@ -520,7 +531,7 @@ public partial class WorldGen : Node3D
 			foreach ((int key, List<int> value) in finalAdjacencyList)
 			{
 				Vector3 finalNormal = Vector3.Zero;
-				for (int k = 0; k < value.Count; k++)
+				for (k = 0; k < value.Count; k++)
 				{
 					finalNormal += adjacentFaceNormals[value[k] / 3];
 				}
