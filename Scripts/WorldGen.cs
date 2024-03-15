@@ -204,7 +204,6 @@ public partial class WorldGen : Node3D
 
 		float noiseValue;
 		int posX, posY, posZ, newX, newY, newZ;
-		bool cacheCheck = false;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
@@ -264,18 +263,13 @@ public partial class WorldGen : Node3D
 						byte bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ,0);
 						if (bitMask != 0)
 						{
-							cacheCheck = false;
-							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false, ref cacheCheck);
+							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false);
 							if (brushes != null)
 							{
+								SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 1, true);
 								chunk.brushes.AddRange(brushes);
 							}
 
-							SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 1, true);
-							if(cacheCheck)
-							{
-								SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 2, true);
-							}
 						}
 					}
 				}
@@ -291,10 +285,10 @@ public partial class WorldGen : Node3D
 					if (!GetBitOfByte(bigBlockArray[posX, posY, posZ], 1) && !GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
 					{
 						//Second layer of "Sub-Surface Brushes"
-						byte bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 2));
+						byte bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1));
 						if (bitMask != 0)
 						{
-							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true, ref cacheCheck);
+							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true);
 							if (brushes != null)
 							{
 								chunk.brushes.AddRange(brushes);
@@ -584,7 +578,7 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
-	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface, ref bool cacheCheck)
+	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface)
 	{
 		List<Brush> brushCopies = new List<Brush>();
 		bool check;
@@ -596,10 +590,9 @@ public partial class WorldGen : Node3D
 		else
 		{
 			check = surfaceBrushes.TryGetValue(id, out verts);
-            surfaceBrushCache.TryGetValue(id, out cacheCheck);
-        }
+		}
 
-        if (check)
+		if (check)
 		{
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
@@ -699,257 +692,156 @@ public partial class WorldGen : Node3D
 
 	System.Collections.Generic.Dictionary<int, byte[]> subSurfaceBrushes = new System.Collections.Generic.Dictionary<int, byte[]>
 	{
-		{0b100001,new byte[]{ //North Ramp to Floor
-					0,0,5, 6,0,5, 6,0,6, 0,0,6,
-					0,1,6, 6,1,6, 6,1,6, 0,1,6
+		{ 0b110011,new byte[]{ //North-East Crushed Connection
+					3,0,1, 6,0,0, 6,0,6, 5,0,5,
+					3,6,1, 6,6,0, 6,6,6, 5,6,5,
+
+					3,0,1, 5,0,5, 5,0,5, 1,0,3,
+					3,6,1, 5,6,5, 5,6,5, 1,6,3,
+
+					1,0,3, 5,0,5, 6,0,6, 0,0,6,
+					1,6,3, 5,6,5, 6,6,6, 0,6,6,
 		}},
-		{0b010001,new byte[]{ //East Ramp to Floor
-					5,0,0, 6,0,0, 6,0,6, 5,0,6,
-					6,1,0, 6,1,0, 6,1,6, 6,1,6
+		{ 0b011011,new byte[]{ //East-South Crushed Connection
+					0,0,0, 6,0,0, 5,0,1, 1,0,3,
+					0,6,0, 6,6,0, 5,6,1, 1,6,3,
+
+					1,0,3, 5,0,1, 5,0,1, 3,0,5,
+					1,6,3, 5,6,1, 5,6,1, 3,6,5,
+
+					5,0,1, 6,0,0, 6,0,6, 3,0,5,
+					5,6,1, 6,6,0, 6,6,6, 3,6,5,
 		}},
-		{0b001001,new byte[]{ //South Ramp to Floor
-					0,0,0, 6,0,0, 6,0,1, 0,0,1,
-					0,1,0, 6,1,0, 6,1,0, 0,1,0
+		{ 0b001111,new byte[]{ //South-West Crushed Connection
+					0,0,0, 6,0,0, 5,0,3, 1,0,1,
+					0,6,0, 6,6,0, 5,6,3, 1,6,1,
+
+					1,0,1, 1,0,1, 5,0,3, 3,0,5,
+					1,6,1, 1,6,1, 5,6,3, 3,6,5,
+
+					0,0,0, 1,0,1, 3,0,5, 0,0,6,
+					0,6,0, 1,6,1, 3,6,5, 0,6,6,
 		}},
-		{0b000101,new byte[]{ //West Ramp to Floor
-					0,0,0, 1,0,0, 1,0,6, 0,0,6,
-					0,1,0, 0,1,0, 0,1,6, 0,1,6
-		}},
-		{0b110000,new byte[]{ //North-East Connection
-					6,0,5, 6,0,5, 6,0,6, 5,0,6,
-					6,6,5, 6,6,5, 6,6,6, 5,6,6,
-		}},
-		{0b011000,new byte[]{ //East-South Connection
-					5,0,0, 6,0,0, 6,0,1, 6,0,1,
-					5,6,0, 6,6,0, 6,6,1, 6,6,1,
+		{ 0b100111,new byte[]{ //West-North Crushed Connection
+					
+					0,0,0, 3,0,1, 1,0,5, 0,0,6,
+					0,6,0, 3,6,1, 1,6,5, 0,6,6,
+
+					3,0,1, 5,0,3, 1,0,5, 1,0,5,
+					3,6,1, 5,6,3, 1,6,5, 1,6,5,
+
+					1,0,5, 5,0,3, 6,0,6, 0,0,6,
+					1,6,5, 5,6,3, 6,6,6, 0,6,6,
 		}},
 		{ 0b110001,new byte[]{ //North-East Bottom Corner Connection
-					1,0,1, 3,0,0, 3,0,3, 0,0,3,
-					1,1,1, 3,1,0, 3,1,3, 0,1,3,
+					
+					3,0,1, 6,0,0, 6,0,2, 4,0,3,
+					3,0,1, 6,0,0, 6,1,2, 4,1,3,
 
-					3,0,0, 6,0,0, 6,0,6, 3,0,3,
-					3,1,0, 6,1,0, 6,1,6, 3,1,3,
+					3,0,1, 4,0,3, 3,0,4, 1,0,3,
+					3,0,1, 4,1,3, 3,1,4, 1,0,3,
 
-					0,0,3, 3,0,3, 6,0,6, 0,0,6,
-					0,1,3, 3,1,3, 6,1,6, 0,1,6,
+					1,0,3, 3,0,4, 2,0,6, 0,0,6,
+					1,0,3, 3,1,4, 2,1,6, 0,0,6,
+
+					4,0,3, 6,0,2, 6,2,4, 3,0,4,
+					4,1,3, 6,1,2, 6,4,3, 3,1,4,
+
+					3,0,4, 6,0,2, 6,0,6, 2,0,6,
+					3,1,4, 6,2,4, 6,2,6, 2,1,6,
+
+					3,1,4, 6,2,4, 6,2,6, 2,1,6,
+					6,4,3, 6,4,3, 6,4,6, 3,4,6,
+
+					3,4,6, 6,4,3, 6,4,6, 6,4,6,
+					4,5,6, 6,5,4, 6,6,6, 6,6,6,
 		}},
-		{ 0b011001,new byte[]{ //East-South Bottom Corner Connection
-					0,0,0, 6,0,0, 3,0,3, 0,0,3,
-					0,1,0, 6,1,0, 3,1,3, 0,1,3,
-
-					0,0,3, 3,0,3, 3,0,6, 1,0,5,
-					0,1,3, 3,1,3, 3,1,6, 1,1,5,
-
-					3,0,3, 6,0,0, 6,0,6, 3,0,6,
-					3,1,3, 6,1,0, 6,1,6, 3,1,6,
-		}},
-		{ 0b001101,new byte[]{ //South-West Bottom Corner Connection
-					0,0,0, 6,0,0, 6,0,3, 3,0,3,
-					0,1,0, 6,1,0, 6,1,3, 3,1,3,
-
-					3,0,3, 6,0,3, 5,0,5, 3,0,6,
-					3,1,3, 6,1,3, 5,1,5, 3,1,6,
-
-					0,0,0, 3,0,3, 3,0,6, 0,0,6,
-					0,1,0, 3,1,3, 3,1,6, 0,1,6,
-		}},
-		{ 0b100101,new byte[]{ //West-North Bottom Corner Connection
-					0,0,0, 3,0,0, 3,0,3, 0,0,6,
-					0,1,0, 3,1,0, 3,1,3, 0,1,6,
-
-					3,0,0, 5,0,1, 6,0,3, 3,0,3,
-					3,1,0, 5,1,1, 6,1,3, 3,1,3,
-
-					3,0,3, 6,0,3, 6,0,6, 0,0,6,
-					3,1,3, 6,1,3, 6,1,6, 0,1,6,
-
-		}},
-	};
-
-	System.Collections.Generic.Dictionary<int, bool> surfaceBrushCache = new System.Collections.Generic.Dictionary<int, bool>
-	{
-		{0b000001,true //Floor
-		},
-		{ 0b000010,true //Ceiling
-		},
-		{ 0b100000,true //North Wall
-		},
-		{ 0b010000,true //East Wall
-		},
-		{ 0b001000,true //South Wall
-		},
-		{ 0b000100,true //West Wall
-		},
-		{ 0b100001,true //North Ramp
-		},
-		{ 0b010001,true //East Ramp
-		},
-		{ 0b001001,true //South Ramp
-		},
-		{ 0b000101,true //West Ramp
-		},
-		{ 0b110000,false //North-East Connection
-		},
-		{ 0b011000,false //East-South Connection
-		},
-		{ 0b001100,false //South-West Connection
-		},
-		{ 0b100100,false //West-North Connection
-		},
-		{ 0b110001,false //North-East Bottom Corner Connection
-		},
-		{ 0b011001,false //East-South Bottom Corner Connection
-		},
-		{ 0b001101,false //South-West Bottom Corner Connection
-		},
-		{ 0b100101,false //West-North Bottom Corner Connection
-		},
 	};
 
 	System.Collections.Generic.Dictionary<int, byte[]> surfaceBrushes = new System.Collections.Generic.Dictionary<int, byte[]>
 	{
-		{0b000001,new byte[]{ //Floor
-					0,0,0, 6,0,0, 6,0,6, 0,0,6,
-					0,1,0, 6,1,0, 6,1,6, 0,1,6,
-		}},
-		{ 0b000010,new byte[]{ //Ceiling
-					0,5,0, 6,5,0, 6,5,6, 0,5,6,
-					0,6,0, 6,6,0, 6,6,6, 0,6,6,
-		}},
-		{ 0b100000,new byte[]{ //North Wall
-					0,0,6, 6,0,6, 6,6,6, 0,6,6,
-					0,0,5, 6,0,5, 6,6,5, 0,6,5,
-		}},
-		{ 0b010000,new byte[]{ //East Wall
-					5,0,0, 6,0,0, 6,0,6, 5,0,6,
-					5,6,0, 6,6,0, 6,6,6, 5,6,6
-		}},
-		{ 0b001000,new byte[]{ //South Wall
-					0,0,0, 6,0,0, 6,0,1, 0,0,1,
-					0,6,0, 6,6,0, 6,6,1, 0,6,1
-		}},
-		{ 0b000100,new byte[]{ //West Wall
-					0,0,0, 1,0,0, 1,0,6, 0,0,6,
-					0,6,0, 1,6,0, 1,6,6, 0,6,6
-		}},
 		{ 0b100001,new byte[]{ //North Ramp
 					0,0,0, 6,0,0, 6,0,3, 0,0,3,
-					0,1,0, 6,1,0, 6,2,2, 0,2,2,
+					0,1,2, 6,1,2, 6,1,2, 0,1,2,
 
 					0,0,3, 6,0,3, 6,0,6, 0,0,6,
-					0,2,2, 6,2,2, 6,4,4, 0,4,4,
+					0,1,2, 6,1,2, 6,4,3, 0,4,3,
 
-					0,4,4, 6,4,4, 6,0,6, 0,0,6,
-					0,6,5, 6,6,5, 6,6,6, 0,6,6,
+					0,4,3, 6,4,3, 6,0,6, 0,0,6,
+					0,5,4, 6,5,4, 6,6,6, 0,6,6,
 		}},
 		{ 0b010001,new byte[]{ //East Ramp
 					0,0,0, 3,0,0, 3,0,6, 0,0,6,
-					0,1,0, 2,2,0, 2,2,6, 0,1,6,
+					2,1,0, 2,1,0, 2,1,6, 2,1,6,
 
 					3,0,0, 6,0,0, 6,0,6, 3,0,6,
-					2,2,0, 4,4,0, 4,4,6, 2,2,6,
+					2,1,0, 3,4,0, 3,4,6, 2,1,6,
 
-					4,4,0, 6,0,0, 6,0,6, 4,4,6,
-					5,6,0, 6,6,0, 6,6,6, 5,6,6,
+					3,4,0, 6,0,0, 6,0,6, 3,4,6,
+					4,5,0, 6,6,0, 6,6,6, 4,5,6,
 		}},
 		{ 0b001001,new byte[]{ //South Ramp
 
 					0,0,3, 6,0,3, 6,0,6, 0,0,6,
-					0,2,4, 6,2,4, 6,1,6, 0,1,6,
+					0,1,4, 6,1,4, 6,1,4, 0,1,4,
+
 					0,0,0, 6,0,0, 6,0,3, 0,0,3,
-					0,4,2, 6,4,2, 6,2,4, 0,2,4,
-					0,0,0, 6,0,0, 6,4,2, 0,4,2,
-					0,6,0, 6,6,0, 6,6,1, 0,6,1,
+					0,4,3, 6,4,3, 6,1,4, 0,1,4,
+
+					0,0,0, 6,0,0, 6,4,3, 0,4,3,
+					0,6,0, 6,6,0, 6,5,2, 0,5,2,
 		}},
 		{ 0b000101,new byte[]{ //West Ramp
-					6,0,6, 3,0,6, 3,0,0, 6,0,0,
-					6,1,6, 4,2,6, 4,2,0, 6,1,0,
-					3,0,6, 0,0,6, 0,0,0, 3,0,0,
-					4,2,6, 2,4,6, 2,4,0, 4,2,0,
-					2,4,6, 0,0,6, 0,0,0, 2,4,0,
-					1,6,6, 0,6,6, 0,6,0, 1,6,0,
+					3,0,0, 6,0,0, 6,0,6, 3,0,6,
+					4,1,0, 4,1,0, 4,1,6, 4,1,6,
+
+					0,0,0, 3,0,0, 3,0,6, 0,0,6,
+					3,4,0, 4,1,0, 4,1,6, 3,4,6, 
+
+					0,0,0, 3,4,0, 3,4,6, 0,0,6,
+					0,6,0, 2,5,0, 2,5,6, 0,6,6,
 		}},
 		{ 0b110000,new byte[]{ //North-East Connection
-					1,0,1, 3,0,0, 3,0,3, 0,0,3,
-					1,6,1, 3,6,0, 3,6,3, 0,6,3,
+					3,0,1, 6,0,0, 6,0,6, 5,0,5,
+					3,6,1, 6,6,0, 6,6,6, 5,6,5,
 
-					3,0,0, 6,0,0, 6,0,6, 3,0,3,
-					3,6,0, 6,6,0, 6,6,6, 3,6,3,
+					3,0,1, 5,0,5, 5,0,5, 1,0,3,
+					3,6,1, 5,6,5, 5,6,5, 1,6,3,
 
-					0,0,3, 3,0,3, 6,0,6, 0,0,6,
-					0,6,3, 3,6,3, 6,6,6, 0,6,6,
+					1,0,3, 5,0,5, 6,0,6, 0,0,6,
+					1,6,3, 5,6,5, 6,6,6, 0,6,6,
 		}},
 		{ 0b011000,new byte[]{ //East-South Connection
-					0,0,0, 6,0,0, 3,0,3, 0,0,3,
-					0,6,0, 6,6,0, 3,6,3, 0,6,3,
+					0,0,0, 6,0,0, 5,0,1, 1,0,3,
+					0,6,0, 6,6,0, 5,6,1, 1,6,3,
 
-					0,0,3, 3,0,3, 3,0,6, 1,0,5,
-					0,6,3, 3,6,3, 3,6,6, 1,6,5,
+					1,0,3, 5,0,1, 5,0,1, 3,0,5,
+					1,6,3, 5,6,1, 5,6,1, 3,6,5,
 
-					3,0,3, 6,0,0, 6,0,6, 3,0,6,
-					3,6,3, 6,6,0, 6,6,6, 3,6,6,
+					5,0,1, 6,0,0, 6,0,6, 3,0,5,
+					5,6,1, 6,6,0, 6,6,6, 3,6,5,
 		}},
 		{ 0b001100,new byte[]{ //South-West Connection
-					0,0,0, 6,0,0, 6,0,3, 3,0,3,
-					0,6,0, 6,6,0, 6,6,3, 3,6,3,
+					0,0,0, 6,0,0, 5,0,3, 1,0,1,
+					0,6,0, 6,6,0, 5,6,3, 1,6,1,
 
-					3,0,3, 6,0,3, 5,0,5, 3,0,6,
-					3,6,3, 6,6,3, 5,6,5, 3,6,6,
+					1,0,1, 1,0,1, 5,0,3, 3,0,5,
+					1,6,1, 1,6,1, 5,6,3, 3,6,5,
 
-					0,0,0, 3,0,3, 3,0,6, 0,0,6,
-					0,6,0, 3,6,3, 3,6,6, 0,6,6,
+					0,0,0, 1,0,1, 3,0,5, 0,0,6,
+					0,6,0, 1,6,1, 3,6,5, 0,6,6,
 		}},
 		{ 0b100100,new byte[]{ //West-North Connection
-					0,0,0, 3,0,0, 3,0,3, 0,0,6,
-					0,6,0, 3,6,0, 3,6,3, 0,6,6,
+					
+					0,0,0, 3,0,1, 1,0,5, 0,0,6,
+					0,6,0, 3,6,1, 1,6,5, 0,6,6,
 
-					3,0,0, 5,0,1, 6,0,3, 3,0,3,
-					3,6,0, 5,6,1, 6,6,3, 3,6,3,
+					3,0,1, 5,0,3, 1,0,5, 1,0,5,
+					3,6,1, 5,6,3, 1,6,5, 1,6,5,
 
-					3,0,3, 6,0,3, 6,0,6, 0,0,6,
-					3,6,3, 6,6,3, 6,6,6, 0,6,6,
-
+					1,0,5, 5,0,3, 6,0,6, 0,0,6,
+					1,6,5, 5,6,3, 6,6,6, 0,6,6,
 		}},
-		{ 0b110001,new byte[]{ //North-East Bottom Corner Connection
-					1,0,1, 3,0,0, 3,0,3, 0,0,3,
-					1,6,1, 3,6,0, 3,6,3, 0,6,3,
-
-					3,0,0, 6,0,0, 6,0,6, 3,0,3,
-					3,6,0, 6,6,0, 6,6,6, 3,6,3,
-
-					0,0,3, 3,0,3, 6,0,6, 0,0,6,
-					0,6,3, 3,6,3, 6,6,6, 0,6,6,
-		}},
-		{ 0b011001,new byte[]{ //East-South Bottom Corner Connection
-					0,0,0, 6,0,0, 3,0,3, 0,0,3,
-					0,6,0, 6,6,0, 3,6,3, 0,6,3,
-
-					0,0,3, 3,0,3, 3,0,6, 1,0,5,
-					0,6,3, 3,6,3, 3,6,6, 1,6,5,
-
-					3,0,3, 6,0,0, 6,0,6, 3,0,6,
-					3,6,3, 6,6,0, 6,6,6, 3,6,6,
-		}},
-		{ 0b001101,new byte[]{ //South-West Bottom Corner Connection
-					0,0,0, 6,0,0, 6,0,3, 3,0,3,
-					0,6,0, 6,6,0, 6,6,3, 3,6,3,
-
-					3,0,3, 6,0,3, 5,0,5, 3,0,6,
-					3,6,3, 6,6,3, 5,6,5, 3,6,6,
-
-					0,0,0, 3,0,3, 3,0,6, 0,0,6,
-					0,6,0, 3,6,3, 3,6,6, 0,6,6,
-		}},
-		{ 0b100101,new byte[]{ //West-North Bottom Corner Connection
-					0,0,0, 3,0,0, 3,0,3, 0,0,6,
-					0,6,0, 3,6,0, 3,6,3, 0,6,6,
-
-					3,0,0, 5,0,1, 6,0,3, 3,0,3,
-					3,6,0, 5,6,1, 6,6,3, 3,6,3,
-
-					3,0,3, 6,0,3, 6,0,6, 0,0,6,
-					3,6,3, 6,6,3, 6,6,6, 0,6,6,
-
-		}},
+		
 	};
 }
