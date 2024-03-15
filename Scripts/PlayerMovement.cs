@@ -6,6 +6,8 @@ public partial class PlayerMovement : CharacterBody3D
 	[Export] Node3D head;
 	[Export] Node3D camera;
 
+	public static Vector3 currentPosition = new Vector3();
+
 	public const float Speed = 25.0f;
 	public const float JumpVelocity = 50.0f;
 	public const float sensitivity = 0.003f;
@@ -57,5 +59,6 @@ public partial class PlayerMovement : CharacterBody3D
 
 		Velocity = velocity;
 		MoveAndSlide();
+		currentPosition = GlobalPosition;
 	}
 }

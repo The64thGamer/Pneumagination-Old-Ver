@@ -112,10 +112,13 @@ public partial class WorldGen : Node3D
 				}
 			}
 
-			for (int i = 0; i < chunks.Count; i++)
+			var newChunk = chunks.OrderBy(v => (Math.Pow((v.X * chunkSize) - PlayerMovement.currentPosition.X, 2) + Math.Pow((v.Y * chunkSize) - PlayerMovement.currentPosition.Y, 2)));
+
+			foreach (Vector2 renderable in newChunk)
 			{
-				RenderChunk((int)chunks[i].X, (int)chunks[i].Y);
-			}
+                RenderChunk((int)renderable.X, (int)renderable.Y);
+
+            }
 		}
 	}
 
