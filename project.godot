@@ -63,7 +63,8 @@ Jump={
 
 [physics]
 
-3d/default_gravity=39.2
+3d/physics_engine="JoltPhysics3D"
+3d/default_gravity=100.0
 
 [rendering]
 

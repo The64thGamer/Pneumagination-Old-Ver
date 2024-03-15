@@ -7,8 +7,8 @@ public partial class PlayerMovement : CharacterBody3D
 	[Export] Node3D camera;
 
 	public const float Speed = 25.0f;
-	public const float JumpVelocity = 25.0f;
-	public const float sensitivity = 0.002f;
+	public const float JumpVelocity = 50.0f;
+	public const float sensitivity = 0.003f;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
