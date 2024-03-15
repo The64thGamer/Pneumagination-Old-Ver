@@ -200,11 +200,11 @@ public partial class WorldGen : Node3D
 		chunk.brushes = new List<Brush>();
 
 		//BlockArray Setup
-		bool[,,] bigBlockArray = new bool[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
-		bool[,,] bigBlockArrayB = new bool[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
+		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
 
 		float noiseValue;
 		int posX, posY, posZ, newX, newY, newZ;
+		bool cacheCheck = false;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
@@ -236,8 +236,7 @@ public partial class WorldGen : Node3D
 					}
 					if (noiseValue <= 0.25f)
 					{
-						bigBlockArray[posX, posY, posZ] = true;
-						bigBlockArrayB[posX, posY, posZ] = true;
+						SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 0, true);
 					}
 				}
 			}
@@ -249,27 +248,33 @@ public partial class WorldGen : Node3D
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					if (bigBlockArray[posX, posY, posZ])
+					if (GetBitOfByte(bigBlockArray[posX, posY, posZ],0))
 					{
 						//Regular Square "Big Blocks"
 						chunk.brushes.Add(
 							CreateBrush(
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize),
-								CheckBrushVisibility(bigBlockArray, posX, posY, posZ)
+								CheckBrushVisibility(bigBlockArray, posX, posY, posZ,0)
 								));
 					}
 					else
 					{
 						//First layer of "Surface Brushes"
-						byte bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ);
+						byte bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ,0);
 						if (bitMask != 0)
 						{
-							bigBlockArrayB[posX, posY, posZ] = true;
-							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize),false);
+							cacheCheck = false;
+							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false, ref cacheCheck);
 							if (brushes != null)
 							{
 								chunk.brushes.AddRange(brushes);
+							}
+
+							SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 1, true);
+							if(cacheCheck)
+							{
+								SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 2, true);
 							}
 						}
 					}
@@ -283,13 +288,13 @@ public partial class WorldGen : Node3D
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					if (!bigBlockArrayB[posX, posY, posZ])
+					if (!GetBitOfByte(bigBlockArray[posX, posY, posZ], 1) && !GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
 					{
 						//Second layer of "Sub-Surface Brushes"
-						byte bitMask = CheckSurfaceBrushType(bigBlockArrayB, posX, posY, posZ);
+						byte bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 2));
 						if (bitMask != 0)
 						{
-							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize),true);
+							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true, ref cacheCheck);
 							if (brushes != null)
 							{
 								chunk.brushes.AddRange(brushes);
@@ -303,36 +308,36 @@ public partial class WorldGen : Node3D
 		return chunk;
 	}
 
-	byte CheckSurfaceBrushType(bool[,,] bigBlockArray, int x, int y, int z)
+	byte CheckSurfaceBrushType(byte[,,] bigBlockArray, int x, int y, int z, int pos)
 	{
 		int bitmask = 0;
 		//North
-		if (z < bigBlockArray.GetLength(2) - 1 && bigBlockArray[x, y, z + 1])
+		if (z < bigBlockArray.GetLength(2) - 1 && GetBitOfByte(bigBlockArray[x, y, z + 1], pos ))
 		{
 			bitmask |= 1 << 5;
 		}
 		//East
-		if (x < bigBlockArray.GetLength(0) - 1 && bigBlockArray[x + 1, y, z])
+		if (x < bigBlockArray.GetLength(0) - 1 && GetBitOfByte(bigBlockArray[x + 1, y, z], pos))
 		{
 			bitmask |= 1 << 4;
 		}
 		//South
-		if (z > 0 && bigBlockArray[x, y, z - 1])
+		if (z > 0 && GetBitOfByte(bigBlockArray[x, y, z - 1], pos))
 		{
 			bitmask |= 1 << 3;
 		}
 		//West
-		if (x > 0 && bigBlockArray[x - 1, y, z])
+		if (x > 0 && GetBitOfByte(bigBlockArray[x - 1, y, z], pos))
 		{
 			bitmask |= 1 << 2;
 		}
 		//Top
-		if (y < bigBlockArray.GetLength(1) - 1 && bigBlockArray[x, y + 1, z])
+		if (y < bigBlockArray.GetLength(1) - 1 && GetBitOfByte(bigBlockArray[x, y + 1, z], pos))
 		{
 			bitmask |= 1 << 1;
 		}
 		//Bottom
-		if (y > 0 && bigBlockArray[x, y - 1, z])
+		if (y > 0 && GetBitOfByte(bigBlockArray[x, y - 1, z], pos))
 		{
 			bitmask |= 1 << 0;
 		}
@@ -340,7 +345,7 @@ public partial class WorldGen : Node3D
 	}
 
 
-	bool CheckBrushVisibility(bool[,,] bigBlockArray, int x, int y, int z)
+	bool CheckBrushVisibility(byte[,,] bigBlockArray, int x, int y, int z, int pos)
 	{
 		if (hideBigBlocks)
 		{
@@ -353,12 +358,12 @@ public partial class WorldGen : Node3D
 			return false;
 		}
 
-		return bigBlockArray[x - 1, y, z] &&
-				bigBlockArray[x + 1, y, z] &&
-				bigBlockArray[x, y - 1, z] &&
-				bigBlockArray[x, y + 1, z] &&
-				bigBlockArray[x, y, z - 1] &&
-				bigBlockArray[x, y, z + 1];
+		return GetBitOfByte(bigBlockArray[x - 1, y, z], pos) &&
+				GetBitOfByte(bigBlockArray[x + 1, y, z], pos) &&
+				GetBitOfByte(bigBlockArray[x, y - 1, z], pos) &&
+				GetBitOfByte(bigBlockArray[x, y + 1, z], pos) &&
+				GetBitOfByte(bigBlockArray[x, y, z - 1], pos) &&
+				GetBitOfByte(bigBlockArray[x, y, z + 1], pos);
 	}
 
 	bool CheckIndexInvalidity(int index, int length)
@@ -579,21 +584,22 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
-	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface)
+	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface, ref bool cacheCheck)
 	{
 		List<Brush> brushCopies = new List<Brush>();
 		bool check;
 		byte[] verts;
-		if(subSurface)
+		if (subSurface)
 		{
 			check = subSurfaceBrushes.TryGetValue(id, out verts);
 		}
 		else
 		{
 			check = surfaceBrushes.TryGetValue(id, out verts);
-		}
+            surfaceBrushCache.TryGetValue(id, out cacheCheck);
+        }
 
-		if (check)
+        if (check)
 		{
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
@@ -625,6 +631,26 @@ public partial class WorldGen : Node3D
 	float GetClampedNoise(float noise)
 	{
 		return (noise + 1.0f) / 2.0f;
+	}
+
+	void SetBitOfByte(ref byte aByte, int pos, bool value)
+	{
+		if (value)
+		{
+			//left-shift 1, then bitwise OR
+			aByte = (byte)(aByte | (1 << pos));
+		}
+		else
+		{
+			//left-shift 1, then take complement, then bitwise AND
+			aByte = (byte)(aByte & ~(1 << pos));
+		}
+	}
+
+	bool GetBitOfByte(byte aByte, int pos)
+	{
+		//left-shift 1, then bitwise AND, then check for non-zero
+		return ((aByte & (1 << pos)) != 0);
 	}
 
 	public class Brush
@@ -689,10 +715,95 @@ public partial class WorldGen : Node3D
 					0,0,0, 1,0,0, 1,0,6, 0,0,6,
 					0,1,0, 0,1,0, 0,1,6, 0,1,6
 		}},
-		{0b011000,new byte[]{ //North-East Connection
-					6,0,4, 6,0,4, 6,0,6, 5,0,6,
-					6,6,4, 6,6,4, 6,6,6, 5,6,6,
+		{0b110000,new byte[]{ //North-East Connection
+					6,0,5, 6,0,5, 6,0,6, 5,0,6,
+					6,6,5, 6,6,5, 6,6,6, 5,6,6,
 		}},
+		{0b011000,new byte[]{ //East-South Connection
+					5,0,0, 6,0,0, 6,0,1, 6,0,1,
+					5,6,0, 6,6,0, 6,6,1, 6,6,1,
+		}},
+		{ 0b110001,new byte[]{ //North-East Bottom Corner Connection
+					1,0,1, 3,0,0, 3,0,3, 0,0,3,
+					1,1,1, 3,1,0, 3,1,3, 0,1,3,
+
+					3,0,0, 6,0,0, 6,0,6, 3,0,3,
+					3,1,0, 6,1,0, 6,1,6, 3,1,3,
+
+					0,0,3, 3,0,3, 6,0,6, 0,0,6,
+					0,1,3, 3,1,3, 6,1,6, 0,1,6,
+		}},
+		{ 0b011001,new byte[]{ //East-South Bottom Corner Connection
+					0,0,0, 6,0,0, 3,0,3, 0,0,3,
+					0,1,0, 6,1,0, 3,1,3, 0,1,3,
+
+					0,0,3, 3,0,3, 3,0,6, 1,0,5,
+					0,1,3, 3,1,3, 3,1,6, 1,1,5,
+
+					3,0,3, 6,0,0, 6,0,6, 3,0,6,
+					3,1,3, 6,1,0, 6,1,6, 3,1,6,
+		}},
+		{ 0b001101,new byte[]{ //South-West Bottom Corner Connection
+					0,0,0, 6,0,0, 6,0,3, 3,0,3,
+					0,1,0, 6,1,0, 6,1,3, 3,1,3,
+
+					3,0,3, 6,0,3, 5,0,5, 3,0,6,
+					3,1,3, 6,1,3, 5,1,5, 3,1,6,
+
+					0,0,0, 3,0,3, 3,0,6, 0,0,6,
+					0,1,0, 3,1,3, 3,1,6, 0,1,6,
+		}},
+		{ 0b100101,new byte[]{ //West-North Bottom Corner Connection
+					0,0,0, 3,0,0, 3,0,3, 0,0,6,
+					0,1,0, 3,1,0, 3,1,3, 0,1,6,
+
+					3,0,0, 5,0,1, 6,0,3, 3,0,3,
+					3,1,0, 5,1,1, 6,1,3, 3,1,3,
+
+					3,0,3, 6,0,3, 6,0,6, 0,0,6,
+					3,1,3, 6,1,3, 6,1,6, 0,1,6,
+
+		}},
+	};
+
+	System.Collections.Generic.Dictionary<int, bool> surfaceBrushCache = new System.Collections.Generic.Dictionary<int, bool>
+	{
+		{0b000001,true //Floor
+		},
+		{ 0b000010,true //Ceiling
+		},
+		{ 0b100000,true //North Wall
+		},
+		{ 0b010000,true //East Wall
+		},
+		{ 0b001000,true //South Wall
+		},
+		{ 0b000100,true //West Wall
+		},
+		{ 0b100001,true //North Ramp
+		},
+		{ 0b010001,true //East Ramp
+		},
+		{ 0b001001,true //South Ramp
+		},
+		{ 0b000101,true //West Ramp
+		},
+		{ 0b110000,false //North-East Connection
+		},
+		{ 0b011000,false //East-South Connection
+		},
+		{ 0b001100,false //South-West Connection
+		},
+		{ 0b100100,false //West-North Connection
+		},
+		{ 0b110001,false //North-East Bottom Corner Connection
+		},
+		{ 0b011001,false //East-South Bottom Corner Connection
+		},
+		{ 0b001101,false //South-West Bottom Corner Connection
+		},
+		{ 0b100101,false //West-North Bottom Corner Connection
+		},
 	};
 
 	System.Collections.Generic.Dictionary<int, byte[]> surfaceBrushes = new System.Collections.Generic.Dictionary<int, byte[]>
@@ -789,6 +900,47 @@ public partial class WorldGen : Node3D
 					0,6,0, 3,6,3, 3,6,6, 0,6,6,
 		}},
 		{ 0b100100,new byte[]{ //West-North Connection
+					0,0,0, 3,0,0, 3,0,3, 0,0,6,
+					0,6,0, 3,6,0, 3,6,3, 0,6,6,
+
+					3,0,0, 5,0,1, 6,0,3, 3,0,3,
+					3,6,0, 5,6,1, 6,6,3, 3,6,3,
+
+					3,0,3, 6,0,3, 6,0,6, 0,0,6,
+					3,6,3, 6,6,3, 6,6,6, 0,6,6,
+
+		}},
+		{ 0b110001,new byte[]{ //North-East Bottom Corner Connection
+					1,0,1, 3,0,0, 3,0,3, 0,0,3,
+					1,6,1, 3,6,0, 3,6,3, 0,6,3,
+
+					3,0,0, 6,0,0, 6,0,6, 3,0,3,
+					3,6,0, 6,6,0, 6,6,6, 3,6,3,
+
+					0,0,3, 3,0,3, 6,0,6, 0,0,6,
+					0,6,3, 3,6,3, 6,6,6, 0,6,6,
+		}},
+		{ 0b011001,new byte[]{ //East-South Bottom Corner Connection
+					0,0,0, 6,0,0, 3,0,3, 0,0,3,
+					0,6,0, 6,6,0, 3,6,3, 0,6,3,
+
+					0,0,3, 3,0,3, 3,0,6, 1,0,5,
+					0,6,3, 3,6,3, 3,6,6, 1,6,5,
+
+					3,0,3, 6,0,0, 6,0,6, 3,0,6,
+					3,6,3, 6,6,0, 6,6,6, 3,6,6,
+		}},
+		{ 0b001101,new byte[]{ //South-West Bottom Corner Connection
+					0,0,0, 6,0,0, 6,0,3, 3,0,3,
+					0,6,0, 6,6,0, 6,6,3, 3,6,3,
+
+					3,0,3, 6,0,3, 5,0,5, 3,0,6,
+					3,6,3, 6,6,3, 5,6,5, 3,6,6,
+
+					0,0,0, 3,0,3, 3,0,6, 0,0,6,
+					0,6,0, 3,6,3, 3,6,6, 0,6,6,
+		}},
+		{ 0b100101,new byte[]{ //West-North Bottom Corner Connection
 					0,0,0, 3,0,0, 3,0,3, 0,0,6,
 					0,6,0, 3,6,0, 3,6,3, 0,6,6,
 
