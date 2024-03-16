@@ -70,8 +70,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 [node name="Player Camera" type="Camera3D" parent="Player/Player Head" groups=["Player"]]
 fov = 92.8
 
-[node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera" groups=["Player"]]
+[node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
 script = ExtResource("4_35mrk")
+worldGen = NodePath("../../../..")
 
 [node name="Debug Text" type="Label" parent="Player/Player Head/Player Camera" groups=["Player"]]
 texture_filter = 1
