@@ -19,6 +19,19 @@ public partial class Mining : Node3D
                 sprite.Texture = (Texture2D)GD.Load("res://Textures/testtexture.png");
                 GetTree().Root.AddChild(sprite);
                 sprite.GlobalPosition = (Vector3)result["position"];
+
+
+                if ((CollisionObject3D)result["collider"] is CollisionObject3D collisionObj)
+                {
+                    var ownerId = collisionObj.ShapeFindOwner((int)result["shape"]);
+                    var ownerObject = collisionObj.ShapeOwnerGetOwner(ownerId);
+
+                    if (ownerObject is CollisionShape3D shapeNode)
+                    {
+                        GD.Print(shapeNode);
+                    }
+                }
+
             }
         }
     }

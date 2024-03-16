@@ -185,7 +185,13 @@ public partial class WorldGen : Node3D
 				ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
 				ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
 
-				loadedChunks.Add(new LoadedChunkData() { id = ongoingChunkRenderData[e].id, node = ongoingChunkRenderData[e].chunkNode, position = ongoingChunkRenderData[e].position });
+				loadedChunks.Add(new LoadedChunkData(){ 
+					id = ongoingChunkRenderData[e].id, 
+					node = ongoingChunkRenderData[e].chunkNode, 
+					position = ongoingChunkRenderData[e].position,
+					chunk = ongoingChunkRenderData[e].chunk,
+					visibleBrushIndices = ongoingChunkRenderData[e].visibleBrushIndices
+				});
 
 				GD.Print("Finishing Chunk (ID " + ongoingChunkRenderData[e].id + ")");
 			}
@@ -423,20 +429,22 @@ public partial class WorldGen : Node3D
 		surfaceArray.Resize((int)Mesh.ArrayType.Max);
 
 		//Initialized Values
+		List<int> visibleBrushes = new List<int>();
 		List<Vector3> verts = new List<Vector3>();
-		Godot.Collections.Dictionary<Vector3, int> vertexHashTable = new Godot.Collections.Dictionary<Vector3, int>();
 		List<int> indices = new List<int>();
 		int maxX, maxY, maxZ, minX, minY, minZ;
 		Vector3 origin, vert;
-		int[] newVertIndexNumbers;
 
 		//Collect all brush vertices, merge duplicate ones
-		foreach (Brush currentBrush in chunkData.brushes)
+		for (int h = 0; h < chunkData.brushes.Count; h++)
 		{
+			Brush currentBrush = chunkData.brushes[h];
 			if (currentBrush.hiddenFlag)
 			{
 				continue;
 			}
+			visibleBrushes.Add(h);
+
 			maxX = int.MinValue;
 			maxY = int.MinValue;
 			maxZ = int.MinValue;
@@ -620,6 +628,8 @@ public partial class WorldGen : Node3D
 			position = new Vector2(chunkData.positionX, chunkData.positionZ),
 			collisionShape = collisionShape,
 			staticBody = body,
+			chunk = chunkData,
+            visibleBrushIndices = visibleBrushes
 		};
 	}
 
@@ -755,13 +765,17 @@ public partial class WorldGen : Node3D
 		public int id;
 		public CollisionShape3D collisionShape;
 		public StaticBody3D staticBody;
-	}
+		public List<int> visibleBrushIndices;
+		public Chunk chunk;
+    }
 
-	public class LoadedChunkData
+    public class LoadedChunkData
 	{
 		public Node3D node;
 		public Vector2 position;
 		public int id;
+		public List<int> visibleBrushIndices;
+        public Chunk chunk;
 	}
 
 	public enum ChunkRenderDataState
