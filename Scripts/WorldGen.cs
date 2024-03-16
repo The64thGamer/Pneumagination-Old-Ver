@@ -442,6 +442,7 @@ public partial class WorldGen : Node3D
 		Vector3 origin, vert;
 
 		//Collect all brush vertices, merge duplicate ones
+		GD.Print(chunkData.brushes.Count);
 		for (int h = 0; h < chunkData.brushes.Count; h++)
 		{
 			Brush currentBrush = chunkData.brushes[h];
@@ -756,20 +757,9 @@ public partial class WorldGen : Node3D
 		{
 			return;
 		}
-
-		//Delete Old Mesh
-		Node3D node = chunk.node;
-		node.QueueFree();
-		chunk.node = null;
-
-		//Apply Mesh
-		AddChild(chunkData.chunkNode);
-		chunkData.chunkNode.AddChild(chunkData.meshNode);
-		chunkData.chunkNode.GlobalPosition = new Vector3(chunkData.position.X * chunkSize, 0, chunkData.position.Y * chunkSize);
-		chunkData.meshNode.AddChild(chunkData.staticBody);
-		chunkData.staticBody.AddChild(chunkData.collisionShape);
-
-		chunk.node = chunkData.chunkNode;
+		MeshInstance3D meshNode = chunk.node.GetChild(0) as MeshInstance3D;
+		meshNode.Mesh = chunkData.meshNode.Mesh;
+		(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
 		chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
 
 		GD.Print("Regenerated Chunk (ID " + chunkData.id + ")");
