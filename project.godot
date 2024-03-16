@@ -79,7 +79,7 @@ Mining={
 
 [physics]
 
-3d/physics_engine="JoltPhysics3D"
+3d/physics_engine="GodotPhysics3D"
 3d/default_gravity=150.0
 
 [rendering]

@@ -14,7 +14,7 @@ public partial class Mining : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                GD.Print("Hit at point: ", result["position"]);
+                GD.Print("Hit at Triangle: ", result["face_index"]);
                 Sprite3D sprite = new Sprite3D();
                 sprite.Texture = (Texture2D)GD.Load("res://Textures/testtexture.png");
                 GetTree().Root.AddChild(sprite);
