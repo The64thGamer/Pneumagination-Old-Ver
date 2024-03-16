@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 3;
+	[Export] int chunkRenderSize = 2;
 	[Export] bool hideBigBlocks = false;
 	public static uint seedA = 0;
 	public static uint seedB = 0;

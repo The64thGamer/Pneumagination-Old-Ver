@@ -1,0 +1,104 @@
+[gd_scene load_steps=4 format=3 uid="uid://8esmg7r8ldb7"]
+
+[ext_resource type="Script" path="res://addons/playerprefsutility/Demo/Scripts/PF_Element.cs" id="1_iettl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3ddd"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eb8kh"]
+bg_color = Color(0.407843, 0.803922, 0.968627, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="PlayerPref_Element" type="PanelContainer" node_paths=PackedStringArray("keyLabel", "valueLabel", "mainButton", "deleteButton")]
+script = ExtResource("1_iettl")
+keyLabel = NodePath("MarginContainer/HBoxContainer/VBoxContainer/Key")
+valueLabel = NodePath("MarginContainer/HBoxContainer/VBoxContainer2/Value")
+mainButton = NodePath("Button")
+deleteButton = NodePath("MarginContainer/HBoxContainer/DeleteButton")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Key_header" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "Key"
+
+[node name="Key" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Key"
+
+[node name="Spacer" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = " "
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Value_header" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 8
+text = "Value"
+
+[node name="Value" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Value"
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(54, 25)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_q3ddd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q3ddd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_eb8kh")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_q3ddd")
+theme_override_styles/focus = SubResource("StyleBoxFlat_q3ddd")
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/DeleteButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Delete"
+horizontal_alignment = 1
+vertical_alignment = 1

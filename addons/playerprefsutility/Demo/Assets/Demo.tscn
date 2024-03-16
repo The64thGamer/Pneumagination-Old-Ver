@@ -1,0 +1,229 @@
+[gd_scene load_steps=5 format=3 uid="uid://d3efv3kvr6onf"]
+
+[ext_resource type="Script" path="res://addons/playerprefsutility/Demo/Scripts/PF_Demo.cs" id="1_4jygy"]
+[ext_resource type="PackedScene" uid="uid://8esmg7r8ldb7" path="res://addons/playerprefsutility/Demo/Assets/player_pref_element.tscn" id="2_yrf7y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6i1vt"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mgrpt"]
+bg_color = Color(0.407843, 0.803922, 0.968627, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Control" type="Control" node_paths=PackedStringArray("keyField", "valueField", "storeButton", "retrieveButton", "warningText", "emptyListLabel", "listParent", "deleteAllButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4jygy")
+keyField = NodePath("CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_key/MarginContainer/HBoxContainer/LineEdit")
+valueField = NodePath("CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_value/MarginContainer/HBoxContainer/LineEdit2")
+storeButton = NodePath("CenterContainer/VBoxContainer2/VBoxContainer/Buttons/MarginContainer/HBoxContainer/Button")
+retrieveButton = NodePath("CenterContainer/VBoxContainer2/VBoxContainer/Buttons/MarginContainer/HBoxContainer/Button2")
+warningText = NodePath("CenterContainer/VBoxContainer2/VBoxContainer/Label")
+emptyListLabel = NodePath("CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/Label")
+listParent = NodePath("CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer2")
+deleteAllButton = NodePath("CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/DeleteAllButton")
+elementPrefab = ExtResource("2_yrf7y")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="PlayerPref_key" type="PanelContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_key"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_key/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_key/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "Key:"
+
+[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_key/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerPref_value" type="PanelContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_value"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_value/MarginContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_value/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "Value"
+
+[node name="LineEdit2" type="LineEdit" parent="CenterContainer/VBoxContainer2/VBoxContainer/PlayerPref_value/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Buttons" type="PanelContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer/Buttons"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer2/VBoxContainer/Buttons/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer2/VBoxContainer/Buttons/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mgrpt")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6i1vt")
+text = "Store"
+
+[node name="Button2" type="Button" parent="CenterContainer/VBoxContainer2/VBoxContainer/Buttons/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mgrpt")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6i1vt")
+text = "Retrieve"
+
+[node name="Control" type="Control" parent="CenterContainer/VBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer2/VBoxContainer"]
+visible = false
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Key <key_name> not found!"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer2/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 5
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+text = "Stored PlayerPrefs"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.458824, 0.458824, 0.458824, 1)
+theme_override_colors/font_shadow_color = Color(0.164706, 0.164706, 0.164706, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = -2
+theme_override_font_sizes/font_size = 22
+text = "No playerprefs stored"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeleteAllButton" type="Button" parent="CenterContainer/VBoxContainer2/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mgrpt")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_6i1vt")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6i1vt")
+text = "Delete All"
