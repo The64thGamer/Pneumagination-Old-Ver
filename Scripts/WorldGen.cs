@@ -211,8 +211,8 @@ public partial class WorldGen : Node3D
 
 		Task.Run(async () =>
 		{
-			Chunk chunk = await GenerateChunk(x, z);
-			ChunkRenderData chunkData = await GetChunkMesh(chunk, id);
+			Chunk chunk = await GenerateChunk(x, z, id);
+			ChunkRenderData chunkData = await GetChunkMesh(chunk);
 			if (chunkData == null)
 			{
 				return;
@@ -238,9 +238,10 @@ public partial class WorldGen : Node3D
 
 
 	//Chunks are 126x126x126
-	async Task<Chunk> GenerateChunk(int x, int z)
+	async Task<Chunk> GenerateChunk(int x, int z, int id)
 	{
 		Chunk chunk = new Chunk();
+		chunk.id = id;
 		chunk.positionX = x;
 		chunk.positionZ = z;
 		chunk.brushes = new List<Brush>();
@@ -415,7 +416,7 @@ public partial class WorldGen : Node3D
 		return false;
 	}
 
-	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData, int id)
+	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData)
 	{
 		Node3D chunk = new Node3D();
 		var surfaceArray = new Godot.Collections.Array();
@@ -610,7 +611,7 @@ public partial class WorldGen : Node3D
 
 		return new ChunkRenderData()
 		{
-			id = id,
+			id = chunkData.id,
 			state = ChunkRenderDataState.ready,
 			chunkNode = chunk,
 			meshNode = meshObject,
@@ -737,6 +738,7 @@ public partial class WorldGen : Node3D
 
 	public class Chunk
 	{
+		public int id;
 		public int positionX;
 		public int positionZ;
 		public List<Brush> brushes;
