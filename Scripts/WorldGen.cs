@@ -219,7 +219,7 @@ public partial class WorldGen : Node3D
 		Task.Run(async () =>
 		{
 			Chunk chunk = await GenerateChunk(x, z, id);
-			ChunkRenderData chunkData = await GetChunkMesh(chunk);
+			ChunkRenderData chunkData = await GetChunkMeshAsync(chunk);
 			if (chunkData == null)
 			{
 				return;
@@ -423,7 +423,12 @@ public partial class WorldGen : Node3D
 		return false;
 	}
 
-	async Task<ChunkRenderData> GetChunkMesh(Chunk chunkData)
+	async Task<ChunkRenderData> GetChunkMeshAsync(Chunk chunkData)
+	{
+		return GetChunkMesh(chunkData);
+	}
+
+	ChunkRenderData GetChunkMesh(Chunk chunkData)
 	{
 		Node3D chunk = new Node3D();
 		var surfaceArray = new Godot.Collections.Array();
@@ -743,20 +748,15 @@ public partial class WorldGen : Node3D
 		}
 	}
 
-	async void RerenderLoadedChunk(LoadedChunkData chunk)
+	void RerenderLoadedChunk(LoadedChunkData chunk)
 	{
-
-
 		//Generate Mesh
-		ChunkRenderData chunkData = null;
-		await Task.Run(async () =>
-		{
-			chunkData = await GetChunkMesh(chunk.chunk);
-		});
+		ChunkRenderData chunkData = GetChunkMesh(chunk.chunk);
 		if (chunkData == null)
 		{
 			return;
 		}
+
 		//Delete Old Mesh
 		Node3D node = chunk.node;
 		node.QueueFree();
@@ -772,7 +772,7 @@ public partial class WorldGen : Node3D
 		chunk.node = chunkData.chunkNode;
 		chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
 
-		GD.Print("Finishing Chunk (ID " + chunkData.id + ")");
+		GD.Print("Regenerated Chunk (ID " + chunkData.id + ")");
 	}
 
 	public class Brush
