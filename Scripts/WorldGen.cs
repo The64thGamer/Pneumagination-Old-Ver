@@ -21,6 +21,7 @@ public partial class WorldGen : Node3D
 	public static int totalChunksRendered = 0;
 
 	//Locals
+	Vector2 oldChunkPos = new Vector2(float.MinValue, float.MinValue);
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	FastNoiseLite celNoiseA = new FastNoiseLite();
@@ -127,9 +128,14 @@ public partial class WorldGen : Node3D
 
 	void LoadAndUnloadChunks()
 	{
-		HashSet<Vector2> loadPositions = new HashSet<Vector2>();
-
 		Vector2 chunkPos = new Vector2(Mathf.FloorToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.FloorToInt(PlayerMovement.currentPosition.Z / chunkSize));
+		if(chunkPos == oldChunkPos)
+		{
+			return;
+		}
+		oldChunkPos = chunkPos;
+
+		HashSet<Vector2> loadPositions = new HashSet<Vector2>();
 		Vector2 temp = Vector2.Zero;
 		for (int x = -chunkLoadingDistance; x < chunkLoadingDistance; x++)
 		{
