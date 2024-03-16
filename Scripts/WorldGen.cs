@@ -111,7 +111,7 @@ public partial class WorldGen : Node3D
 	void LoadAndUnloadChunks()
 	{
 		//Check
-		Vector2 chunkPos = new Vector2(Mathf.FloorToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.FloorToInt(PlayerMovement.currentPosition.Z / chunkSize));
+		Vector2 chunkPos = new Vector2(Mathf.RoundToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Z / chunkSize));
 		if(chunkPos == oldChunkPos)
 		{
 			return;
