@@ -30,8 +30,8 @@ public partial class WorldGen : Node3D
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
 	//Consts
-	const int chunkLoadingDistance = 2;
-	const int chunkUnloadingDistance = 3;
+	const int chunkLoadingDistance = 3;
+	const int chunkUnloadingDistance = 6;
 	const int bigBlockSize = 6;
 	const int chunkSize = 252;
 	readonly byte[] brushIndices = new byte[]
@@ -100,24 +100,6 @@ public partial class WorldGen : Node3D
 		os2NoiseB.SetSeed((int)seedD);
 		os2NoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseB.SetFractalOctaves(4);
-
-		/*
-		List<Vector2> chunks = new List<Vector2>();
-		for (int x = -chunkLoadingDistance; x <= chunkLoadingDistance; x++)
-		{
-			for (int y = -chunkLoadingDistance; y <= chunkLoadingDistance; y++)
-			{
-				chunks.Add(new Vector2(x, y));
-			}
-		}
-
-		var newChunk = chunks.OrderBy(v => (Math.Pow((v.X * chunkSize) - PlayerMovement.currentPosition.X, 2) + Math.Pow((v.Y * chunkSize) - PlayerMovement.currentPosition.Y, 2)));
-
-		foreach (Vector2 renderable in newChunk)
-		{
-			RenderChunk((int)renderable.X, (int)renderable.Y);
-		}
-		*/
 	}
 
 	public override void _Process(double delta)
@@ -128,6 +110,7 @@ public partial class WorldGen : Node3D
 
 	void LoadAndUnloadChunks()
 	{
+		//Check
 		Vector2 chunkPos = new Vector2(Mathf.FloorToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.FloorToInt(PlayerMovement.currentPosition.Z / chunkSize));
 		if(chunkPos == oldChunkPos)
 		{
@@ -135,6 +118,7 @@ public partial class WorldGen : Node3D
 		}
 		oldChunkPos = chunkPos;
 
+		//Load New Chunks
 		HashSet<Vector2> loadPositions = new HashSet<Vector2>();
 		Vector2 temp = Vector2.Zero;
 		for (int x = -chunkLoadingDistance; x < chunkLoadingDistance; x++)
@@ -163,6 +147,23 @@ public partial class WorldGen : Node3D
 		{
 			RenderChunk((int)chunk.X, (int)chunk.Y);
 		}
+
+		//Unload Far Away Chunks
+		List<LoadedChunkData> remainingChunks = new List<LoadedChunkData>();
+		for (int i = 0; i < loadedChunks.Count; i++)
+		{
+			if (Math.Pow(loadedChunks[i].position.X - chunkPos.X, 2) + Math.Pow(loadedChunks[i].position.Y - chunkPos.Y, 2) >= chunkUnloadingDistance)
+			{
+				GD.Print("Unloading Chunk (ID " + loadedChunks[i].id + "): X = " + loadedChunks[i].position.X + " Z = " + loadedChunks[i].position.Y);
+
+				loadedChunks[i].node.QueueFree();
+			}
+			else
+			{
+				remainingChunks.Add(loadedChunks[i]);
+			}
+		}
+		loadedChunks = remainingChunks;
 	}
 
 	void CheckForAnyPendingFinishedChunks()
