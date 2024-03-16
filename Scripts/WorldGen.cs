@@ -9,24 +9,28 @@ using System.Threading.Tasks;
 
 public partial class WorldGen : Node3D
 {
+	//Exports
 	[Export] Material mat;
-	[Export] int chunkRenderSize = 2;
 	[Export] bool hideBigBlocks = false;
+
+	//Globals
 	public static uint seedA = 0;
 	public static uint seedB = 0;
 	public static uint seedC = 0;
 	public static uint seedD = 0;
-	int totalChunksRendered = 0;
+	public static int totalChunksRendered = 0;
 
+	//Locals
+	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
-
-	//Noise
 	FastNoiseLite celNoiseA = new FastNoiseLite();
 	FastNoiseLite celNoiseB = new FastNoiseLite();
 	FastNoiseLite os2NoiseA = new FastNoiseLite();
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
 	//Consts
+	const int chunkLoadingDistance = 2;
+	const int chunkUnloadingDistance = 3;
 	const int bigBlockSize = 6;
 	const int chunkSize = 252;
 	readonly byte[] brushIndices = new byte[]
@@ -96,35 +100,63 @@ public partial class WorldGen : Node3D
 		os2NoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseB.SetFractalOctaves(4);
 
-
-		if (chunkRenderSize <= 0)
+		/*
+		List<Vector2> chunks = new List<Vector2>();
+		for (int x = -chunkLoadingDistance; x <= chunkLoadingDistance; x++)
 		{
-			RenderChunk(0, 0);
-		}
-		else
-		{
-			List<Vector2> chunks = new List<Vector2>();
-			for (int x = -chunkRenderSize; x <= chunkRenderSize; x++)
+			for (int y = -chunkLoadingDistance; y <= chunkLoadingDistance; y++)
 			{
-				for (int y = -chunkRenderSize; y <= chunkRenderSize; y++)
-				{
-					chunks.Add(new Vector2(x, y));
-				}
-			}
-
-			var newChunk = chunks.OrderBy(v => (Math.Pow((v.X * chunkSize) - PlayerMovement.currentPosition.X, 2) + Math.Pow((v.Y * chunkSize) - PlayerMovement.currentPosition.Y, 2)));
-
-			foreach (Vector2 renderable in newChunk)
-			{
-				RenderChunk((int)renderable.X, (int)renderable.Y);
-
+				chunks.Add(new Vector2(x, y));
 			}
 		}
+
+		var newChunk = chunks.OrderBy(v => (Math.Pow((v.X * chunkSize) - PlayerMovement.currentPosition.X, 2) + Math.Pow((v.Y * chunkSize) - PlayerMovement.currentPosition.Y, 2)));
+
+		foreach (Vector2 renderable in newChunk)
+		{
+			RenderChunk((int)renderable.X, (int)renderable.Y);
+		}
+		*/
 	}
 
 	public override void _Process(double delta)
 	{
 		CheckForAnyPendingFinishedChunks();
+		LoadAndUnloadChunks();
+	}
+
+	void LoadAndUnloadChunks()
+	{
+		HashSet<Vector2> loadPositions = new HashSet<Vector2>();
+
+		Vector2 chunkPos = new Vector2(Mathf.FloorToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.FloorToInt(PlayerMovement.currentPosition.Z / chunkSize));
+		Vector2 temp = Vector2.Zero;
+		for (int x = -chunkLoadingDistance; x < chunkLoadingDistance; x++)
+		{
+			for (int z = -chunkLoadingDistance; z < chunkLoadingDistance; z++)
+			{
+				temp.X = chunkPos.X + x;
+				temp.Y = chunkPos.Y + z;
+				if(Math.Pow(temp.X - chunkPos.X, 2) + Math.Pow(temp.Y - chunkPos.Y, 2) <= chunkLoadingDistance)
+				{
+					loadPositions.Add(temp);
+				}
+			}
+		}
+
+		for (int i = 0; i < loadedChunks.Count; i++)
+		{
+			loadPositions.Remove(loadedChunks[i].position);
+		}
+		for (int i = 0; i < ongoingChunkRenderData.Count; i++)
+		{
+			loadPositions.Remove(ongoingChunkRenderData[i].position);
+		}
+
+		foreach (Vector2 chunk in loadPositions)
+		{
+			RenderChunk((int)chunk.X, (int)chunk.Y);
+		}
 	}
 
 	void CheckForAnyPendingFinishedChunks()
@@ -141,11 +173,13 @@ public partial class WorldGen : Node3D
 			{
 				AddChild(ongoingChunkRenderData[e].chunkNode);
 				ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
-				ongoingChunkRenderData[e].chunkNode.GlobalPosition = ongoingChunkRenderData[e].position;
+				ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, 0, ongoingChunkRenderData[e].position.Y * chunkSize);
 				ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
 				ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
 				ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
-				
+
+				loadedChunks.Add(new LoadedChunkData() { id = ongoingChunkRenderData[e].id, node = ongoingChunkRenderData[e].chunkNode, position = ongoingChunkRenderData[e].position });
+
 				GD.Print("Finishing Chunk (ID " + ongoingChunkRenderData[e].id + ")");
 			}
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
@@ -165,7 +199,7 @@ public partial class WorldGen : Node3D
 	{
 		totalChunksRendered++;
 		int id = totalChunksRendered;
-		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id });
+		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector2(x,z) });
 		GD.Print("Generating Chunk (ID " + totalChunksRendered + "): X = " + x + " Z = " + z);
 
 		Task.Run(async () =>
@@ -252,20 +286,20 @@ public partial class WorldGen : Node3D
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					if (GetBitOfByte(bigBlockArray[posX, posY, posZ],0))
+					if (GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
 					{
 						//Regular Square "Big Blocks"
 						chunk.brushes.Add(
 							CreateBrush(
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize),
-								CheckBrushVisibility(bigBlockArray, posX, posY, posZ,0)
+								CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0)
 								));
 					}
 					else
 					{
 						//First layer of "Surface Brushes"
-						byte bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ,0);
+						byte bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
 						if (bitMask != 0)
 						{
 							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false);
@@ -311,7 +345,7 @@ public partial class WorldGen : Node3D
 	{
 		int bitmask = 0;
 		//North
-		if (z < bigBlockArray.GetLength(2) - 1 && GetBitOfByte(bigBlockArray[x, y, z + 1], pos ))
+		if (z < bigBlockArray.GetLength(2) - 1 && GetBitOfByte(bigBlockArray[x, y, z + 1], pos))
 		{
 			bitmask |= 1 << 5;
 		}
@@ -492,7 +526,7 @@ public partial class WorldGen : Node3D
 					{
 						for (k = 0; k < 3; k++)
 						{
-							if(currentVert.Equals(verts[indices[adjacentTriangleIndices[(i * 3) + k]]]))
+							if (currentVert.Equals(verts[indices[adjacentTriangleIndices[(i * 3) + k]]]))
 							{
 								for (j = 0; j < 3; j++)
 								{
@@ -505,7 +539,7 @@ public partial class WorldGen : Node3D
 								break;
 							}
 						}
-						
+
 					}
 				}
 			}
@@ -573,7 +607,7 @@ public partial class WorldGen : Node3D
 			state = ChunkRenderDataState.ready,
 			chunkNode = chunk,
 			meshNode = meshObject,
-			position = new Vector3(chunkData.positionX * chunkSize, 0, chunkData.positionZ * chunkSize),
+			position = new Vector2(chunkData.positionX, chunkData.positionZ),
 			collisionShape = collisionShape,
 			staticBody = body,
 		};
@@ -707,10 +741,17 @@ public partial class WorldGen : Node3D
 		public ChunkRenderDataState state;
 		public Node3D chunkNode;
 		public MeshInstance3D meshNode;
-		public Vector3 position;
+		public Vector2 position;
 		public int id;
 		public CollisionShape3D collisionShape;
 		public StaticBody3D staticBody;
+	}
+
+	public class LoadedChunkData
+	{
+		public Node3D node;
+		public Vector2 position;
+		public int id;
 	}
 
 	public enum ChunkRenderDataState
