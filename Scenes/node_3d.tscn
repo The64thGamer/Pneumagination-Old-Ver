@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=10 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Material" uid="uid://oe6t0x1uogb3" path="res://Materials/Ground.tres" id="2_p4t7p"]
 [ext_resource type="Script" path="res://Scripts/PlayerMovement.cs" id="3_m8gbp"]
+[ext_resource type="Script" path="res://Scripts/Mining.cs" id="4_35mrk"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="4_tt854"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="4_tu8wd"]
 
@@ -66,6 +67,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 
 [node name="Player Camera" type="Camera3D" parent="Player/Player Head"]
 fov = 92.8
+
+[node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera"]
+script = ExtResource("4_35mrk")
 
 [node name="Debug Text" type="Label" parent="Player/Player Head/Player Camera"]
 texture_filter = 1

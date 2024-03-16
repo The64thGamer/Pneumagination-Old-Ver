@@ -746,7 +746,6 @@ public partial class WorldGen : Node3D
 
 	public class ChunkRenderData
 	{
-		public Thread thread;
 		public ChunkRenderDataState state;
 		public Node3D chunkNode;
 		public MeshInstance3D meshNode;
