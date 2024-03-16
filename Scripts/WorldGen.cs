@@ -608,6 +608,8 @@ public partial class WorldGen : Node3D
 		collisionShape.Shape = collisionMesh;
 
 		StaticBody3D body = new StaticBody3D();
+		body.CollisionLayer = 0b00000000_00000000_00000000_00000101; //Default, Brushes
+
 
 		return new ChunkRenderData()
 		{
