@@ -3,6 +3,7 @@ using System;
 
 public partial class Mining : Node3D
 {
+    [Export] WorldGen worldGen;
 
     public override void _PhysicsProcess(double delta)
     {
@@ -21,15 +22,9 @@ public partial class Mining : Node3D
                 sprite.GlobalPosition = (Vector3)result["position"];
 
 
-                if ((CollisionObject3D)result["collider"] is CollisionObject3D collisionObj)
+                if ((CollisionObject3D)result["collider"] is CollisionObject3D collisionObj && (int)result["face_index"] >= 0)
                 {
-                    var ownerId = collisionObj.ShapeFindOwner((int)result["shape"]);
-                    var ownerObject = collisionObj.ShapeOwnerGetOwner(ownerId);
-
-                    if (ownerObject is CollisionShape3D shapeNode)
-                    {
-                        GD.Print(shapeNode);
-                    }
+                    worldGen.DestroyBlock(collisionObj.GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"]) / 12.0f)); //"/12.0f" for each face of the cube
                 }
 
             }
