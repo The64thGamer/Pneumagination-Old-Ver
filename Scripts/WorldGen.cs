@@ -440,12 +440,12 @@ public partial class WorldGen : Node3D
 		List<int> indices = new List<int>();
 		int maxX, maxY, maxZ, minX, minY, minZ;
 		Vector3 origin, vert;
+		Brush currentBrush;
 
-		//Collect all brush vertices, merge duplicate ones
-		GD.Print(chunkData.brushes.Count);
-		for (int h = 0; h < chunkData.brushes.Count; h++)
+        //Collect all brush vertices, merge duplicate ones
+        for (int h = 0; h < chunkData.brushes.Count; h++)
 		{
-			Brush currentBrush = chunkData.brushes[h];
+			currentBrush = chunkData.brushes[h];
 			if (currentBrush.hiddenFlag)
 			{
 				continue;

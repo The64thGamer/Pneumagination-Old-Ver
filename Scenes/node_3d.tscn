@@ -31,9 +31,8 @@ fog_density = 0.0005
 fog_height = 38.16
 fog_height_density = 0.3965
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_a7sms"]
-height = 11.0
-radius = 2.0
+[sub_resource type="BoxShape3D" id="BoxShape3D_l23mf"]
+size = Vector3(2, 11, 2)
 
 [sub_resource type="LabelSettings" id="LabelSettings_bbj47"]
 line_spacing = 2.0
@@ -62,7 +61,7 @@ head = NodePath("Player Head")
 camera = NodePath("Player Head/Player Camera")
 
 [node name="Player Collision" type="CollisionShape3D" parent="Player" groups=["Player"]]
-shape = SubResource("CylinderShape3D_a7sms")
+shape = SubResource("BoxShape3D_l23mf")
 
 [node name="Player Head" type="Node3D" parent="Player" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
