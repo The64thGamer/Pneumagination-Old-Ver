@@ -151,7 +151,9 @@ public partial class WorldGen : Node3D
 			loadPositions.Remove(ongoingChunkRenderData[i].position);
 		}
 
-		foreach (Vector3 chunk in loadPositions)
+		List<Vector3> sortedPosition = loadPositions.OrderBy(n => (chunkPos.DistanceTo(n))).ToList();
+
+		foreach (Vector3 chunk in sortedPosition)
 		{
 			RenderChunk((int)chunk.X, (int)chunk.Y, (int)chunk.Z);
 		}
