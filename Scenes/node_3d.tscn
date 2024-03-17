@@ -27,7 +27,7 @@ sdfgi_energy = 3.0
 fog_enabled = true
 fog_light_color = Color(0.545098, 0.709804, 1, 1)
 fog_density = 0.0005
-fog_height = 38.16
+fog_height = 10.0
 fog_height_density = 0.3965
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l23mf"]

@@ -30,8 +30,8 @@ public partial class WorldGen : Node3D
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
 	//Consts
-	const int chunkLoadingDistance = 9;
-	const int chunkUnloadingDistance = 12;
+	const int chunkLoadingDistance = 32;
+	const int chunkUnloadingDistance = 64;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
 	readonly byte[] brushIndices = new byte[]
