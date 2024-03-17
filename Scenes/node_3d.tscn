@@ -19,7 +19,6 @@ ssil_radius = 7.58
 ssil_intensity = 0.89
 ssil_sharpness = 1.0
 sdfgi_enabled = true
-sdfgi_use_occlusion = true
 sdfgi_bounce_feedback = 1.5
 sdfgi_cascades = 6
 sdfgi_min_cell_size = 0.488281

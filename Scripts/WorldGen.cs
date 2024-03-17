@@ -255,6 +255,7 @@ public partial class WorldGen : Node3D
 
 		//BlockArray Setup
 		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
+		Brush[,,] bigBlockBrushArray = new Brush[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
 
 		float noiseValue;
 		int posX, posY, posZ, newX, newY, newZ;
@@ -294,7 +295,11 @@ public partial class WorldGen : Node3D
 				}
 			}
 		}
+		List<Brush> brushes;
+		byte bitMask;
+		Brush bigBlock;
 
+		//Big Blocks and First Surface Layer
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
 			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
@@ -302,22 +307,22 @@ public partial class WorldGen : Node3D
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
 					if (GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
-					{
+					{                       
 						//Regular Square "Big Blocks"
-						chunk.brushes.Add(
-							CreateBrush(
+						bigBlock = CreateBrush(
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
-								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize),
-								CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0)
-								));
+								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
+						bigBlock.hiddenFlag = CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0);
+						chunk.brushes.Add(bigBlock);
+						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
 					}
 					else
 					{
 						//First layer of "Surface Brushes"
-						byte bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
+						bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
 						if (bitMask != 0)
 						{
-							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false);
+							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false);
 							if (brushes != null)
 							{
 								SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 1, true);
@@ -330,19 +335,69 @@ public partial class WorldGen : Node3D
 			}
 		}
 
+		//Second Surface Layer & Visibility Assigning
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
 			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
+					if (bigBlockBrushArray[posX,posY,posZ] != null && bigBlockBrushArray[posX, posY, posZ].hiddenFlag)
+					{
+						if (posX - 1 >= 0 && bigBlockBrushArray[posX - 1, posY, posZ] != null)
+						{ if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX - 1, posY, posZ]))
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX - 1, posY, posZ]].Add(bigBlockBrushArray[posX, posY, posZ]); }
+							else
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX - 1, posY, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; } }
+
+						if (posY - 1 >= 0 && bigBlockBrushArray[posX, posY - 1, posZ] != null)
+						{
+							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX, posY - 1, posZ]))
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY - 1, posZ]].Add(bigBlockBrushArray[posX, posY, posZ]); }
+							else
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY - 1, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
+						}
+
+						if (posZ - 1 >= 0 && bigBlockBrushArray[posX, posY, posZ - 1] != null)
+						{
+							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX, posY, posZ - 1]))
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY, posZ - 1]].Add(bigBlockBrushArray[posX, posY, posZ]); }
+							else
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY, posZ - 1]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
+						}
+
+						if (posX + 1 < chunkSize && bigBlockBrushArray[posX + 1, posY, posZ] != null)
+						{
+							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX + 1, posY, posZ]))
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX + 1, posY, posZ]].Add(bigBlockBrushArray[posX, posY, posZ]); }
+							else
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX + 1, posY, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
+						}
+
+						if (posY + 1 < chunkSize && bigBlockBrushArray[posX, posY + 1, posZ] != null)
+						{
+							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX, posY + 1, posZ]))
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY + 1, posZ]].Add(bigBlockBrushArray[posX, posY, posZ]); }
+							else
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY + 1, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
+						}
+
+						if (posZ + 1 < chunkSize && bigBlockBrushArray[posX, posY, posZ + 1] != null)
+						{
+							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX, posY, posZ + 1]))
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY, posZ + 1]].Add(bigBlockBrushArray[posX, posY, posZ]); }
+							else
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY, posZ + 1]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
+						}
+					}
+
 					if (!GetBitOfByte(bigBlockArray[posX, posY, posZ], 1) && !GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
 					{
 						//Second layer of "Sub-Surface Brushes"
-						byte bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1));
+						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1));
 						if (bitMask != 0)
 						{
-							List<Brush> brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true);
+							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true);
 							if (brushes != null)
 							{
 								chunk.brushes.AddRange(brushes);
@@ -406,6 +461,7 @@ public partial class WorldGen : Node3D
 			return false;
 		}
 
+		//If hidden
 		return GetBitOfByte(bigBlockArray[x - 1, y, z], pos) &&
 				GetBitOfByte(bigBlockArray[x + 1, y, z], pos) &&
 				GetBitOfByte(bigBlockArray[x, y - 1, z], pos) &&
@@ -442,8 +498,8 @@ public partial class WorldGen : Node3D
 		Vector3 origin, vert;
 		Brush currentBrush;
 
-        //Collect all brush vertices, merge duplicate ones
-        for (int h = 0; h < chunkData.brushes.Count; h++)
+		//Collect all brush vertices, merge duplicate ones
+		for (int h = 0; h < chunkData.brushes.Count; h++)
 		{
 			currentBrush = chunkData.brushes[h];
 			if (currentBrush.hiddenFlag)
@@ -526,6 +582,8 @@ public partial class WorldGen : Node3D
 		List<Vector3> adjacentFaceNormals = new List<Vector3>();
 		System.Collections.Generic.Dictionary<int, List<int>> finalAdjacencyList;
 		int k, j;
+		Vector3 finalNormal;
+
 		foreach ((Vector3 currentVert, List<int> adjacentTriangleIndices) in triangleAdjacencyList)
 		{
 
@@ -592,7 +650,7 @@ public partial class WorldGen : Node3D
 
 			foreach ((int key, List<int> value) in finalAdjacencyList)
 			{
-				Vector3 finalNormal = Vector3.Zero;
+				finalNormal = Vector3.Zero;
 				for (k = 0; k < value.Count; k++)
 				{
 					finalNormal += adjacentFaceNormals[value[k] / 3];
@@ -640,7 +698,7 @@ public partial class WorldGen : Node3D
 		};
 	}
 
-	Brush CreateBrush(Vector3 pos, Vector3 size, bool hiddenFlag)
+	Brush CreateBrush(Vector3 pos, Vector3 size)
 	{
 		byte newX = (byte)pos.X;
 		byte newY = (byte)pos.Y;
@@ -663,7 +721,6 @@ public partial class WorldGen : Node3D
 				maxX,maxY,maxZ,
 				newX,maxY,maxZ,
 			};
-		brush.hiddenFlag = hiddenFlag;
 		return brush;
 	}
 
@@ -683,9 +740,11 @@ public partial class WorldGen : Node3D
 
 		if (check)
 		{
+			Brush b;
+
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				Brush b = new Brush { hiddenFlag = false, vertices = new byte[24] };
+				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
 				for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = verts[e + (i * 24)];
@@ -741,6 +800,15 @@ public partial class WorldGen : Node3D
 		{
 			if (loadedChunks[i].node == chunkNode)
 			{
+				if(loadedChunks[i].chunk.connectedInvisibleBrushes.TryGetValue(loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]],out List<Brush> updateBrushes))
+				{
+					foreach (Brush pendingBrush in updateBrushes)
+					{
+						pendingBrush.hiddenFlag = false;
+					}
+
+					loadedChunks[i].chunk.connectedInvisibleBrushes.Remove(loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]]);
+				}
 				loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
 				RerenderLoadedChunk(loadedChunks[i]);
 				return;
@@ -790,6 +858,7 @@ public partial class WorldGen : Node3D
 		public int positionX;
 		public int positionZ;
 		public List<Brush> brushes;
+		public System.Collections.Generic.Dictionary<Brush, List<Brush>> connectedInvisibleBrushes;
 	}
 
 	public class ChunkRenderData
