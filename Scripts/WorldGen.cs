@@ -285,15 +285,15 @@ public partial class WorldGen : Node3D
 					noiseValue *= (1 - (posY * bigBlockSize / (float)chunkSize)) * (GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
 					noiseValue = 1 - noiseValue;
 
-					if (posY * bigBlockSize / (float)chunkSize < Math.Pow(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)), 3.0f))
+					if (newY / (float)chunkSize < Math.Pow(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)), 3.0f))
 					{
 						noiseValue = 0;
 					}
-					if (posY * bigBlockSize / (float)chunkSize < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) - 0.4f)
+					if (newY / (float)chunkSize < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) - 0.4f)
 					{
 						noiseValue = 0;
 					}
-					if (posY * bigBlockSize < 1)
+					if (newY < 1)
 					{
 						noiseValue = 0;
 					}
