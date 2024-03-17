@@ -737,12 +737,11 @@ public partial class WorldGen : Node3D
 
 	public void DestroyBlock(Node3D chunkNode, int brushID)
 	{
-		GD.Print("Attempt Destroy Block " + chunkNode + " - BrushID " + brushID);
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{
 			if (loadedChunks[i].node == chunkNode)
 			{
-				loadedChunks[i].chunk.brushes.RemoveAt(brushID);
+				loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
 				RerenderLoadedChunk(loadedChunks[i]);
 				return;
 			}
