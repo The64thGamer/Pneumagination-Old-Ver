@@ -91,7 +91,7 @@ public partial class WorldGen : Node3D
 		celNoiseB.SetFractalOctaves(3);
 
 		os2NoiseA.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		os2NoiseA.SetFrequency(0.01f);
+		os2NoiseA.SetFrequency(0.001f);
 		os2NoiseA.SetSeed((int)seedC);
 		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseA.SetFractalOctaves(4);
@@ -133,7 +133,7 @@ public partial class WorldGen : Node3D
 					temp.X = chunkPos.X + x;
 					temp.Y = chunkPos.Y + y;
 					temp.Z = chunkPos.Z + z;
-					
+
 					if (chunkPos.DistanceTo(temp) <= chunkLoadingDistance)
 					{
 						loadPositions.Add(temp);
@@ -223,12 +223,12 @@ public partial class WorldGen : Node3D
 	{
 		totalChunksRendered++;
 		int id = totalChunksRendered;
-		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x,y, z) });
+		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
 		GD.Print("Generating Chunk (ID " + totalChunksRendered + "): X = " + x + " Y = " + y + " Z = " + z);
 
 		Task.Run(async () =>
 		{
-			Chunk chunk = await GenerateChunk(x,y, z, id);
+			Chunk chunk = await GenerateChunk(x, y, z, id);
 			ChunkRenderData chunkData = await GetChunkMeshAsync(chunk);
 			if (chunkData == null)
 			{
@@ -271,6 +271,7 @@ public partial class WorldGen : Node3D
 
 		bool noiseValue = false;
 		int posX, posY, posZ, newX, newY, newZ;
+		float temp;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
@@ -290,14 +291,29 @@ public partial class WorldGen : Node3D
 					}
 					else
 					{
+						//Above-Surface Generation
 						noiseValue = false;
-						
-						if(chunk.positionY < 2 && chunk.positionY >= 0 && GetClampedNoise(os2NoiseA.GetNoise(newX,newZ)) > GetClampedChunkRange(0, 2 * chunkSize / bigBlockSize, newY))
+
+						if (chunk.positionY < 5 && chunk.positionY >= 0 && curve1.SampleBaked(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ))) > GetClampedChunkRange(0, 5 * chunkSize / bigBlockSize, newY))
 						{
 							noiseValue = true;
 						}
-
+						if (chunk.positionY < 6 && chunk.positionY >= 0 && curve1.SampleBaked(GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) + GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)) > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
+						{
+							noiseValue = true;
+						}
 					}
+					//Both Surfaces Generation
+					if (chunk.positionY < 1 && chunk.positionY >= -4)
+					{
+						temp = GetClampedNoise(celNoiseA.GetNoise(newX, newY, newZ)) + curve1.SampleBaked(GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)));
+
+						if (temp < GetClampedChunkRange(-4 * chunkSize / bigBlockSize, 1 * chunkSize / bigBlockSize, newY))
+						{
+							noiseValue = false;
+						}
+					}
+
 					//Apply
 					if (noiseValue)
 					{
@@ -320,7 +336,7 @@ public partial class WorldGen : Node3D
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
 					if (GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
-					{                       
+					{
 						//Regular Square "Big Blocks"
 						bigBlock = CreateBrush(
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
@@ -355,13 +371,15 @@ public partial class WorldGen : Node3D
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					if (bigBlockBrushArray[posX,posY,posZ] != null && bigBlockBrushArray[posX, posY, posZ].hiddenFlag)
+					if (bigBlockBrushArray[posX, posY, posZ] != null && bigBlockBrushArray[posX, posY, posZ].hiddenFlag)
 					{
 						if (posX - 1 >= 0 && bigBlockBrushArray[posX - 1, posY, posZ] != null)
-						{ if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX - 1, posY, posZ]))
+						{
+							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX - 1, posY, posZ]))
 							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX - 1, posY, posZ]].Add(bigBlockBrushArray[posX, posY, posZ]); }
 							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX - 1, posY, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; } }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX - 1, posY, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
+						}
 
 						if (posY - 1 >= 0 && bigBlockBrushArray[posX, posY - 1, posZ] != null)
 						{
@@ -575,10 +593,10 @@ public partial class WorldGen : Node3D
 		{
 
 			//Gather all face normals
-			adjacentFaceNormals = new Vector3[adjacentTriangleIndices.Count/3];
+			adjacentFaceNormals = new Vector3[adjacentTriangleIndices.Count / 3];
 			for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
 			{
-				adjacentFaceNormals[i/3] =
+				adjacentFaceNormals[i / 3] =
 					(verts[indices[adjacentTriangleIndices[i]]] -
 					verts[indices[adjacentTriangleIndices[i + 1]]]).Cross(verts[indices[adjacentTriangleIndices[i + 2]]] -
 					verts[indices[adjacentTriangleIndices[i + 1]]]);
@@ -761,7 +779,7 @@ public partial class WorldGen : Node3D
 
 	float GetClampedChunkRange(float lowerBound, float upperBound, float yPos)
 	{
-		return Mathf.Clamp((yPos - lowerBound) / (upperBound - lowerBound),0,1);
+		return Mathf.Clamp((yPos - lowerBound) / (upperBound - lowerBound), 0, 1);
 	}
 
 	void SetBitOfByte(ref byte aByte, int pos, bool value)
@@ -790,7 +808,7 @@ public partial class WorldGen : Node3D
 		{
 			if (loadedChunks[i].node == chunkNode)
 			{
-				if(loadedChunks[i].chunk.connectedInvisibleBrushes.TryGetValue(loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]],out List<Brush> updateBrushes))
+				if (loadedChunks[i].chunk.connectedInvisibleBrushes.TryGetValue(loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]], out List<Brush> updateBrushes))
 				{
 					foreach (Brush pendingBrush in updateBrushes)
 					{
