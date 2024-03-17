@@ -21,7 +21,7 @@ public partial class WorldGen : Node3D
 	public static int totalChunksRendered = 0;
 
 	//Locals
-	Vector2 oldChunkPos = new Vector2(float.MinValue, float.MinValue);
+	Vector3 oldChunkPos = new Vector3(float.MinValue, float.MinValue, float.MinValue);
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	FastNoiseLite celNoiseA = new FastNoiseLite();
@@ -30,8 +30,8 @@ public partial class WorldGen : Node3D
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
 	//Consts
-	const int chunkLoadingDistance = 32;
-	const int chunkUnloadingDistance = 64;
+	const int chunkLoadingDistance = 3;
+	const int chunkUnloadingDistance = 12;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
 	readonly byte[] brushIndices = new byte[]
@@ -111,7 +111,7 @@ public partial class WorldGen : Node3D
 	void LoadAndUnloadChunks()
 	{
 		//Check
-		Vector2 chunkPos = new Vector2(Mathf.RoundToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Z / chunkSize));
+		Vector3 chunkPos = new Vector3(Mathf.RoundToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Y / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Z / chunkSize));
 		if (chunkPos == oldChunkPos)
 		{
 			return;
@@ -119,17 +119,24 @@ public partial class WorldGen : Node3D
 		oldChunkPos = chunkPos;
 
 		//Load New Chunks
-		HashSet<Vector2> loadPositions = new HashSet<Vector2>();
-		Vector2 temp = Vector2.Zero;
-		for (int x = -chunkLoadingDistance; x < chunkLoadingDistance; x++)
+		HashSet<Vector3> loadPositions = new HashSet<Vector3>();
+		Vector3 temp = Vector3.Zero;
+		int x, y, z;
+
+		for (x = -chunkLoadingDistance; x < chunkLoadingDistance; x++)
 		{
-			for (int z = -chunkLoadingDistance; z < chunkLoadingDistance; z++)
+			for (y = -chunkLoadingDistance; y < chunkLoadingDistance; y++)
 			{
-				temp.X = chunkPos.X + x;
-				temp.Y = chunkPos.Y + z;
-				if (Math.Pow(temp.X - chunkPos.X, 2) + Math.Pow(temp.Y - chunkPos.Y, 2) <= chunkLoadingDistance)
+				for (z = -chunkLoadingDistance; z < chunkLoadingDistance; z++)
 				{
-					loadPositions.Add(temp);
+					temp.X = chunkPos.X + x;
+					temp.Y = chunkPos.Y + y;
+					temp.Z = chunkPos.Z + z;
+					
+					if (chunkPos.DistanceTo(temp) <= chunkLoadingDistance)
+					{
+						loadPositions.Add(temp);
+					}
 				}
 			}
 		}
@@ -143,18 +150,18 @@ public partial class WorldGen : Node3D
 			loadPositions.Remove(ongoingChunkRenderData[i].position);
 		}
 
-		foreach (Vector2 chunk in loadPositions)
+		foreach (Vector3 chunk in loadPositions)
 		{
-			RenderChunk((int)chunk.X, (int)chunk.Y);
+			RenderChunk((int)chunk.X, (int)chunk.Y, (int)chunk.Z);
 		}
 
 		//Unload Far Away Chunks
 		List<LoadedChunkData> remainingChunks = new List<LoadedChunkData>();
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{
-			if (Math.Pow(loadedChunks[i].position.X - chunkPos.X, 2) + Math.Pow(loadedChunks[i].position.Y - chunkPos.Y, 2) >= chunkUnloadingDistance)
+			if (chunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance)
 			{
-				GD.Print("Unloading Chunk (ID " + loadedChunks[i].id + "): X = " + loadedChunks[i].position.X + " Z = " + loadedChunks[i].position.Y);
+				GD.Print("Unloading Chunk (ID " + loadedChunks[i].id + "): X = " + loadedChunks[i].position.X + " Y = " + loadedChunks[i].position.Y + " Z = " + loadedChunks[i].position.Z);
 
 				loadedChunks[i].node.QueueFree();
 			}
@@ -180,7 +187,7 @@ public partial class WorldGen : Node3D
 			{
 				AddChild(ongoingChunkRenderData[e].chunkNode);
 				ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
-				ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, 0, ongoingChunkRenderData[e].position.Y * chunkSize);
+				ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, ongoingChunkRenderData[e].position.Y * chunkSize, ongoingChunkRenderData[e].position.Z * chunkSize);
 				ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
 				ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
 				ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
@@ -209,16 +216,16 @@ public partial class WorldGen : Node3D
 		}
 	}
 
-	void RenderChunk(int x, int z)
+	void RenderChunk(int x, int y, int z)
 	{
 		totalChunksRendered++;
 		int id = totalChunksRendered;
-		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector2(x, z) });
-		GD.Print("Generating Chunk (ID " + totalChunksRendered + "): X = " + x + " Z = " + z);
+		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x,y, z) });
+		GD.Print("Generating Chunk (ID " + totalChunksRendered + "): X = " + x + " Y = " + y + " Z = " + z);
 
 		Task.Run(async () =>
 		{
-			Chunk chunk = await GenerateChunk(x, z, id);
+			Chunk chunk = await GenerateChunk(x,y, z, id);
 			ChunkRenderData chunkData = await GetChunkMeshAsync(chunk);
 			if (chunkData == null)
 			{
@@ -245,11 +252,12 @@ public partial class WorldGen : Node3D
 
 
 	//Chunks are 126x126x126
-	async Task<Chunk> GenerateChunk(int x, int z, int id)
+	async Task<Chunk> GenerateChunk(int x, int y, int z, int id)
 	{
 		Chunk chunk = new Chunk();
 		chunk.id = id;
 		chunk.positionX = x;
+		chunk.positionY = y;
 		chunk.positionZ = z;
 		chunk.brushes = new List<Brush>();
 		chunk.connectedInvisibleBrushes = new System.Collections.Generic.Dictionary<Brush, List<Brush>>();
@@ -268,7 +276,7 @@ public partial class WorldGen : Node3D
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
 					newX = (posX * bigBlockSize) + (chunkSize * x);
-					newY = (posY * bigBlockSize);
+					newY = (posY * bigBlockSize) + (chunkSize * y);
 					newZ = (posZ * bigBlockSize) + (chunkSize * z);
 
 					noiseValue = (GetClampedNoise(celNoiseA.GetNoise(newX, newY, newZ)));
@@ -663,7 +671,7 @@ public partial class WorldGen : Node3D
 			state = ChunkRenderDataState.ready,
 			chunkNode = chunk,
 			meshNode = meshObject,
-			position = new Vector2(chunkData.positionX, chunkData.positionZ),
+			position = new Vector3(chunkData.positionX, chunkData.positionY, chunkData.positionZ),
 			collisionShape = collisionShape,
 			staticBody = body,
 			chunk = chunkData,
@@ -829,6 +837,7 @@ public partial class WorldGen : Node3D
 	{
 		public int id;
 		public int positionX;
+		public int positionY;
 		public int positionZ;
 		public List<Brush> brushes;
 		public System.Collections.Generic.Dictionary<Brush, List<Brush>> connectedInvisibleBrushes;
@@ -839,7 +848,7 @@ public partial class WorldGen : Node3D
 		public ChunkRenderDataState state;
 		public Node3D chunkNode;
 		public MeshInstance3D meshNode;
-		public Vector2 position;
+		public Vector3 position;
 		public int id;
 		public CollisionShape3D collisionShape;
 		public StaticBody3D staticBody;
@@ -850,7 +859,7 @@ public partial class WorldGen : Node3D
 	public class LoadedChunkData
 	{
 		public Node3D node;
-		public Vector2 position;
+		public Vector3 position;
 		public int id;
 		public List<int> visibleBrushIndices;
 		public Chunk chunk;
