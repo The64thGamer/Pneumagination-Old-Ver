@@ -271,7 +271,7 @@ public partial class WorldGen : Node3D
 
 		bool noiseValue = false;
 		int posX, posY, posZ, newX, newY, newZ;
-		float temp;
+		float temp, temp2;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
@@ -304,11 +304,13 @@ public partial class WorldGen : Node3D
 						}
 					}
 					//Both Surfaces Generation
-					if (chunk.positionY < 1 && chunk.positionY >= -4)
+					if (chunk.positionY < 2 && chunk.positionY >= -5)
 					{
-						temp = GetClampedNoise(celNoiseA.GetNoise(newX, newY, newZ)) + curve1.SampleBaked(GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)));
+						temp = GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)) + GetClampedNoise(os2NoiseB.GetNoise(newX, newY, newZ) + GetClampedNoise(os2NoiseB.GetNoise(newY, newZ, newX)));
+						temp2 = GetClampedChunkRange(-5 * chunkSize / bigBlockSize, 2 * chunkSize / bigBlockSize, newY);
 
-						if (temp < GetClampedChunkRange(-4 * chunkSize / bigBlockSize, 1 * chunkSize / bigBlockSize, newY))
+
+						if (temp < temp2)
 						{
 							noiseValue = false;
 						}
