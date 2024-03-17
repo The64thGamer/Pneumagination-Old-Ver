@@ -495,8 +495,7 @@ public partial class WorldGen : Node3D
 		List<int> visibleBrushes = new List<int>();
 		List<Vector3> verts = new List<Vector3>();
 		List<int> indices = new List<int>();
-		int maxX, maxY, maxZ, minX, minY, minZ;
-		Vector3 origin, vert;
+		Vector3 vert;
 		Brush currentBrush;
 
 		//Collect all brush vertices, merge duplicate ones
@@ -508,27 +507,6 @@ public partial class WorldGen : Node3D
 				continue;
 			}
 			visibleBrushes.Add(h);
-
-			maxX = int.MinValue;
-			maxY = int.MinValue;
-			maxZ = int.MinValue;
-			minX = int.MaxValue;
-			minY = int.MaxValue;
-			minZ = int.MaxValue;
-
-			for (int i = 0; i < currentBrush.vertices.Length; i += 3)
-			{
-				maxX = Math.Max(maxX, currentBrush.vertices[i]);
-				maxY = Math.Max(maxY, currentBrush.vertices[i + 1]);
-				maxZ = Math.Max(maxZ, currentBrush.vertices[i + 2]);
-				minX = Math.Min(minX, currentBrush.vertices[i]);
-				minY = Math.Min(minY, currentBrush.vertices[i + 1]);
-				minZ = Math.Min(minZ, currentBrush.vertices[i + 2]);
-			}
-
-			origin.X = (minX + maxX) / 2;
-			origin.Y = (minY + maxY) / 2;
-			origin.Z = (minZ + maxZ) / 2;
 
 			for (int i = 0; i < brushIndices.Length; i++)
 			{
@@ -547,11 +525,7 @@ public partial class WorldGen : Node3D
 		}
 
 		//Setup normals
-		List<Vector3> normals = new List<Vector3>();
-		for (int i = 0; i < verts.Count; i++)
-		{
-			normals.Add(new Vector3(0, 1, 0));
-		}
+		Vector3[] normals = new Vector3[verts.Count];
 
 		//Create a fast lookup table for adjacent triangles
 		System.Collections.Generic.Dictionary<Vector3, List<int>> triangleAdjacencyList = new System.Collections.Generic.Dictionary<Vector3, List<int>>();
@@ -580,7 +554,7 @@ public partial class WorldGen : Node3D
 		}
 
 		//Vertex Merger
-		List<Vector3> adjacentFaceNormals = new List<Vector3>();
+		Vector3[] adjacentFaceNormals;
 		System.Collections.Generic.Dictionary<int, List<int>> finalAdjacencyList;
 		int k, j;
 		Vector3 finalNormal;
@@ -589,20 +563,18 @@ public partial class WorldGen : Node3D
 		{
 
 			//Gather all face normals
-			adjacentFaceNormals = new List<Vector3>();
+			adjacentFaceNormals = new Vector3[adjacentTriangleIndices.Count/3];
 			for (int i = 0; i < adjacentTriangleIndices.Count; i += 3)
 			{
-				adjacentFaceNormals.Add((
-					verts[indices[adjacentTriangleIndices[i]]] -
-					verts[indices[adjacentTriangleIndices[i + 1]]]).
-					Cross(verts[indices[adjacentTriangleIndices[i + 2]]] -
-					verts[indices[adjacentTriangleIndices[i + 1]]]
-					));
+				adjacentFaceNormals[i/3] =
+					(verts[indices[adjacentTriangleIndices[i]]] -
+					verts[indices[adjacentTriangleIndices[i + 1]]]).Cross(verts[indices[adjacentTriangleIndices[i + 2]]] -
+					verts[indices[adjacentTriangleIndices[i + 1]]]);
 			}
 
-			for (int i = 0; i < adjacentFaceNormals.Count; i++)
+			for (int i = 0; i < adjacentFaceNormals.Length; i++)
 			{
-				for (int e = 0; e < adjacentFaceNormals.Count; e++)
+				for (int e = 0; e < adjacentFaceNormals.Length; e++)
 				{
 					if (adjacentFaceNormals[i].Normalized().Dot(adjacentFaceNormals[e].Normalized()) > 0.45)
 					{
