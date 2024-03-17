@@ -252,6 +252,7 @@ public partial class WorldGen : Node3D
 		chunk.positionX = x;
 		chunk.positionZ = z;
 		chunk.brushes = new List<Brush>();
+		chunk.connectedInvisibleBrushes = new System.Collections.Generic.Dictionary<Brush, List<Brush>>();
 
 		//BlockArray Setup
 		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
