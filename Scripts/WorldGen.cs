@@ -12,6 +12,7 @@ public partial class WorldGen : Node3D
 	//Exports
 	[Export] Material mat;
 	[Export] bool hideBigBlocks = false;
+	[Export] Curve curve1;
 
 	//Globals
 	public static uint seedA = 0;
@@ -30,7 +31,7 @@ public partial class WorldGen : Node3D
 	FastNoiseLite os2NoiseB = new FastNoiseLite();
 
 	//Consts
-	const int chunkLoadingDistance = 3;
+	const int chunkLoadingDistance = 6;
 	const int chunkUnloadingDistance = 12;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
@@ -90,13 +91,13 @@ public partial class WorldGen : Node3D
 		celNoiseB.SetFractalOctaves(3);
 
 		os2NoiseA.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		os2NoiseA.SetFrequency(0.001f);
+		os2NoiseA.SetFrequency(0.01f);
 		os2NoiseA.SetSeed((int)seedC);
 		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseA.SetFractalOctaves(4);
 
 		os2NoiseB.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
-		os2NoiseB.SetFrequency(0.005f);
+		os2NoiseB.SetFrequency(0.01f);
 		os2NoiseB.SetSeed((int)seedD);
 		os2NoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
 		os2NoiseB.SetFractalOctaves(4);
@@ -266,7 +267,7 @@ public partial class WorldGen : Node3D
 		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
 		Brush[,,] bigBlockBrushArray = new Brush[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
 
-		float noiseValue;
+		bool noiseValue = false;
 		int posX, posY, posZ, newX, newY, newZ;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
@@ -275,35 +276,36 @@ public partial class WorldGen : Node3D
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					newX = (posX * bigBlockSize) + (chunkSize * x);
-					newY = (posY * bigBlockSize) + (chunkSize * y);
-					newZ = (posZ * bigBlockSize) + (chunkSize * z);
+					//Within BigBlock space, not unit space
+					newX = posX + (chunkSize * x / bigBlockSize);
+					newY = posY + (chunkSize * y / bigBlockSize);
+					newZ = posZ + (chunkSize * z / bigBlockSize);
 
-					noiseValue = (GetClampedNoise(celNoiseA.GetNoise(newX, newY, newZ)));
-					noiseValue += (GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)));
-					noiseValue *= noiseValue * 20.0f * noiseValue;
-					noiseValue *= (1 - (posY * bigBlockSize / (float)chunkSize)) * (GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)) - 0.7f) * 25.0f;
-					noiseValue = 1 - noiseValue;
+					if (newY < 0)
+					{
+						//Below-Surface Generation
+						noiseValue = true;
+					}
+					else
+					{
+						noiseValue = false;
+						
+						if(chunk.positionY < 2 && chunk.positionY >= 0 && GetClampedNoise(os2NoiseA.GetNoise(newX,newZ)) > GetClampedChunkRange(0, 2 * chunkSize / bigBlockSize, newY))
+						{
+							noiseValue = true;
+						}
 
-					if (newY / (float)chunkSize < Math.Pow(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ)), 3.0f))
-					{
-						noiseValue = 0;
 					}
-					if (newY / (float)chunkSize < (0.9 * GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) - 0.4f)
-					{
-						noiseValue = 0;
-					}
-					if (newY < 1)
-					{
-						noiseValue = 0;
-					}
-					if (noiseValue <= 0.25f)
+					//Apply
+					if (noiseValue)
 					{
 						SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 0, true);
 					}
 				}
 			}
 		}
+
+
 		List<Brush> brushes;
 		byte bitMask;
 		Brush bigBlock;
@@ -753,6 +755,11 @@ public partial class WorldGen : Node3D
 	float GetClampedNoise(float noise)
 	{
 		return (noise + 1.0f) / 2.0f;
+	}
+
+	float GetClampedChunkRange(float lowerBound, float upperBound, float yPos)
+	{
+		return Mathf.Clamp((yPos - lowerBound) / (upperBound - lowerBound),0,1);
 	}
 
 	void SetBitOfByte(ref byte aByte, int pos, bool value)
