@@ -32,6 +32,11 @@ public partial class PlayerMovement : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
 	{
+		if(!WorldGen.firstChunkLoaded)
+		{
+			return;
+		}
+
 		// Tab out
 		if (Input.IsActionJustPressed("Pause"))
 		{

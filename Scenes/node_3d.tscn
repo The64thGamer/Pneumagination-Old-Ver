@@ -1,15 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=10 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
-[ext_resource type="Material" uid="uid://oe6t0x1uogb3" path="res://Materials/Ground.tres" id="2_p4t7p"]
 [ext_resource type="Script" path="res://Scripts/PlayerMovement.cs" id="3_m8gbp"]
 [ext_resource type="Script" path="res://Scripts/Mining.cs" id="4_35mrk"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="4_tt854"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="4_tu8wd"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.340176, 0.240449), 0.0, 0.0, 0, 0, Vector2(0.618768, 0.196629), 0.0, 0.0, 0, 0, Vector2(0.818182, 0.612921), 0.452809, 0.452809, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
-point_count = 5
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.410567, 0.26236), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.777126, 0.160112), 0.452809, 0.452809, 0, 0, Vector2(0.853372, 0.729775), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
+point_count = 8
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_energy_multiplier = 16.0
@@ -46,7 +45,6 @@ shadow_offset = Vector2(0, 0)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_qvi55")
-mat = ExtResource("2_p4t7p")
 curve1 = SubResource("Curve_tpjr8")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

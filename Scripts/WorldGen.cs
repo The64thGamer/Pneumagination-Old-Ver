@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 public partial class WorldGen : Node3D
 {
 	//Exports
-	[Export] Material mat;
 	[Export] bool hideBigBlocks = false;
 	[Export] Curve curve1;
 
@@ -20,38 +19,37 @@ public partial class WorldGen : Node3D
 	public static uint seedC = 0;
 	public static uint seedD = 0;
 	public static int totalChunksRendered = 0;
+	public static bool firstChunkLoaded;
 
 	//Locals
 	Vector3 oldChunkPos = new Vector3(float.MinValue, float.MinValue, float.MinValue);
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
-	FastNoiseLite celNoiseA = new FastNoiseLite();
-	FastNoiseLite celNoiseB = new FastNoiseLite();
-	FastNoiseLite os2NoiseA = new FastNoiseLite();
-	FastNoiseLite os2NoiseB = new FastNoiseLite();
+	List<Material> mats = new List<Material>();
 
 	//Consts
-	const int chunkLoadingDistance = 6;
-	const int chunkUnloadingDistance = 12;
+	const int chunkLoadingDistance = 4;
+	const int chunkUnloadingDistance = 6;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
 	readonly byte[] brushIndices = new byte[]
 				{
+					//Bottom
 					2, 1, 0,
 					0, 3, 2,
-
+					//North
 					6, 2, 3,
 					3, 7, 6,
-
+					//Top
 					5, 6, 7,
 					7, 4, 5,
-
+					//South
 					1, 5, 4,
 					4, 0, 1,
-
+					//West
 					7, 3, 0,
 					0, 4, 7,
-
+					//East
 					6, 5, 1,
 					1, 2, 6
 				};
@@ -77,30 +75,10 @@ public partial class WorldGen : Node3D
 			seedD = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
 		}
 
-		celNoiseA.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		celNoiseA.SetFrequency(.01f);
-		celNoiseA.SetSeed((int)seedA);
-		celNoiseA.SetFractalType(FastNoiseLite.FractalType.PingPong);
-		celNoiseA.SetFractalOctaves(1);
-		celNoiseA.SetFractalPingPongStrength(1.5f);
-
-		celNoiseB.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		celNoiseB.SetFrequency(.02f);
-		celNoiseB.SetSeed((int)seedB);
-		celNoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
-		celNoiseB.SetFractalOctaves(3);
-
-		os2NoiseA.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		os2NoiseA.SetFrequency(0.001f);
-		os2NoiseA.SetSeed((int)seedC);
-		os2NoiseA.SetFractalType(FastNoiseLite.FractalType.FBm);
-		os2NoiseA.SetFractalOctaves(4);
-
-		os2NoiseB.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
-		os2NoiseB.SetFrequency(0.01f);
-		os2NoiseB.SetSeed((int)seedD);
-		os2NoiseB.SetFractalType(FastNoiseLite.FractalType.FBm);
-		os2NoiseB.SetFractalOctaves(4);
+		for (int i = 0; i < 5; i++)
+		{
+			mats.Add(GD.Load("res://Materials/" + i + ".tres") as Material);
+		}
 	}
 
 	public override void _Process(double delta)
@@ -214,6 +192,10 @@ public partial class WorldGen : Node3D
 
 		if (!check)
 		{
+			if(!firstChunkLoaded)
+			{
+				firstChunkLoaded = true;
+			}
 			GD.Print("All Chunks Done Rendering");
 			ongoingChunkRenderData = new List<ChunkRenderData>();
 		}
@@ -273,6 +255,17 @@ public partial class WorldGen : Node3D
 		int posX, posY, posZ, newX, newY, newZ;
 		float temp, temp2;
 
+		FastNoiseLite noise = new FastNoiseLite();
+		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		noise.SetFrequency(0.002f);
+		noise.SetSeed((int)seedA);
+		noise.SetFractalType(FastNoiseLite.FractalType.PingPong);
+		noise.SetFractalOctaves(3);
+		noise.SetFractalPingPongStrength(2);
+		noise.SetCellularJitter(1.2f);
+		noise.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
+		noise.SetDomainWarpAmp(400);
+
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
 			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
@@ -284,36 +277,22 @@ public partial class WorldGen : Node3D
 					newY = posY + (chunkSize * y / bigBlockSize);
 					newZ = posZ + (chunkSize * z / bigBlockSize);
 
-					if (newY < 0)
+					if (chunk.positionY < 0)
 					{
 						//Below-Surface Generation
 						noiseValue = true;
 					}
-					else
+					if (chunk.positionY >= 0)
 					{
 						//Above-Surface Generation
 						noiseValue = false;
 
-						if (chunk.positionY < 5 && chunk.positionY >= 0 && curve1.SampleBaked(GetClampedNoise(os2NoiseA.GetNoise(newX, newZ))) > GetClampedChunkRange(0, 5 * chunkSize / bigBlockSize, newY))
+						if (chunk.positionY < 6 && chunk.positionY >= 0 && 
+							GetClampedNoise(noise.GetNoise(newX,newY, newZ)) > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
 						{
 							noiseValue = true;
 						}
-						if (chunk.positionY < 6 && chunk.positionY >= 0 && curve1.SampleBaked(GetClampedNoise(os2NoiseB.GetNoise(newX, newZ))) + GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)) > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
-						{
-							noiseValue = true;
-						}
-					}
-					//Both Surfaces Generation
-					if (chunk.positionY < 2 && chunk.positionY >= -5)
-					{
-						temp = GetClampedNoise(celNoiseB.GetNoise(newX, newY, newZ)) + GetClampedNoise(os2NoiseB.GetNoise(newX, newY, newZ) + GetClampedNoise(os2NoiseB.GetNoise(newY, newZ, newX)));
-						temp2 = GetClampedChunkRange(-5 * chunkSize / bigBlockSize, 2 * chunkSize / bigBlockSize, newY);
 
-
-						if (temp < temp2)
-						{
-							noiseValue = false;
-						}
 					}
 
 					//Apply
@@ -344,6 +323,14 @@ public partial class WorldGen : Node3D
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0);
+						if (bigBlock.hiddenFlag)
+						{
+							bigBlock.textures = new uint[] { 1,1,1,1,1,1 };
+						}
+						else
+						{
+							bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
+						}
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
 					}
@@ -519,15 +506,19 @@ public partial class WorldGen : Node3D
 
 	ChunkRenderData GetChunkMesh(Chunk chunkData)
 	{
+		if (chunkData.brushes.Count == 0)
+		{
+			GD.Print("Chunk had no blocks.");
+			return null;
+		}
+
 		Node3D chunk = new Node3D();
-		var surfaceArray = new Godot.Collections.Array();
-		surfaceArray.Resize((int)Mesh.ArrayType.Max);
 
 		//Initialized Values
 		List<int> visibleBrushes = new List<int>();
-		List<Vector3> verts = new List<Vector3>();
-		List<int> indices = new List<int>();
-		Vector3 vert;
+		Vector3[] verts = new Vector3[chunkData.brushes.Count * 8];
+		int[] indices = new int[chunkData.brushes.Count * 8];
+        Vector3 vert;
 		Brush currentBrush;
 
 		//Collect all brush vertices, merge duplicate ones
@@ -545,25 +536,25 @@ public partial class WorldGen : Node3D
 				vert.X = currentBrush.vertices[brushIndices[i] * 3];
 				vert.Y = currentBrush.vertices[(brushIndices[i] * 3) + 1];
 				vert.Z = currentBrush.vertices[(brushIndices[i] * 3) + 2];
-				indices.Add(verts.Count);
-				verts.Add(vert);
+                indices[(h * 8) + i] = (h * 8) + i;
+				verts[(h * 8) + i] = vert;
 			}
 		}
 
-		if (verts.Count == 0)
+		if (verts.Length == 0)
 		{
-			GD.Print("Chunk had no blocks / no visible blocks.");
+			GD.Print("Chunk had no visible blocks.");
 			return null;
 		}
 
 		//Setup normals
-		Vector3[] normals = new Vector3[verts.Count];
+		Vector3[] normals = new Vector3[verts.Length];
 
 		//Create a fast lookup table for adjacent triangles
 		System.Collections.Generic.Dictionary<Vector3, List<int>> triangleAdjacencyList = new System.Collections.Generic.Dictionary<Vector3, List<int>>();
 		Vector3 lookupVertex;
 		int startIndex;
-		for (int i = 0; i < indices.Count; i++)
+		for (int i = 0; i < indices.Length; i++)
 		{
 			lookupVertex = verts[indices[i]];
 			startIndex = i - (i % 3);
@@ -665,18 +656,76 @@ public partial class WorldGen : Node3D
 
 		}
 
-		// Convert Lists to arrays and assign to surface array
-		ArrayMesh arrMesh = new ArrayMesh();
-		surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[verts.Count];
-		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
-		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
+		//Split everything based on material
+		System.Collections.Generic.Dictionary<uint, PreMesh> splitMeshes = new System.Collections.Generic.Dictionary<uint, PreMesh>();
+		for (int i = 0; i < visibleBrushes.Count; i++)
+		{
+			for (int e = 0; e < chunkData.brushes[visibleBrushes[i]].textures.Length; e++)
+			{
+				int temp = (i * 24) + (e * 6);
+				if (splitMeshes.TryGetValue(chunkData.brushes[visibleBrushes[i]].textures[e], out PreMesh preMesh))
+				{
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp]]);
+					preMesh.normals.Add(verts[indices[temp]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 1]]);
+					preMesh.normals.Add(verts[indices[temp + 1]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 2]]);
+					preMesh.normals.Add(verts[indices[temp + 2]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 3]]);
+					preMesh.normals.Add(verts[indices[temp + 3]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 4]]);
+					preMesh.normals.Add(verts[indices[temp + 4]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 5]]);
+					preMesh.normals.Add(verts[indices[temp + 5]]);
+				}
+				else
+				{
+					PreMesh premesh = new PreMesh() { vertices = new List<Vector3>(), indices = new List<int>(), normals = new List<Vector3>() };
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp]]);
+					preMesh.normals.Add(verts[indices[temp]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 1]]);
+					preMesh.normals.Add(verts[indices[temp + 1]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 2]]);
+					preMesh.normals.Add(verts[indices[temp + 2]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 3]]);
+					preMesh.normals.Add(verts[indices[temp + 3]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 4]]);
+					preMesh.normals.Add(verts[indices[temp + 4]]);
+					preMesh.indices.Add(preMesh.vertices.Count);
+					preMesh.vertices.Add(verts[indices[temp + 5]]);
+					preMesh.normals.Add(verts[indices[temp + 5]]);
+					splitMeshes.Add(chunkData.brushes[visibleBrushes[i]].textures[e], premesh);
+				}
+			}
+		}
 
 		//Assign the surface to a mesh and return
+		ArrayMesh arrMesh = new ArrayMesh();
 		MeshInstance3D meshObject = new MeshInstance3D();
 		meshObject.Mesh = arrMesh;
-		meshObject.Mesh.SurfaceSetMaterial(0, mat);
+		foreach ((uint key, PreMesh value) in splitMeshes)
+		{
+			// Convert Lists to arrays and assign to surface array
+			Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
+			surfaceArray.Resize((int)Mesh.ArrayType.Max);
+			surfaceArray[(int)Mesh.ArrayType.Vertex] = value.vertices.ToArray();
+			surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[value.vertices.Count];
+			surfaceArray[(int)Mesh.ArrayType.Normal] = value.normals.ToArray();
+			surfaceArray[(int)Mesh.ArrayType.Index] = value.indices.ToArray();
+			arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
+			meshObject.Mesh.SurfaceSetMaterial(0, mats[(int)key]);
+		}
 
 		//Assign Collision
 		ConcavePolygonShape3D collisionMesh = new ConcavePolygonShape3D();
@@ -749,7 +798,7 @@ public partial class WorldGen : Node3D
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
+				b = new Brush { hiddenFlag = false, vertices = new byte[24], textures = new uint[] {4,4,4,4,4,4 } };
 				for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = verts[e + (i * 24)];
@@ -860,6 +909,13 @@ public partial class WorldGen : Node3D
 		public byte[] vertices;
 		public uint[] textures;
 		public bool hiddenFlag;
+	}
+
+	class PreMesh
+	{
+		public List<Vector3> vertices;
+		public List<int> indices;
+		public List<Vector3> normals;
 	}
 
 	public class Chunk
