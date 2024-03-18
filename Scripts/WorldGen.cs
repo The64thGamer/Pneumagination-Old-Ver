@@ -218,16 +218,16 @@ public partial class WorldGen : Node3D
 			{
 				if (ongoingChunkRenderData[i].id == id)
 				{
-                    if (chunkData == null)
-                    {
-						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
-                        check = true;
-                    }
-                    else
+					if (chunkData == null)
 					{
-                        ongoingChunkRenderData[i] = chunkData;
-                        check = true;
-                    }
+						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
+						check = true;
+					}
+					else
+					{
+						ongoingChunkRenderData[i] = chunkData;
+						check = true;
+					}
 					break;
 				}
 			}
@@ -817,8 +817,16 @@ public partial class WorldGen : Node3D
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24], textures = new uint[] { 4, 4, 4, 4, 4, 4 } };
-				for (int e = 0; e < 24; e++)
+				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
+				if((id & (1 << 1)) != 0)
+				{
+					b.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
+				}
+				else
+				{
+                    b.textures = new uint[] { 4,4,4,4,4,4 };
+                }
+                for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = verts[e + (i * 24)];
 				}
