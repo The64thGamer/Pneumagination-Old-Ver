@@ -192,7 +192,7 @@ public partial class WorldGen : Node3D
 
 		if (!check)
 		{
-			if(!firstChunkLoaded)
+			if (!firstChunkLoaded)
 			{
 				firstChunkLoaded = true;
 			}
@@ -212,17 +212,22 @@ public partial class WorldGen : Node3D
 		{
 			Chunk chunk = await GenerateChunk(x, y, z, id);
 			ChunkRenderData chunkData = await GetChunkMeshAsync(chunk);
-			if (chunkData == null)
-			{
-				return;
-			}
+
 			bool check = false;
 			for (int i = 0; i < ongoingChunkRenderData.Count; i++)
 			{
 				if (ongoingChunkRenderData[i].id == id)
 				{
-					ongoingChunkRenderData[i] = chunkData;
-					check = true;
+                    if (chunkData == null)
+                    {
+						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
+                        check = true;
+                    }
+                    else
+					{
+                        ongoingChunkRenderData[i] = chunkData;
+                        check = true;
+                    }
 					break;
 				}
 			}
@@ -239,6 +244,7 @@ public partial class WorldGen : Node3D
 	//Chunks are 126x126x126
 	async Task<Chunk> GenerateChunk(int x, int y, int z, int id)
 	{
+
 		Chunk chunk = new Chunk();
 		chunk.id = id;
 		chunk.positionX = x;
@@ -287,8 +293,8 @@ public partial class WorldGen : Node3D
 						//Above-Surface Generation
 						noiseValue = false;
 
-						if (chunk.positionY < 6 && chunk.positionY >= 0 && 
-							GetClampedNoise(noise.GetNoise(newX,newY, newZ)) > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
+						if (chunk.positionY < 6 && chunk.positionY >= 0 &&
+							GetClampedNoise(noise.GetNoise(newX, newY, newZ)) > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
 						{
 							noiseValue = true;
 						}
@@ -303,7 +309,6 @@ public partial class WorldGen : Node3D
 				}
 			}
 		}
-
 
 		List<Brush> brushes;
 		byte bitMask;
@@ -325,7 +330,7 @@ public partial class WorldGen : Node3D
 						bigBlock.hiddenFlag = CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0);
 						if (bigBlock.hiddenFlag)
 						{
-							bigBlock.textures = new uint[] { 1,1,1,1,1,1 };
+							bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
 						}
 						else
 						{
@@ -516,9 +521,9 @@ public partial class WorldGen : Node3D
 
 		//Initialized Values
 		List<int> visibleBrushes = new List<int>();
-		Vector3[] verts = new Vector3[chunkData.brushes.Count * 8];
-		int[] indices = new int[chunkData.brushes.Count * 8];
-        Vector3 vert;
+		List<Vector3> verts = new List<Vector3>();
+		List<int> indices = new List<int>();
+		Vector3 vert;
 		Brush currentBrush;
 
 		//Collect all brush vertices, merge duplicate ones
@@ -536,25 +541,26 @@ public partial class WorldGen : Node3D
 				vert.X = currentBrush.vertices[brushIndices[i] * 3];
 				vert.Y = currentBrush.vertices[(brushIndices[i] * 3) + 1];
 				vert.Z = currentBrush.vertices[(brushIndices[i] * 3) + 2];
-                indices[(h * 8) + i] = (h * 8) + i;
-				verts[(h * 8) + i] = vert;
+
+				indices.Add(verts.Count);
+				verts.Add(vert);
 			}
 		}
 
-		if (verts.Length == 0)
+		if (verts.Count == 0)
 		{
 			GD.Print("Chunk had no visible blocks.");
 			return null;
 		}
 
 		//Setup normals
-		Vector3[] normals = new Vector3[verts.Length];
+		Vector3[] normals = new Vector3[verts.Count];
 
 		//Create a fast lookup table for adjacent triangles
 		System.Collections.Generic.Dictionary<Vector3, List<int>> triangleAdjacencyList = new System.Collections.Generic.Dictionary<Vector3, List<int>>();
 		Vector3 lookupVertex;
 		int startIndex;
-		for (int i = 0; i < indices.Length; i++)
+		for (int i = 0; i < indices.Count; i++)
 		{
 			lookupVertex = verts[indices[i]];
 			startIndex = i - (i % 3);
@@ -660,7 +666,7 @@ public partial class WorldGen : Node3D
 		System.Collections.Generic.Dictionary<uint, PreMesh> splitMeshes = new System.Collections.Generic.Dictionary<uint, PreMesh>();
 		for (int i = 0; i < visibleBrushes.Count; i++)
 		{
-			for (int e = 0; e < chunkData.brushes[visibleBrushes[i]].textures.Length; e++)
+			for (int e = 0; e < 6; e++)
 			{
 				int temp = (i * 24) + (e * 6);
 				if (splitMeshes.TryGetValue(chunkData.brushes[visibleBrushes[i]].textures[e], out PreMesh preMesh))
@@ -686,34 +692,39 @@ public partial class WorldGen : Node3D
 				}
 				else
 				{
-					PreMesh premesh = new PreMesh() { vertices = new List<Vector3>(), indices = new List<int>(), normals = new List<Vector3>() };
-					preMesh.indices.Add(preMesh.vertices.Count);
-					preMesh.vertices.Add(verts[indices[temp]]);
-					preMesh.normals.Add(verts[indices[temp]]);
-					preMesh.indices.Add(preMesh.vertices.Count);
-					preMesh.vertices.Add(verts[indices[temp + 1]]);
-					preMesh.normals.Add(verts[indices[temp + 1]]);
-					preMesh.indices.Add(preMesh.vertices.Count);
-					preMesh.vertices.Add(verts[indices[temp + 2]]);
-					preMesh.normals.Add(verts[indices[temp + 2]]);
-					preMesh.indices.Add(preMesh.vertices.Count);
-					preMesh.vertices.Add(verts[indices[temp + 3]]);
-					preMesh.normals.Add(verts[indices[temp + 3]]);
-					preMesh.indices.Add(preMesh.vertices.Count);
-					preMesh.vertices.Add(verts[indices[temp + 4]]);
-					preMesh.normals.Add(verts[indices[temp + 4]]);
-					preMesh.indices.Add(preMesh.vertices.Count);
-					preMesh.vertices.Add(verts[indices[temp + 5]]);
-					preMesh.normals.Add(verts[indices[temp + 5]]);
-					splitMeshes.Add(chunkData.brushes[visibleBrushes[i]].textures[e], premesh);
+
+					PreMesh newMesh = new PreMesh() { vertices = new List<Vector3>(), indices = new List<int>(), normals = new List<Vector3>() };
+
+					newMesh.indices.Add(newMesh.vertices.Count);
+					newMesh.vertices.Add(verts[indices[temp]]);
+					newMesh.normals.Add(normals[indices[temp]]);
+					newMesh.indices.Add(newMesh.vertices.Count);
+					newMesh.vertices.Add(verts[indices[temp + 1]]);
+					newMesh.normals.Add(normals[indices[temp + 1]]);
+					newMesh.indices.Add(newMesh.vertices.Count);
+					newMesh.vertices.Add(verts[indices[temp + 2]]);
+					newMesh.normals.Add(normals[indices[temp + 2]]);
+					newMesh.indices.Add(newMesh.vertices.Count);
+					newMesh.vertices.Add(verts[indices[temp + 3]]);
+					newMesh.normals.Add(normals[indices[temp + 3]]);
+					newMesh.indices.Add(newMesh.vertices.Count);
+					newMesh.vertices.Add(verts[indices[temp + 4]]);
+					newMesh.normals.Add(normals[indices[temp + 4]]);
+					newMesh.indices.Add(newMesh.vertices.Count);
+					newMesh.vertices.Add(verts[indices[temp + 5]]);
+					newMesh.normals.Add(normals[indices[temp + 5]]);
+
+					splitMeshes.Add(chunkData.brushes[visibleBrushes[i]].textures[e], newMesh);
+
 				}
 			}
 		}
 
 		//Assign the surface to a mesh and return
 		ArrayMesh arrMesh = new ArrayMesh();
-		MeshInstance3D meshObject = new MeshInstance3D();
-		meshObject.Mesh = arrMesh;
+
+		uint[] matIDs = new uint[splitMeshes.Count];
+		int currentPremesh = 0;
 		foreach ((uint key, PreMesh value) in splitMeshes)
 		{
 			// Convert Lists to arrays and assign to surface array
@@ -724,7 +735,15 @@ public partial class WorldGen : Node3D
 			surfaceArray[(int)Mesh.ArrayType.Normal] = value.normals.ToArray();
 			surfaceArray[(int)Mesh.ArrayType.Index] = value.indices.ToArray();
 			arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
-			meshObject.Mesh.SurfaceSetMaterial(0, mats[(int)key]);
+			matIDs[currentPremesh] = key;
+			currentPremesh++;
+		}
+
+		MeshInstance3D meshObject = new MeshInstance3D();
+		meshObject.Mesh = arrMesh;
+		for (int i = 0; i < matIDs.Length; i++)
+		{
+			meshObject.Mesh.SurfaceSetMaterial(i, mats[(int)matIDs[i]]);
 		}
 
 		//Assign Collision
@@ -798,7 +817,7 @@ public partial class WorldGen : Node3D
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24], textures = new uint[] {4,4,4,4,4,4 } };
+				b = new Brush { hiddenFlag = false, vertices = new byte[24], textures = new uint[] { 4, 4, 4, 4, 4, 4 } };
 				for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = verts[e + (i * 24)];
@@ -855,6 +874,10 @@ public partial class WorldGen : Node3D
 
 	public void DestroyBlock(Node3D chunkNode, int brushID)
 	{
+		if(!firstChunkLoaded)
+		{
+			return;
+		}
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{
 			if (loadedChunks[i].node == chunkNode)
