@@ -517,50 +517,50 @@ public partial class WorldGen : Node3D
 			return null;
 		}
 
-		Node3D chunk = new Node3D();
-
-		//Initialized Values
+		//Find just visible brushes
 		List<int> visibleBrushes = new List<int>();
-		List<Vector3> verts = new List<Vector3>();
-		List<int> indices = new List<int>();
-		Vector3 vert;
-		Brush currentBrush;
 
-		//Collect all brush vertices, merge duplicate ones
 		for (int h = 0; h < chunkData.brushes.Count; h++)
 		{
-			currentBrush = chunkData.brushes[h];
-			if (currentBrush.hiddenFlag)
+			if (chunkData.brushes[h].hiddenFlag)
 			{
 				continue;
 			}
 			visibleBrushes.Add(h);
+		}
 
+		//Add all vertex data
+		Vector3[] verts = new Vector3[visibleBrushes.Count * 36];
+		int[] indices = new int[visibleBrushes.Count * 36];
+		Vector3 vert;
+
+		for (int h = 0; h < visibleBrushes.Count; h++)
+		{
 			for (int i = 0; i < brushIndices.Length; i++)
 			{
-				vert.X = currentBrush.vertices[brushIndices[i] * 3];
-				vert.Y = currentBrush.vertices[(brushIndices[i] * 3) + 1];
-				vert.Z = currentBrush.vertices[(brushIndices[i] * 3) + 2];
+				vert.X = chunkData.brushes[visibleBrushes[h]].vertices[brushIndices[i] * 3];
+				vert.Y = chunkData.brushes[visibleBrushes[h]].vertices[(brushIndices[i] * 3) + 1];
+				vert.Z = chunkData.brushes[visibleBrushes[h]].vertices[(brushIndices[i] * 3) + 2];
 
-				indices.Add(verts.Count);
-				verts.Add(vert);
+				indices[(h * 36) + i] = (h * 36) + i;
+				verts[(h * 36) + i] = vert;
 			}
 		}
 
-		if (verts.Count == 0)
+		if (verts.Length == 0)
 		{
 			GD.Print("Chunk had no visible blocks.");
 			return null;
 		}
 
 		//Setup normals
-		Vector3[] normals = new Vector3[verts.Count];
+		Vector3[] normals = new Vector3[verts.Length];
 
 		//Create a fast lookup table for adjacent triangles
 		System.Collections.Generic.Dictionary<Vector3, List<int>> triangleAdjacencyList = new System.Collections.Generic.Dictionary<Vector3, List<int>>();
 		Vector3 lookupVertex;
 		int startIndex;
-		for (int i = 0; i < indices.Count; i++)
+		for (int i = 0; i < indices.Length; i++)
 		{
 			lookupVertex = verts[indices[i]];
 			startIndex = i - (i % 3);
@@ -721,6 +721,7 @@ public partial class WorldGen : Node3D
 		}
 
 		//Assign the surface to a mesh and return
+		Node3D chunk = new Node3D();
 		ArrayMesh arrMesh = new ArrayMesh();
 
 		uint[] matIDs = new uint[splitMeshes.Count];
@@ -824,9 +825,9 @@ public partial class WorldGen : Node3D
 				}
 				else
 				{
-                    b.textures = new uint[] { 4,4,4,4,4,4 };
-                }
-                for (int e = 0; e < 24; e++)
+					b.textures = new uint[] { 4,4,4,4,4,4 };
+				}
+				for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = verts[e + (i * 24)];
 				}
