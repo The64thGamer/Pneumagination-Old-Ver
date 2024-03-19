@@ -15,11 +15,13 @@ public partial class Mining : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
+                /*
                 Sprite3D sprite = new Sprite3D();
                 sprite.Texture = (Texture2D)GD.Load("res://Textures/testtexture.png");
                 GetTree().Root.AddChild(sprite);
                 sprite.GlobalPosition = (Vector3)result["position"];
                 sprite.Billboard = BaseMaterial3D.BillboardModeEnum.Enabled;
+                */
 
                 worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"]) / 12.0f)); //"/12.0f" for each face of the cube
 

@@ -328,15 +328,19 @@ public partial class WorldGen : Node3D
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0);
-						if (bigBlock.hiddenFlag)
+						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
+						if ((bitMask & (1 << 1)) != 0)
+						{
+							bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
+						}
+						else if(bigBlock.hiddenFlag)
 						{
 							bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
 						}
 						else
 						{
-							bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
+							bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
 						}
-						bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
 
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
