@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=11 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/PlayerMovement.cs" id="3_m8gbp"]
@@ -9,6 +9,10 @@
 [sub_resource type="Curve" id="Curve_tpjr8"]
 _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.0942249, 0.611827), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
 point_count = 13
+
+[sub_resource type="Curve" id="Curve_0dt1a"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_mode = 1
@@ -53,6 +57,7 @@ shadow_offset = Vector2(0, 0)
 [node name="World" type="Node3D"]
 script = ExtResource("1_qvi55")
 curve1 = SubResource("Curve_tpjr8")
+curve2 = SubResource("Curve_0dt1a")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_rruv5")

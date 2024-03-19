@@ -12,6 +12,7 @@ public partial class WorldGen : Node3D
 	//Exports
 	[Export] bool hideBigBlocks = false;
 	[Export] Curve curve1;
+	[Export] Curve curve2;
 
 	//Globals
 	public static uint seedA = 0;
@@ -28,8 +29,8 @@ public partial class WorldGen : Node3D
 	Material[] mats;
 
 	//Consts
-	const int chunkLoadingDistance = 4;
-	const int chunkUnloadingDistance = 6;
+	const int chunkLoadingDistance = 6;
+	const int chunkUnloadingDistance = 8;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
 	readonly byte[] brushIndices = new byte[]
@@ -273,6 +274,14 @@ public partial class WorldGen : Node3D
 		noise.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
 		noise.SetDomainWarpAmp(400);
 
+		FastNoiseLite noiseB = new FastNoiseLite();
+		noiseB.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseB.SetFrequency(0.01f);
+		noiseB.SetSeed((int)seedB);
+		noiseB.SetFractalType(FastNoiseLite.FractalType.PingPong);
+		noiseB.SetFractalOctaves(1);
+		noiseB.SetFractalPingPongStrength(1);
+
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
 			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
@@ -299,6 +308,13 @@ public partial class WorldGen : Node3D
 						{
 							noiseValue = true;
 						}
+					}
+
+					//Both Surface Generation
+					if (chunk.positionY < 5 && chunk.positionY >= -10 &&
+						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ))) > GetClampedChunkRange(-10, 5 * chunkSize / bigBlockSize, newY))
+					{
+						noiseValue = false;
 					}
 
 					//Apply
