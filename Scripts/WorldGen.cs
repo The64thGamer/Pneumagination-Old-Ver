@@ -727,7 +727,7 @@ public partial class WorldGen : Node3D
 				Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
 				surfaceArray.Resize((int)Mesh.ArrayType.Max);
 				surfaceArray[(int)Mesh.ArrayType.Vertex] = value.vertices.ToArray();
-				surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[value.vertices.Count];
+				surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[value.vertices.Count];//Hello there is an error with this go fix it
 				surfaceArray[(int)Mesh.ArrayType.Normal] = value.normals.ToArray();
 				surfaceArray[(int)Mesh.ArrayType.Index] = value.indices.ToArray();
 				arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
