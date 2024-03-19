@@ -688,13 +688,11 @@ public partial class WorldGen : Node3D
 		//Check mat count
 		if (splitMeshes.Count > 1)
 		{
-			GD.Print(splitMeshes.Count);
-
 			for (int i = 0; i < visibleBrushes.Count; i++)
 			{
 				for (int e = 0; e < 6; e++)
 				{
-					int temp = (i * 24) + (e * 6);
+					int temp = (i * 36) + (e * 6);
 					if (splitMeshes.TryGetValue(chunkData.brushes[visibleBrushes[i]].textures[e], out PreMesh preMesh))
 					{
 						preMesh.indices.Add(preMesh.vertices.Count);
@@ -715,19 +713,20 @@ public partial class WorldGen : Node3D
 						preMesh.indices.Add(preMesh.vertices.Count);
 						preMesh.vertices.Add(verts[indices[temp + 5]]);
 						preMesh.normals.Add(verts[indices[temp + 5]]);
+						splitMeshes[chunkData.brushes[visibleBrushes[i]].textures[e]] = preMesh;
 					}
 				}
 			}
 
 			int currentPremesh = 0;
+			Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
+			surfaceArray.Resize((int)Mesh.ArrayType.Max);
 			foreach ((uint key, PreMesh value) in splitMeshes)
 			{
 
 				// Convert Lists to arrays and assign to surface array
-				Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
-				surfaceArray.Resize((int)Mesh.ArrayType.Max);
 				surfaceArray[(int)Mesh.ArrayType.Vertex] = value.vertices.ToArray();
-				surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[value.vertices.Count];//Hello there is an error with this go fix it
+				surfaceArray[(int)Mesh.ArrayType.TexUV] = value.vertices.ToArray();//This is probably a bad idea
 				surfaceArray[(int)Mesh.ArrayType.Normal] = value.normals.ToArray();
 				surfaceArray[(int)Mesh.ArrayType.Index] = value.indices.ToArray();
 				arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
