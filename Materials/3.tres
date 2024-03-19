@@ -4,7 +4,9 @@
 
 [resource]
 albedo_texture = ExtResource("1_yuryf")
+albedo_texture_force_srgb = true
 metallic_specular = 0.0
 roughness = 0.31
+uv1_scale = Vector3(0.015, 0.015, 0.015)
 uv1_triplanar = true
 uv1_world_triplanar = true

@@ -333,7 +333,7 @@ public partial class WorldGen : Node3D
 						{
 							bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
 						}
-						else if(bigBlock.hiddenFlag)
+						else if (bigBlock.hiddenFlag)
 						{
 							bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
 						}
@@ -563,7 +563,7 @@ public partial class WorldGen : Node3D
 		//Setup normals
 		Vector3[] normals = new Vector3[verts.Length];
 
-		
+
 		//Create a fast lookup table for adjacent triangles
 		System.Collections.Generic.Dictionary<Vector3, List<int>> triangleAdjacencyList = new System.Collections.Generic.Dictionary<Vector3, List<int>>();
 		Vector3 lookupVertex;
@@ -669,17 +669,23 @@ public partial class WorldGen : Node3D
 			}
 
 		}
-		
+
 		//Split everything based on material
 		System.Collections.Generic.Dictionary<uint, PreMesh> splitMeshes = new System.Collections.Generic.Dictionary<uint, PreMesh>();
 		for (int i = 0; i < visibleBrushes.Count; i++)
 		{
 			for (int e = 0; e < 6; e++)
 			{
-
 				if (!splitMeshes.ContainsKey(chunkData.brushes[visibleBrushes[i]].textures[e]))
 				{
-					splitMeshes.Add(chunkData.brushes[visibleBrushes[i]].textures[e], new PreMesh() { vertices = new List<Vector3>(), indices = new List<int>(), normals = new List<Vector3>() });
+					splitMeshes.Add(chunkData.brushes[visibleBrushes[i]].textures[e],
+						new PreMesh()
+						{
+							vertices = new List<Vector3>(),
+							indices = new List<int>(),
+							normals = new List<Vector3>(),
+							brushIndexes = new List<int>()
+						});
 				}
 			}
 		}
@@ -688,55 +694,43 @@ public partial class WorldGen : Node3D
 		Node3D chunk = new Node3D();
 		ArrayMesh arrMesh = new ArrayMesh();
 		uint[] matIDs = new uint[splitMeshes.Count];
+		List<int> triangletoBrushIndex = new List<int>();
 
-		//Check mat count
-		if (splitMeshes.Count > 1)
+
+		for (int i = 0; i < visibleBrushes.Count; i++)
 		{
-			for (int i = 0; i < visibleBrushes.Count; i++)
+			for (int e = 0; e < 6; e++)
 			{
-				for (int e = 0; e < 6; e++)
+				int temp = (i * 36) + (e * 6);
+				if (splitMeshes.TryGetValue(chunkData.brushes[visibleBrushes[i]].textures[e], out PreMesh preMesh))
 				{
-					int temp = (i * 36) + (e * 6);
-					if (splitMeshes.TryGetValue(chunkData.brushes[visibleBrushes[i]].textures[e], out PreMesh preMesh))
+					for (int o = 0; o < 6; o++)
 					{
-						for (int o = 0; o < 6; o++)
-						{
-							preMesh.indices.Add(preMesh.vertices.Count);
-							preMesh.vertices.Add(verts[indices[temp + o]]);
-							preMesh.normals.Add(normals[indices[temp + o]]);
-						}
+						preMesh.indices.Add(preMesh.vertices.Count);
+						preMesh.vertices.Add(verts[indices[temp + o]]);
+						preMesh.normals.Add(normals[indices[temp + o]]);
 					}
+					preMesh.brushIndexes.Add(visibleBrushes[i]);
+					preMesh.brushIndexes.Add(visibleBrushes[i]);
 				}
 			}
-
-			int currentPremesh = 0;
-			Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
-			surfaceArray.Resize((int)Mesh.ArrayType.Max);
-			foreach ((uint key, PreMesh value) in splitMeshes)
-			{
-
-
-				// Convert Lists to arrays and assign to surface array
-				surfaceArray[(int)Mesh.ArrayType.Vertex] = value.vertices.ToArray();
-				surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[value.vertices.Count];
-				surfaceArray[(int)Mesh.ArrayType.Normal] = value.normals.ToArray();
-				surfaceArray[(int)Mesh.ArrayType.Index] = value.indices.ToArray();
-				arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
-				matIDs[currentPremesh] = key;
-				currentPremesh++;
-
-			}
 		}
-		else
+
+
+		int currentPremesh = 0;
+		Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
+		surfaceArray.Resize((int)Mesh.ArrayType.Max);
+		foreach ((uint key, PreMesh value) in splitMeshes)
 		{
-			Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
-			surfaceArray.Resize((int)Mesh.ArrayType.Max);
-			surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
-			surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[verts.Length];
-			surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-			surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
+			// Convert Lists to arrays and assign to surface array
+			surfaceArray[(int)Mesh.ArrayType.Vertex] = value.vertices.ToArray();
+			surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[value.vertices.Count];
+			surfaceArray[(int)Mesh.ArrayType.Normal] = value.normals.ToArray();
+			surfaceArray[(int)Mesh.ArrayType.Index] = value.indices.ToArray();
 			arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
-			matIDs[0] = chunkData.brushes[visibleBrushes[0]].textures[0];
+			matIDs[currentPremesh] = key;
+			currentPremesh++;
+			triangletoBrushIndex.AddRange(value.brushIndexes);
 		}
 
 		MeshInstance3D meshObject = new MeshInstance3D();
@@ -767,7 +761,7 @@ public partial class WorldGen : Node3D
 			collisionShape = collisionShape,
 			staticBody = body,
 			chunk = chunkData,
-			visibleBrushIndices = visibleBrushes
+			visibleBrushIndices = triangletoBrushIndex
 		};
 	}
 
@@ -948,6 +942,7 @@ public partial class WorldGen : Node3D
 		public List<Vector3> vertices;
 		public List<int> indices;
 		public List<Vector3> normals;
+		public List<int> brushIndexes;
 	}
 
 	public class Chunk

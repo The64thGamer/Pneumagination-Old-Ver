@@ -23,7 +23,7 @@ public partial class Mining : Node3D
                 sprite.Billboard = BaseMaterial3D.BillboardModeEnum.Enabled;
                 */
 
-                worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"]) / 12.0f)); //"/12.0f" for each face of the cube
+                worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"])));
 
             }
         }
