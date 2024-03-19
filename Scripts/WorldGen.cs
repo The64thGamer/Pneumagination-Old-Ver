@@ -699,25 +699,12 @@ public partial class WorldGen : Node3D
 					int temp = (i * 36) + (e * 6);
 					if (splitMeshes.TryGetValue(chunkData.brushes[visibleBrushes[i]].textures[e], out PreMesh preMesh))
 					{
-						preMesh.indices.Add(preMesh.vertices.Count);
-						preMesh.vertices.Add(verts[indices[temp]]);
-						preMesh.normals.Add(verts[indices[temp]]);
-						preMesh.indices.Add(preMesh.vertices.Count);
-						preMesh.vertices.Add(verts[indices[temp + 1]]);
-						preMesh.normals.Add(verts[indices[temp + 1]]);
-						preMesh.indices.Add(preMesh.vertices.Count);
-						preMesh.vertices.Add(verts[indices[temp + 2]]);
-						preMesh.normals.Add(verts[indices[temp + 2]]);
-						preMesh.indices.Add(preMesh.vertices.Count);
-						preMesh.vertices.Add(verts[indices[temp + 3]]);
-						preMesh.normals.Add(verts[indices[temp + 3]]);
-						preMesh.indices.Add(preMesh.vertices.Count);
-						preMesh.vertices.Add(verts[indices[temp + 4]]);
-						preMesh.normals.Add(verts[indices[temp + 4]]);
-						preMesh.indices.Add(preMesh.vertices.Count);
-						preMesh.vertices.Add(verts[indices[temp + 5]]);
-						preMesh.normals.Add(verts[indices[temp + 5]]);
-						splitMeshes[chunkData.brushes[visibleBrushes[i]].textures[e]] = preMesh;
+						for (int o = 0; o < 6; o++)
+						{
+							preMesh.indices.Add(preMesh.vertices.Count);
+							preMesh.vertices.Add(verts[indices[temp + o]]);
+							preMesh.normals.Add(normals[indices[temp + o]]);
+						}
 					}
 				}
 			}
@@ -728,9 +715,10 @@ public partial class WorldGen : Node3D
 			foreach ((uint key, PreMesh value) in splitMeshes)
 			{
 
+
 				// Convert Lists to arrays and assign to surface array
 				surfaceArray[(int)Mesh.ArrayType.Vertex] = value.vertices.ToArray();
-				surfaceArray[(int)Mesh.ArrayType.TexUV] = value.vertices.ToArray();//This is probably a bad idea
+				surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[value.vertices.Count];
 				surfaceArray[(int)Mesh.ArrayType.Normal] = value.normals.ToArray();
 				surfaceArray[(int)Mesh.ArrayType.Index] = value.indices.ToArray();
 				arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
