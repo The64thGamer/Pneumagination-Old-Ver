@@ -1,6 +1,10 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://b1uatm1t1qa5i"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b1uatm1t1qa5i"]
+
+[ext_resource type="Texture2D" uid="uid://dtdi1d8mw3gra" path="res://Textures/Grass_Base.png" id="1_080do"]
 
 [resource]
-albedo_color = Color(0.156863, 0.603922, 0, 1)
+albedo_texture = ExtResource("1_080do")
 metallic_specular = 0.0
 roughness = 0.31
+uv1_triplanar = true
+uv1_world_triplanar = true

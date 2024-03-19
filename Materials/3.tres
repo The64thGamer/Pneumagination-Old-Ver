@@ -1,6 +1,10 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://b57dawp57a4nj"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b57dawp57a4nj"]
+
+[ext_resource type="Texture2D" uid="uid://c74obs1kj68gl" path="res://Textures/Cliffside_Diffuse.png" id="1_yuryf"]
 
 [resource]
-albedo_color = Color(0.521569, 0.294118, 0.192157, 1)
+albedo_texture = ExtResource("1_yuryf")
 metallic_specular = 0.0
 roughness = 0.31
+uv1_triplanar = true
+uv1_world_triplanar = true

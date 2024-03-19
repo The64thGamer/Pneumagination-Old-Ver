@@ -1,6 +1,10 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://bp2pfvkqpvdjk"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bp2pfvkqpvdjk"]
+
+[ext_resource type="Texture2D" uid="uid://db8skc7si2np0" path="res://Textures/Road_Base.png" id="1_tvc4e"]
 
 [resource]
-albedo_color = Color(0.32549, 0.32549, 0.32549, 1)
+albedo_texture = ExtResource("1_tvc4e")
 metallic_specular = 0.0
 roughness = 0.31
+uv1_triplanar = true
+uv1_world_triplanar = true
