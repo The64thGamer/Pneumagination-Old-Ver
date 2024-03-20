@@ -96,11 +96,13 @@ public partial class WorldGen : Node3D
 		noise.SetDomainWarpAmp(400);
 
 		noiseB = new FastNoiseLite();
-		noiseB.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseB.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2S);
 		noiseB.SetFrequency(0.06f);
 		noiseB.SetSeed((int)seedB);
+		noiseB.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.EuclideanSq);
+		noiseB.SetCellularReturnType(FastNoiseLite.CellularReturnType.Distance);
 		noiseB.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
-		noiseB.SetDomainWarpAmp(250);
+		noiseB.SetDomainWarpAmp(200);
 
 		noiseC = new FastNoiseLite();
 		noiseC.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -322,7 +324,7 @@ public partial class WorldGen : Node3D
 
 					//Both Surface Generation
 					if (y < 5 && y >= -10 &&
-						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ))) > curve3.SampleBaked(GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, newY)))
+						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ))) > curve3.SampleBaked(1 - GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, newY)))
 					{
 						noiseValue = false;
 					}
@@ -526,26 +528,26 @@ public partial class WorldGen : Node3D
 			{
 				regionBordercheck = true;
 			}
-            regionBorderCornercheck = false;
-            if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ - 1)) ||
-                region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ - 1)) ||
-                region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ + 1)) ||
-                region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ + 1)))
-            {
-                regionBorderCornercheck = true;
-            }
-            for (int i = 0; i < verts.Length / 24; i++)
+			regionBorderCornercheck = false;
+			if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ - 1)) ||
+				region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ - 1)) ||
+				region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ + 1)) ||
+				region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ + 1)))
+			{
+				regionBorderCornercheck = true;
+			}
+			for (int i = 0; i < verts.Length / 24; i++)
 			{
 				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
 				if ((id & (1 << 1)) == 0 && (id & (1 << 0)) != 0 && y >= 0)
 				{
-                    if (regionBordercheck || regionBorderCornercheck)
-                    {
-                        b.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
-                    }
-                    else
-                    {
-                        b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+					if (regionBordercheck || regionBorderCornercheck)
+					{
+						b.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+					}
+					else
+					{
+						b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
 					}
 				}
 				else
