@@ -13,6 +13,8 @@ public partial class WorldGen : Node3D
 	[Export] bool hideBigBlocks = false;
 	[Export] Curve curve1;
 	[Export] Curve curve2;
+	[Export] Curve curve3;
+	[Export] Curve curve4;
 
 	//Globals
 	public static uint seedA = 0;
@@ -27,6 +29,7 @@ public partial class WorldGen : Node3D
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
+	FastNoiseLite noise, noiseB, noiseC;
 
 	//Consts
 	const int chunkLoadingDistance = 6;
@@ -81,6 +84,35 @@ public partial class WorldGen : Node3D
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
+
+		 noise = new FastNoiseLite();
+		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		noise.SetFrequency(0.002f);
+		noise.SetSeed((int)seedA);
+		noise.SetFractalType(FastNoiseLite.FractalType.PingPong);
+		noise.SetFractalOctaves(3);
+		noise.SetFractalPingPongStrength(2);
+		noise.SetCellularJitter(1.2f);
+		noise.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
+		noise.SetDomainWarpAmp(400);
+
+		noiseB = new FastNoiseLite();
+		noiseB.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseB.SetFrequency(0.06f);
+		noiseB.SetSeed((int)seedB);
+		noiseB.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
+		noiseB.SetDomainWarpAmp(250);
+
+		noiseC = new FastNoiseLite();
+		noiseC.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		noiseC.SetFrequency(0.1f);
+		noiseC.SetSeed((int)seedC);
+		noiseC.SetCellularJitter(0.8f);
+		noiseC.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
+		noiseC.SetDomainWarpAmp(120);
+		noiseC.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.Manhattan);
+		noiseC.SetCellularReturnType(FastNoiseLite.CellularReturnType.Distance);
+
 	}
 
 	public override void _Process(double delta)
@@ -223,6 +255,7 @@ public partial class WorldGen : Node3D
 					if (chunkData == null)
 					{
 						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
+						GD.Print("Chuck had 0 visible blocks (ID " + ongoingChunkRenderData[i].id + ")");
 						check = true;
 					}
 					else
@@ -263,25 +296,6 @@ public partial class WorldGen : Node3D
 		int posX, posY, posZ, newX, newY, newZ;
 		float temp, temp2;
 
-		FastNoiseLite noise = new FastNoiseLite();
-		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		noise.SetFrequency(0.002f);
-		noise.SetSeed((int)seedA);
-		noise.SetFractalType(FastNoiseLite.FractalType.PingPong);
-		noise.SetFractalOctaves(3);
-		noise.SetFractalPingPongStrength(2);
-		noise.SetCellularJitter(1.2f);
-		noise.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
-		noise.SetDomainWarpAmp(400);
-
-		FastNoiseLite noiseB = new FastNoiseLite();
-		noiseB.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		noiseB.SetFrequency(0.01f);
-		noiseB.SetSeed((int)seedB);
-		noiseB.SetFractalType(FastNoiseLite.FractalType.PingPong);
-		noiseB.SetFractalOctaves(1);
-		noiseB.SetFractalPingPongStrength(1);
-
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
 			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
@@ -293,17 +307,17 @@ public partial class WorldGen : Node3D
 					newY = posY + (chunkSize * y / bigBlockSize);
 					newZ = posZ + (chunkSize * z / bigBlockSize);
 
-					if (chunk.positionY < 0)
+					if (y < 0)
 					{
 						//Below-Surface Generation
 						noiseValue = true;
 					}
-					if (chunk.positionY >= 0)
+					if (y >= 0)
 					{
 						//Above-Surface Generation
 						noiseValue = false;
 
-						if (chunk.positionY < 6 && chunk.positionY >= 0 &&
+						if (y < 6 && y >= 0 &&
 							curve1.SampleBaked(GetClampedNoise(noise.GetNoise(newX, newY, newZ))) > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
 						{
 							noiseValue = true;
@@ -311,8 +325,8 @@ public partial class WorldGen : Node3D
 					}
 
 					//Both Surface Generation
-					if (chunk.positionY < 5 && chunk.positionY >= -10 &&
-						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ))) > GetClampedChunkRange(-10, 5 * chunkSize / bigBlockSize, newY))
+					if (y < 5 && y >= -10 &&
+						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ))) > curve3.SampleBaked(GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, newY)))
 					{
 						noiseValue = false;
 					}
@@ -345,20 +359,23 @@ public partial class WorldGen : Node3D
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0);
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
-						if ((bitMask & (1 << 1)) != 0)
-						{
-							bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
-						}
-						else if (bigBlock.hiddenFlag)
-						{
-							bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+                        if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
+                        {
+                            if (GetClampedNoise(curve4.SampleBaked(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)))) > 0.5)
+                            {
+                                bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+                            }
+                            else
+                            {
+                                bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+                            }
 						}
 						else
 						{
-							bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
-						}
+                            bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
+                        }
 
-						chunk.brushes.Add(bigBlock);
+                        chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
 					}
 					else
@@ -367,7 +384,7 @@ public partial class WorldGen : Node3D
 						bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
 						if (bitMask != 0)
 						{
-							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false);
+							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false, x,y, z);
 							if (brushes != null)
 							{
 								SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 1, true);
@@ -444,7 +461,7 @@ public partial class WorldGen : Node3D
 						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1));
 						if (bitMask != 0)
 						{
-							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true);
+							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true,x,y,z);
 							if (brushes != null)
 							{
 								chunk.brushes.AddRange(brushes);
@@ -456,6 +473,67 @@ public partial class WorldGen : Node3D
 		}
 
 		return chunk;
+	}
+
+
+	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface, int x, int y, int z)
+	{
+		List<Brush> brushCopies = new List<Brush>();
+		bool check;
+		byte[] verts;
+		if (subSurface)
+		{
+			check = subSurfaceBrushes.TryGetValue(id, out verts);
+		}
+		else
+		{
+			check = surfaceBrushes.TryGetValue(id, out verts);
+		}
+
+		if (check)
+		{
+			Brush b;
+
+			for (int i = 0; i < verts.Length / 24; i++)
+			{
+				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
+				if ((id & (1 << 1)) == 0 && (id & (1 << 0)) != 0 && y >= 0)
+				{
+					if (GetClampedNoise(curve4.SampleBaked(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)))) > 0.5)
+					{
+						b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+					}
+					else
+					{
+						b.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+					}
+				}
+				else
+				{
+					b.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
+				}
+				for (int e = 0; e < 24; e++)
+				{
+					b.vertices[e] = verts[e + (i * 24)];
+				}
+				brushCopies.Add(b);
+
+			}
+
+			for (int e = 0; e < brushCopies.Count; e++)
+			{
+				for (int i = 0; i < brushCopies[e].vertices.Length; i += 3)
+				{
+					brushCopies[e].vertices[i] += posX;
+					brushCopies[e].vertices[i + 1] += posY;
+					brushCopies[e].vertices[i + 2] += posZ;
+				}
+			}
+
+			return brushCopies;
+		}
+
+		return null;
 	}
 
 	byte CheckSurfaceBrushType(byte[,,] bigBlockArray, int x, int y, int z, int pos)
@@ -573,8 +651,6 @@ public partial class WorldGen : Node3D
 				verts[(h * 36) + visBrushIndiciesIndex] = vert;
 			}
 		}
-
-
 
 		//Setup normals
 		Vector3[] normals = new Vector3[verts.Length];
@@ -806,59 +882,6 @@ public partial class WorldGen : Node3D
 			};
 		brush.textures = new uint[] { 0, 0, 0, 0, 0, 0 };
 		return brush;
-	}
-
-	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface)
-	{
-		List<Brush> brushCopies = new List<Brush>();
-		bool check;
-		byte[] verts;
-		if (subSurface)
-		{
-			check = subSurfaceBrushes.TryGetValue(id, out verts);
-		}
-		else
-		{
-			check = surfaceBrushes.TryGetValue(id, out verts);
-		}
-
-		if (check)
-		{
-			Brush b;
-
-			for (int i = 0; i < verts.Length / 24; i++)
-			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
-				if ((id & (1 << 1)) != 0)
-				{
-					b.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
-				}
-				else
-				{
-					b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
-				}
-				for (int e = 0; e < 24; e++)
-				{
-					b.vertices[e] = verts[e + (i * 24)];
-				}
-				brushCopies.Add(b);
-
-			}
-
-			for (int e = 0; e < brushCopies.Count; e++)
-			{
-				for (int i = 0; i < brushCopies[e].vertices.Length; i += 3)
-				{
-					brushCopies[e].vertices[i] += posX;
-					brushCopies[e].vertices[i + 1] += posY;
-					brushCopies[e].vertices[i + 2] += posZ;
-				}
-			}
-
-			return brushCopies;
-		}
-
-		return null;
 	}
 
 	float GetClampedNoise(float noise)

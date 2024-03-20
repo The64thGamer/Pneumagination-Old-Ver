@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=13 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/PlayerMovement.cs" id="3_m8gbp"]
@@ -11,7 +11,15 @@ _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.5813
 point_count = 13
 
 [sub_resource type="Curve" id="Curve_0dt1a"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.167038, 1), 0.0, 0.0, 0, 0, Vector2(0.171492, 0.475288), -5.06113, -5.06113, 0, 0, Vector2(0.45657, 0), 0.0, 0.0, 0, 0, Vector2(0.688196, 0.116557), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Curve" id="Curve_3hewv"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.576837, 0), 0.0, 0.0, 0, 0, Vector2(0.694878, 0.416392), 0.0, 0.0, 0, 0, Vector2(0.783964, 0.577018), 0.0, 0.0, 0, 0, Vector2(0.853007, 0.416392), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_hqrqk"]
+_data = [Vector2(0.291759, 1), 0.0, 0.0, 0, 0, Vector2(0.385301, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Environment" id="Environment_rruv5"]
@@ -58,12 +66,14 @@ shadow_offset = Vector2(0, 0)
 script = ExtResource("1_qvi55")
 curve1 = SubResource("Curve_tpjr8")
 curve2 = SubResource("Curve_0dt1a")
+curve3 = SubResource("Curve_3hewv")
+curve4 = SubResource("Curve_hqrqk")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_rruv5")
 
 [node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("head", "camera") groups=["Player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 249.123, 127.848)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 249.123, 0)
 collision_layer = 3
 collision_mask = 5
 floor_max_angle = 1.39626
