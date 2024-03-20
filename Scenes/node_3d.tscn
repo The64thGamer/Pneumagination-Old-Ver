@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=15 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/PlayerMovement.cs" id="3_m8gbp"]
@@ -17,6 +17,18 @@ point_count = 2
 [sub_resource type="Curve" id="Curve_3hewv"]
 _data = [Vector2(0, 0.775124), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.914333), 0.0, 0.0, 0, 0, Vector2(0.155902, 0.689456), 0.0, 0.0, 0, 0, Vector2(0.193764, 0.89827), 0.0, 0.0, 0, 0, Vector2(0.22049, 0.512768), 0.0, 0.0, 0, 0, Vector2(0.240535, 0.908979), 0.0, 0.0, 0, 0, Vector2(0.291759, 0.860791), 0.0, 0.0, 0, 0, Vector2(0.514477, 0.978583), 0.0, 0.0, 0, 0, Vector2(0.572383, 0.860791), 0.0, 0.0, 0, 0, Vector2(0.603563, 0.475288), 0.0, 0.0, 0, 0, Vector2(0.690423, 0.925041), 0.0, 0.0, 0, 0, Vector2(0.768374, 0.598435), 0.0, 0.0, 0, 0, Vector2(0.806236, 0.919687), 0.0, 0.0, 0, 0, Vector2(0.859688, 0.4271), 0.0, 0.0, 0, 0, Vector2(0.893096, 0), 0.0, 0.0, 0, 0, Vector2(0.944321, 0.641269), -15.3858, -15.3858, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 17
+
+[sub_resource type="Curve" id="Curve_81qg4"]
+_data = [Vector2(0, 0.63056), 0.0, 0.0, 0, 0, Vector2(0.104677, 0.357496), 0.0, 0.0, 0, 0, Vector2(0.155902, 0), 0.0, 0.0, 0, 0, Vector2(0.213808, 0.0790774), 0.0, 0.0, 0, 0, Vector2(0.293987, 0.0201812), 0.0, 0.0, 0, 0, Vector2(0.36971, 0.0308896), 0.0, 0.0, 0, 0, Vector2(0.458797, 0.041598), 0.0, 0.0, 0, 0, Vector2(0.496659, 0.111203), 0.0, 0.0, 0, 0, Vector2(0.525612, 0.014827), 0.0, 0.0, 0, 0, Vector2(0.579065, 0.068369), 0.0, 0.0, 0, 0, Vector2(0.632517, 0.0255353), 0.0, 0.0, 0, 0, Vector2(0.683742, 0), 0.0, 0.0, 0, 0, Vector2(0.708241, 0.191516), 0.0, 0.0, 0, 0, Vector2(0.759466, 0.469934), 0.0, 0.0, 0, 0, Vector2(0.781737, 0.368204), 0.0, 0.0, 0, 0, Vector2(0.817372, 0.689456), 0.0, 0.0, 0, 0, Vector2(1, 0.823311), 0.0, 0.0, 0, 0]
+point_count = 17
+
+[sub_resource type="Curve" id="Curve_yefdb"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.242762, 1), 0.0, 0.0, 0, 0, Vector2(0.365256, 0), 0.0, 0.0, 0, 0, Vector2(0.452116, 0.068369), 0.0, 0.0, 0, 0, Vector2(0.561247, 0), 0.0, 0.0, 0, 0, Vector2(0.797327, 0), 0.0, 0.0, 0, 0, Vector2(0.830735, 0.453871), 0.0, 0.0, 0, 0, Vector2(0.902004, 0.753707), 0.0, 0.0, 0, 0, Vector2(0.966592, 0.641269), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 10
+
+[sub_resource type="Curve" id="Curve_ijfoo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.247216, 1), 0.0, 0.0, 0, 0, Vector2(0.374165, 0), 0.0, 0.0, 0, 0, Vector2(0.452116, 0), 0.0, 0.0, 0, 0, Vector2(0.690423, 0.00411856), 0.0, 0.0, 0, 0, Vector2(0.732739, 1), 0.0, 0.0, 0, 0, Vector2(0.830735, 0.716227), 0.0, 0.0, 0, 0, Vector2(0.877506, 1), 0.0, 0.0, 0, 0]
+point_count = 8
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_mode = 1
@@ -63,6 +75,9 @@ script = ExtResource("1_qvi55")
 curve1 = SubResource("Curve_tpjr8")
 curve2 = SubResource("Curve_0dt1a")
 curve3 = SubResource("Curve_3hewv")
+curve4 = SubResource("Curve_81qg4")
+curve5 = SubResource("Curve_yefdb")
+curve6 = SubResource("Curve_ijfoo")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_rruv5")

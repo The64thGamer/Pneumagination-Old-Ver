@@ -14,6 +14,9 @@ public partial class WorldGen : Node3D
 	[Export] Curve curve1;
 	[Export] Curve curve2;
 	[Export] Curve curve3;
+	[Export] Curve curve4;
+	[Export] Curve curve5;
+	[Export] Curve curve6;
 
 	//Globals
 	public static uint seedA = 0;
@@ -28,7 +31,7 @@ public partial class WorldGen : Node3D
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
-	FastNoiseLite noise, noiseB, noiseC;
+	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE;
 
 	//Consts
 	const int chunkLoadingDistance = 6;
@@ -111,6 +114,20 @@ public partial class WorldGen : Node3D
 		noiseC.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.Manhattan);
 		noiseC.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
 
+
+		noiseD = new FastNoiseLite();
+		noiseD.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseD.SetFrequency(0.002f);
+		noiseD.SetSeed((int)seedD);
+		noiseD.SetFractalType(FastNoiseLite.FractalType.FBm);
+		noiseD.SetFractalOctaves(4);
+
+		noiseE = new FastNoiseLite();
+		noiseE.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseE.SetFrequency(0.0005f);
+		noiseE.SetSeed((int)seedA);
+		noiseE.SetFractalType(FastNoiseLite.FractalType.FBm);
+		noiseE.SetFractalOctaves(4);
 	}
 
 	public override void _Process(double delta)
@@ -316,7 +333,10 @@ public partial class WorldGen : Node3D
 						noiseValue = false;
 
 						if (y < 6 && y >= 0 &&
-							curve1.SampleBaked(GetClampedNoise(noise.GetNoise(newX, newY, newZ))) > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
+							(curve1.SampleBaked(GetClampedNoise(noise.GetNoise(newX, newY, newZ))) 
+							+ curve4.SampleBaked(GetClampedNoise(noiseD.GetNoise(newX, newZ))))
+							* curve5.SampleBaked(GetClampedNoise(noiseE.GetNoise(newX, newZ)))
+							> GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
 						{
 							noiseValue = true;
 						}
@@ -324,7 +344,10 @@ public partial class WorldGen : Node3D
 
 					//Both Surface Generation
 					if (y < 5 && y >= -10 &&
-						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ))) > curve3.SampleBaked(1 - GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, newY)))
+						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ)))
+						* curve6.SampleBaked(GetClampedNoise(noiseE.GetNoise(newX, newY, newZ)))
+						> curve3.SampleBaked(1 - GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, newY)))
+
 					{
 						noiseValue = false;
 					}
