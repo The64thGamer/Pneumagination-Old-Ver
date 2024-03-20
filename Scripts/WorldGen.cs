@@ -14,7 +14,6 @@ public partial class WorldGen : Node3D
 	[Export] Curve curve1;
 	[Export] Curve curve2;
 	[Export] Curve curve3;
-	[Export] Curve curve4;
 
 	//Globals
 	public static uint seedA = 0;
@@ -85,7 +84,7 @@ public partial class WorldGen : Node3D
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
 
-		 noise = new FastNoiseLite();
+		noise = new FastNoiseLite();
 		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		noise.SetFrequency(0.002f);
 		noise.SetSeed((int)seedA);
@@ -105,13 +104,10 @@ public partial class WorldGen : Node3D
 
 		noiseC = new FastNoiseLite();
 		noiseC.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		noiseC.SetFrequency(0.1f);
+		noiseC.SetFrequency(0.005f);
 		noiseC.SetSeed((int)seedC);
-		noiseC.SetCellularJitter(0.8f);
-		noiseC.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
-		noiseC.SetDomainWarpAmp(120);
 		noiseC.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.Manhattan);
-		noiseC.SetCellularReturnType(FastNoiseLite.CellularReturnType.Distance);
+		noiseC.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
 
 	}
 
@@ -343,6 +339,8 @@ public partial class WorldGen : Node3D
 		List<Brush> brushes;
 		byte bitMask;
 		Brush bigBlock;
+		bool regionBordercheck;
+		float region;
 
 		//Big Blocks and First Surface Layer
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
@@ -352,30 +350,42 @@ public partial class WorldGen : Node3D
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
 					if (GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
-					{
+                    {
+                        newX = posX + (chunkSize * x / bigBlockSize);
+                        newZ = posZ + (chunkSize * z / bigBlockSize);
+                        
 						//Regular Square "Big Blocks"
-						bigBlock = CreateBrush(
+                        bigBlock = CreateBrush(
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0);
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
-                        if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
-                        {
-                            if (GetClampedNoise(curve4.SampleBaked(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)))) > 0.5)
-                            {
-                                bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
-                            }
-                            else
-                            {
-                                bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
-                            }
+						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
+						{
+							region = GetClampedNoise(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)));
+							regionBordercheck = false;
+							if(region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ))||
+								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ))||
+								region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1))||
+								region != GetClampedNoise(noiseC.GetNoise(newX, newZ + 1)))
+							{
+								regionBordercheck = true;
+							}
+							if (!regionBordercheck)
+							{
+								bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+							}
+							else
+							{
+								bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+							}
 						}
 						else
 						{
-                            bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
-                        }
+							bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
+						}
 
-                        chunk.brushes.Add(bigBlock);
+						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
 					}
 					else
@@ -493,13 +503,27 @@ public partial class WorldGen : Node3D
 		if (check)
 		{
 			Brush b;
+			float newX = (posX / bigBlockSize) + (chunkSize * x / bigBlockSize);
+			float newZ = (posZ / bigBlockSize) + (chunkSize * z / bigBlockSize);
+
+            float region;
+			bool regionBordercheck;
+			region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
+			regionBordercheck = false;
+			if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ)) ||
+				region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ)) ||
+				region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1)) ||
+				region != GetClampedNoise(noiseC.GetNoise(newX, newZ + 1)))
+			{
+				regionBordercheck = true;
+			}
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
 				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
 				if ((id & (1 << 1)) == 0 && (id & (1 << 0)) != 0 && y >= 0)
 				{
-					if (GetClampedNoise(curve4.SampleBaked(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)))) > 0.5)
+					if (!regionBordercheck)
 					{
 						b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
 					}
