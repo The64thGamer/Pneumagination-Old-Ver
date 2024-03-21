@@ -40,7 +40,7 @@ public partial class WorldGen : Node3D
 	const int chunkUnloadingDistance = 9;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
-	const int maxChunksLoading = 24;
+	const int maxChunksLoading = 12;
 	readonly byte[] brushIndices = new byte[]
 				{
 					//Bottom
