@@ -216,6 +216,7 @@ public partial class WorldGen : Node3D
 		}
 
 		bool check = false;
+		int what = 0;
 		for (int e = 0; e < ongoingChunkRenderData.Count; e++)
 		{
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
@@ -241,9 +242,10 @@ public partial class WorldGen : Node3D
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
 			{
 				check = true;
+				what++;
 			}
 		}
-
+		GD.Print(what);
 		if (!check)
 		{
 			if (!firstChunkLoaded)
@@ -263,8 +265,28 @@ public partial class WorldGen : Node3D
 
 		Task.Run(async () =>
 		{
-			Chunk chunk = await GenerateChunk(x, y, z, id);
-			ChunkRenderData chunkData = await GetChunkMeshAsync(chunk);
+			Chunk chunk;
+
+			try
+			{
+				chunk = await GenerateChunk(x, y, z, id);
+			}
+			catch (Exception ex)
+			{
+				GD.PrintErr(ex);
+				throw;
+			}
+			ChunkRenderData chunkData;
+
+			try
+			{
+				chunkData = await GetChunkMeshAsync(chunk);
+			}
+			catch (Exception ex)
+			{
+				GD.PrintErr(ex);
+				throw;
+			}
 
 			bool check = false;
 			for (int i = 0; i < ongoingChunkRenderData.Count; i++)
@@ -441,7 +463,7 @@ public partial class WorldGen : Node3D
 							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY, posZ - 1]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
 						}
 
-						if (posX + 1 < chunkSize && bigBlockBrushArray[posX + 1, posY, posZ] != null)
+						if (posX + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[posX + 1, posY, posZ] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX + 1, posY, posZ]))
 							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX + 1, posY, posZ]].Add(bigBlockBrushArray[posX, posY, posZ]); }
@@ -449,7 +471,7 @@ public partial class WorldGen : Node3D
 							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX + 1, posY, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
 						}
 
-						if (posY + 1 < chunkSize && bigBlockBrushArray[posX, posY + 1, posZ] != null)
+						if (posY + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[posX, posY + 1, posZ] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX, posY + 1, posZ]))
 							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY + 1, posZ]].Add(bigBlockBrushArray[posX, posY, posZ]); }
@@ -457,7 +479,7 @@ public partial class WorldGen : Node3D
 							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY + 1, posZ]] = new List<Brush>() { bigBlockBrushArray[posX, posY, posZ] }; }
 						}
 
-						if (posZ + 1 < chunkSize && bigBlockBrushArray[posX, posY, posZ + 1] != null)
+						if (posZ + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[posX, posY, posZ + 1] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[posX, posY, posZ + 1]))
 							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[posX, posY, posZ + 1]].Add(bigBlockBrushArray[posX, posY, posZ]); }
@@ -490,7 +512,7 @@ public partial class WorldGen : Node3D
 	{
 		bool noiseValue = false;
 
-		int chunkY = Mathf.FloorToInt(posY / (float)chunkSize);
+		int chunkY = Mathf.FloorToInt(posY / (float)chunkSize / bigBlockSize);
 
 		if (chunkY < 0)
 		{
@@ -690,13 +712,13 @@ public partial class WorldGen : Node3D
 		//Z
 		if (z == 0)
 		{
-			visibility &= CheckBigBlock(x + chunkX, y + chunkY, z - 1 + chunkZ);
-			visibility &= GetBitOfByte(bigBlockArray[x, y, z + 1], byteIndex);
+			//visibility &= CheckBigBlock(x + chunkX, y + chunkY, z - 1 + chunkZ);
+			//visibility &= GetBitOfByte(bigBlockArray[x, y, z + 1], byteIndex);
 		}
 		else if (z >= bigBlockArray.GetLength(2) - 1)
 		{
-			visibility &= CheckBigBlock(x + chunkX, y + chunkY, z + 1 + chunkZ);
-			visibility &= GetBitOfByte(bigBlockArray[x, y, z - 1], byteIndex);
+			//visibility &= CheckBigBlock(x + chunkX, y + chunkY, z + 1 + chunkZ);
+			//visibility &= GetBitOfByte(bigBlockArray[x, y, z - 1], byteIndex);
 		}
 		else
 		{
