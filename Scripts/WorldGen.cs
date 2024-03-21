@@ -28,6 +28,7 @@ public partial class WorldGen : Node3D
 
 	//Locals
 	Vector3 oldChunkPos = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+	bool lastFrameMaxChunkLimitReached;
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
@@ -38,6 +39,7 @@ public partial class WorldGen : Node3D
 	const int chunkUnloadingDistance = 8;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
+	const int maxChunksLoading = 8;
 	readonly byte[] brushIndices = new byte[]
 				{
 					//Bottom
@@ -86,6 +88,7 @@ public partial class WorldGen : Node3D
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
+		
 
 		noise = new FastNoiseLite();
 		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -132,6 +135,7 @@ public partial class WorldGen : Node3D
 
 	public override void _Process(double delta)
 	{
+
 		CheckForAnyPendingFinishedChunks();
 		LoadAndUnloadChunks();
 	}
@@ -140,11 +144,12 @@ public partial class WorldGen : Node3D
 	{
 		//Check
 		Vector3 chunkPos = new Vector3(Mathf.RoundToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Y / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Z / chunkSize));
-		if (chunkPos == oldChunkPos)
+		if (chunkPos == oldChunkPos && !lastFrameMaxChunkLimitReached)
 		{
 			return;
 		}
 		oldChunkPos = chunkPos;
+		lastFrameMaxChunkLimitReached = false;
 
 		//Load New Chunks
 		HashSet<Vector3> loadPositions = new HashSet<Vector3>();
@@ -180,10 +185,18 @@ public partial class WorldGen : Node3D
 
 		List<Vector3> sortedPosition = loadPositions.OrderBy(n => (chunkPos.DistanceTo(n))).ToList();
 
+		int loadedChunksVar = ongoingChunkRenderData.Count;
 		foreach (Vector3 chunk in sortedPosition)
 		{
+			if (loadedChunksVar > maxChunksLoading)
+			{
+				GD.Print(loadedChunksVar);
+				lastFrameMaxChunkLimitReached = true;
+				break;
+			}
 
 			RenderChunk((int)chunk.X, (int)chunk.Y, (int)chunk.Z);
+			loadedChunksVar++;
 		}
 
 		//Unload Far Away Chunks
@@ -252,11 +265,11 @@ public partial class WorldGen : Node3D
 		int id = totalChunksRendered;
 		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
 
-		Task.Run(async () =>
+		Task.Run( () =>
 		{
-			Chunk chunk= await GenerateChunk(x, y, z, id);
+			Chunk chunk = GenerateChunk(x, y, z, id);
 
-			ChunkRenderData chunkData = await GetChunkMeshAsync(chunk);
+			ChunkRenderData chunkData = GetChunkMesh(chunk);
 
 			bool check = false;
 			for (int i = 0; i < ongoingChunkRenderData.Count; i++)
@@ -287,12 +300,12 @@ public partial class WorldGen : Node3D
 
 
 	//Chunks are 126x126x126
-	async Task<Chunk> GenerateChunk(int x, int y, int z, int id)
+	Chunk GenerateChunk(int x, int y, int z, int id)
 	{
 
 		Chunk chunk = new Chunk();
 		chunk.id = id;
-		chunk.hasBeenModified = false;
+		chunk.hasGeneratedBorders = false;
 		chunk.positionX = x;
 		chunk.positionY = y;
 		chunk.positionZ = z;
@@ -336,35 +349,35 @@ public partial class WorldGen : Node3D
 					{
 						newX = posX + (chunkSize * x / bigBlockSize);
 						newZ = posZ + (chunkSize * z / bigBlockSize);
-						
+
 						//Regular Square "Big Blocks"
 						bigBlock = CreateBrush(
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
-						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0,x,y,z);
-						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY,posZ);
+						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0, x, y, z);
+						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY, posZ);
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
 						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
 						{
 							region = GetClampedNoise(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)));
 							regionBordercheck = false;
-							if(region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ))||
-								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ))||
-								region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1))||
+							if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ)) ||
+								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ)) ||
+								region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1)) ||
 								region != GetClampedNoise(noiseC.GetNoise(newX, newZ + 1)))
 							{
 								regionBordercheck = true;
 							}
 							regionBorderCornercheck = false;
-							if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ-1)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ-1)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX-1, newZ + 1)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX+1, newZ + 1)))
+							if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ - 1)) ||
+								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ - 1)) ||
+								region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ + 1)) ||
+								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ + 1)))
 							{
 								regionBorderCornercheck = true;
 							}
 							if (regionBordercheck || regionBorderCornercheck)
-							{								
+							{
 								bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
 							}
 							else
@@ -387,7 +400,7 @@ public partial class WorldGen : Node3D
 						bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
 						if (bitMask != 0)
 						{
-							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false, x,y, z);
+							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false, x, y, z);
 							if (brushes != null)
 							{
 								SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 1, true);
@@ -407,7 +420,7 @@ public partial class WorldGen : Node3D
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					if (bigBlockBrushArray[posX, posY, posZ] != null && bigBlockBrushArray[posX, posY, posZ].hiddenFlag)
+					if (bigBlockBrushArray[posX, posY, posZ] != null && (bigBlockBrushArray[posX, posY, posZ].hiddenFlag || bigBlockBrushArray[posX, posY, posZ].borderFlag))
 					{
 						if (posX - 1 >= 0 && bigBlockBrushArray[posX - 1, posY, posZ] != null)
 						{
@@ -464,7 +477,7 @@ public partial class WorldGen : Node3D
 						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1));
 						if (bitMask != 0)
 						{
-							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true,x,y,z);
+							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true, x, y, z);
 							if (brushes != null)
 							{
 								chunk.brushes.AddRange(brushes);
@@ -653,7 +666,7 @@ public partial class WorldGen : Node3D
 			visibility &= CheckBigBlock(x - 1 + chunkX, y + chunkY, z + chunkZ);
 			visibility &= GetBitOfByte(bigBlockArray[x + 1, y, z], byteIndex);
 		}
-		else if(x >= bigBlockArray.GetLength(0)-1)
+		else if (x >= bigBlockArray.GetLength(0) - 1)
 		{
 			visibility &= CheckBigBlock(x + 1 + chunkX, y + chunkY, z + chunkZ);
 			visibility &= GetBitOfByte(bigBlockArray[x - 1, y, z], byteIndex);
@@ -676,8 +689,8 @@ public partial class WorldGen : Node3D
 		}
 		else
 		{
-			visibility &= GetBitOfByte(bigBlockArray[x , y - 1, z], byteIndex);
-			visibility &= GetBitOfByte(bigBlockArray[x , y + 1, z], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[x, y - 1, z], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[x, y + 1, z], byteIndex);
 		}
 		//Z
 		if (z == 0)
@@ -692,8 +705,8 @@ public partial class WorldGen : Node3D
 		}
 		else
 		{
-			visibility &= GetBitOfByte(bigBlockArray[x , y, z - 1], byteIndex);
-			visibility &= GetBitOfByte(bigBlockArray[x , y, z + 1], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[x, y, z - 1], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[x, y, z + 1], byteIndex);
 		}
 
 		//If hidden
@@ -703,13 +716,9 @@ public partial class WorldGen : Node3D
 	bool CheckBrushOnBorder(int x, int y, int z)
 	{
 		int length = chunkSize / bigBlockSize;
-		return (x == 0 || y == 0 || z == 0 || x >= length-1 || y >= length-1 || z >= length-1);
+		return (x == 0 || y == 0 || z == 0 || x >= length - 1 || y >= length - 1 || z >= length - 1);
 	}
 
-	async Task<ChunkRenderData> GetChunkMeshAsync(Chunk chunkData)
-	{
-		return GetChunkMesh(chunkData);
-	}
 
 	ChunkRenderData GetChunkMesh(Chunk chunkData)
 	{
@@ -1040,61 +1049,50 @@ public partial class WorldGen : Node3D
 				}
 
 				//Check for border generation
-				if(!loadedChunks[i].chunk.hasBeenModified && loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].borderFlag)
+				if (loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].borderFlag)
 				{
-					loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
-					RenderChunkBordersVisible(loadedChunks[i]);
-				}
-				else
-				{
-					loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
-					RerenderLoadedChunk(loadedChunks[i]);
-				}
+					GD.Print(brushID);
+					chunkPos = new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ);
 
-				chunkPos = new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ);
+					for (int e = 0; e < loadedChunks.Count; e++)
+					{
+						if (loadedChunks[e].chunk.hasGeneratedBorders)
+						{
+							continue;
+						}
 
-				for (int e = 0; e < loadedChunks.Count; e++)
-				{
-					if (loadedChunks[e].chunk.hasBeenModified)
-					{
-						continue;
-					}		
+						if ((loadedChunks[e].chunk.positionX == chunkPos.X - 1 &&
+							loadedChunks[e].chunk.positionY == chunkPos.Y &&
+							loadedChunks[e].chunk.positionZ == chunkPos.Z) ||
 
-					if (loadedChunks[e].chunk.positionX == chunkPos.X - 1 &&
-						loadedChunks[e].chunk.positionY == chunkPos.Y  &&
-						loadedChunks[e].chunk.positionZ == chunkPos.Z  ){
-						RenderChunkBordersVisible(loadedChunks[e]);}
-					if (loadedChunks[e].chunk.positionX == chunkPos.X + 1 &&
-						loadedChunks[e].chunk.positionY == chunkPos.Y  &&
-						loadedChunks[e].chunk.positionZ == chunkPos.Z ){
-						RenderChunkBordersVisible(loadedChunks[e]);}
-					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
-						loadedChunks[e].chunk.positionY == chunkPos.Y - 1 &&
-						loadedChunks[e].chunk.positionZ == chunkPos.Z)
-					{
-						RenderChunkBordersVisible(loadedChunks[e]);
-					}
-					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
-						loadedChunks[e].chunk.positionY == chunkPos.Y + 1 &&
-						loadedChunks[e].chunk.positionZ == chunkPos.Z)
-					{
-						RenderChunkBordersVisible(loadedChunks[e]);
-					}
-					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
-						loadedChunks[e].chunk.positionY == chunkPos.Y &&
-						loadedChunks[e].chunk.positionZ == chunkPos.Z - 1)
-					{
-						RenderChunkBordersVisible(loadedChunks[e]);
-					}
-					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
-						loadedChunks[e].chunk.positionY == chunkPos.Y &&
-						loadedChunks[e].chunk.positionZ == chunkPos.Z + 1)
-					{
-						RenderChunkBordersVisible(loadedChunks[e]);
-					}
+							(loadedChunks[e].chunk.positionX == chunkPos.X + 1 &&
+							loadedChunks[e].chunk.positionY == chunkPos.Y &&
+							loadedChunks[e].chunk.positionZ == chunkPos.Z) ||
 
+							(loadedChunks[e].chunk.positionX == chunkPos.X &&
+							loadedChunks[e].chunk.positionY == chunkPos.Y - 1 &&
+							loadedChunks[e].chunk.positionZ == chunkPos.Z) ||
+
+							(loadedChunks[e].chunk.positionX == chunkPos.X &&
+							loadedChunks[e].chunk.positionY == chunkPos.Y + 1 &&
+							loadedChunks[e].chunk.positionZ == chunkPos.Z) ||
+
+							(loadedChunks[e].chunk.positionX == chunkPos.X &&
+							loadedChunks[e].chunk.positionY == chunkPos.Y &&
+							loadedChunks[e].chunk.positionZ == chunkPos.Z - 1) ||
+
+							(loadedChunks[e].chunk.positionX == chunkPos.X &&
+							loadedChunks[e].chunk.positionY == chunkPos.Y &&
+							loadedChunks[e].chunk.positionZ == chunkPos.Z + 1))
+						{
+							GD.Print(loadedChunks[e].chunk.id + " a" );
+							RenderChunkBordersVisible(loadedChunks[e]);
+						}
+					}
 				}
 
+				loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
+				RenderChunkBordersVisible(loadedChunks[i]);
 				return;
 			}
 		}
@@ -1103,10 +1101,12 @@ public partial class WorldGen : Node3D
 
 	void RenderChunkBordersVisible(LoadedChunkData chunk)
 	{
-		chunk.chunk.hasBeenModified = true;
+		chunk.chunk.hasGeneratedBorders = true;
 
 		for (int i = 0; i < chunk.chunk.brushes.Count; i++)
 		{
+			chunk.chunk.brushes[i].hiddenFlag = false;
+
 			if (chunk.chunk.brushes[i].borderFlag)
 			{
 				chunk.chunk.brushes[i].hiddenFlag = false;
@@ -1163,7 +1163,7 @@ public partial class WorldGen : Node3D
 
 	public class Chunk
 	{
-		public bool hasBeenModified;
+		public bool hasGeneratedBorders;
 		public int id;
 		public int positionX;
 		public int positionY;

@@ -83,7 +83,7 @@ curve6 = SubResource("Curve_ijfoo")
 environment = SubResource("Environment_rruv5")
 
 [node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("head", "camera") groups=["Player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.926, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
 collision_layer = 3
 collision_mask = 5
 floor_max_angle = 1.39626
