@@ -216,7 +216,6 @@ public partial class WorldGen : Node3D
 		}
 
 		bool check = false;
-		int what = 0;
 		for (int e = 0; e < ongoingChunkRenderData.Count; e++)
 		{
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
@@ -242,10 +241,8 @@ public partial class WorldGen : Node3D
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
 			{
 				check = true;
-				what++;
 			}
 		}
-		GD.Print(what);
 		if (!check)
 		{
 			if (!firstChunkLoaded)
@@ -265,28 +262,9 @@ public partial class WorldGen : Node3D
 
 		Task.Run(async () =>
 		{
-			Chunk chunk;
+			Chunk chunk= await GenerateChunk(x, y, z, id);
 
-			try
-			{
-				chunk = await GenerateChunk(x, y, z, id);
-			}
-			catch (Exception ex)
-			{
-				GD.PrintErr(ex);
-				throw;
-			}
-			ChunkRenderData chunkData;
-
-			try
-			{
-				chunkData = await GetChunkMeshAsync(chunk);
-			}
-			catch (Exception ex)
-			{
-				GD.PrintErr(ex);
-				throw;
-			}
+			ChunkRenderData chunkData = await GetChunkMeshAsync(chunk);
 
 			bool check = false;
 			for (int i = 0; i < ongoingChunkRenderData.Count; i++)
