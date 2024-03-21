@@ -3,9 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://dtdi1d8mw3gra" path="res://Textures/Grass_Base.png" id="1_080do"]
 
 [resource]
-transparency = 3
-alpha_hash_scale = 2.0
-alpha_antialiasing_mode = 0
 albedo_color = Color(1, 1, 1, 0.0509804)
 albedo_texture = ExtResource("1_080do")
 albedo_texture_force_srgb = true

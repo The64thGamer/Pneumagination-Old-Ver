@@ -35,8 +35,8 @@ public partial class WorldGen : Node3D
 	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE;
 
 	//Consts
-	const int chunkLoadingDistance = 6;
-	const int chunkUnloadingDistance = 8;
+	const int chunkLoadingDistance = 7;
+	const int chunkUnloadingDistance = 9;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
 	const int maxChunksLoading = 1;
@@ -202,7 +202,7 @@ public partial class WorldGen : Node3D
 		List<LoadedChunkData> remainingChunks = new List<LoadedChunkData>();
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{
-			if (chunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance)
+			if (chunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance && loadedChunks[i].node != null)
 			{
 				loadedChunks[i].node.QueueFree();
 			}

@@ -3,9 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://c74obs1kj68gl" path="res://Textures/Cliffside_Diffuse.png" id="1_yuryf"]
 
 [resource]
-transparency = 3
-alpha_hash_scale = 1.0
-alpha_antialiasing_mode = 0
 albedo_color = Color(1, 1, 1, 0.152941)
 albedo_texture = ExtResource("1_yuryf")
 albedo_texture_force_srgb = true
