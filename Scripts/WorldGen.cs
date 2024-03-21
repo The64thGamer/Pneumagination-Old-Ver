@@ -292,6 +292,7 @@ public partial class WorldGen : Node3D
 
 		Chunk chunk = new Chunk();
 		chunk.id = id;
+		chunk.hasBeenModified = false;
 		chunk.positionX = x;
 		chunk.positionY = y;
 		chunk.positionZ = z;
@@ -303,7 +304,6 @@ public partial class WorldGen : Node3D
 		Brush[,,] bigBlockBrushArray = new Brush[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
 
 		int posX, posY, posZ, newX, newZ;
-		float temp, temp2;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
@@ -342,6 +342,7 @@ public partial class WorldGen : Node3D
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0,x,y,z);
+						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY,posZ);
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
 						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
 						{
@@ -557,7 +558,7 @@ public partial class WorldGen : Node3D
 			}
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24] };
+				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(posX, posY, posZ) };
 				if ((id & (1 << 1)) == 0 && (id & (1 << 0)) != 0 && y >= 0)
 				{
 					if (regionBordercheck || regionBorderCornercheck)
@@ -697,6 +698,12 @@ public partial class WorldGen : Node3D
 
 		//If hidden
 		return visibility;
+	}
+
+	bool CheckBrushOnBorder(int x, int y, int z)
+	{
+		int length = chunkSize / bigBlockSize;
+		return (x == 0 || y == 0 || z == 0 || x >= length-1 || y >= length-1 || z >= length-1);
 	}
 
 	async Task<ChunkRenderData> GetChunkMeshAsync(Chunk chunkData)
@@ -1015,24 +1022,98 @@ public partial class WorldGen : Node3D
 		{
 			return;
 		}
+
+		Vector3 chunkPos;
+
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{
 			if (loadedChunks[i].node == chunkNode)
 			{
+				//Signal to reveal hidden blocks
 				if (loadedChunks[i].chunk.connectedInvisibleBrushes.TryGetValue(loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]], out List<Brush> updateBrushes))
 				{
 					foreach (Brush pendingBrush in updateBrushes)
 					{
 						pendingBrush.hiddenFlag = false;
 					}
-
 					loadedChunks[i].chunk.connectedInvisibleBrushes.Remove(loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]]);
 				}
-				loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
-				RerenderLoadedChunk(loadedChunks[i]);
+
+				//Check for border generation
+				if(!loadedChunks[i].chunk.hasBeenModified && loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].borderFlag)
+				{
+					loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
+					RenderChunkBordersVisible(loadedChunks[i]);
+				}
+				else
+				{
+					loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
+					RerenderLoadedChunk(loadedChunks[i]);
+				}
+
+				chunkPos = new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ);
+
+				for (int e = 0; e < loadedChunks.Count; e++)
+				{
+					if (loadedChunks[e].chunk.hasBeenModified)
+					{
+						continue;
+					}		
+
+					if (loadedChunks[e].chunk.positionX == chunkPos.X - 1 &&
+						loadedChunks[e].chunk.positionY == chunkPos.Y  &&
+						loadedChunks[e].chunk.positionZ == chunkPos.Z  ){
+						RenderChunkBordersVisible(loadedChunks[e]);}
+					if (loadedChunks[e].chunk.positionX == chunkPos.X + 1 &&
+						loadedChunks[e].chunk.positionY == chunkPos.Y  &&
+						loadedChunks[e].chunk.positionZ == chunkPos.Z ){
+						RenderChunkBordersVisible(loadedChunks[e]);}
+					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
+						loadedChunks[e].chunk.positionY == chunkPos.Y - 1 &&
+						loadedChunks[e].chunk.positionZ == chunkPos.Z)
+					{
+						RenderChunkBordersVisible(loadedChunks[e]);
+					}
+					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
+						loadedChunks[e].chunk.positionY == chunkPos.Y + 1 &&
+						loadedChunks[e].chunk.positionZ == chunkPos.Z)
+					{
+						RenderChunkBordersVisible(loadedChunks[e]);
+					}
+					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
+						loadedChunks[e].chunk.positionY == chunkPos.Y &&
+						loadedChunks[e].chunk.positionZ == chunkPos.Z - 1)
+					{
+						RenderChunkBordersVisible(loadedChunks[e]);
+					}
+					if (loadedChunks[e].chunk.positionX == chunkPos.X &&
+						loadedChunks[e].chunk.positionY == chunkPos.Y &&
+						loadedChunks[e].chunk.positionZ == chunkPos.Z + 1)
+					{
+						RenderChunkBordersVisible(loadedChunks[e]);
+					}
+
+				}
+
 				return;
 			}
 		}
+
+	}
+
+	void RenderChunkBordersVisible(LoadedChunkData chunk)
+	{
+		chunk.chunk.hasBeenModified = true;
+
+		for (int i = 0; i < chunk.chunk.brushes.Count; i++)
+		{
+			if (chunk.chunk.brushes[i].borderFlag)
+			{
+				chunk.chunk.brushes[i].hiddenFlag = false;
+			}
+		}
+
+		RerenderLoadedChunk(chunk);
 	}
 
 	void RerenderLoadedChunk(LoadedChunkData chunk)
@@ -1048,7 +1129,7 @@ public partial class WorldGen : Node3D
 		(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
 		chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
 
-		GD.Print("Regenerated Chunk (ID " + chunkData.id + ")");
+		//GD.Print("Regenerated Chunk (ID " + chunkData.id + ")");
 	}
 
 	public class Brush
@@ -1069,6 +1150,7 @@ public partial class WorldGen : Node3D
 		public byte[] vertices;
 		public uint[] textures = new uint[] { 0, 0, 0, 0, 0, 0 };
 		public bool hiddenFlag;
+		public bool borderFlag;
 	}
 
 	class PreMesh
@@ -1081,6 +1163,7 @@ public partial class WorldGen : Node3D
 
 	public class Chunk
 	{
+		public bool hasBeenModified;
 		public int id;
 		public int positionX;
 		public int positionY;
