@@ -37,7 +37,7 @@ public partial class WorldGen : Node3D
 
 	//Consts
 	const int chunkLoadingDistance = 7;
-	const int chunkUnloadingDistance = 9;
+	const int chunkUnloadingDistance = 8;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
 	const int maxChunksLoading = 12;
@@ -143,10 +143,14 @@ public partial class WorldGen : Node3D
 	public override void _Process(double delta)
 	{
 		CheckForAnyPendingFinishedChunks();
-		LoadAndUnloadChunks();
+		LoadChunks();
+		UnloadChunks();
+		GD.Print("LC " + loadedChunks.Count);
+
+		GD.Print("RC " + ongoingChunkRenderData.Count);
 	}
 
-	void LoadAndUnloadChunks()
+	void LoadChunks()
 	{
 		//Check
 		Vector3 chunkPos = new Vector3(Mathf.RoundToInt(PlayerMovement.currentPosition.X / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Y / chunkSize), Mathf.RoundToInt(PlayerMovement.currentPosition.Z / chunkSize));
@@ -203,21 +207,19 @@ public partial class WorldGen : Node3D
 			RenderChunk((int)chunk.X, (int)chunk.Y, (int)chunk.Z);
 			loadedChunksVar++;
 		}
+	}
 
+	void UnloadChunks()
+	{
 		//Unload Far Away Chunks
-		List<LoadedChunkData> remainingChunks = new List<LoadedChunkData>();
-		for (int i = 0; i < loadedChunks.Count; i++)
+		for (int i = loadedChunks.Count - 1; i > -1; i--)
 		{
-			if (chunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance && loadedChunks[i].node != null)
+			if (oldChunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance && loadedChunks[i].node != null)
 			{
 				loadedChunks[i].node.QueueFree();
-			}
-			else
-			{
-				remainingChunks.Add(loadedChunks[i]);
+				loadedChunks.RemoveAt(i);
 			}
 		}
-		loadedChunks = remainingChunks;
 	}
 
 	void CheckForAnyPendingFinishedChunks()
@@ -226,15 +228,15 @@ public partial class WorldGen : Node3D
 		{
 			return;
 		}
-        for (int i = ongoingChunkRenderData.Count - 1; i > -1; i--)
-        {
-            if (ongoingChunkRenderData[i].state == ChunkRenderDataState.garbageCollector)
-            {
-                ongoingChunkRenderData.RemoveAt(i);
-            }
-        }
+		for (int i = ongoingChunkRenderData.Count - 1; i > -1; i--)
+		{
+			if (ongoingChunkRenderData[i].state == ChunkRenderDataState.garbageCollector)
+			{
+				ongoingChunkRenderData.RemoveAt(i);
+			}
+		}
 
-        bool check = false;
+		bool check = false;
 		for (int e = 0; e < ongoingChunkRenderData.Count; e++)
 		{
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
@@ -242,6 +244,7 @@ public partial class WorldGen : Node3D
 				if (ongoingChunkRenderData[e].chunkNode != null)
 				{
 					AddChild(ongoingChunkRenderData[e].chunkNode);
+					ongoingChunkRenderData[e].chunkNode.Name = "Chunk " + ongoingChunkRenderData[e].id.ToString();
 					ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
 					ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, ongoingChunkRenderData[e].position.Y * chunkSize, ongoingChunkRenderData[e].position.Z * chunkSize);
 					ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
@@ -259,6 +262,8 @@ public partial class WorldGen : Node3D
 				}
 				else
 				{
+					ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
+
 					loadedChunks.Add(new LoadedChunkData()
 					{
 						id = ongoingChunkRenderData[e].id,
@@ -1270,6 +1275,7 @@ public partial class WorldGen : Node3D
 		else if(chunkData.chunkNode != null)
 		{
 			AddChild(chunkData.chunkNode);
+			chunkData.chunkNode.Name = "Chunk " + chunkData.id.ToString();
 			chunkData.chunkNode.AddChild(chunkData.meshNode);
 			chunkData.chunkNode.GlobalPosition = new Vector3(chunkData.position.X * chunkSize, chunkData.position.Y * chunkSize, chunkData.position.Z * chunkSize);
 			chunkData.state = ChunkRenderDataState.garbageCollector;
