@@ -179,20 +179,24 @@ public partial class WorldGen : Node3D
 		}
 
 		List<Vector3> sortedPosition = loadPositions.OrderBy(n => (chunkPos.DistanceTo(n))).ToList();
+		string printDebug = "";
 
 		foreach (Vector3 chunk in sortedPosition)
 		{
+			printDebug += "Chunk Gen (ID " + totalChunksRendered + "): X=" + chunk.X + " Y=" + chunk.Y + " Z=" + chunk.Z + '\n';
+
 			RenderChunk((int)chunk.X, (int)chunk.Y, (int)chunk.Z);
 		}
+		GD.Print(printDebug);
 
 		//Unload Far Away Chunks
 		List<LoadedChunkData> remainingChunks = new List<LoadedChunkData>();
+		printDebug = "";
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{
 			if (chunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance)
 			{
-				GD.Print("Unloading Chunk (ID " + loadedChunks[i].id + "): X = " + loadedChunks[i].position.X + " Y = " + loadedChunks[i].position.Y + " Z = " + loadedChunks[i].position.Z);
-
+				printDebug += "Unloading Chunk (ID " + loadedChunks[i].id + "): X = " + loadedChunks[i].position.X + " Y = " + loadedChunks[i].position.Y + " Z = " + loadedChunks[i].position.Z + '\n';
 				loadedChunks[i].node.QueueFree();
 			}
 			else
@@ -200,6 +204,7 @@ public partial class WorldGen : Node3D
 				remainingChunks.Add(loadedChunks[i]);
 			}
 		}
+		GD.Print(printDebug);
 		loadedChunks = remainingChunks;
 	}
 
@@ -255,7 +260,6 @@ public partial class WorldGen : Node3D
 		totalChunksRendered++;
 		int id = totalChunksRendered;
 		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
-		GD.Print("Generating Chunk (ID " + totalChunksRendered + "): X = " + x + " Y = " + y + " Z = " + z);
 
 		Task.Run(async () =>
 		{
@@ -307,8 +311,7 @@ public partial class WorldGen : Node3D
 		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
 		Brush[,,] bigBlockBrushArray = new Brush[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
 
-		bool noiseValue = false;
-		int posX, posY, posZ, newX, newY, newZ;
+		int posX, posY, posZ, newX, newZ;
 		float temp, temp2;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
@@ -317,43 +320,7 @@ public partial class WorldGen : Node3D
 			{
 				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 				{
-					//Within BigBlock space, not unit space
-					newX = posX + (chunkSize * x / bigBlockSize);
-					newY = posY + (chunkSize * y / bigBlockSize);
-					newZ = posZ + (chunkSize * z / bigBlockSize);
-
-					if (y < 0)
-					{
-						//Below-Surface Generation
-						noiseValue = true;
-					}
-					if (y >= 0)
-					{
-						//Above-Surface Generation
-						noiseValue = false;
-
-						if (y < 6 && y >= 0 &&
-							(curve1.SampleBaked(GetClampedNoise(noise.GetNoise(newX, newY, newZ))) 
-							+ curve4.SampleBaked(GetClampedNoise(noiseD.GetNoise(newX, newZ))))
-							* curve5.SampleBaked(GetClampedNoise(noiseE.GetNoise(newX, newZ)))
-							> GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, newY))
-						{
-							noiseValue = true;
-						}
-					}
-
-					//Both Surface Generation
-					if (y < 5 && y >= -10 &&
-						curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(newX, newY, newZ)))
-						* curve6.SampleBaked(GetClampedNoise(noiseE.GetNoise(newX, newY, newZ)))
-						> curve3.SampleBaked(1 - GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, newY)))
-
-					{
-						noiseValue = false;
-					}
-
-					//Apply
-					if (noiseValue)
+					if (CheckBigBlock(posX + (chunkSize * x / bigBlockSize), posY + (chunkSize * y / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)))
 					{
 						SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 0, true);
 					}
@@ -383,7 +350,7 @@ public partial class WorldGen : Node3D
 						bigBlock = CreateBrush(
 								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
-						bigBlock.hiddenFlag = CheckBrushVisibility(bigBlockArray, posX, posY, posZ, 0);
+						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0,x,y,z);
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
 						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
 						{
@@ -519,6 +486,44 @@ public partial class WorldGen : Node3D
 		return chunk;
 	}
 
+	bool CheckBigBlock(int posX, int posY, int posZ)
+	{
+		bool noiseValue = false;
+
+		int chunkY = Mathf.FloorToInt(posY / (float)chunkSize);
+
+		if (chunkY < 0)
+		{
+			//Below-Surface Generation
+			noiseValue = true;
+		}
+		if (chunkY >= 0)
+		{
+			//Above-Surface Generation
+			noiseValue = false;
+
+			if (chunkY < 6 && chunkY >= 0 &&
+				(curve1.SampleBaked(GetClampedNoise(noise.GetNoise(posX, posY, posZ)))
+				+ curve4.SampleBaked(GetClampedNoise(noiseD.GetNoise(posX, posZ))))
+				* curve5.SampleBaked(GetClampedNoise(noiseE.GetNoise(posX, posZ)))
+				> GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, posY))
+			{
+				noiseValue = true;
+			}
+		}
+
+		//Both Surface Generation
+		if (chunkY < 5 && chunkY >= -10 &&
+			curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(posX, posY, posZ)))
+			* curve6.SampleBaked(GetClampedNoise(noiseE.GetNoise(posX, posY, posZ)))
+			> curve3.SampleBaked(1 - GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, posY)))
+
+		{
+			noiseValue = false;
+		}
+
+		return noiseValue;
+	}
 
 	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface, int x, int y, int z)
 	{
@@ -638,35 +643,69 @@ public partial class WorldGen : Node3D
 	}
 
 
-	bool CheckBrushVisibility(byte[,,] bigBlockArray, int x, int y, int z, int pos)
+	bool CheckBrushVisibility(ref byte[,,] bigBlockArray, int x, int y, int z, int byteIndex, int chunkX, int chunkY, int chunkZ)
 	{
 		if (hideBigBlocks)
 		{
 			return true;
 		}
+		bool visibility = true;
 
-		//Check if block on chunk boundary
-		if (CheckIndexInvalidity(x, bigBlockArray.GetLength(0)) || CheckIndexInvalidity(y, bigBlockArray.GetLength(1)) || CheckIndexInvalidity(z, bigBlockArray.GetLength(2)))
+		chunkX = (chunkSize * chunkX / bigBlockSize);
+		chunkY = (chunkSize * chunkY / bigBlockSize);
+		chunkZ = (chunkSize * chunkZ / bigBlockSize);
+
+		//X
+		if (x == 0)
 		{
-			return false;
+			visibility &= CheckBigBlock(x - 1 + chunkX, y + chunkY, z + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x + 1, y, z], byteIndex);
+		}
+		else if(x >= bigBlockArray.GetLength(0)-1)
+		{
+			visibility &= CheckBigBlock(x + 1 + chunkX, y + chunkY, z + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x - 1, y, z], byteIndex);
+		}
+		else
+		{
+			visibility &= GetBitOfByte(bigBlockArray[x - 1, y, z], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[x + 1, y, z], byteIndex);
+		}
+		//Y
+		if (y == 0)
+		{
+			visibility &= CheckBigBlock(x + chunkX, y - 1 + chunkY, z + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x, y + 1, z], byteIndex);
+		}
+		else if (y >= bigBlockArray.GetLength(1) - 1)
+		{
+			visibility &= CheckBigBlock(x + chunkX, y + 1 + chunkY, z + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x, y - 1, z], byteIndex);
+		}
+		else
+		{
+			visibility &= GetBitOfByte(bigBlockArray[x , y - 1, z], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[x , y + 1, z], byteIndex);
+		}
+		//Z
+		if (z == 0)
+		{
+			visibility &= CheckBigBlock(x + chunkX, y + chunkY, z - 1 + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x, y, z + 1], byteIndex);
+		}
+		else if (z >= bigBlockArray.GetLength(2) - 1)
+		{
+			visibility &= CheckBigBlock(x + chunkX, y + chunkY, z + 1 + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x, y, z - 1], byteIndex);
+		}
+		else
+		{
+			visibility &= GetBitOfByte(bigBlockArray[x , y, z - 1], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[x , y, z + 1], byteIndex);
 		}
 
 		//If hidden
-		return GetBitOfByte(bigBlockArray[x - 1, y, z], pos) &&
-				GetBitOfByte(bigBlockArray[x + 1, y, z], pos) &&
-				GetBitOfByte(bigBlockArray[x, y - 1, z], pos) &&
-				GetBitOfByte(bigBlockArray[x, y + 1, z], pos) &&
-				GetBitOfByte(bigBlockArray[x, y, z - 1], pos) &&
-				GetBitOfByte(bigBlockArray[x, y, z + 1], pos);
-	}
-
-	bool CheckIndexInvalidity(int index, int length)
-	{
-		if (index == 0 || index == length - 1)
-		{
-			return true;
-		}
-		return false;
+		return visibility;
 	}
 
 	async Task<ChunkRenderData> GetChunkMeshAsync(Chunk chunkData)
