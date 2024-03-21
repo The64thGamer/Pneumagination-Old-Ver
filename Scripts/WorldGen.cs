@@ -387,7 +387,7 @@ public partial class WorldGen : Node3D
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0, x, y, z);
 						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY, posZ);
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x,y,z);
-						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
+						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1)
 						{
 							region = GetClampedNoise(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)));
 							regionBordercheck = false;
@@ -617,7 +617,7 @@ public partial class WorldGen : Node3D
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
 				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(posX, posY, posZ) };
-				if ((id & (1 << 1)) == 0 && (id & (1 << 0)) != 0 && y >= 0)
+				if ((id & (1 << 1)) == 0 && (id & (1 << 0)) != 0 && y >= -1)
 				{
 					if (regionBordercheck || regionBorderCornercheck)
 					{
