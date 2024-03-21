@@ -32,7 +32,7 @@ public partial class WorldGen : Node3D
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
-	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE;
+	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE, noiseF;
 	int maxChunksLoadingRampUp = 1;
 
 	//Consts
@@ -84,8 +84,8 @@ public partial class WorldGen : Node3D
 			seedD = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
 		}
 
-		mats = new Material[5];
-		for (int i = 0; i < 5; i++)
+		mats = new Material[7];
+		for (int i = 0; i < 7; i++)
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
@@ -118,7 +118,6 @@ public partial class WorldGen : Node3D
 		noiseC.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.Manhattan);
 		noiseC.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
 
-
 		noiseD = new FastNoiseLite();
 		noiseD.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseD.SetFrequency(0.002f);
@@ -132,6 +131,13 @@ public partial class WorldGen : Node3D
 		noiseE.SetSeed((int)seedA);
 		noiseE.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseE.SetFractalOctaves(4);
+
+		noiseF = new FastNoiseLite();
+		noiseF.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseF.SetFrequency(0.002f);
+		noiseF.SetSeed((int)seedB);
+		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
+		noiseF.SetFractalOctaves(4);
 	}
 
 	public override void _Process(double delta)
@@ -391,12 +397,27 @@ public partial class WorldGen : Node3D
 							}
 							if (regionBordercheck || regionBorderCornercheck)
 							{
-								bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+								if(GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
+								{
+									bigBlock.textures = new uint[] { 6, 6, 6, 6, 6, 6 };
+								}
+								else
+								{
+									bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+
+								}
 							}
 							else
 							{
-								bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+								if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
+								{
+									bigBlock.textures = new uint[] { 5, 5, 5, 5, 5, 5 };
+								}
+								else
+								{
+									bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
 
+								}
 							}
 						}
 						else
@@ -589,11 +610,26 @@ public partial class WorldGen : Node3D
 				{
 					if (regionBordercheck || regionBorderCornercheck)
 					{
-						b.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+						if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
+						{
+							b.textures = new uint[] { 6, 6, 6, 6, 6, 6 };
+						}
+						else
+						{
+							b.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
+
+						}
 					}
 					else
 					{
-						b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+						if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
+						{
+							b.textures = new uint[] { 5, 5, 5, 5, 5, 5 };
+						}
+						else
+						{
+							b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+						}
 					}
 				}
 				else

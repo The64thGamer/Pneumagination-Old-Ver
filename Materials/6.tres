@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cls8qippggdfx"]
+
+[ext_resource type="Texture2D" uid="uid://dbv5rbwqkijtb" path="res://Textures/Sand_Rocky_Diffuse.png" id="1_s2ei7"]
+
+[resource]
+albedo_color = Color(1, 1, 1, 0.0509804)
+albedo_texture = ExtResource("1_s2ei7")
+albedo_texture_force_srgb = true
+metallic_specular = 0.0
+roughness = 0.31
+uv1_scale = Vector3(0.03, 0.03, 0.03)
+uv1_triplanar = true
+uv1_world_triplanar = true
