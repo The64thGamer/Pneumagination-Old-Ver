@@ -226,8 +226,15 @@ public partial class WorldGen : Node3D
 		{
 			return;
 		}
+        for (int i = ongoingChunkRenderData.Count - 1; i > -1; i--)
+        {
+            if (ongoingChunkRenderData[i].state == ChunkRenderDataState.garbageCollector)
+            {
+                ongoingChunkRenderData.RemoveAt(i);
+            }
+        }
 
-		bool check = false;
+        bool check = false;
 		for (int e = 0; e < ongoingChunkRenderData.Count; e++)
 		{
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
