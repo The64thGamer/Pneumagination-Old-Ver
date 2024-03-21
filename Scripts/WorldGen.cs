@@ -375,7 +375,7 @@ public partial class WorldGen : Node3D
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0, x, y, z);
 						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY, posZ);
-						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
+						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x,y,z);
 						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= 0)
 						{
 							region = GetClampedNoise(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)));
@@ -431,7 +431,7 @@ public partial class WorldGen : Node3D
 					else
 					{
 						//First layer of "Surface Brushes"
-						bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0);
+						bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0,x,y,z);
 						if (bitMask != 0)
 						{
 							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false, x, y, z);
@@ -508,7 +508,7 @@ public partial class WorldGen : Node3D
 					if (!GetBitOfByte(bigBlockArray[posX, posY, posZ], 1) && !GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
 					{
 						//Second layer of "Sub-Surface Brushes"
-						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1));
+						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0,x,y,z) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1,x,y,z));
 						if (bitMask != 0)
 						{
 							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true, x, y, z);
@@ -660,38 +660,108 @@ public partial class WorldGen : Node3D
 		return null;
 	}
 
-	byte CheckSurfaceBrushType(byte[,,] bigBlockArray, int x, int y, int z, int pos)
+	byte CheckSurfaceBrushType(byte[,,] bigBlockArray, int x, int y, int z, int pos, int chunkX, int chunkY, int chunkZ)
 	{
+		 chunkX = (chunkSize * chunkX / bigBlockSize);
+		 chunkY = (chunkSize * chunkY / bigBlockSize);
+		 chunkZ = (chunkSize * chunkZ / bigBlockSize);
 		int bitmask = 0;
 		//North
-		if (z < bigBlockArray.GetLength(2) - 1 && GetBitOfByte(bigBlockArray[x, y, z + 1], pos))
+		if (z < bigBlockArray.GetLength(2) - 1)
 		{
-			bitmask |= 1 << 5;
+			if (GetBitOfByte(bigBlockArray[x, y, z + 1], pos))
+			{
+				bitmask |= 1 << 5;
+			}
+		}
+		else
+		{
+			if(CheckBigBlock(x + chunkX,y + chunkY,z + chunkZ+1))
+			{
+				bitmask |= 1 << 5;
+			}
 		}
 		//East
-		if (x < bigBlockArray.GetLength(0) - 1 && GetBitOfByte(bigBlockArray[x + 1, y, z], pos))
+		if (x < bigBlockArray.GetLength(0) - 1)
 		{
-			bitmask |= 1 << 4;
+			if (GetBitOfByte(bigBlockArray[x + 1, y, z], pos))
+			{
+				bitmask |= 1 << 4;
+			} 
+		}
+		else
+		{
+			if (CheckBigBlock(x + 1 + chunkX, y + chunkY, z + chunkZ))
+			{
+				bitmask |= 1 << 4;
+
+			}
 		}
 		//South
-		if (z > 0 && GetBitOfByte(bigBlockArray[x, y, z - 1], pos))
+		if (z > 0)
 		{
-			bitmask |= 1 << 3;
+			if (GetBitOfByte(bigBlockArray[x, y, z - 1], pos))
+			{
+				bitmask |= 1 << 3;
+
+			}
+		}
+		else
+		{
+			if (CheckBigBlock(x + chunkX, y + chunkY, z - 1 + chunkZ))
+			{
+				bitmask |= 1 << 3;
+
+			}
 		}
 		//West
-		if (x > 0 && GetBitOfByte(bigBlockArray[x - 1, y, z], pos))
+		if (x > 0)
 		{
-			bitmask |= 1 << 2;
+			if (GetBitOfByte(bigBlockArray[x - 1, y, z], pos))
+			{
+				bitmask |= 1 << 2;
+
+			}
+		}
+		else
+		{
+			if (CheckBigBlock(x - 1 + chunkX, y + chunkY, z + chunkZ))
+			{
+				bitmask |= 1 << 2;
+
+			}
 		}
 		//Top
-		if (y < bigBlockArray.GetLength(1) - 1 && GetBitOfByte(bigBlockArray[x, y + 1, z], pos))
+		if (y < bigBlockArray.GetLength(1) - 1)
 		{
-			bitmask |= 1 << 1;
+			if (GetBitOfByte(bigBlockArray[x, y + 1, z], pos))
+			{
+				bitmask |= 1 << 1;
+			}
+		}
+		else
+		{
+			if (CheckBigBlock(x + chunkX, y + 1 + chunkY, z + chunkZ))
+			{
+				bitmask |= 1 << 1;
+
+			}
 		}
 		//Bottom
-		if (y > 0 && GetBitOfByte(bigBlockArray[x, y - 1, z], pos))
+		if (y > 0)
 		{
-			bitmask |= 1 << 0;
+			if (GetBitOfByte(bigBlockArray[x, y - 1, z], pos))
+			{
+				bitmask |= 1 << 0;
+			}
+		}
+		else
+		{
+			if (CheckBigBlock(x + chunkX, y - 1 + chunkY, z + chunkZ))
+			{
+				bitmask |= 1 << 0;
+
+			}
 		}
 		return (byte)bitmask;
 	}
