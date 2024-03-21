@@ -1154,7 +1154,7 @@ public partial class WorldGen : Node3D
 			(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
 			chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
 		}
-		else
+		else if(chunkData.chunkNode != null)
 		{
 			AddChild(chunkData.chunkNode);
 			chunkData.chunkNode.AddChild(chunkData.meshNode);
