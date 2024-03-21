@@ -1107,7 +1107,6 @@ public partial class WorldGen : Node3D
 							loadedChunks[e].chunk.positionY == chunkPos.Y &&
 							loadedChunks[e].chunk.positionZ == chunkPos.Z + 1))
 						{
-							GD.Print(loadedChunks[e].chunk.id + " a");
 							RenderChunkBordersVisible(loadedChunks[e]);
 						}
 					}
@@ -1127,8 +1126,6 @@ public partial class WorldGen : Node3D
 
 		for (int i = 0; i < chunk.chunk.brushes.Count; i++)
 		{
-			chunk.chunk.brushes[i].hiddenFlag = false;
-
 			if (chunk.chunk.brushes[i].borderFlag)
 			{
 				chunk.chunk.brushes[i].hiddenFlag = false;
