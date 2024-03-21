@@ -39,7 +39,7 @@ public partial class WorldGen : Node3D
 	const int chunkUnloadingDistance = 8;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
-	const int maxChunksLoading = 8;
+	const int maxChunksLoading = 1;
 	readonly byte[] brushIndices = new byte[]
 				{
 					//Bottom
@@ -88,7 +88,7 @@ public partial class WorldGen : Node3D
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
-		
+
 
 		noise = new FastNoiseLite();
 		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -188,9 +188,8 @@ public partial class WorldGen : Node3D
 		int loadedChunksVar = ongoingChunkRenderData.Count;
 		foreach (Vector3 chunk in sortedPosition)
 		{
-			if (loadedChunksVar > maxChunksLoading)
+			if (loadedChunksVar >= maxChunksLoading)
 			{
-				GD.Print(loadedChunksVar);
 				lastFrameMaxChunkLimitReached = true;
 				break;
 			}
@@ -227,22 +226,33 @@ public partial class WorldGen : Node3D
 		{
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
 			{
-				AddChild(ongoingChunkRenderData[e].chunkNode);
-				ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
-				ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, ongoingChunkRenderData[e].position.Y * chunkSize, ongoingChunkRenderData[e].position.Z * chunkSize);
-				ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
-				ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
-				ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
-
-				loadedChunks.Add(new LoadedChunkData()
+				if (ongoingChunkRenderData[e].chunkNode != null)
 				{
-					id = ongoingChunkRenderData[e].id,
-					node = ongoingChunkRenderData[e].chunkNode,
-					position = ongoingChunkRenderData[e].position,
-					chunk = ongoingChunkRenderData[e].chunk,
-					visibleBrushIndices = ongoingChunkRenderData[e].visibleBrushIndices
-				});
+					AddChild(ongoingChunkRenderData[e].chunkNode);
+					ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
+					ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, ongoingChunkRenderData[e].position.Y * chunkSize, ongoingChunkRenderData[e].position.Z * chunkSize);
+					ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
+					ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
+					ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
 
+					loadedChunks.Add(new LoadedChunkData()
+					{
+						id = ongoingChunkRenderData[e].id,
+						node = ongoingChunkRenderData[e].chunkNode,
+						position = ongoingChunkRenderData[e].position,
+						chunk = ongoingChunkRenderData[e].chunk,
+						visibleBrushIndices = ongoingChunkRenderData[e].visibleBrushIndices
+					});
+				}
+				else
+				{
+					loadedChunks.Add(new LoadedChunkData()
+					{
+						id = ongoingChunkRenderData[e].id,
+						position = ongoingChunkRenderData[e].position,
+						chunk = ongoingChunkRenderData[e].chunk,
+					});
+				}
 			}
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
 			{
@@ -265,7 +275,7 @@ public partial class WorldGen : Node3D
 		int id = totalChunksRendered;
 		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
 
-		Task.Run( () =>
+		Task.Run(() =>
 		{
 			Chunk chunk = GenerateChunk(x, y, z, id);
 
@@ -279,7 +289,6 @@ public partial class WorldGen : Node3D
 					if (chunkData == null)
 					{
 						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
-						check = true;
 					}
 					else
 					{
@@ -724,7 +733,14 @@ public partial class WorldGen : Node3D
 	{
 		if (chunkData.brushes.Count == 0)
 		{
-			return null;
+			return new ChunkRenderData()
+			{
+				id = chunkData.id,
+				state = ChunkRenderDataState.ready,
+				position = new Vector3(chunkData.positionX, chunkData.positionY, chunkData.positionZ),
+				chunk = chunkData,
+				visibleBrushIndices = new List<int>()
+			};
 		}
 
 		//Find just visible brushes
@@ -740,7 +756,14 @@ public partial class WorldGen : Node3D
 
 		if (visibleBrushes.Count == 0)
 		{
-			return null;
+			return new ChunkRenderData()
+			{
+				id = chunkData.id,
+				state = ChunkRenderDataState.ready,
+				position = new Vector3(chunkData.positionX, chunkData.positionY, chunkData.positionZ),
+				chunk = chunkData,
+				visibleBrushIndices = new List<int>()
+			};
 		}
 
 		//Add all vertex data
@@ -1051,7 +1074,6 @@ public partial class WorldGen : Node3D
 				//Check for border generation
 				if (loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].borderFlag)
 				{
-					GD.Print(brushID);
 					chunkPos = new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ);
 
 					for (int e = 0; e < loadedChunks.Count; e++)
@@ -1085,7 +1107,7 @@ public partial class WorldGen : Node3D
 							loadedChunks[e].chunk.positionY == chunkPos.Y &&
 							loadedChunks[e].chunk.positionZ == chunkPos.Z + 1))
 						{
-							GD.Print(loadedChunks[e].chunk.id + " a" );
+							GD.Print(loadedChunks[e].chunk.id + " a");
 							RenderChunkBordersVisible(loadedChunks[e]);
 						}
 					}
@@ -1124,12 +1146,28 @@ public partial class WorldGen : Node3D
 		{
 			return;
 		}
-		MeshInstance3D meshNode = chunk.node.GetChild(0) as MeshInstance3D;
-		meshNode.Mesh = chunkData.meshNode.Mesh;
-		(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
-		chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
+		if (chunk.node != null)
+		{
+			MeshInstance3D meshNode = chunk.node.GetChild(0) as MeshInstance3D;
+			meshNode.Mesh = chunkData.meshNode.Mesh;
+			(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
+			chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
+		}
+		else
+		{
+			AddChild(chunkData.chunkNode);
+			chunkData.chunkNode.AddChild(chunkData.meshNode);
+			chunkData.chunkNode.GlobalPosition = new Vector3(chunkData.position.X * chunkSize, chunkData.position.Y * chunkSize, chunkData.position.Z * chunkSize);
+			chunkData.state = ChunkRenderDataState.garbageCollector;
+			chunkData.meshNode.AddChild(chunkData.staticBody);
+			chunkData.staticBody.AddChild(chunkData.collisionShape);
 
-		//GD.Print("Regenerated Chunk (ID " + chunkData.id + ")");
+			chunk.id = chunkData.id;
+			chunk.node = chunkData.chunkNode;
+			chunk.position = chunkData.position;
+			chunk.chunk = chunkData.chunk;
+			chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
+		}
 	}
 
 	public class Brush
