@@ -37,10 +37,10 @@ public partial class WorldGen : Node3D
 
 	//Consts
 	const int chunkLoadingDistance = 7;
-	const int chunkUnloadingDistance = 8;
+	const int chunkUnloadingDistance = 9;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
-	const int maxChunksLoading = 12;
+	const int maxChunksLoading = 24;
 	readonly byte[] brushIndices = new byte[]
 				{
 					//Bottom
@@ -145,9 +145,6 @@ public partial class WorldGen : Node3D
 		CheckForAnyPendingFinishedChunks();
 		LoadChunks();
 		UnloadChunks();
-		GD.Print("LC " + loadedChunks.Count);
-
-		GD.Print("RC " + ongoingChunkRenderData.Count);
 	}
 
 	void LoadChunks()
@@ -172,9 +169,9 @@ public partial class WorldGen : Node3D
 			{
 				for (z = -chunkLoadingDistance; z < chunkLoadingDistance; z++)
 				{
-					temp.X = chunkPos.X + x;
-					temp.Y = chunkPos.Y + y;
-					temp.Z = chunkPos.Z + z;
+					temp.X = (int)chunkPos.X + x;
+					temp.Y = (int)chunkPos.Y + y;
+					temp.Z = (int)chunkPos.Z + z;
 
 					if (chunkPos.DistanceTo(temp) <= chunkLoadingDistance)
 					{
@@ -214,9 +211,12 @@ public partial class WorldGen : Node3D
 		//Unload Far Away Chunks
 		for (int i = loadedChunks.Count - 1; i > -1; i--)
 		{
-			if (oldChunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance && loadedChunks[i].node != null)
+			if (oldChunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance)
 			{
-				loadedChunks[i].node.QueueFree();
+				if(loadedChunks[i].node != null)
+				{
+					loadedChunks[i].node.QueueFree();
+				}
 				loadedChunks.RemoveAt(i);
 			}
 		}
@@ -241,13 +241,14 @@ public partial class WorldGen : Node3D
 		{
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.ready)
 			{
+				ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
+
 				if (ongoingChunkRenderData[e].chunkNode != null)
 				{
 					AddChild(ongoingChunkRenderData[e].chunkNode);
 					ongoingChunkRenderData[e].chunkNode.Name = "Chunk " + ongoingChunkRenderData[e].id.ToString();
 					ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
 					ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, ongoingChunkRenderData[e].position.Y * chunkSize, ongoingChunkRenderData[e].position.Z * chunkSize);
-					ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
 					ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
 					ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
 
@@ -262,8 +263,6 @@ public partial class WorldGen : Node3D
 				}
 				else
 				{
-					ongoingChunkRenderData[e].state = ChunkRenderDataState.garbageCollector;
-
 					loadedChunks.Add(new LoadedChunkData()
 					{
 						id = ongoingChunkRenderData[e].id,
