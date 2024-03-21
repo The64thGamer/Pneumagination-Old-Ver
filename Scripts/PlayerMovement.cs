@@ -16,8 +16,9 @@ public partial class PlayerMovement : CharacterBody3D
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
     public override void _Ready()
-	{
-		Input.MouseMode = Input.MouseModeEnum.Captured;
+    {
+        currentPosition = GlobalPosition;
+        Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
     public override void _UnhandledInput(InputEvent currentEvent)

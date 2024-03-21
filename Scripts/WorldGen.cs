@@ -261,7 +261,7 @@ public partial class WorldGen : Node3D
 		}
 		if (!check)
 		{
-			if (!firstChunkLoaded)
+			if (!firstChunkLoaded && !lastFrameMaxChunkLimitReached)
 			{
 				firstChunkLoaded = true;
 			}
