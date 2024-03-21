@@ -179,24 +179,19 @@ public partial class WorldGen : Node3D
 		}
 
 		List<Vector3> sortedPosition = loadPositions.OrderBy(n => (chunkPos.DistanceTo(n))).ToList();
-		string printDebug = "";
 
 		foreach (Vector3 chunk in sortedPosition)
 		{
-			printDebug += "Chunk Gen (ID " + totalChunksRendered + "): X=" + chunk.X + " Y=" + chunk.Y + " Z=" + chunk.Z + '\n';
 
 			RenderChunk((int)chunk.X, (int)chunk.Y, (int)chunk.Z);
 		}
-		GD.Print(printDebug);
 
 		//Unload Far Away Chunks
 		List<LoadedChunkData> remainingChunks = new List<LoadedChunkData>();
-		printDebug = "";
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{
 			if (chunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance)
 			{
-				printDebug += "Unloading Chunk (ID " + loadedChunks[i].id + "): X = " + loadedChunks[i].position.X + " Y = " + loadedChunks[i].position.Y + " Z = " + loadedChunks[i].position.Z + '\n';
 				loadedChunks[i].node.QueueFree();
 			}
 			else
@@ -204,7 +199,6 @@ public partial class WorldGen : Node3D
 				remainingChunks.Add(loadedChunks[i]);
 			}
 		}
-		GD.Print(printDebug);
 		loadedChunks = remainingChunks;
 	}
 
@@ -236,7 +230,6 @@ public partial class WorldGen : Node3D
 					visibleBrushIndices = ongoingChunkRenderData[e].visibleBrushIndices
 				});
 
-				GD.Print("Finishing Chunk (ID " + ongoingChunkRenderData[e].id + ")");
 			}
 			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
 			{
@@ -249,7 +242,6 @@ public partial class WorldGen : Node3D
 			{
 				firstChunkLoaded = true;
 			}
-			GD.Print("All Chunks Done Rendering");
 			ongoingChunkRenderData = new List<ChunkRenderData>();
 		}
 	}
@@ -274,7 +266,6 @@ public partial class WorldGen : Node3D
 					if (chunkData == null)
 					{
 						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
-						GD.Print("Chuck had 0 visible blocks (ID " + ongoingChunkRenderData[i].id + ")");
 						check = true;
 					}
 					else
@@ -690,13 +681,13 @@ public partial class WorldGen : Node3D
 		//Z
 		if (z == 0)
 		{
-			//visibility &= CheckBigBlock(x + chunkX, y + chunkY, z - 1 + chunkZ);
-			//visibility &= GetBitOfByte(bigBlockArray[x, y, z + 1], byteIndex);
+			visibility &= CheckBigBlock(x + chunkX, y + chunkY, z - 1 + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x, y, z + 1], byteIndex);
 		}
 		else if (z >= bigBlockArray.GetLength(2) - 1)
 		{
-			//visibility &= CheckBigBlock(x + chunkX, y + chunkY, z + 1 + chunkZ);
-			//visibility &= GetBitOfByte(bigBlockArray[x, y, z - 1], byteIndex);
+			visibility &= CheckBigBlock(x + chunkX, y + chunkY, z + 1 + chunkZ);
+			visibility &= GetBitOfByte(bigBlockArray[x, y, z - 1], byteIndex);
 		}
 		else
 		{
