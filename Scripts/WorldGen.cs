@@ -33,13 +33,14 @@ public partial class WorldGen : Node3D
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
 	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE;
+	int maxChunksLoadingRampUp = 1;
 
 	//Consts
 	const int chunkLoadingDistance = 7;
 	const int chunkUnloadingDistance = 9;
 	const int bigBlockSize = 6;
 	const int chunkSize = 84;
-	const int maxChunksLoading = 1;
+	const int maxChunksLoading = 24;
 	readonly byte[] brushIndices = new byte[]
 				{
 					//Bottom
@@ -135,7 +136,6 @@ public partial class WorldGen : Node3D
 
 	public override void _Process(double delta)
 	{
-
 		CheckForAnyPendingFinishedChunks();
 		LoadAndUnloadChunks();
 	}
@@ -188,7 +188,7 @@ public partial class WorldGen : Node3D
 		int loadedChunksVar = ongoingChunkRenderData.Count;
 		foreach (Vector3 chunk in sortedPosition)
 		{
-			if (loadedChunksVar >= maxChunksLoading)
+			if (loadedChunksVar >= maxChunksLoadingRampUp)
 			{
 				lastFrameMaxChunkLimitReached = true;
 				break;
@@ -261,9 +261,13 @@ public partial class WorldGen : Node3D
 		}
 		if (!check)
 		{
-			if (!firstChunkLoaded && !lastFrameMaxChunkLimitReached)
+			if (!lastFrameMaxChunkLimitReached)
 			{
 				firstChunkLoaded = true;
+			}
+			else if(maxChunksLoadingRampUp != maxChunksLoading)
+			{
+				maxChunksLoadingRampUp = Mathf.Min(maxChunksLoadingRampUp + 1, maxChunksLoading);
 			}
 			ongoingChunkRenderData = new List<ChunkRenderData>();
 		}
