@@ -11,6 +11,7 @@ public partial class WorldGen : Node3D
 {
 	//Exports
 	[Export] bool hideBigBlocks = false;
+	[Export] EnvironmentController envController;
 	[Export] Curve curve1;
 	[Export] Curve curve2;
 	[Export] Curve curve3;
@@ -1175,7 +1176,6 @@ public partial class WorldGen : Node3D
 		{
 			return;
 		}
-
 		Vector3 chunkPos;
 
 		for (int i = 0; i < loadedChunks.Count; i++)

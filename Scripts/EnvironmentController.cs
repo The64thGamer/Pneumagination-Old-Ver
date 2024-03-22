@@ -7,7 +7,7 @@ public partial class EnvironmentController : WorldEnvironment
     [Export] Gradient skyColor;
 
     const float sdfgiMaxDistance = 1400;
-    const float sdfgiMaxDistancePhotoMode = 2500;
+    const float sdfgiMaxDistancePhotoMode = 3000;
     const float fogDensity = 0.0007f;
     const float fogDensityPhotoMode = 0.0005f;
 

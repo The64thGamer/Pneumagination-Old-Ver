@@ -81,8 +81,9 @@ shadow_size = 3
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
 
-[node name="World" type="Node3D"]
+[node name="World" type="Node3D" node_paths=PackedStringArray("envController")]
 script = ExtResource("1_qvi55")
+envController = NodePath("WorldEnvironment")
 curve1 = SubResource("Curve_tpjr8")
 curve2 = SubResource("Curve_0dt1a")
 curve3 = SubResource("Curve_3hewv")
