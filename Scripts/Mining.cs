@@ -15,13 +15,7 @@ public partial class Mining : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                /*
-                Sprite3D sprite = new Sprite3D();
-                sprite.Texture = (Texture2D)GD.Load("res://Textures/testtexture.png");
-                GetTree().Root.AddChild(sprite);
-                sprite.GlobalPosition = (Vector3)result["position"];
-                sprite.Billboard = BaseMaterial3D.BillboardModeEnum.Enabled;
-                */
+                Vector3 position = ((Node3D)result["collider"]).GlobalPosition;
 
                 worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"])));
 

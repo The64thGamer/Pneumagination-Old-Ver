@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctebjgs6cgjjn"]
+
+[ext_resource type="Material" uid="uid://c7am5t16dkatl" path="res://Particles/Break Brush PRM.tres" id="1_12m5o"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_8syxi"]
+
+[node name="GPUParticles3D" type="GPUParticles3D"]
+amount = 100
+lifetime = 0.71
+one_shot = true
+explosiveness = 0.76
+draw_order = 3
+transform_align = 3
+process_material = ExtResource("1_12m5o")
+draw_pass_1 = SubResource("PrismMesh_8syxi")

@@ -18,6 +18,8 @@ public partial class WorldGen : Node3D
 	[Export] Curve curve4;
 	[Export] Curve curve5;
 	[Export] Curve curve6;
+	[Export] public GpuParticles3D destroyBrushParticles;
+
 
 	//Globals
 	public static uint seedA = 0;
@@ -1170,11 +1172,11 @@ public partial class WorldGen : Node3D
 		return ((aByte & (1 << pos)) != 0);
 	}
 
-	public void DestroyBlock(Node3D chunkNode, int brushID)
+	public bool DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
 		{
-			return;
+			return false;
 		}
 		Vector3 chunkPos;
 
@@ -1232,13 +1234,39 @@ public partial class WorldGen : Node3D
 						}
 					}
 				}
+				//Particles
+				byte[] brushVerts = loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].vertices;
+				Vector3 pos = Vector3.Zero;
+				Vector3 minSize = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
+				Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+				for (int j = 0; j < brushVerts.Length; j += 3)
+				{
+					pos += new Vector3(brushVerts[j], brushVerts[j+1], brushVerts[j+2]);
+					if (minSize.X > brushVerts[j]) { minSize.X = brushVerts[j]; }
+					if (minSize.Y > brushVerts[j+1]) { minSize.Y = brushVerts[j + 1]; }
+					if (minSize.Z > brushVerts[j + 2]) { minSize.Z = brushVerts[j + 2]; }
+					if (maxSize.X < brushVerts[j]) { maxSize.X = brushVerts[j]; }
+					if (maxSize.Y < brushVerts[j + 1]) { maxSize.Y = brushVerts[j + 1]; }
+					if (maxSize.Z < brushVerts[j + 2]) { maxSize.Z = brushVerts[j + 2]; }
+				}
+				pos /= brushVerts.Length/3;
+				Vector3 size = (maxSize - minSize);
 
+				destroyBrushParticles.GlobalPosition = pos + (chunkSize * new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ));
+				(destroyBrushParticles.ProcessMaterial as ParticleProcessMaterial).EmissionBoxExtents = size / 2.0f;
+				destroyBrushParticles.Amount = (int)Mathf.Sqrt(size.X * size.Y * size.Z);
+				GD.Print((maxSize - minSize));
+				destroyBrushParticles.MaterialOverride = mats[loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].textures[0]];
+				destroyBrushParticles.Restart();
+				destroyBrushParticles.Emitting = true;
+
+				//Remove and rerender
 				loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
 				RenderChunkBordersVisible(loadedChunks[i]);
-				return;
+				return true;
 			}
 		}
-
+		return false;
 	}
 
 	void RenderChunkBordersVisible(LoadedChunkData chunk)

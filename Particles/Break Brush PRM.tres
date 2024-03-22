@@ -1,0 +1,24 @@
+[gd_resource type="ParticleProcessMaterial" load_steps=3 format=3 uid="uid://c7am5t16dkatl"]
+
+[sub_resource type="Curve" id="Curve_ot2kq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.52238, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5tfww"]
+curve = SubResource("Curve_ot2kq")
+
+[resource]
+lifetime_randomness = 0.1
+emission_shape = 3
+emission_box_extents = Vector3(3, 3, 3)
+angle_max = 720.0
+direction = Vector3(0, 2, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 35.0
+angular_velocity_max = 14.55
+gravity = Vector3(0, -98, 0)
+scale_curve = SubResource("CurveTexture_5tfww")
+scale_over_velocity_max = 1000.0
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.25
