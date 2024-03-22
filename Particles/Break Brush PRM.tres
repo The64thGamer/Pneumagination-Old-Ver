@@ -19,6 +19,3 @@ angular_velocity_max = 14.55
 gravity = Vector3(0, -98, 0)
 scale_curve = SubResource("CurveTexture_5tfww")
 scale_over_velocity_max = 1000.0
-collision_mode = 1
-collision_friction = 0.0
-collision_bounce = 0.25

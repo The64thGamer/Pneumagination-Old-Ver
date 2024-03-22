@@ -3,6 +3,8 @@
 [ext_resource type="Material" uid="uid://c7am5t16dkatl" path="res://Particles/Break Brush PRM.tres" id="1_12m5o"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_8syxi"]
+left_to_right = 0.3
+size = Vector3(0.5, 0.5, 0.5)
 
 [node name="GPUParticles3D" type="GPUParticles3D"]
 amount = 100
