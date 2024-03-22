@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=19 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Mining.cs" id="4_35mrk"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="4_tt854"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="4_tu8wd"]
+[ext_resource type="Script" path="res://Scripts/PhotoMode.cs" id="7_8ade3"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
 _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.603789), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.318486, 0.2824), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.505568, 0.271829), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
@@ -128,6 +129,17 @@ text = "
  LOL"
 label_settings = SubResource("LabelSettings_bbj47")
 script = ExtResource("4_tt854")
+
+[node name="Photo Mode" type="Node3D" parent="Player"]
+
+[node name="Photo Mode Camera" type="Camera3D" parent="Player/Photo Mode" node_paths=PackedStringArray("envController")]
+projection = 1
+fov = 1.0
+size = 1000.0
+near = 10.0
+far = 1500.0
+script = ExtResource("7_8ade3")
+envController = NodePath("../../../WorldEnvironment")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
