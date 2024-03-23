@@ -112,7 +112,7 @@ public partial class WorldGen : Node3D
 		noiseB.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.EuclideanSq);
 		noiseB.SetCellularReturnType(FastNoiseLite.CellularReturnType.Distance);
 		noiseB.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
-		noiseB.SetDomainWarpAmp(200);
+		noiseB.SetDomainWarpAmp(400);
 
 		noiseC = new FastNoiseLite();
 		noiseC.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -141,6 +141,8 @@ public partial class WorldGen : Node3D
 		noiseF.SetSeed((int)seedB);
 		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseF.SetFractalOctaves(4);
+		noiseF.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
+		noiseF.SetDomainWarpAmp(1000);
 	}
 
 	public override void _Process(double delta)

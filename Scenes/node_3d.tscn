@@ -30,8 +30,8 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.242762, 1), 0.0, 0.0, 0, 0, Ve
 point_count = 14
 
 [sub_resource type="Curve" id="Curve_ijfoo"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.349666, 1), 0.0, 0.0, 0, 0, Vector2(0.436526, 0), 0.0, 0.0, 0, 0, Vector2(0.501114, 0.336079), 0.0, 0.0, 0, 0, Vector2(0.596882, 0), 0.0, 0.0, 0, 0, Vector2(0.690423, 0.00411856), 0.0, 0.0, 0, 0, Vector2(0.728285, 1), 0.0, 0.0, 0, 0, Vector2(0.812918, 0.850082), 0.0, 0.0, 0, 0, Vector2(0.877506, 1), 0.0, 0.0, 0, 0]
-point_count = 9
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.345212, 1), 0.0, 0.0, 0, 0, Vector2(0.579065, 0), 0.0, 0.0, 0, 0, Vector2(0.690423, 0.00411856), 0.0, 0.0, 0, 0, Vector2(0.728285, 1), 0.0, 0.0, 0, 0, Vector2(0.821826, 0.780478), 0.0, 0.0, 0, 0, Vector2(0.877506, 1), 0.0, 0.0, 0, 0]
+point_count = 7
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_mode = 1
