@@ -1270,7 +1270,7 @@ public partial class WorldGen : Node3D
 					(chunkSize * loadedChunks[i].chunk.positionZ) - chunkMarginSize
 					);
 				(destroyBrushParticles.ProcessMaterial as ParticleProcessMaterial).EmissionBoxExtents = size / 2.0f;
-				destroyBrushParticles.Amount = (int)(size.X * size.Y * size.Z * 0.2f);
+				destroyBrushParticles.Amount = (int)Mathf.Max(size.X * size.Y * size.Z * 0.2f, 2);
 				destroyBrushParticles.MaterialOverride = mats[loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].textures[0]];
 				destroyBrushParticles.Restart();
 				destroyBrushParticles.Emitting = true;
