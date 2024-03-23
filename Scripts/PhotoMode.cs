@@ -4,11 +4,14 @@ using System;
 public partial class PhotoMode : Camera3D
 {
     [Export] EnvironmentController envController;
+    public static bool photoModeEnabled;
 
+    bool inPhotoModeLoadingScreen = true;
     float camZoomDelta;
     Node3D parent;
     public override void _Ready()
     {
+        EnterPhotoMode();
         parent = (GetParent() as Node3D);
         Size = WorldGen.chunkUnloadingDistance * WorldGen.chunkSize;
         camZoomDelta = WorldGen.chunkUnloadingDistance * WorldGen.chunkSize;
@@ -18,10 +21,14 @@ public partial class PhotoMode : Camera3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _PhysicsProcess(double delta)
     {
+        if(inPhotoModeLoadingScreen)
+        {
+            return;
+        }
+
         if (Input.IsActionJustPressed("Photo Mode"))
         {
-            Current = !Current;
-            if(Current)
+            if(!Current)
             {
                 EnterPhotoMode();
             }
@@ -46,6 +53,12 @@ public partial class PhotoMode : Camera3D
 
     public override void _Process(double delta)
     {
+        if(inPhotoModeLoadingScreen && WorldGen.firstChunkLoaded)
+        {
+            inPhotoModeLoadingScreen = false;
+            ExitPhotoMode();
+        }
+
         if (Current)
         {
             Size = Mathf.Clamp(Mathf.Lerp(Size, camZoomDelta,(float)delta*20),0.1f, WorldGen.chunkUnloadingDistance * WorldGen.chunkSize * 2);
@@ -71,12 +84,16 @@ public partial class PhotoMode : Camera3D
 
     void EnterPhotoMode()
     {
+        Current = true;
+        photoModeEnabled = true;
         Position = new Vector3(0,0,WorldGen.chunkUnloadingDistance * WorldGen.chunkSize);
         Input.MouseMode = Input.MouseModeEnum.Visible;
         envController.EnablePhotoMode();
     }
     void ExitPhotoMode()
     {
+        Current = false;
+        photoModeEnabled = false;
         Input.MouseMode = Input.MouseModeEnum.Captured;
         envController.DisablePhotoMode();
     }
