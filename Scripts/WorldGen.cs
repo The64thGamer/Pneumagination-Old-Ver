@@ -1147,6 +1147,12 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
+	int mod(int x, int m)
+	{
+		int r = x % m;
+		return r < 0 ? r + m : r;
+	}
+
 	float GetClampedNoise(float noise)
 	{
 		return (noise + 1.0f) / 2.0f;
@@ -1302,9 +1308,9 @@ public partial class WorldGen : Node3D
 			Mathf.Floor(position.Z / chunkSize)
 			);
 		Vector3 insideChunkPos = new Vector3(
-			(position.X % chunkSize) + chunkMarginSize,
-			(position.Y % chunkSize) + chunkMarginSize, 
-			(position.Z % chunkSize) + chunkMarginSize
+			(mod((int)position.X, chunkSize)) + chunkMarginSize,
+			(mod((int)position.Y, chunkSize)) + chunkMarginSize, 
+			(mod((int)position.Z, chunkSize)) + chunkMarginSize
 			);
 		for (int i = 0; i < loadedChunks.Count; i++)
 		{

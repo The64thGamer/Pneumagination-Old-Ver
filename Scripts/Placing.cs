@@ -19,7 +19,7 @@ public partial class Placing : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                GD.Print(worldGen.PlaceBlock((Vector3)result["position"] + ((Vector3)result["normal"])*0.5f));
+                worldGen.PlaceBlock((Vector3)result["position"] + ((Vector3)result["normal"])*0.5f);
             }
         }
     }
