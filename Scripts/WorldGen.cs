@@ -258,11 +258,6 @@ public partial class WorldGen : Node3D
 					ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3((ongoingChunkRenderData[e].position.X * chunkSize) - chunkMarginSize, (ongoingChunkRenderData[e].position.Y * chunkSize) - chunkMarginSize, (ongoingChunkRenderData[e].position.Z * chunkSize) - chunkMarginSize);
 					ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
 					ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
-					
-					if (ongoingChunkRenderData[e].position.X % 2 != 0 || ongoingChunkRenderData[e].position.Y % 2 != 0 || ongoingChunkRenderData[e].position.Z % 2 != 0)
-					{
-						ongoingChunkRenderData[e].chunkNode.Visible = false;
-					}
 
 					loadedChunks.Add(new LoadedChunkData()
 					{
@@ -272,9 +267,6 @@ public partial class WorldGen : Node3D
 						chunk = ongoingChunkRenderData[e].chunk,
 						visibleBrushIndices = ongoingChunkRenderData[e].visibleBrushIndices
 					});
-					Vector3 pos = new Vector3((ongoingChunkRenderData[e].position.X * chunkSize), (ongoingChunkRenderData[e].position.Y * chunkSize), (ongoingChunkRenderData[e].position.Z * chunkSize));
-
-					debugLine.DrawLine(pos, pos + new Vector3(0,chunkSize,0), new Color(1,1,1,1),1000);
 				}
 				else
 				{
@@ -1264,8 +1256,11 @@ public partial class WorldGen : Node3D
 				}
 				pos /= brushVerts.Length / 3;
 				Vector3 size = (maxSize - minSize);
-
-				destroyBrushParticles.GlobalPosition = pos + (chunkSize * new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ));
+				destroyBrushParticles.GlobalPosition = pos + new Vector3(
+					(chunkSize * loadedChunks[i].chunk.positionX) - chunkMarginSize,
+					(chunkSize * loadedChunks[i].chunk.positionY) - chunkMarginSize,
+					(chunkSize * loadedChunks[i].chunk.positionZ) - chunkMarginSize
+					);
 				(destroyBrushParticles.ProcessMaterial as ParticleProcessMaterial).EmissionBoxExtents = size / 2.0f;
 				destroyBrushParticles.Amount = (int)(size.X * size.Y * size.Z * 0.2f);
 				destroyBrushParticles.MaterialOverride = mats[loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].textures[0]];
