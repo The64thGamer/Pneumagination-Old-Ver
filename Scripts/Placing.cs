@@ -7,11 +7,11 @@ public partial class Placing : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
-        if (PhotoMode.photoModeEnabled)
+        if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.placeBrushSlot)
         {
             return;
         }
-        if (Input.IsActionJustPressed("Placing"))
+        if (Input.IsActionJustPressed("Action"))
         {
             PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
             PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(this.GlobalPosition, this.GlobalPosition + (-this.GlobalTransform.Basis.Z * 50));

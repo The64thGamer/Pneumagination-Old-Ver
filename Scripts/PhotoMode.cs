@@ -73,12 +73,12 @@ public partial class PhotoMode : Camera3D
         }
         if (currentEvent is InputEventMouseMotion motion)
         {
-            if(Input.IsActionPressed("Placing"))
+            if(Input.IsActionPressed("Alt Action"))
             {
                 parent.RotateY(-motion.Relative.X * PlayerMovement.sensitivity);
 
             }
-            if (Input.IsActionPressed("Mining"))
+            if (Input.IsActionPressed("Action"))
             {
                 Vector2 size = DisplayServer.ScreenGetSize();
                 Position += new Vector3(-motion.Relative.X, motion.Relative.Y, 0) * Size / Mathf.Min(size.X,size.Y);

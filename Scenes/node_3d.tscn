@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=29 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -11,6 +11,12 @@
 [ext_resource type="PackedScene" uid="uid://ctebjgs6cgjjn" path="res://Particles/Break Brush.tscn" id="8_htych"]
 [ext_resource type="Script" path="res://Scripts/DrawLine3D.cs" id="9_dc1ri"]
 [ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://Textures/Cursor.png" id="9_yvr36"]
+[ext_resource type="Script" path="res://Scripts/ScrollBar.cs" id="10_etxye"]
+[ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="10_n1m02"]
+[ext_resource type="Texture2D" uid="uid://crtnf337fo4gr" path="res://UI/Slot Edge.png" id="11_nqbhn"]
+[ext_resource type="Texture2D" uid="uid://8b68gmhi8sq4" path="res://UI/Slot Face.png" id="12_rpj1j"]
+[ext_resource type="Texture2D" uid="uid://1nxqi0sgrpbg" path="res://UI/Slot Placing.png" id="13_ksttp"]
+[ext_resource type="Texture2D" uid="uid://b2cujyos0ev48" path="res://UI/Slot Mining.png" id="14_1kgwj"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
 _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.603789), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.318486, 0.2824), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.505568, 0.271829), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
@@ -161,6 +167,50 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_yvr36")
 stretch_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player/Player Head/Player Camera"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -40.0
+offset_right = 192.0
+offset_bottom = -6.0
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("10_etxye")
+selectColor = Color(1, 0.654902, 0.411765, 1)
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_n1m02")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TextureRect2" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("11_nqbhn")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TextureRect3" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("12_rpj1j")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TextureRect4" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("13_ksttp")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TextureRect5" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("14_1kgwj")
+expand_mode = 2
+stretch_mode = 4
 
 [node name="Photo Mode" type="Node3D" parent="Player"]
 
