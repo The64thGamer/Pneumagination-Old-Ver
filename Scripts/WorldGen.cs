@@ -19,7 +19,7 @@ public partial class WorldGen : Node3D
 	[Export] Curve curve5;
 	[Export] Curve curve6;
 	[Export] public GpuParticles3D destroyBrushParticles;
-
+	[Export] DrawLine3D debugLine;
 
 	//Globals
 	public static uint seedA = 0;
@@ -43,6 +43,7 @@ public partial class WorldGen : Node3D
 	public const int chunkUnloadingDistance = 9;
 	const int bigBlockSize = 6;
 	public const int chunkSize = 84;
+	public const int chunkMarginSize = 86; //(256 - Chunksize) / 2. 
 	const int maxChunksLoading = 24;
 	readonly byte[] brushIndices = new byte[]
 				{
@@ -253,9 +254,14 @@ public partial class WorldGen : Node3D
 					AddChild(ongoingChunkRenderData[e].chunkNode);
 					ongoingChunkRenderData[e].chunkNode.Name = "Chunk " + ongoingChunkRenderData[e].id.ToString();
 					ongoingChunkRenderData[e].chunkNode.AddChild(ongoingChunkRenderData[e].meshNode);
-					ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3(ongoingChunkRenderData[e].position.X * chunkSize, ongoingChunkRenderData[e].position.Y * chunkSize, ongoingChunkRenderData[e].position.Z * chunkSize);
+					ongoingChunkRenderData[e].chunkNode.GlobalPosition = new Vector3((ongoingChunkRenderData[e].position.X * chunkSize) - chunkMarginSize, (ongoingChunkRenderData[e].position.Y * chunkSize) - chunkMarginSize, (ongoingChunkRenderData[e].position.Z * chunkSize) - chunkMarginSize);
 					ongoingChunkRenderData[e].meshNode.AddChild(ongoingChunkRenderData[e].staticBody);
 					ongoingChunkRenderData[e].staticBody.AddChild(ongoingChunkRenderData[e].collisionShape);
+					
+					if (ongoingChunkRenderData[e].position.X % 2 != 0 || ongoingChunkRenderData[e].position.Y % 2 != 0 || ongoingChunkRenderData[e].position.Z % 2 != 0)
+					{
+						ongoingChunkRenderData[e].chunkNode.Visible = false;
+					}
 
 					loadedChunks.Add(new LoadedChunkData()
 					{
@@ -265,6 +271,9 @@ public partial class WorldGen : Node3D
 						chunk = ongoingChunkRenderData[e].chunk,
 						visibleBrushIndices = ongoingChunkRenderData[e].visibleBrushIndices
 					});
+					Vector3 pos = new Vector3((ongoingChunkRenderData[e].position.X * chunkSize), (ongoingChunkRenderData[e].position.Y * chunkSize), (ongoingChunkRenderData[e].position.Z * chunkSize));
+
+                    debugLine.DrawLine(pos, pos + new Vector3(0,chunkSize,0), new Color(1,1,1,1),1000);
 				}
 				else
 				{
@@ -297,6 +306,7 @@ public partial class WorldGen : Node3D
 
 	void RenderChunk(int x, int y, int z)
 	{
+
 		totalChunksRendered++;
 		int id = totalChunksRendered;
 		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
@@ -387,7 +397,7 @@ public partial class WorldGen : Node3D
 
 						//Regular Square "Big Blocks"
 						bigBlock = CreateBrush(
-								new Vector3(posX * bigBlockSize, posY * bigBlockSize, posZ * bigBlockSize),
+								new Vector3((posX * bigBlockSize) + chunkMarginSize, (posY * bigBlockSize) + chunkMarginSize, (posZ * bigBlockSize) + chunkMarginSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0, x, y, z);
 						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY, posZ);
@@ -654,7 +664,7 @@ public partial class WorldGen : Node3D
 				}
 				for (int e = 0; e < 24; e++)
 				{
-					b.vertices[e] = verts[e + (i * 24)];
+					b.vertices[e] = (byte)(verts[e + (i * 24)] + chunkMarginSize);
 				}
 				brushCopies.Add(b);
 
