@@ -1213,7 +1213,7 @@ public partial class WorldGen : Node3D
 	public int DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
-		{
+		{ 
 			return 0;
 		} 
 		Vector3 chunkPos;
