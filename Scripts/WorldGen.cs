@@ -331,7 +331,8 @@ public partial class WorldGen : Node3D
 
 			if (!check)
 			{
-				GD.Print("Chunk missing ID in ongoing chunk pool. (ID " + id + ")");
+				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ")");
+				firstChunkLoaded = true; //Bandaid fix, please figure out why chunks are missing IDs
 			}
 
 		});
@@ -1151,12 +1152,12 @@ public partial class WorldGen : Node3D
 	float VolumeOfMesh(byte[] verts)
 	{
 		float total = 0;
-		for (int i = 0; i < verts.Length; i += 3)
+		for (int i = 0; i < brushIndices.Length; i += 3)
 		{
 			total += SignedVolumeOfTriangle(
-				new Vector3(verts[(brushIndices[i] * 3)], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i] * 3)]),
-				new Vector3(verts[(brushIndices[i+1] * 3)], verts[1 + (brushIndices[i+1] * 3)], verts[2 + (brushIndices[i+1] * 3)]),
-				new Vector3(verts[(brushIndices[i+2] * 3)], verts[1 + (brushIndices[i+2] * 3)], verts[2 + (brushIndices[i+2] * 3)])
+				new Vector3(verts[brushIndices[i] * 3], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i] * 3)]),
+				new Vector3(verts[brushIndices[i+1] * 3], verts[1 + (brushIndices[i+1] * 3)], verts[2 + (brushIndices[i+1] * 3)]),
+				new Vector3(verts[brushIndices[i+2] * 3], verts[1 + (brushIndices[i+2] * 3)], verts[2 + (brushIndices[i+2] * 3)])
 				);
 		}
 		return Mathf.Abs(total);
