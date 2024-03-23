@@ -1155,8 +1155,8 @@ public partial class WorldGen : Node3D
 		{
 			total += SignedVolumeOfTriangle(
 				new Vector3(verts[(brushIndices[i] * 3)], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i] * 3)]),
-				new Vector3(verts[(brushIndices[i+1] * 3)], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i+1] * 3)]),
-				new Vector3(verts[(brushIndices[i+2] * 3)], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i+2] * 3)])
+				new Vector3(verts[(brushIndices[i+1] * 3)], verts[1 + (brushIndices[i+1] * 3)], verts[2 + (brushIndices[i+1] * 3)]),
+				new Vector3(verts[(brushIndices[i+2] * 3)], verts[1 + (brushIndices[i+2] * 3)], verts[2 + (brushIndices[i+2] * 3)])
 				);
 		}
 		return Mathf.Abs(total);
