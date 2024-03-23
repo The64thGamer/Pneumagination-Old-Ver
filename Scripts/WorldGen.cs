@@ -318,6 +318,7 @@ public partial class WorldGen : Node3D
 					if (chunkData == null)
 					{
 						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
+						check = true;
 					}
 					else
 					{
@@ -330,7 +331,7 @@ public partial class WorldGen : Node3D
 
 			if (!check)
 			{
-				GD.PrintErr("Chunk Mesh Could Not Be Finalized (ID " + id + ")");
+				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ")");
 			}
 
 		});
