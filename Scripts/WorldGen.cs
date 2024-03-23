@@ -216,7 +216,7 @@ public partial class WorldGen : Node3D
 		{
 			if (oldChunkPos.DistanceTo(loadedChunks[i].position) >= chunkUnloadingDistance)
 			{
-				if(loadedChunks[i].node != null)
+				if (loadedChunks[i].node != null)
 				{
 					loadedChunks[i].node.QueueFree();
 				}
@@ -285,7 +285,7 @@ public partial class WorldGen : Node3D
 			{
 				firstChunkLoaded = true;
 			}
-			else if(maxChunksLoadingRampUp != maxChunksLoading)
+			else if (maxChunksLoadingRampUp != maxChunksLoading)
 			{
 				maxChunksLoadingRampUp = Mathf.Min(maxChunksLoadingRampUp + 1, maxChunksLoading);
 			}
@@ -389,7 +389,7 @@ public partial class WorldGen : Node3D
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0, x, y, z);
 						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY, posZ);
-						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x,y,z);
+						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x, y, z);
 						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1)
 						{
 							region = GetClampedNoise(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)));
@@ -411,7 +411,7 @@ public partial class WorldGen : Node3D
 							}
 							if (regionBordercheck || regionBorderCornercheck)
 							{
-								if(GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
+								if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
 								{
 									bigBlock.textures = new uint[] { 6, 6, 6, 6, 6, 6 };
 								}
@@ -445,7 +445,7 @@ public partial class WorldGen : Node3D
 					else
 					{
 						//First layer of "Surface Brushes"
-						bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0,x,y,z);
+						bitMask = CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x, y, z);
 						if (bitMask != 0)
 						{
 							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), false, x, y, z);
@@ -522,7 +522,7 @@ public partial class WorldGen : Node3D
 					if (!GetBitOfByte(bigBlockArray[posX, posY, posZ], 1) && !GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
 					{
 						//Second layer of "Sub-Surface Brushes"
-						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0,x,y,z) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1,x,y,z));
+						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x, y, z) | CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 1, x, y, z));
 						if (bitMask != 0)
 						{
 							brushes = CreateSurfaceBrushes(bitMask, (byte)(posX * bigBlockSize), (byte)(posY * bigBlockSize), (byte)(posZ * bigBlockSize), true, x, y, z);
@@ -676,9 +676,9 @@ public partial class WorldGen : Node3D
 
 	byte CheckSurfaceBrushType(byte[,,] bigBlockArray, int x, int y, int z, int pos, int chunkX, int chunkY, int chunkZ)
 	{
-		 chunkX = (chunkSize * chunkX / bigBlockSize);
-		 chunkY = (chunkSize * chunkY / bigBlockSize);
-		 chunkZ = (chunkSize * chunkZ / bigBlockSize);
+		chunkX = (chunkSize * chunkX / bigBlockSize);
+		chunkY = (chunkSize * chunkY / bigBlockSize);
+		chunkZ = (chunkSize * chunkZ / bigBlockSize);
 		int bitmask = 0;
 		//North
 		if (z < bigBlockArray.GetLength(2) - 1)
@@ -690,7 +690,7 @@ public partial class WorldGen : Node3D
 		}
 		else
 		{
-			if(CheckBigBlock(x + chunkX,y + chunkY,z + chunkZ+1))
+			if (CheckBigBlock(x + chunkX, y + chunkY, z + chunkZ + 1))
 			{
 				bitmask |= 1 << 5;
 			}
@@ -701,7 +701,7 @@ public partial class WorldGen : Node3D
 			if (GetBitOfByte(bigBlockArray[x + 1, y, z], pos))
 			{
 				bitmask |= 1 << 4;
-			} 
+			}
 		}
 		else
 		{
@@ -1237,19 +1237,19 @@ public partial class WorldGen : Node3D
 				//Particles
 				byte[] brushVerts = loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].vertices;
 				Vector3 pos = Vector3.Zero;
-				Vector3 minSize = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue);
+				Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 				Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
 				for (int j = 0; j < brushVerts.Length; j += 3)
 				{
-					pos += new Vector3(brushVerts[j], brushVerts[j+1], brushVerts[j+2]);
+					pos += new Vector3(brushVerts[j], brushVerts[j + 1], brushVerts[j + 2]);
 					if (minSize.X > brushVerts[j]) { minSize.X = brushVerts[j]; }
-					if (minSize.Y > brushVerts[j+1]) { minSize.Y = brushVerts[j + 1]; }
+					if (minSize.Y > brushVerts[j + 1]) { minSize.Y = brushVerts[j + 1]; }
 					if (minSize.Z > brushVerts[j + 2]) { minSize.Z = brushVerts[j + 2]; }
 					if (maxSize.X < brushVerts[j]) { maxSize.X = brushVerts[j]; }
 					if (maxSize.Y < brushVerts[j + 1]) { maxSize.Y = brushVerts[j + 1]; }
 					if (maxSize.Z < brushVerts[j + 2]) { maxSize.Z = brushVerts[j + 2]; }
 				}
-				pos /= brushVerts.Length/3;
+				pos /= brushVerts.Length / 3;
 				Vector3 size = (maxSize - minSize);
 
 				destroyBrushParticles.GlobalPosition = pos + (chunkSize * new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ));
@@ -1298,7 +1298,7 @@ public partial class WorldGen : Node3D
 			(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
 			chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
 		}
-		else if(chunkData.chunkNode != null)
+		else if (chunkData.chunkNode != null)
 		{
 			AddChild(chunkData.chunkNode);
 			chunkData.chunkNode.Name = "Chunk " + chunkData.id.ToString();
@@ -1313,6 +1313,46 @@ public partial class WorldGen : Node3D
 			chunk.position = chunkData.position;
 			chunk.chunk = chunkData.chunk;
 			chunk.visibleBrushIndices = chunkData.visibleBrushIndices;
+		}
+	}
+
+	public Vector3 FindValidSpawnPosition()
+	{
+		if (!firstChunkLoaded)
+		{
+			GD.PrintErr("Attempted to spawn a player before chunks finish loading");
+			return Vector3.Zero;
+		}
+
+		int y = 0;
+		int i;
+		for (i = 0; i < loadedChunks.Count; i++)
+		{
+			if (loadedChunks[i].position.X != 0 || loadedChunks[i].position.Z != 0 || loadedChunks[i].position.Y != y)
+			{
+				continue;
+			}
+			if (loadedChunks[i].chunk.brushes.Count == 0)
+			{
+				break;
+			}
+			y++;
+		}
+
+		Vector3 pos = (loadedChunks[i].position * chunkSize) + new Vector3(0, chunkSize / 2.0f, 0);
+
+		PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
+		PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(pos, pos + new Vector3(0, -2000, 0));
+		query.CollisionMask = 0b00000000_00000000_00000000_00000100; //Brushes
+		Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
+		if (result.Count > 0)
+		{
+			return (Vector3)result["position"];
+		}
+		else
+		{
+			GD.PrintErr("Found no valid spawn. Ray sent from chunk Y=" + y + ", Pos was " + pos);
+			return Vector3.Zero;
 		}
 	}
 

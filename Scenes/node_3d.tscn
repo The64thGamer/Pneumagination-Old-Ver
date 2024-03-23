@@ -101,10 +101,8 @@ skyColor = SubResource("Gradient_uyqn1")
 
 [node name="Break Brush Particles" parent="." instance=ExtResource("8_htych")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
-emitting = false
 
-[node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("head", "camera") groups=["Player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
+[node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("head", "camera", "worldGen") groups=["Player"]]
 collision_layer = 3
 collision_mask = 5
 floor_max_angle = 1.39626
@@ -112,12 +110,14 @@ safe_margin = 0.01
 script = ExtResource("3_m8gbp")
 head = NodePath("Player Head")
 camera = NodePath("Player Head/Player Camera")
+worldGen = NodePath("..")
 
 [node name="Player Collision" type="CollisionShape3D" parent="Player" groups=["Player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 shape = SubResource("BoxShape3D_l23mf")
 
 [node name="Player Head" type="Node3D" parent="Player" groups=["Player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
 
 [node name="Player Camera" type="Camera3D" parent="Player/Player Head" groups=["Player"]]
 fov = 92.8

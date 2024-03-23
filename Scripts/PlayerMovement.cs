@@ -5,8 +5,11 @@ public partial class PlayerMovement : CharacterBody3D
 {
 	[Export] Node3D head;
 	[Export] Node3D camera;
+	[Export] WorldGen worldGen;
 
 	public static Vector3 currentPosition = new Vector3();
+
+	bool spawned;
 
 	public const float Speed = 25.0f;
 	public const float JumpVelocity = 50.0f;
@@ -36,6 +39,11 @@ public partial class PlayerMovement : CharacterBody3D
 		if(!WorldGen.firstChunkLoaded)
 		{
 			return;
+		}
+		else if(!spawned)
+		{
+			spawned = true;
+            GlobalPosition = worldGen.FindValidSpawnPosition();
 		}
 
 		// Tab out

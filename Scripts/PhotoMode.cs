@@ -67,6 +67,10 @@ public partial class PhotoMode : Camera3D
 
     public override void _UnhandledInput(InputEvent currentEvent)
     {
+        if (inPhotoModeLoadingScreen)
+        {
+            return;
+        }
         if (currentEvent is InputEventMouseMotion motion)
         {
             if(Input.IsActionPressed("Placing"))
