@@ -4,17 +4,28 @@ using System;
 public partial class Placing : Node3D
 {
     [Export] public WorldGen worldGen;
-    int size = 1;
+    int currentSizeIndex = 0;
+    int[] sizes = new int[] { 1, 2, 3, 6 };
 
+    public static int currentPlacementSize;
+    public override void _Ready()
+    {
+        currentPlacementSize = sizes[currentSizeIndex];
+    }
     public override void _PhysicsProcess(double delta)
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.placeBrushSlot)
         {
             return;
         }
+        if (Input.IsActionJustPressed("Alt Action"))
+        {
+            currentSizeIndex = mod(currentSizeIndex + 1, sizes.Length);
+            currentPlacementSize = sizes[currentSizeIndex];
+        }
         if (Input.IsActionJustPressed("Action"))
         {
-            if(Math.Pow(size,3) > Mining.totalBrushes)
+            if (Math.Pow(sizes[currentSizeIndex],3) > Mining.totalBrushes)
             {
                 return;
             }
@@ -25,11 +36,17 @@ public partial class Placing : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                if(worldGen.PlaceBlock((Vector3)result["position"] + ((Vector3)result["normal"])*0.5f, size))
+                if(worldGen.PlaceBlock((Vector3)result["position"] + ((Vector3)result["normal"])*0.5f, sizes[currentSizeIndex]))
                 {
-                    Mining.totalBrushes -= (int)Math.Pow(size, 3);
+                    Mining.totalBrushes -= (int)Math.Pow(sizes[currentSizeIndex], 3);
                 }
             }
         }
+    }
+
+    int mod(int x, int m)
+    {
+        int r = x % m;
+        return r < 0 ? r + m : r;
     }
 }
