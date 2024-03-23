@@ -26,6 +26,10 @@ public partial class PlayerMovement : CharacterBody3D
 
     public override void _UnhandledInput(InputEvent currentEvent)
     {
+		if(PhotoMode.photoModeEnabled)
+		{
+			return;
+		}
 		if(currentEvent is InputEventMouseMotion motion)
 		{
             head.RotateY(-motion.Relative.X * sensitivity);

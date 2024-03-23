@@ -7,6 +7,10 @@ public partial class Mining : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
+        if (PhotoMode.photoModeEnabled)
+        {
+            return;
+        }
         if (Input.IsActionJustPressed("Mining"))
         {
             PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
