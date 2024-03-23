@@ -36,7 +36,7 @@ public partial class Placing : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                if(worldGen.PlaceBlock((Vector3)result["position"] + ((Vector3)result["normal"])*0.5f, sizes[currentSizeIndex]))
+                if(worldGen.PlaceBlock((Vector3)result["position"] + ((Vector3)result["normal"])*0.5f * sizes[currentSizeIndex], sizes[currentSizeIndex]))
                 {
                     Mining.totalBrushes -= (int)Math.Pow(sizes[currentSizeIndex], 3);
                 }

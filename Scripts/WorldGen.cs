@@ -1333,11 +1333,10 @@ public partial class WorldGen : Node3D
 		//Double check parameters
 		size = Math.Clamp(size, 1,chunkMarginSize*2);
 		position = new Vector3(
-			Mathf.Floor(position.X),
-			Mathf.Floor(position.Y),
-			Mathf.Floor(position.Z)
+			Mathf.Floor(Mathf.Floor(position.X) / size) * size,
+			Mathf.Floor(Mathf.Floor(position.Y) / size) * size,
+			Mathf.Floor(Mathf.Floor(position.Z) / size) * size
 			);
-
 		//Calculate
 		Vector3 chunkPos = new Vector3(
 			Mathf.Floor(position.X / chunkSize),
