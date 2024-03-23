@@ -331,7 +331,7 @@ public partial class WorldGen : Node3D
 
 			if (!check)
 			{
-				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ")");
+				GD.Print("Chunk missing ID in ongoing chunk pool. (ID " + id + ")");
 			}
 
 		});
