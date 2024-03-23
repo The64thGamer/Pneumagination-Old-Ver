@@ -5,6 +5,8 @@ public partial class Mining : Node3D
 {
     [Export] public WorldGen worldGen;
 
+    public static int totalBrushes;
+
     public override void _PhysicsProcess(double delta)
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.miningSlot)
@@ -21,7 +23,7 @@ public partial class Mining : Node3D
             {
                 Vector3 position = ((Node3D)result["collider"]).GlobalPosition;
 
-                worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"])));
+                totalBrushes += worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"])));
 
             }
         }

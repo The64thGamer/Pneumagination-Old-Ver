@@ -1148,6 +1148,25 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
+	float VolumeOfMesh(byte[] verts)
+	{
+		float total = 0;
+		for (int i = 0; i < brushIndices.Length; i += 3)
+		{
+			total += SignedVolumeOfTriangle(
+				new Vector3(verts[(brushIndices[i] * 3)], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i] * 3)]),
+				new Vector3(verts[(brushIndices[i+1] * 3)], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i+1] * 3)]),
+				new Vector3(verts[(brushIndices[i+2] * 3)], verts[1 + (brushIndices[i] * 3)], verts[2 + (brushIndices[i+2] * 3)])
+				);
+		}
+		return Mathf.Abs(total);
+	}
+
+	float SignedVolumeOfTriangle(Vector3 p1, Vector3 p2, Vector3 p3)
+	{
+		return p1.Dot(p2.Cross(p3)) / 6.0f;
+	}
+
 	int mod(int x, int m)
 	{
 		int r = x % m;
@@ -1184,11 +1203,11 @@ public partial class WorldGen : Node3D
 		return ((aByte & (1 << pos)) != 0);
 	}
 
-	public bool DestroyBlock(Node3D chunkNode, int brushID)
+	public int DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
 		{
-			return false;
+			return 0;
 		}
 		Vector3 chunkPos;
 
@@ -1248,7 +1267,7 @@ public partial class WorldGen : Node3D
 						}
 					}
 				}
-				//Particles
+				//Set up Values
 				byte[] brushVerts = loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].vertices;
 				Vector3 pos = Vector3.Zero;
 				Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -1264,6 +1283,11 @@ public partial class WorldGen : Node3D
 					if (maxSize.Z < brushVerts[j + 2]) { maxSize.Z = brushVerts[j + 2]; }
 				}
 				pos /= brushVerts.Length / 3;
+
+				//Get Volume
+				int volume = Mathf.CeilToInt(VolumeOfMesh(brushVerts));
+
+				//Particles
 				Vector3 size = (maxSize - minSize);
 				destroyBrushParticles.GlobalPosition = pos + new Vector3(
 					(chunkSize * loadedChunks[i].chunk.positionX) - chunkMarginSize,
@@ -1286,23 +1310,28 @@ public partial class WorldGen : Node3D
 				{
 					RerenderLoadedChunk(loadedChunks[i]);
 				}
-				return true;
+				return volume;
 			}
 		}
-		return false;
+		return 0;
 	}
 
-	public bool PlaceBlock(Vector3 position)
+	public bool PlaceBlock(Vector3 position, int size)
 	{
 		if (!firstChunkLoaded)
 		{
 			return false;
 		}
+
+		//Double check parameters
+		size = Math.Clamp(size, 1,chunkMarginSize*2);
 		position = new Vector3(
 			Mathf.Floor(position.X),
 			Mathf.Floor(position.Y),
 			Mathf.Floor(position.Z)
 			);
+
+		//Calculate
 		Vector3 chunkPos = new Vector3(
 			Mathf.Floor(position.X / chunkSize),
 			Mathf.Floor(position.Y / chunkSize),
@@ -1317,7 +1346,7 @@ public partial class WorldGen : Node3D
 		{
 			if (loadedChunks[i].position.Equals(chunkPos))
 			{
-				Brush b = CreateBrush(insideChunkPos, Vector3.One);
+				Brush b = CreateBrush(insideChunkPos, Vector3.One * size);
 				b.hiddenFlag = false;
 				b.borderFlag = false;
 				loadedChunks[i].chunk.brushes.Add(b);
