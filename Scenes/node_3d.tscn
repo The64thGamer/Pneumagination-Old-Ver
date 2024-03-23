@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=22 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Mining.cs" id="4_35mrk"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="4_tt854"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="4_tu8wd"]
+[ext_resource type="Script" path="res://Scripts/Placing.cs" id="6_c3d1i"]
 [ext_resource type="Script" path="res://Scripts/PhotoMode.cs" id="7_8ade3"]
 [ext_resource type="PackedScene" uid="uid://ctebjgs6cgjjn" path="res://Particles/Break Brush.tscn" id="8_htych"]
 [ext_resource type="Script" path="res://Scripts/DrawLine3D.cs" id="9_dc1ri"]
@@ -127,6 +128,10 @@ far = 2000.0
 
 [node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
 script = ExtResource("4_35mrk")
+worldGen = NodePath("../../../..")
+
+[node name="Placing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
+script = ExtResource("6_c3d1i")
 worldGen = NodePath("../../../..")
 
 [node name="Debug Text" type="Label" parent="Player/Player Head/Player Camera" groups=["Player"]]

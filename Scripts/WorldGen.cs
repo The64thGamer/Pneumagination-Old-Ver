@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static WorldGen;
 
 public partial class WorldGen : Node3D
 {
@@ -273,7 +274,7 @@ public partial class WorldGen : Node3D
 					});
 					Vector3 pos = new Vector3((ongoingChunkRenderData[e].position.X * chunkSize), (ongoingChunkRenderData[e].position.Y * chunkSize), (ongoingChunkRenderData[e].position.Z * chunkSize));
 
-                    debugLine.DrawLine(pos, pos + new Vector3(0,chunkSize,0), new Color(1,1,1,1),1000);
+					debugLine.DrawLine(pos, pos + new Vector3(0,chunkSize,0), new Color(1,1,1,1),1000);
 				}
 				else
 				{
@@ -1280,6 +1281,43 @@ public partial class WorldGen : Node3D
 		return false;
 	}
 
+	public bool PlaceBlock(Vector3 position)
+	{
+		if (!firstChunkLoaded)
+		{
+			return false;
+		}
+		position = new Vector3(
+			Mathf.Floor(position.X),
+			Mathf.Floor(position.Y),
+			Mathf.Floor(position.Z)
+			);
+		Vector3 chunkPos = new Vector3(
+			Mathf.Floor(position.X / chunkSize),
+			Mathf.Floor(position.Y / chunkSize),
+			Mathf.Floor(position.Z / chunkSize)
+			);
+		Vector3 insideChunkPos = new Vector3(
+			(position.X % chunkSize) + chunkMarginSize,
+			(position.Y % chunkSize) + chunkMarginSize, 
+			(position.Z % chunkSize) + chunkMarginSize
+			);
+		for (int i = 0; i < loadedChunks.Count; i++)
+		{
+			if (loadedChunks[i].position.Equals(chunkPos))
+			{
+				Brush b = CreateBrush(insideChunkPos, Vector3.One);
+				b.hiddenFlag = false;
+				b.borderFlag = false;
+				loadedChunks[i].chunk.brushes.Add(b);
+				RerenderLoadedChunk(loadedChunks[i]);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	void RenderChunkBordersVisible(LoadedChunkData chunk)
 	{
 		chunk.chunk.hasGeneratedBorders = true;
@@ -1315,7 +1353,7 @@ public partial class WorldGen : Node3D
 			AddChild(chunkData.chunkNode);
 			chunkData.chunkNode.Name = "Chunk " + chunkData.id.ToString();
 			chunkData.chunkNode.AddChild(chunkData.meshNode);
-			chunkData.chunkNode.GlobalPosition = new Vector3(chunkData.position.X * chunkSize, chunkData.position.Y * chunkSize, chunkData.position.Z * chunkSize);
+			chunkData.chunkNode.GlobalPosition = new Vector3((chunkData.position.X * chunkSize) - chunkMarginSize, (chunkData.position.Y * chunkSize) - chunkMarginSize, (chunkData.position.Z * chunkSize) - chunkMarginSize);
 			chunkData.state = ChunkRenderDataState.garbageCollector;
 			chunkData.meshNode.AddChild(chunkData.staticBody);
 			chunkData.staticBody.AddChild(chunkData.collisionShape);
