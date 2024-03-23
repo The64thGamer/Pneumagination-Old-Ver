@@ -11,6 +11,9 @@ public partial class PlayerMovement : CharacterBody3D
 
 	bool spawned;
 
+	float coyoteTime;
+
+	public const float GivenCoyoteTime = 0.2f;
 	public const float Speed = 25.0f;
 	public const float JumpVelocity = 50.0f;
 	public const float sensitivity = 0.003f;
@@ -63,19 +66,31 @@ public partial class PlayerMovement : CharacterBody3D
             }
         }
 
+		bool grounded = IsOnFloor();
+
         Vector3 velocity = Velocity;
 
 		// Add the gravity.
-		if (!IsOnFloor())
+		if (!grounded)
+		{
 			velocity.Y -= gravity * (float)delta;
+			coyoteTime = Mathf.Max(0, coyoteTime - (float)delta);
+        }
+		else if(coyoteTime != GivenCoyoteTime)
+		{
+			coyoteTime = GivenCoyoteTime;
+        }
 
-		// Handle Jump.
-		if (Input.IsActionJustPressed("Jump") && IsOnFloor())
-			velocity.Y = JumpVelocity;
+        // Handle Jump.
+        if (Input.IsActionPressed("Jump") && coyoteTime > 0)
+        {
+            velocity.Y = JumpVelocity;
+            coyoteTime = 0;
+        }
 
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		Vector2 inputDir = Input.GetVector("Move Left", "Move Right", "Move Forward", "Move Back");
+        // Get the input direction and handle the movement/deceleration.
+        // As good practice, you should replace UI actions with custom gameplay actions.
+        Vector2 inputDir = Input.GetVector("Move Left", "Move Right", "Move Forward", "Move Back");
 		Vector3 direction = (head.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
