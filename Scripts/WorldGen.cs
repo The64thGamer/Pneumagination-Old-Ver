@@ -1199,8 +1199,10 @@ public partial class WorldGen : Node3D
 					loadedChunks[i].chunk.connectedInvisibleBrushes.Remove(loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]]);
 				}
 
+				bool borderCheck = loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].borderFlag;
+
 				//Check for border generation
-				if (loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]].borderFlag)
+				if (borderCheck)
 				{
 					chunkPos = new Vector3(loadedChunks[i].chunk.positionX, loadedChunks[i].chunk.positionY, loadedChunks[i].chunk.positionZ);
 
@@ -1269,7 +1271,14 @@ public partial class WorldGen : Node3D
 
 				//Remove and rerender
 				loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
-				RenderChunkBordersVisible(loadedChunks[i]);
+				if (borderCheck && !loadedChunks[i].chunk.hasGeneratedBorders)
+				{
+					RenderChunkBordersVisible(loadedChunks[i]);
+				}
+				else
+				{
+					RerenderLoadedChunk(loadedChunks[i]);
+				}
 				return true;
 			}
 		}
