@@ -1215,7 +1215,7 @@ public partial class WorldGen : Node3D
 		if (!firstChunkLoaded)
 		{
 			return 0;
-		}
+		} 
 		Vector3 chunkPos;
 
 		for (int i = 0; i < loadedChunks.Count; i++)

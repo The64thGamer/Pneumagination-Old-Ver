@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=32 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://Scripts/PhotoMode.cs" id="7_8ade3"]
 [ext_resource type="PackedScene" uid="uid://ctebjgs6cgjjn" path="res://Particles/Break Brush.tscn" id="8_htych"]
 [ext_resource type="Script" path="res://Scripts/DrawLine3D.cs" id="9_dc1ri"]
-[ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://Textures/Cursor.png" id="9_yvr36"]
+[ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://Cursor.png" id="9_yvr36"]
 [ext_resource type="Script" path="res://Scripts/ScrollBar.cs" id="10_etxye"]
 [ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="10_n1m02"]
 [ext_resource type="Texture2D" uid="uid://crtnf337fo4gr" path="res://UI/Slot Edge.png" id="11_nqbhn"]
@@ -18,6 +18,8 @@
 [ext_resource type="Texture2D" uid="uid://1nxqi0sgrpbg" path="res://UI/Slot Placing.png" id="13_ksttp"]
 [ext_resource type="Texture2D" uid="uid://b2cujyos0ev48" path="res://UI/Slot Mining.png" id="14_1kgwj"]
 [ext_resource type="Script" path="res://Scripts/TotalBrushes.cs" id="15_jlml1"]
+[ext_resource type="Texture2D" uid="uid://cqewp1wk7xn4" path="res://UI/Slot Empty.png" id="17_dve77"]
+[ext_resource type="Texture2D" uid="uid://dtdi1d8mw3gra" path="res://Textures/Grass_Base.png" id="18_bihoa"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
 _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.603789), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.318486, 0.2824), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.505568, 0.271829), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
@@ -229,6 +231,43 @@ layout_mode = 2
 texture = ExtResource("14_1kgwj")
 expand_mode = 2
 stretch_mode = 4
+
+[node name="TextureRect6" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("17_dve77")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect6" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("15_jlml1")
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_bihoa")
+expand_mode = 1
 
 [node name="Photo Mode" type="Node3D" parent="Player"]
 
