@@ -139,7 +139,7 @@ public partial class WorldGen : Node3D
 
 		noiseF = new FastNoiseLite();
 		noiseF.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		noiseF.SetFrequency(0.005f);
+		noiseF.SetFrequency(0.0075f);
 		noiseF.SetSeed((int)seedB);
 		noiseF.SetCellularJitter(1.5f);
 		noiseF.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
@@ -540,7 +540,7 @@ public partial class WorldGen : Node3D
 	{
 		if (biome > 0.3f && biome <= 0.6f) //Grass
 		{
-			if (regionBorderCheck || regionBorderCornerCheck)
+			if (regionBorderCheck || regionBorderCornerCheck && isSurface)
 			{
 				return new uint[] { 3, 1, 1, 1, 1, 1 };
 			}
@@ -555,7 +555,7 @@ public partial class WorldGen : Node3D
 		}
 		else if (biome <= 0.3f) //Desert
 		{
-			if (regionBorderCheck || regionBorderCornerCheck)
+			if (regionBorderCheck || regionBorderCornerCheck && isSurface)
 			{
 				return new uint[] { 3, 6, 6, 6, 6, 6 };
 			}
@@ -570,7 +570,7 @@ public partial class WorldGen : Node3D
 		}
 		else //Quarry
 		{
-			if (regionBorderCheck || regionBorderCornerCheck)
+			if (regionBorderCheck || regionBorderCornerCheck && isSurface)
 			{
 				return new uint[] { 7, 1, 1, 1, 1, 1 };
 			}
