@@ -14,10 +14,9 @@ config/name="Pneumagination"
 config/version="0.11a"
 run/main_scene="res://Scenes/node_3d.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
-boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/show_image=false
-boot_splash/image="res://Textures/testtexture.png"
-config/icon="res://Textures/testtexture.png"
+boot_splash/bg_color=Color(0.270588, 0.596078, 0.85098, 1)
+boot_splash/image="res://UI/Logo/FullTallRender.png"
+config/icon="res://UI/Logo/MediumRender.png"
 
 [autoload]
 
