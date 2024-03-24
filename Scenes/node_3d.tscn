@@ -8,8 +8,8 @@
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="4_tu8wd"]
 [ext_resource type="Script" path="res://Scripts/Placing.cs" id="6_c3d1i"]
 [ext_resource type="Script" path="res://Scripts/PhotoMode.cs" id="7_8ade3"]
+[ext_resource type="Script" path="res://Scripts/Texturing.cs" id="7_uco8b"]
 [ext_resource type="PackedScene" uid="uid://ctebjgs6cgjjn" path="res://Particles/Break Brush.tscn" id="8_htych"]
-[ext_resource type="Script" path="res://Scripts/DrawLine3D.cs" id="9_dc1ri"]
 [ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://Cursor.png" id="9_yvr36"]
 [ext_resource type="Script" path="res://Scripts/ScrollBar.cs" id="10_etxye"]
 [ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="10_n1m02"]
@@ -101,7 +101,7 @@ shadow_size = 3
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
 
-[node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles", "debugLine")]
+[node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles")]
 script = ExtResource("1_qvi55")
 envController = NodePath("WorldEnvironment")
 curve1 = SubResource("Curve_tpjr8")
@@ -111,7 +111,6 @@ curve4 = SubResource("Curve_81qg4")
 curve5 = SubResource("Curve_yefdb")
 curve6 = SubResource("Curve_ijfoo")
 destroyBrushParticles = NodePath("Break Brush Particles")
-debugLine = NodePath("DebugDraw")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_rruv5")
@@ -149,6 +148,10 @@ worldGen = NodePath("../../../..")
 
 [node name="Placing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
 script = ExtResource("6_c3d1i")
+worldGen = NodePath("../../../..")
+
+[node name="Texturing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen")]
+script = ExtResource("7_uco8b")
 worldGen = NodePath("../../../..")
 
 [node name="Debug Text" type="Label" parent="Player/Player Head/Player Camera" groups=["Player"]]
@@ -492,6 +495,3 @@ shadow_blur = 0.364
 directional_shadow_split_1 = 0.052
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 2374.0
-
-[node name="DebugDraw" type="Node2D" parent="."]
-script = ExtResource("9_dc1ri")
