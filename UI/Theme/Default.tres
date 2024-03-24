@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c2m7n0pwedx3p"]
+
+[ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="1_rs7qk"]
+
+[resource]
+default_font = ExtResource("1_rs7qk")
+default_font_size = 7

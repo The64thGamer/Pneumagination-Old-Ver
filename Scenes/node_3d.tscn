@@ -157,7 +157,7 @@ worldGen = NodePath("../../../..")
 [node name="Debug Text" type="Label" parent="Player/Player Head/Player Camera" groups=["Player"]]
 texture_filter = 1
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 25.0
 text = " 
  LOL
  LOL"
@@ -187,7 +187,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 6.0
 offset_top = -40.0
-offset_right = 192.0
+offset_right = 420.0
 offset_bottom = -6.0
 grow_vertical = 0
 size_flags_horizontal = 4

@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cdnlpoiwgn3a7"]
+
+[ext_resource type="Texture2D" uid="uid://bl6l134rxbfxq" path="res://Textures/Laterite.jpg" id="1_cohsr"]
+
+[resource]
+albedo_color = Color(1, 1, 1, 0.0509804)
+albedo_texture = ExtResource("1_cohsr")
+metallic_specular = 0.0
+uv1_scale = Vector3(0.008, 0.008, 0.008)
+uv1_triplanar = true
+uv1_world_triplanar = true

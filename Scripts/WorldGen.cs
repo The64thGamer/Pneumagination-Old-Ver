@@ -89,8 +89,8 @@ public partial class WorldGen : Node3D
 			seedD = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
 		}
 
-		mats = new Material[7];
-		for (int i = 0; i < 7; i++)
+		mats = new Material[8];
+		for (int i = 0; i < 8; i++)
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
@@ -138,13 +138,12 @@ public partial class WorldGen : Node3D
 		noiseE.SetFractalOctaves(4);
 
 		noiseF = new FastNoiseLite();
-		noiseF.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		noiseF.SetFrequency(0.002f);
+		noiseF.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+		noiseF.SetFrequency(0.005f);
 		noiseF.SetSeed((int)seedB);
-		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
-		noiseF.SetFractalOctaves(4);
+		noiseF.SetCellularJitter(1.5f);
 		noiseF.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
-		noiseF.SetDomainWarpAmp(1000);
+		noiseF.SetDomainWarpAmp(100);
 	}
 
 	public override void _Process(double delta)
@@ -378,6 +377,8 @@ public partial class WorldGen : Node3D
 		Brush bigBlock;
 		bool regionBordercheck, regionBorderCornercheck;
 		float region;
+		float biome;
+		bool isSurface;
 
 		//Big Blocks and First Surface Layer
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
@@ -398,54 +399,16 @@ public partial class WorldGen : Node3D
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, posX, posY, posZ, 0, x, y, z);
 						bigBlock.borderFlag = CheckBrushOnBorder(posX, posY, posZ);
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x, y, z);
-						if ((bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1)
-						{
-							region = GetClampedNoise(noiseC.GetNoise(posX + (chunkSize * x / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)));
-							regionBordercheck = false;
-							if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX, newZ + 1)))
-							{
-								regionBordercheck = true;
-							}
-							regionBorderCornercheck = false;
-							if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ - 1)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ - 1)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ + 1)) ||
-								region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ + 1)))
-							{
-								regionBorderCornercheck = true;
-							}
-							if (regionBordercheck || regionBorderCornercheck)
-							{
-								if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
-								{
-									bigBlock.textures = new uint[] { 6, 6, 6, 6, 6, 6 };
-								}
-								else
-								{
-									bigBlock.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
 
-								}
-							}
-							else
-							{
-								if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
-								{
-									bigBlock.textures = new uint[] { 5, 5, 5, 5, 5, 5 };
-								}
-								else
-								{
-									bigBlock.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
+						//Find Values
+						biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
+						region = GetClampedNoise(noiseC.GetNoise(newX,newZ));
+						regionBordercheck = FindIfRoadBlock(region, newX, newZ);
+						regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
+						isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
 
-								}
-							}
-						}
-						else
-						{
-							bigBlock.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
-						}
+						//Assign textures
+						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region);
 
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
@@ -547,6 +510,75 @@ public partial class WorldGen : Node3D
 		return chunk;
 	}
 
+	bool FindIfRoadBlock(float region, float newX, float newZ)
+	{
+		if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ)) ||
+			region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ)) ||
+			region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1)) ||
+			region != GetClampedNoise(noiseC.GetNoise(newX, newZ + 1)))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool FindIfCornerRoadBlock(float region, float newX, float newZ)
+	{
+		if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ - 1)) ||
+			region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ - 1)) ||
+			region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ + 1)) ||
+			region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ + 1)))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	
+	//Bottom,North,Top,South,West,East
+	uint[] FindTextureOfGeneratingBrush(bool isSurface, bool regionBorderCheck, bool regionBorderCornerCheck, float biome, float region)
+	{
+		if (biome > 0.3f && biome <= 0.6f) //Grass
+		{
+			if (regionBorderCheck || regionBorderCornerCheck)
+			{
+				return new uint[] { 3, 1, 1, 1, 1, 1 };
+			}
+			if (isSurface)
+			{
+				return new uint[] { 3, 4, 4, 4, 4, 4 };
+			}
+			else
+			{
+				return new uint[] { 3, 3, 3, 3, 3, 3 };
+			}
+		}
+		else if (biome <= 0.3f) //Desert
+		{
+			if (regionBorderCheck || regionBorderCornerCheck)
+			{
+				return new uint[] { 3, 6, 6, 6, 6, 6 };
+			}
+			if (isSurface)
+			{
+				return new uint[] { 3, 5, 5, 5, 5, 5 };
+			}
+			else
+			{
+				return new uint[] { 3, 3, 3, 3, 3, 3 };
+			}
+		}
+		else //Quarry
+		{
+			if (regionBorderCheck || regionBorderCornerCheck)
+			{
+				return new uint[] { 7, 1, 1, 1, 1, 1 };
+			}
+			return new uint[] { 7, 7, 7, 7, 7, 7 };
+
+		}
+	}
+
 	bool CheckBigBlock(int posX, int posY, int posZ)
 	{
 		bool noiseValue = false;
@@ -586,18 +618,18 @@ public partial class WorldGen : Node3D
 		return noiseValue;
 	}
 
-	List<Brush> CreateSurfaceBrushes(byte id, byte posX, byte posY, byte posZ, bool subSurface, int x, int y, int z)
+	List<Brush> CreateSurfaceBrushes(byte bitMask, byte posX, byte posY, byte posZ, bool subSurface, int x, int y, int z)
 	{
 		List<Brush> brushCopies = new List<Brush>();
 		bool check;
 		byte[] verts;
 		if (subSurface)
 		{
-			check = subSurfaceBrushes.TryGetValue(id, out verts);
+			check = subSurfaceBrushes.TryGetValue(bitMask, out verts);
 		}
 		else
 		{
-			check = surfaceBrushes.TryGetValue(id, out verts);
+			check = surfaceBrushes.TryGetValue(bitMask, out verts);
 		}
 
 		if (check)
@@ -606,64 +638,24 @@ public partial class WorldGen : Node3D
 			float newX = (posX / bigBlockSize) + (chunkSize * x / bigBlockSize);
 			float newZ = (posZ / bigBlockSize) + (chunkSize * z / bigBlockSize);
 
-			float region;
-			bool regionBordercheck, regionBorderCornercheck;
-			region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
-			regionBordercheck = false;
-			if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ)) ||
-				region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ)) ||
-				region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1)) ||
-				region != GetClampedNoise(noiseC.GetNoise(newX, newZ + 1)))
-			{
-				regionBordercheck = true;
-			}
-			regionBorderCornercheck = false;
-			if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ - 1)) ||
-				region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ - 1)) ||
-				region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ + 1)) ||
-				region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ + 1)))
-			{
-				regionBorderCornercheck = true;
-			}
+			//Find Values
+			float biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
+			float region = GetClampedNoise(noiseC.GetNoise(newX,newZ));
+			bool regionBordercheck = FindIfRoadBlock(region, newX, newZ);
+			bool regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
+			bool isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
+
+			//Assign textures
+			uint[] textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region);
+
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(posX, posY, posZ) };
-				if ((id & (1 << 1)) == 0 && (id & (1 << 0)) != 0 && y >= -1)
-				{
-					if (regionBordercheck || regionBorderCornercheck)
-					{
-						if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
-						{
-							b.textures = new uint[] { 6, 6, 6, 6, 6, 6 };
-						}
-						else
-						{
-							b.textures = new uint[] { 1, 1, 1, 1, 1, 1 };
-
-						}
-					}
-					else
-					{
-						if (GetClampedNoise(noiseF.GetNoise(newX, newZ)) > 0.6f)
-						{
-							b.textures = new uint[] { 5, 5, 5, 5, 5, 5 };
-						}
-						else
-						{
-							b.textures = new uint[] { 4, 4, 4, 4, 4, 4 };
-						}
-					}
-				}
-				else
-				{
-					b.textures = new uint[] { 3, 3, 3, 3, 3, 3 };
-				}
+				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(posX, posY, posZ),textures = textures };
 				for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = (byte)(verts[e + (i * 24)] + chunkMarginSize);
 				}
 				brushCopies.Add(b);
-
 			}
 
 			for (int e = 0; e < brushCopies.Count; e++)
@@ -1229,7 +1221,7 @@ public partial class WorldGen : Node3D
 		LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
 		if (foundChunk == null)
 		{
-			return -1;
+ 			return -1;
 		}
 		int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[brushID]];
 		foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[brushID]] = materialID;
