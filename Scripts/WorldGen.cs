@@ -1149,7 +1149,7 @@ public partial class WorldGen : Node3D
 		return brush;
 	}
 
-	float VolumeOfMesh(byte[] verts)
+	public float VolumeOfMesh(byte[] verts)
 	{
 		float total = 0;
 		for (int i = 0; i < brushIndices.Length; i += 3)
@@ -1210,11 +1210,11 @@ public partial class WorldGen : Node3D
 		return ((aByte & (1 << pos)) != 0);
 	}
 
-	public int DestroyBlock(Node3D chunkNode, int brushID)
+	public Brush DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
 		{ 
-			return 0;
+			return null;
 		} 
 		Vector3 chunkPos;
 
@@ -1291,9 +1291,6 @@ public partial class WorldGen : Node3D
 				}
 				pos /= brushVerts.Length / 3;
 
-				//Get Volume
-				int volume = Mathf.CeilToInt(VolumeOfMesh(brushVerts));
-
 				//Particles
 				Vector3 size = (maxSize - minSize);
 				destroyBrushParticles.GlobalPosition = pos + new Vector3(
@@ -1307,6 +1304,8 @@ public partial class WorldGen : Node3D
 				destroyBrushParticles.Restart();
 				destroyBrushParticles.Emitting = true;
 
+				Brush b = loadedChunks[i].chunk.brushes[loadedChunks[i].visibleBrushIndices[brushID]];
+
 				//Remove and rerender
 				loadedChunks[i].chunk.brushes.RemoveAt(loadedChunks[i].visibleBrushIndices[brushID]);
 				if (borderCheck && !loadedChunks[i].chunk.hasGeneratedBorders)
@@ -1317,10 +1316,10 @@ public partial class WorldGen : Node3D
 				{
 					RerenderLoadedChunk(loadedChunks[i]);
 				}
-				return volume;
+				return b;
 			}
 		}
-		return 0;
+		return null;
 	}
 
 	public bool PlaceBlock(Vector3 position, int size)

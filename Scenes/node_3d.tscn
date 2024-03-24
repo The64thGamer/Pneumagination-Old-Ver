@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=39 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -20,6 +20,13 @@
 [ext_resource type="Script" path="res://Scripts/TotalBrushes.cs" id="15_jlml1"]
 [ext_resource type="Texture2D" uid="uid://cqewp1wk7xn4" path="res://UI/Slot Empty.png" id="17_dve77"]
 [ext_resource type="Texture2D" uid="uid://dtdi1d8mw3gra" path="res://Textures/Grass_Base.png" id="18_bihoa"]
+[ext_resource type="Script" path="res://Scripts/ItemCount.cs" id="18_h2tyc"]
+[ext_resource type="Texture2D" uid="uid://db8skc7si2np0" path="res://Textures/Road_Base.png" id="19_pivc3"]
+[ext_resource type="Texture2D" uid="uid://bs32iedt22nhy" path="res://Textures/plasterwall_diffuse.jpg" id="20_7nkk8"]
+[ext_resource type="Texture2D" uid="uid://c74obs1kj68gl" path="res://Textures/Cliffside_Diffuse.png" id="21_033t3"]
+[ext_resource type="Texture2D" uid="uid://omo2vxy8kwxn" path="res://Textures/Sand_Diffuse.png" id="23_q1kgu"]
+[ext_resource type="Texture2D" uid="uid://dbv5rbwqkijtb" path="res://Textures/Sand_Rocky_Diffuse.png" id="24_x3368"]
+[ext_resource type="Script" path="res://Scripts/Inventory.cs" id="26_8c26d"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
 _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.603789), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.318486, 0.2824), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.505568, 0.271829), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
@@ -253,9 +260,124 @@ text = "99999"
 label_settings = SubResource("LabelSettings_bbj47")
 horizontal_alignment = 1
 vertical_alignment = 2
-script = ExtResource("15_jlml1")
+script = ExtResource("18_h2tyc")
+checkItem = 1
 
 [node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_pivc3")
+expand_mode = 1
+
+[node name="TextureRect7" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("17_dve77")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect7" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("18_h2tyc")
+checkItem = 2
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_7nkk8")
+expand_mode = 1
+
+[node name="TextureRect8" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("17_dve77")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect8" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("18_h2tyc")
+checkItem = 3
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("21_033t3")
+expand_mode = 1
+
+[node name="TextureRect9" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("17_dve77")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect9" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("18_h2tyc")
+checkItem = 4
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect9"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -269,6 +391,82 @@ grow_vertical = 2
 texture = ExtResource("18_bihoa")
 expand_mode = 1
 
+[node name="TextureRect10" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("17_dve77")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect10" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("18_h2tyc")
+checkItem = 5
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect10"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("23_q1kgu")
+expand_mode = 1
+
+[node name="TextureRect11" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("17_dve77")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect11" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("18_h2tyc")
+checkItem = 6
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect11"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("24_x3368")
+expand_mode = 1
+
 [node name="Photo Mode" type="Node3D" parent="Player"]
 
 [node name="Photo Mode Camera" type="Camera3D" parent="Player/Photo Mode" node_paths=PackedStringArray("envController")]
@@ -279,6 +477,9 @@ near = 10.0
 far = 1500.0
 script = ExtResource("7_8ade3")
 envController = NodePath("../../../WorldEnvironment")
+
+[node name="Inventory" type="Node" parent="Player"]
+script = ExtResource("26_8c26d")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)

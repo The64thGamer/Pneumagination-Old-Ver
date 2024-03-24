@@ -23,8 +23,16 @@ public partial class Mining : Node3D
             {
                 Vector3 position = ((Node3D)result["collider"]).GlobalPosition;
 
-                totalBrushes += worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"])));
-
+                WorldGen.Brush b = worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, Mathf.FloorToInt(((int)result["face_index"])));
+                totalBrushes += Mathf.CeilToInt(worldGen.VolumeOfMesh(b.vertices));
+                for (int i = 0; i < b.textures.Length; i++)
+                {
+                    if (b.textures[i] == 0)
+                    {
+                        continue;
+                    }
+                    Inventory.inventory[b.textures[i]]++;
+                }
             }
         }
     }
