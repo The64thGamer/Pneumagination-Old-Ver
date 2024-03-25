@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=49 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -90,6 +90,14 @@ offsets = PackedFloat32Array(0.46506, 0.939759)
 [sub_resource type="Gradient" id="Gradient_uyqn1"]
 offsets = PackedFloat32Array(0, 0.853012)
 
+[sub_resource type="Curve" id="Curve_hisxf"]
+_data = [Vector2(0.195, 0.315), 0.0, 0.0, 0, 0, Vector2(0.399, 1), 0.0, 0.0, 0, 0, Vector2(0.786192, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.315), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_6m3dr"]
+_data = [Vector2(0.318, 0), 0.0, 0.0, 0, 0, Vector2(0.443, 0.6), 0.0, 0.0, 0, 0, Vector2(0.675, 0.6), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_l23mf"]
 size = Vector3(2, 11, 2)
 
@@ -131,6 +139,8 @@ skyDepthColor = SubResource("Gradient_uyqn1")
 sunColor = ExtResource("3_vpwsn")
 skyColor = ExtResource("4_ukaty")
 fogColor = ExtResource("5_2fe6i")
+maxFogDistance = SubResource("Curve_hisxf")
+minFogDistance = SubResource("Curve_6m3dr")
 sun = NodePath("../DirectionalLight3D")
 fogMesh = NodePath("../Player/Player Head/Player Camera/Fog Mesh")
 

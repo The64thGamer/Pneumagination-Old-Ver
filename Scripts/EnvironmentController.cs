@@ -8,25 +8,29 @@ public partial class EnvironmentController : WorldEnvironment
     [Export] Gradient sunColor;
     [Export] Gradient skyColor;
     [Export] Gradient fogColor;
+    [Export] Curve maxFogDistance;
+    [Export] Curve minFogDistance;
     [Export] DirectionalLight3D sun;
     [Export] MeshInstance3D fogMesh;
+    ShaderMaterial fogMat;
+
+    //Statics
     public static float timeOfDay;
     public static float lengthOfDay = 60;
 
+    //Locals
     float exactTimeOfDay = 10;
+    float maxFogRange = (WorldGen.chunkLoadingDistance * WorldGen.chunkSize) - WorldGen.chunkSize;
 
+    //Consts
     const float sdfgiMaxDistance = 1600;
     const float sdfgiMaxDistancePhotoMode = 3000;
     const float fogDensity = 0.0007f;
     const float fogDensityPhotoMode = 0.0005f;
 
-    ShaderMaterial fogMat;
-
     public override void _Ready()
     {
         fogMat = ((ShaderMaterial)fogMesh.MaterialOverride);
-        fogMat.SetShaderParameter("fogMaxRadius", (WorldGen.chunkLoadingDistance * WorldGen.chunkSize) - WorldGen.chunkSize);
-
     }
 
     public override void _Process(double delta)
@@ -41,6 +45,9 @@ public partial class EnvironmentController : WorldEnvironment
         Environment.BackgroundColor = skyColor.Sample(timeOfDay) * skyDepthColor.Sample(range);
         fogMat.SetShaderParameter("fog_color", fogColor.Sample(timeOfDay) * fogDepthColor.Sample(range));
         fogMat.SetShaderParameter("fogCenterWorldPos", PlayerMovement.currentPosition);
+        fogMat.SetShaderParameter("fogMaxRadius", maxFogRange * maxFogDistance.Sample(timeOfDay));
+        fogMat.SetShaderParameter("fogMinRadius", maxFogRange * minFogDistance.Sample(timeOfDay));
+
     }
 
     float GetClampedRange(float lowerBound, float upperBound, float pos)
