@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=42 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -84,11 +84,36 @@ fog_sky_affect = 0.0
 
 [sub_resource type="Gradient" id="Gradient_i5exu"]
 offsets = PackedFloat32Array(0.46506, 0.939759)
-colors = PackedColorArray(0, 0, 0, 1, 0.545098, 0.709804, 1, 1)
 
 [sub_resource type="Gradient" id="Gradient_uyqn1"]
 offsets = PackedFloat32Array(0, 0.853012)
-colors = PackedColorArray(0, 0, 0, 1, 0.662745, 0.784314, 1, 1)
+
+[sub_resource type="Gradient" id="Gradient_cy587"]
+offsets = PackedFloat32Array(0, 0.118072, 0.190361, 0.25, 0.313253, 0.383133, 0.5, 0.619277, 0.681928, 0.75, 0.804819, 0.877108, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 0.0322761, 0.138052, 0.192149, 1, 0.310463, 0.444609, 0.608023, 1, 0.757038, 0.894699, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.941464, 0.621051, 0.417625, 1, 0.79555, 0.206593, 0.483763, 1, 0.184455, 0.209879, 0.569819, 1, 0.0173569, 4.81308e-08, 0.258483, 1, 0, 0, 0, 1)
+
+[sub_resource type="CSharpScript" id="CSharpScript_1ikse"]
+script/source = "using Godot;
+using System;
+
+public partial class DayNightCycle : DirectionalLight3D
+{
+	[Export] public Gradient sunColor;
+	[Export] public Gradient skyColor;
+	[Export] public Gradient fogColor;
+	public static float timeOfDay;
+	public static float lengthOfDay = 2400;
+	 
+	float exactTimeOfDay = 0;
+
+	public override void _Process(double delta)
+	{
+		exactTimeOfDay = (exactTimeOfDay + (float)delta) % lengthOfDay;
+		timeOfDay = exactTimeOfDay / lengthOfDay;
+		LightColor = sunColor.Sample(timeOfDay);
+	}
+}
+"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l23mf"]
 size = Vector3(2, 11, 2)
@@ -113,11 +138,28 @@ curve5 = SubResource("Curve_yefdb")
 curve6 = SubResource("Curve_ijfoo")
 destroyBrushParticles = NodePath("Break Brush Particles")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." node_paths=PackedStringArray("sun")]
 environment = SubResource("Environment_rruv5")
 script = ExtResource("2_ju4os")
-fogColor = SubResource("Gradient_i5exu")
-skyColor = SubResource("Gradient_uyqn1")
+fogDepthColor = SubResource("Gradient_i5exu")
+skyDepthColor = SubResource("Gradient_uyqn1")
+sunColor = SubResource("Gradient_cy587")
+skyColor = SubResource("Gradient_cy587")
+fogColor = SubResource("Gradient_cy587")
+sun = NodePath("../DirectionalLight3D")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+light_energy = 1.382
+light_indirect_energy = 2.0
+shadow_enabled = true
+shadow_bias = 0.282
+shadow_normal_bias = 10.0
+shadow_blur = 0.364
+directional_shadow_split_1 = 0.052
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 2374.0
+script = SubResource("CSharpScript_1ikse")
 
 [node name="Break Brush Particles" parent="." instance=ExtResource("8_htych")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
@@ -522,15 +564,3 @@ envController = NodePath("../../../WorldEnvironment")
 
 [node name="Inventory" type="Node" parent="Player"]
 script = ExtResource("26_8c26d")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-light_energy = 1.382
-light_indirect_energy = 2.0
-shadow_enabled = true
-shadow_bias = 0.282
-shadow_normal_bias = 10.0
-shadow_blur = 0.364
-directional_shadow_split_1 = 0.052
-directional_shadow_blend_splits = true
-directional_shadow_max_distance = 2374.0

@@ -3,8 +3,16 @@ using System;
 
 public partial class EnvironmentController : WorldEnvironment
 {
-    [Export] Gradient fogColor;
+    [Export] Gradient fogDepthColor;
+    [Export] Gradient skyDepthColor;
+    [Export] Gradient sunColor;
     [Export] Gradient skyColor;
+    [Export] Gradient fogColor;
+    [Export] DirectionalLight3D sun;
+    public static float timeOfDay;
+    public static float lengthOfDay = 20;
+
+    float exactTimeOfDay = 0;
 
     const float sdfgiMaxDistance = 1400;
     const float sdfgiMaxDistancePhotoMode = 3000;
@@ -15,9 +23,14 @@ public partial class EnvironmentController : WorldEnvironment
     public override void _Process(double delta)
     {
         float range = GetClampedRange(-200, 0, PlayerMovement.currentPosition.Y);
-        Environment.FogLightColor = fogColor.Sample(range);
-        Environment.BackgroundColor = skyColor.Sample(range);
+        Environment.FogLightColor = fogColor.Sample(timeOfDay) * fogDepthColor.Sample(range);
+        Environment.BackgroundColor = skyColor.Sample(timeOfDay) * skyDepthColor.Sample(range);
+
+        exactTimeOfDay = (exactTimeOfDay + (float)delta) % lengthOfDay;
+        timeOfDay = exactTimeOfDay / lengthOfDay;
+        sun.LightColor = sunColor.Sample(timeOfDay);
     }
+
     float GetClampedRange(float lowerBound, float upperBound, float pos)
     {
         return Mathf.Clamp((pos - lowerBound) / (upperBound - lowerBound), 0, 1);
