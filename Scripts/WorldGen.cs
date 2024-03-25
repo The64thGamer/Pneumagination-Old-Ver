@@ -138,12 +138,11 @@ public partial class WorldGen : Node3D
 		noiseE.SetFractalOctaves(4);
 
 		noiseF = new FastNoiseLite();
-		noiseF.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		noiseF.SetFrequency(0.0075f);
+		noiseF.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseF.SetFrequency(0.001f);
 		noiseF.SetSeed((int)seedB);
-		noiseF.SetCellularJitter(1.5f);
-		noiseF.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
-		noiseF.SetDomainWarpAmp(100);
+		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
+		noiseF.SetFractalOctaves(4);
 	}
 
 	public override void _Process(double delta)
@@ -538,9 +537,9 @@ public partial class WorldGen : Node3D
 	//Bottom,North,Top,South,West,East
 	uint[] FindTextureOfGeneratingBrush(bool isSurface, bool regionBorderCheck, bool regionBorderCornerCheck, float biome, float region)
 	{
-		if (biome > 0.3f && biome <= 0.6f) //Grass
+		if (biome <= 0.5f) //Grass
 		{
-			if (regionBorderCheck || regionBorderCornerCheck && isSurface)
+			if ((regionBorderCheck || regionBorderCornerCheck) && isSurface)
 			{
 				return new uint[] { 3, 1, 1, 1, 1, 1 };
 			}
@@ -553,9 +552,9 @@ public partial class WorldGen : Node3D
 				return new uint[] { 3, 3, 3, 3, 3, 3 };
 			}
 		}
-		else if (biome <= 0.3f) //Desert
+		else if (biome > 0.5f && biome <= 0.75f) //Desert
 		{
-			if (regionBorderCheck || regionBorderCornerCheck && isSurface)
+			if ((regionBorderCheck || regionBorderCornerCheck) && isSurface)
 			{
 				return new uint[] { 3, 6, 6, 6, 6, 6 };
 			}
@@ -570,7 +569,7 @@ public partial class WorldGen : Node3D
 		}
 		else //Quarry
 		{
-			if (regionBorderCheck || regionBorderCornerCheck && isSurface)
+			if ((regionBorderCheck || regionBorderCornerCheck) && isSurface)
 			{
 				return new uint[] { 7, 1, 1, 1, 1, 1 };
 			}
