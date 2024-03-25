@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Drawing;
 
 public partial class Placing : Node3D
 {
@@ -36,9 +37,30 @@ public partial class Placing : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                if(worldGen.PlaceBlock((Vector3)result["position"] + ((Vector3)result["normal"])*0.5f * sizes[currentSizeIndex], sizes[currentSizeIndex]))
+                int size = sizes[currentSizeIndex];
+                Vector3 position = (Vector3)result["position"] + ((Vector3)result["normal"]) * 0.5f * size;
+                Vector3 intPosition = new Vector3(
+                Mathf.Floor(Mathf.Floor(position.X) / size) * size,
+                Mathf.Floor(Mathf.Floor(position.Y) / size) * size,
+                Mathf.Floor(Mathf.Floor(position.Z) / size) * size
+                );
+
+                //Check player position and height to not be inside Brush
+                //THIS IS FLAWED it only checks 3 points, make a Raycast version someday
+                if (
+                    PlayerMovement.currentPosition.X >= intPosition.X && PlayerMovement.currentPosition.X <= intPosition.X + size &&
+                    (PlayerMovement.currentPosition.Y >= intPosition.Y && PlayerMovement.currentPosition.Y <= intPosition.Y + size ||
+                    PlayerMovement.currentPosition.Y + 10 >= intPosition.Y && PlayerMovement.currentPosition.Y + 10 <= intPosition.Y + size ||
+                    PlayerMovement.currentPosition.Y + 5 >= intPosition.Y && PlayerMovement.currentPosition.Y + 5 <= intPosition.Y + size) &&
+                    PlayerMovement.currentPosition.Z >= intPosition.Z && PlayerMovement.currentPosition.Z <= intPosition.Z + size
+                    )
                 {
-                    Mining.totalBrushes -= (int)Math.Pow(sizes[currentSizeIndex], 3);
+                    return;
+                }
+
+                if (worldGen.PlaceBlock(position, size))
+                {
+                    Mining.totalBrushes -= (int)Math.Pow(size, 3);
                 }
             }
         }
