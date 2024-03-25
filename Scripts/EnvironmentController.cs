@@ -19,7 +19,7 @@ public partial class EnvironmentController : WorldEnvironment
     public static float lengthOfDay = 1500;
 
     //Locals
-    float exactTimeOfDay = 500;
+    float exactTimeOfDay = 400;
     float maxFogRange = (WorldGen.chunkLoadingDistance * WorldGen.chunkSize) - WorldGen.chunkSize;
 
     //Consts
