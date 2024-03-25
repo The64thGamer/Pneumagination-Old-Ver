@@ -1,15 +1,20 @@
-[gd_scene load_steps=42 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=47 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
 [ext_resource type="Script" path="res://Scripts/PlayerMovement.cs" id="3_m8gbp"]
+[ext_resource type="Gradient" uid="uid://ck38t5fd85an7" path="res://UI/Gradients/Sun.tres" id="3_vpwsn"]
 [ext_resource type="Script" path="res://Scripts/Mining.cs" id="4_35mrk"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="4_tt854"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="4_tu8wd"]
+[ext_resource type="Gradient" uid="uid://cl5kd5v3k56ma" path="res://UI/Gradients/Sky.tres" id="4_ukaty"]
+[ext_resource type="Gradient" uid="uid://j1x467tpopan" path="res://UI/Gradients/Fog.tres" id="5_2fe6i"]
 [ext_resource type="Script" path="res://Scripts/Placing.cs" id="6_c3d1i"]
 [ext_resource type="Script" path="res://Scripts/PhotoMode.cs" id="7_8ade3"]
 [ext_resource type="Script" path="res://Scripts/Texturing.cs" id="7_uco8b"]
+[ext_resource type="Shader" path="res://Shaders/Fog.gdshader" id="8_8lbir"]
 [ext_resource type="PackedScene" uid="uid://ctebjgs6cgjjn" path="res://Particles/Break Brush.tscn" id="8_htych"]
+[ext_resource type="Script" path="res://Scripts/ShaderTriangle.gd" id="9_dmydx"]
 [ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://Cursor.png" id="9_yvr36"]
 [ext_resource type="Script" path="res://Scripts/ScrollBar.cs" id="10_etxye"]
 [ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="10_n1m02"]
@@ -55,10 +60,7 @@ point_count = 7
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_mode = 1
-background_color = Color(0.662745, 0.784314, 1, 1)
 background_energy_multiplier = 1.29
-ambient_light_source = 2
-ambient_light_color = Color(0.298039, 0.545098, 1, 1)
 ambient_light_energy = 0.0
 tonemap_mode = 3
 tonemap_exposure = 0.8
@@ -73,12 +75,12 @@ sdfgi_enabled = true
 sdfgi_use_occlusion = true
 sdfgi_bounce_feedback = 1.5
 sdfgi_cascades = 6
-sdfgi_min_cell_size = 0.341797
+sdfgi_min_cell_size = 0.390625
 sdfgi_y_scale = 2
 sdfgi_energy = 3.0
 fog_enabled = true
 fog_light_color = Color(0.545098, 0.709804, 1, 1)
-fog_light_energy = 2.59
+fog_light_energy = 0.0
 fog_density = 0.0007
 fog_sky_affect = 0.0
 
@@ -88,35 +90,17 @@ offsets = PackedFloat32Array(0.46506, 0.939759)
 [sub_resource type="Gradient" id="Gradient_uyqn1"]
 offsets = PackedFloat32Array(0, 0.853012)
 
-[sub_resource type="Gradient" id="Gradient_cy587"]
-offsets = PackedFloat32Array(0, 0.118072, 0.190361, 0.25, 0.313253, 0.383133, 0.5, 0.619277, 0.681928, 0.75, 0.804819, 0.877108, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 0.0322761, 0.138052, 0.192149, 1, 0.310463, 0.444609, 0.608023, 1, 0.757038, 0.894699, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.941464, 0.621051, 0.417625, 1, 0.79555, 0.206593, 0.483763, 1, 0.184455, 0.209879, 0.569819, 1, 0.0173569, 4.81308e-08, 0.258483, 1, 0, 0, 0, 1)
-
-[sub_resource type="CSharpScript" id="CSharpScript_1ikse"]
-script/source = "using Godot;
-using System;
-
-public partial class DayNightCycle : DirectionalLight3D
-{
-	[Export] public Gradient sunColor;
-	[Export] public Gradient skyColor;
-	[Export] public Gradient fogColor;
-	public static float timeOfDay;
-	public static float lengthOfDay = 2400;
-	 
-	float exactTimeOfDay = 0;
-
-	public override void _Process(double delta)
-	{
-		exactTimeOfDay = (exactTimeOfDay + (float)delta) % lengthOfDay;
-		timeOfDay = exactTimeOfDay / lengthOfDay;
-		LightColor = sunColor.Sample(timeOfDay);
-	}
-}
-"
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_l23mf"]
 size = Vector3(2, 11, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdjng"]
+render_priority = 0
+shader = ExtResource("8_8lbir")
+shader_parameter/fog_color = Color(0.278431, 0.494118, 1, 1)
+shader_parameter/fog_intensity = 0.02
+shader_parameter/amount = 0.11
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5c67k"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bbj47"]
 line_spacing = 2.0
@@ -138,15 +122,16 @@ curve5 = SubResource("Curve_yefdb")
 curve6 = SubResource("Curve_ijfoo")
 destroyBrushParticles = NodePath("Break Brush Particles")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." node_paths=PackedStringArray("sun")]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." node_paths=PackedStringArray("sun", "fogMesh")]
 environment = SubResource("Environment_rruv5")
 script = ExtResource("2_ju4os")
 fogDepthColor = SubResource("Gradient_i5exu")
 skyDepthColor = SubResource("Gradient_uyqn1")
-sunColor = SubResource("Gradient_cy587")
-skyColor = SubResource("Gradient_cy587")
-fogColor = SubResource("Gradient_cy587")
+sunColor = ExtResource("3_vpwsn")
+skyColor = ExtResource("4_ukaty")
+fogColor = ExtResource("5_2fe6i")
 sun = NodePath("../DirectionalLight3D")
+fogMesh = NodePath("../Player/Player Head/Player Camera/Fog Mesh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
@@ -159,7 +144,6 @@ shadow_blur = 0.364
 directional_shadow_split_1 = 0.052
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 2374.0
-script = SubResource("CSharpScript_1ikse")
 
 [node name="Break Brush Particles" parent="." instance=ExtResource("8_htych")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
@@ -184,6 +168,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
 [node name="Player Camera" type="Camera3D" parent="Player/Player Head" groups=["Player"]]
 fov = 92.8
 far = 2000.0
+
+[node name="Fog Mesh" type="MeshInstance3D" parent="Player/Player Head/Player Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05)
+material_override = SubResource("ShaderMaterial_qdjng")
+cast_shadow = 0
+ignore_occlusion_culling = true
+gi_mode = 0
+mesh = SubResource("ArrayMesh_5c67k")
+script = ExtResource("9_dmydx")
 
 [node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
 script = ExtResource("4_35mrk")

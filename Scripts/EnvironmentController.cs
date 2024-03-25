@@ -9,26 +9,35 @@ public partial class EnvironmentController : WorldEnvironment
     [Export] Gradient skyColor;
     [Export] Gradient fogColor;
     [Export] DirectionalLight3D sun;
+    [Export] MeshInstance3D fogMesh;
     public static float timeOfDay;
-    public static float lengthOfDay = 20;
+    public static float lengthOfDay = 60;
 
     float exactTimeOfDay = 0;
 
-    const float sdfgiMaxDistance = 1400;
+    const float sdfgiMaxDistance = 1600;
     const float sdfgiMaxDistancePhotoMode = 3000;
     const float fogDensity = 0.0007f;
     const float fogDensityPhotoMode = 0.0005f;
 
+    ShaderMaterial fogMat;
+
+    public override void _Ready()
+    {
+        fogMat = ((ShaderMaterial)fogMesh.MaterialOverride);
+    }
 
     public override void _Process(double delta)
     {
         float range = GetClampedRange(-200, 0, PlayerMovement.currentPosition.Y);
-        Environment.FogLightColor = fogColor.Sample(timeOfDay) * fogDepthColor.Sample(range);
-        Environment.BackgroundColor = skyColor.Sample(timeOfDay) * skyDepthColor.Sample(range);
+
 
         exactTimeOfDay = (exactTimeOfDay + (float)delta) % lengthOfDay;
         timeOfDay = exactTimeOfDay / lengthOfDay;
         sun.LightColor = sunColor.Sample(timeOfDay);
+        Environment.FogLightColor = 
+        Environment.BackgroundColor = skyColor.Sample(timeOfDay) * skyDepthColor.Sample(range);
+        fogMat.SetShaderParameter("fog_color", fogColor.Sample(timeOfDay) * fogDepthColor.Sample(range));
     }
 
     float GetClampedRange(float lowerBound, float upperBound, float pos)
