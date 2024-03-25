@@ -13,7 +13,7 @@ public partial class EnvironmentController : WorldEnvironment
     public static float timeOfDay;
     public static float lengthOfDay = 60;
 
-    float exactTimeOfDay = 0;
+    float exactTimeOfDay = 10;
 
     const float sdfgiMaxDistance = 1600;
     const float sdfgiMaxDistancePhotoMode = 3000;
@@ -25,6 +25,8 @@ public partial class EnvironmentController : WorldEnvironment
     public override void _Ready()
     {
         fogMat = ((ShaderMaterial)fogMesh.MaterialOverride);
+        fogMat.SetShaderParameter("fogMaxRadius", (WorldGen.chunkLoadingDistance * WorldGen.chunkSize) - WorldGen.chunkSize);
+
     }
 
     public override void _Process(double delta)
@@ -38,6 +40,7 @@ public partial class EnvironmentController : WorldEnvironment
         Environment.FogLightColor = 
         Environment.BackgroundColor = skyColor.Sample(timeOfDay) * skyDepthColor.Sample(range);
         fogMat.SetShaderParameter("fog_color", fogColor.Sample(timeOfDay) * fogDepthColor.Sample(range));
+        fogMat.SetShaderParameter("fogCenterWorldPos", PlayerMovement.currentPosition);
     }
 
     float GetClampedRange(float lowerBound, float upperBound, float pos)

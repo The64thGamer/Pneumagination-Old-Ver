@@ -40,8 +40,8 @@ public partial class WorldGen : Node3D
 	int maxChunksLoadingRampUp = 1;
 
 	//Consts
-	const int chunkLoadingDistance = 7;
-	public const int chunkUnloadingDistance = 9;
+	public const int chunkLoadingDistance = 8;
+	public const int chunkUnloadingDistance = 11;
 	const int bigBlockSize = 6;
 	public const int chunkSize = 84;
 	public const int chunkMarginSize = 86; //(256 - Chunksize) / 2. 

@@ -97,8 +97,9 @@ size = Vector3(2, 11, 2)
 render_priority = 0
 shader = ExtResource("8_8lbir")
 shader_parameter/fog_color = Color(0.278431, 0.494118, 1, 1)
-shader_parameter/fog_intensity = 0.02
-shader_parameter/amount = 0.11
+shader_parameter/fogCenterWorldPos = Vector3(0, 100, 0)
+shader_parameter/fogMaxRadius = 558.04
+shader_parameter/fogMinRadius = 387.66
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_5c67k"]
 
