@@ -1065,7 +1065,6 @@ public partial class WorldGen : Node3D
 					preMesh.brushIndexes.Add(visibleBrushes[i]);
 					preMesh.brushIndexes.Add(visibleBrushes[i]);
 					preMesh.brushface.Add(e);
-					preMesh.brushface.Add(e);
 				}
 			}
 		}
@@ -1222,13 +1221,34 @@ public partial class WorldGen : Node3D
 		{
  			return -1;
 		}
-		int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[brushID]];
-		foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[brushID]] = materialID;
+		int index = Mathf.FloorToInt(brushID / 2.0f);
+
+        int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]];
+		if(oldtex == materialID)
+		{
+			return -1;
+		}
+
+		foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]] = materialID;
 		RerenderLoadedChunk(foundChunk);
 		return oldtex;
 	}
 
-	public Brush DestroyBlock(Node3D chunkNode, int brushID)
+    public int[] GetIndicesFromFace(Node3D chunkNode, int brushID)
+    {
+        if (!firstChunkLoaded)
+        {
+            return null;
+        }
+        LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
+        if (foundChunk == null)
+        {
+            return null;
+        }
+		return null;
+    }
+
+    public Brush DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
 		{
