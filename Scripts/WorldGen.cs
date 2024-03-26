@@ -1223,7 +1223,7 @@ public partial class WorldGen : Node3D
 		}
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 
-        int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]];
+		int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]];
 		if(oldtex == materialID)
 		{
 			return -1;
@@ -1234,21 +1234,21 @@ public partial class WorldGen : Node3D
 		return oldtex;
 	}
 
-    public int[] GetIndicesFromFace(Node3D chunkNode, int brushID)
-    {
-        if (!firstChunkLoaded)
-        {
-            return null;
-        }
-        LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
-        if (foundChunk == null)
-        {
-            return null;
-        }
+	public int[] GetIndicesFromFace(Node3D chunkNode, int brushID)
+	{
+		if (!firstChunkLoaded)
+		{
+			return null;
+		}
+		LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
+		if (foundChunk == null)
+		{
+			return null;
+		}
 		return null;
-    }
+	}
 
-    public Brush DestroyBlock(Node3D chunkNode, int brushID)
+	public Brush DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
 		{

@@ -169,6 +169,14 @@ head = NodePath("Player Head")
 camera = NodePath("Player Head/Player Camera")
 worldGen = NodePath("..")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+light_color = Color(0.152941, 0.152941, 0.152941, 1)
+light_energy = 10.0
+light_indirect_energy = 16.0
+light_size = 1.0
+omni_range = 50.0
+
 [node name="Player Collision" type="CollisionShape3D" parent="Player" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 shape = SubResource("BoxShape3D_l23mf")
