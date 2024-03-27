@@ -35,7 +35,7 @@ public partial class ScrollBar : HBoxContainer
 
     public override void _PhysicsProcess(double delta)
     {
-        if (PhotoMode.photoModeEnabled)
+        if (PhotoMode.photoModeEnabled || MeshEditing.selection != MeshEditing.SelectionType.none)
         {
             return;
         }

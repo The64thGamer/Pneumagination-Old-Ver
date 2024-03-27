@@ -6,8 +6,13 @@ public partial class MeshEditing : Node3D
     [Export] public WorldGen worldGen;
     [Export] public MeshInstance3D displayMesh;
     [Export] public Material displayMat;
-    SelectionType selection = SelectionType.none;
+
+    public static SelectionType selection = SelectionType.none;
     Vector3[] verts;
+    Node3D chunk;
+    int faceID;
+    FaceEditType faceEditType;
+
     public override void _PhysicsProcess(double delta)
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.faceSlot)
@@ -28,12 +33,38 @@ public partial class MeshEditing : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                verts = worldGen.GetVertsFromFaceCollision(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, (int)result["face_index"]);
-                selection = SelectionType.face;
-                DisplayFace();
+                chunk = ((Node3D)result["collider"]).GetParent().GetParent() as Node3D;
+                faceID = (int)result["face_index"];
+
+                verts = worldGen.GetVertsFromFaceCollision(chunk,faceID);
+                if(verts != null)
+                {
+                    selection = SelectionType.face;
+                    DisplayFace();
+                }
+
             }
         }
-    }
+        if(selection != SelectionType.none)
+        {
+            if (Input.IsActionJustPressed("Scroll Up"))
+            {
+                switch (faceEditType)
+                {
+                    case FaceEditType.faceAxis:
+                        worldGen.MoveVertsFromFaceCollision(chunk, faceID, (verts[0] - verts[1]).Cross(verts[2] - verts[1]));
+                        break;
+                    case FaceEditType.cardinalAxis:
+                        break;
+                    case FaceEditType.towardsPlayer:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+}
 
     void DisableSelection()
     {
@@ -64,11 +95,18 @@ public partial class MeshEditing : Node3D
         displayMesh.Mesh.SurfaceSetMaterial(0, displayMat);
     }
 
-    enum SelectionType
+    public enum SelectionType
     {
         none,
         vertex,
         edge,
         face,
+    }
+
+    enum FaceEditType
+    {
+        faceAxis,
+        cardinalAxis,
+        towardsPlayer,
     }
 }

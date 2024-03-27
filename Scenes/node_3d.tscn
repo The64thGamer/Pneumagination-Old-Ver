@@ -281,6 +281,22 @@ texture = ExtResource("12_rpj1j")
 expand_mode = 2
 stretch_mode = 4
 
+[node name="Debug Text4" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect3" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -18.0
+offset_right = 29.0
+grow_horizontal = 2
+text = "Face
+Axis"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+script = ExtResource("15_jlml1")
+
 [node name="TextureRect4" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("13_ksttp")

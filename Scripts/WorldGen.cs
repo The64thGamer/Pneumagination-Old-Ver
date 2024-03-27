@@ -1275,6 +1275,51 @@ public partial class WorldGen : Node3D
 		return verts;
 	}
 
+	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move)
+	{
+		if (!firstChunkLoaded)
+		{
+			return false;
+		}
+		LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
+		if (foundChunk == null)
+		{
+			return false;
+		}
+		int index = Mathf.FloorToInt(brushID / 2.0f);
+		Brush foundBrush = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
+		int foundFace = foundChunk.triangleIndexToBrushTextureIndex[index] * 6;
+
+		int finalFace = 0;
+		int currentIndices;
+		for (int i = 0; i < 4; i++)
+		{
+			switch (i)
+			{
+				case 0:
+					finalFace = foundFace;
+					break;
+				case 1:
+					finalFace = foundFace + 1;
+					break;
+				case 2:
+					finalFace = foundFace + 2;
+					break;
+				case 3:
+					finalFace = foundFace + 4;
+					break;
+				default:
+					break;
+			}
+			currentIndices = brushIndices[finalFace] * 3;
+			foundBrush.vertices[currentIndices] = (byte)((foundBrush.vertices[currentIndices] + (int)move.X) % byte.MaxValue);
+			foundBrush.vertices[currentIndices + 1] = (byte)((foundBrush.vertices[currentIndices + 1] + (int)move.Y) % byte.MaxValue);
+			foundBrush.vertices[currentIndices + 2] = (byte)((foundBrush.vertices[currentIndices + 2] + (int)move.Z) % byte.MaxValue);
+		}
+	  
+		return false;
+	}
+
 	public Brush DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
