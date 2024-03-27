@@ -19,6 +19,20 @@ public partial class ScrollBar : HBoxContainer
     {
         UpdateHotbar();
     }
+
+    public override void _Process(double delta)
+    {
+        if (PhotoMode.photoModeEnabled)
+        {
+            Visible = false;
+            return;
+        }
+        else
+        {
+            Visible = true;
+        }
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         if (PhotoMode.photoModeEnabled)

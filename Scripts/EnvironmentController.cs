@@ -24,9 +24,7 @@ public partial class EnvironmentController : WorldEnvironment
 
     //Consts
     const float sdfgiMaxDistance = 1600;
-    const float sdfgiMaxDistancePhotoMode = 3000;
-    const float fogDensity = 0.0007f;
-    const float fogDensityPhotoMode = 0.0005f;
+    const float sdfgiMaxDistancePhotoMode = 2400;
 
     public override void _Ready()
     {
@@ -58,12 +56,10 @@ public partial class EnvironmentController : WorldEnvironment
     public void EnablePhotoMode()
     {
         Environment.SdfgiMaxDistance = sdfgiMaxDistancePhotoMode;
-        Environment.FogDensity = fogDensityPhotoMode;
     }
 
     public void DisablePhotoMode()
     {
         Environment.SdfgiMaxDistance = sdfgiMaxDistance;
-        Environment.FogDensity = fogDensity;
     }
 }
