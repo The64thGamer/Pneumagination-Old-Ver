@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=51 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://Scripts/ScrollBar.cs" id="10_etxye"]
 [ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="10_n1m02"]
 [ext_resource type="Texture2D" uid="uid://crtnf337fo4gr" path="res://UI/Slot Edge.png" id="11_nqbhn"]
+[ext_resource type="Script" path="res://Scripts/MeshEditing.cs" id="11_y4gd0"]
 [ext_resource type="Texture2D" uid="uid://8b68gmhi8sq4" path="res://UI/Slot Face.png" id="12_rpj1j"]
 [ext_resource type="Texture2D" uid="uid://1nxqi0sgrpbg" path="res://UI/Slot Placing.png" id="13_ksttp"]
 [ext_resource type="Texture2D" uid="uid://b2cujyos0ev48" path="res://UI/Slot Mining.png" id="14_1kgwj"]
@@ -33,6 +34,7 @@
 [ext_resource type="Texture2D" uid="uid://dbv5rbwqkijtb" path="res://Textures/Sand_Rocky_Diffuse.png" id="24_x3368"]
 [ext_resource type="Script" path="res://Scripts/Inventory.cs" id="26_8c26d"]
 [ext_resource type="Texture2D" uid="uid://bl6l134rxbfxq" path="res://Textures/Laterite.jpg" id="26_agmi3"]
+[ext_resource type="Script" path="res://Scripts/DrawLine3D.cs" id="34_dy48u"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
 _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.603789), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.318486, 0.2824), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.505568, 0.271829), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
@@ -119,7 +121,7 @@ shadow_size = 3
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
 
-[node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles")]
+[node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles", "debugLine")]
 script = ExtResource("1_qvi55")
 envController = NodePath("WorldEnvironment")
 curve1 = SubResource("Curve_tpjr8")
@@ -129,6 +131,7 @@ curve4 = SubResource("Curve_81qg4")
 curve5 = SubResource("Curve_yefdb")
 curve6 = SubResource("Curve_ijfoo")
 destroyBrushParticles = NodePath("Break Brush Particles")
+debugLine = NodePath("DrawLine")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." node_paths=PackedStringArray("sun", "fogMesh")]
 environment = SubResource("Environment_rruv5")
@@ -197,6 +200,10 @@ script = ExtResource("9_dmydx")
 
 [node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
 script = ExtResource("4_35mrk")
+worldGen = NodePath("../../../..")
+
+[node name="Mesh Editing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
+script = ExtResource("11_y4gd0")
 worldGen = NodePath("../../../..")
 
 [node name="Placing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
@@ -574,3 +581,6 @@ envController = NodePath("../../../WorldEnvironment")
 
 [node name="Inventory" type="Node" parent="Player"]
 script = ExtResource("26_8c26d")
+
+[node name="DrawLine" type="Node2D" parent="."]
+script = ExtResource("34_dy48u")

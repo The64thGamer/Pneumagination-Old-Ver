@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using static WorldGen;
@@ -46,7 +47,7 @@ public partial class WorldGen : Node3D
 	public const int chunkSize = 84;
 	public const int chunkMarginSize = 86; //(256 - Chunksize) / 2. 
 	const int maxChunksLoading = 24;
-	readonly byte[] brushIndices = new byte[]
+	readonly byte[] brushIndices = new byte[36]
 				{
 					//Bottom
 					2, 1, 0,
@@ -1063,7 +1064,6 @@ public partial class WorldGen : Node3D
 						preMesh.normals.Add(normals[indices[temp + o]]);
 					}
 					preMesh.brushIndexes.Add(visibleBrushes[i]);
-					preMesh.brushIndexes.Add(visibleBrushes[i]);
 					preMesh.brushface.Add(e);
 				}
 			}
@@ -1223,18 +1223,18 @@ public partial class WorldGen : Node3D
 		}
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 
-		int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]];
+		int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]];
 		if(oldtex == materialID)
 		{
 			return -1;
 		}
 
-		foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]] = materialID;
+		foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]] = materialID;
 		RerenderLoadedChunk(foundChunk);
 		return oldtex;
 	}
 
-	public int[] GetIndicesFromFace(Node3D chunkNode, int brushID)
+	public Vector3[] GetVertsFromFaceCollision(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
 		{
@@ -1245,7 +1245,40 @@ public partial class WorldGen : Node3D
 		{
 			return null;
 		}
-		return null;
+		int index = Mathf.FloorToInt(brushID / 2.0f);
+		Brush foundBrush = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
+		int foundFace = foundChunk.triangleIndexToBrushTextureIndex[index] * 6;
+
+		Vector3[] verts = new Vector3[4];
+
+		//Verts are accessed by 0,1,2,4 as they are unique in the set
+		verts[0] = new Vector3(
+				foundBrush.vertices[brushIndices[foundFace] * 3] - chunkMarginSize,
+				foundBrush.vertices[(brushIndices[foundFace] * 3) + 1] - chunkMarginSize,
+				foundBrush.vertices[(brushIndices[foundFace] * 3) + 2] - chunkMarginSize)
+				+(foundChunk.position * chunkSize);
+		verts[1] = new Vector3(
+			foundBrush.vertices[brushIndices[foundFace + 1] * 3] - chunkMarginSize,
+			foundBrush.vertices[(brushIndices[foundFace + 1] * 3) + 1] - chunkMarginSize,
+			foundBrush.vertices[(brushIndices[foundFace + 1] * 3) + 2] - chunkMarginSize)
+			+ (foundChunk.position * chunkSize);
+		verts[2] = new Vector3(
+			foundBrush.vertices[brushIndices[foundFace + 2] * 3] - chunkMarginSize,
+			foundBrush.vertices[(brushIndices[foundFace + 2] * 3) + 1] - chunkMarginSize,
+			foundBrush.vertices[(brushIndices[foundFace + 2] * 3) + 2] - chunkMarginSize)
+			+ (foundChunk.position * chunkSize);
+		verts[3] = new Vector3(
+			foundBrush.vertices[brushIndices[foundFace + 4] * 3] - chunkMarginSize,
+			foundBrush.vertices[(brushIndices[foundFace + 4] * 3) + 1] - chunkMarginSize,
+			foundBrush.vertices[(brushIndices[foundFace + 4] * 3) + 2] - chunkMarginSize)
+			 + (foundChunk.position * chunkSize);
+
+		for (int i = 0; i < verts.Length; i++)
+		{
+			debugLine.DrawLine(verts[i], verts[i] + new Vector3(0, 1, 0), new Color(1, 1, 1, 1), 10000);
+		}
+
+		return verts;
 	}
 
 	public Brush DestroyBlock(Node3D chunkNode, int brushID)
@@ -1259,18 +1292,19 @@ public partial class WorldGen : Node3D
 		{
 			return null;
 		}
+		int index = Mathf.FloorToInt(brushID / 2.0f);
 
 		//Signal to reveal hidden blocks
-		if (foundChunk.chunk.connectedInvisibleBrushes.TryGetValue(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]], out List<Brush> updateBrushes))
+		if (foundChunk.chunk.connectedInvisibleBrushes.TryGetValue(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]], out List<Brush> updateBrushes))
 		{
 			foreach (Brush pendingBrush in updateBrushes)
 			{
 				pendingBrush.hiddenFlag = false;
 			}
-			foundChunk.chunk.connectedInvisibleBrushes.Remove(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]]);
+			foundChunk.chunk.connectedInvisibleBrushes.Remove(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]]);
 		}
 
-		bool borderCheck = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].borderFlag;
+		bool borderCheck = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].borderFlag;
 
 		//Check for border generation
 		Vector3 chunkPos;
@@ -1314,7 +1348,7 @@ public partial class WorldGen : Node3D
 			}
 		}
 		//Set up Values
-		byte[] brushVerts = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].vertices;
+		byte[] brushVerts = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].vertices;
 		Vector3 pos = Vector3.Zero;
 		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
@@ -1339,14 +1373,14 @@ public partial class WorldGen : Node3D
 			);
 		(destroyBrushParticles.ProcessMaterial as ParticleProcessMaterial).EmissionBoxExtents = size / 2.0f;
 		destroyBrushParticles.Amount = (int)Mathf.Max(size.X * size.Y * size.Z * 0.2f, 2);
-		destroyBrushParticles.MaterialOverride = mats[foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]].textures[0]];
+		destroyBrushParticles.MaterialOverride = mats[foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].textures[0]];
 		destroyBrushParticles.Restart();
 		destroyBrushParticles.Emitting = true;
 
-		Brush b = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[brushID]];
+		Brush b = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
 
 		//Remove and rerender
-		foundChunk.chunk.brushes.RemoveAt(foundChunk.triangleIndexToBrushIndex[brushID]);
+		foundChunk.chunk.brushes.RemoveAt(foundChunk.triangleIndexToBrushIndex[index]);
 		if (borderCheck && !foundChunk.chunk.hasGeneratedBorders)
 		{
 			RenderChunkBordersVisible(foundChunk);
