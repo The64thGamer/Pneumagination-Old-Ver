@@ -4,12 +4,20 @@ using System;
 public partial class MeshEditing : Node3D
 {
     [Export] public WorldGen worldGen;
-
-
+    [Export] public MeshInstance3D displayMesh;
+    [Export] public Material displayMat;
+    SelectionType selection = SelectionType.none;
+    Vector3[] verts;
     public override void _PhysicsProcess(double delta)
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.faceSlot)
         {
+            if(selection != SelectionType.none) 
+            {
+                selection = SelectionType.none;
+                verts = null;
+                displayMesh.Mesh = null;
+            }
             return;
         }
         if (Input.IsActionJustPressed("Action"))
@@ -20,14 +28,37 @@ public partial class MeshEditing : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                worldGen.GetVertsFromFaceCollision(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, (int)result["face_index"]);
+                verts = worldGen.GetVertsFromFaceCollision(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, (int)result["face_index"]);
+                selection = SelectionType.face;
+                DisplayFace();
             }
         }
     }
 
-    int mod(int x, int m)
+    void DisplayFace()
     {
-        int r = x % m;
-        return r < 0 ? r + m : r;
+        if (selection != SelectionType.face)
+        {
+            return;
+        }
+
+        ArrayMesh arrMesh = new ArrayMesh();
+        Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
+        surfaceArray.Resize((int)Mesh.ArrayType.Max);
+        surfaceArray[(int)Mesh.ArrayType.Vertex] = verts;
+        surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[] { new Vector2(0,0), new Vector2(1,0), new Vector2(1,1), new Vector2(0,1) };
+        surfaceArray[(int)Mesh.ArrayType.Normal] = new Vector3[verts.Length];
+        surfaceArray[(int)Mesh.ArrayType.Index] = new int[] {0,1,2, 2,3,0,};
+        arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
+        displayMesh.Mesh = arrMesh;
+        displayMesh.Mesh.SurfaceSetMaterial(0, displayMat);
+    }
+
+    enum SelectionType
+    {
+        none,
+        vertex,
+        edge,
+        face,
     }
 }

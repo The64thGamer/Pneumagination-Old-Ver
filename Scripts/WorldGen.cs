@@ -1272,12 +1272,6 @@ public partial class WorldGen : Node3D
 			foundBrush.vertices[(brushIndices[foundFace + 4] * 3) + 1] - chunkMarginSize,
 			foundBrush.vertices[(brushIndices[foundFace + 4] * 3) + 2] - chunkMarginSize)
 			 + (foundChunk.position * chunkSize);
-
-		for (int i = 0; i < verts.Length; i++)
-		{
-			debugLine.DrawLine(verts[i], verts[i] + new Vector3(0, 1, 0), new Color(1, 1, 1, 1), 10000);
-		}
-
 		return verts;
 	}
 

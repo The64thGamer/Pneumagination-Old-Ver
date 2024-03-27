@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=52 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="10_n1m02"]
 [ext_resource type="Texture2D" uid="uid://crtnf337fo4gr" path="res://UI/Slot Edge.png" id="11_nqbhn"]
 [ext_resource type="Script" path="res://Scripts/MeshEditing.cs" id="11_y4gd0"]
+[ext_resource type="Material" uid="uid://bmv3unkepswms" path="res://Materials/FaceDisplay.tres" id="12_o316n"]
 [ext_resource type="Texture2D" uid="uid://8b68gmhi8sq4" path="res://UI/Slot Face.png" id="12_rpj1j"]
 [ext_resource type="Texture2D" uid="uid://1nxqi0sgrpbg" path="res://UI/Slot Placing.png" id="13_ksttp"]
 [ext_resource type="Texture2D" uid="uid://b2cujyos0ev48" path="res://UI/Slot Mining.png" id="14_1kgwj"]
@@ -202,9 +203,16 @@ script = ExtResource("9_dmydx")
 script = ExtResource("4_35mrk")
 worldGen = NodePath("../../../..")
 
-[node name="Mesh Editing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
+[node name="Mesh Editing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen", "displayMesh") groups=["Player"]]
 script = ExtResource("11_y4gd0")
 worldGen = NodePath("../../../..")
+displayMesh = NodePath("DisplayMesh")
+displayMat = ExtResource("12_o316n")
+
+[node name="DisplayMesh" type="MeshInstance3D" parent="Player/Player Head/Player Camera/Mesh Editing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0)
+top_level = true
+skeleton = NodePath("../../../../..")
 
 [node name="Placing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
 script = ExtResource("6_c3d1i")
