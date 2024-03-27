@@ -1338,6 +1338,7 @@ public partial class WorldGen : Node3D
 		if(meshChanged)
 		{
 			RerenderLoadedChunk(foundChunk);
+			return true;
 		}
 	  
 		return false;
