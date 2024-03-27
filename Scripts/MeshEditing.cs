@@ -12,18 +12,18 @@ public partial class MeshEditing : Node3D
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.faceSlot)
         {
-            if(selection != SelectionType.none) 
-            {
-                selection = SelectionType.none;
-                verts = null;
-                displayMesh.Mesh = null;
-            }
+            DisableSelection();
             return;
         }
+        if(verts != null && verts[0].DistanceTo(PlayerMovement.currentPosition) > PlayerMovement.playerReach)
+        {
+            DisableSelection();
+        }
+
         if (Input.IsActionJustPressed("Action"))
         {
             PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
-            PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(this.GlobalPosition, this.GlobalPosition + (-this.GlobalTransform.Basis.Z * 50));
+            PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(this.GlobalPosition, this.GlobalPosition + (-this.GlobalTransform.Basis.Z * PlayerMovement.playerReach));
             query.CollisionMask = 0b00000000_00000000_00000000_00000100; //Brushes
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
@@ -32,6 +32,16 @@ public partial class MeshEditing : Node3D
                 selection = SelectionType.face;
                 DisplayFace();
             }
+        }
+    }
+
+    void DisableSelection()
+    {
+        if (selection != SelectionType.none)
+        {
+            selection = SelectionType.none;
+            verts = null;
+            displayMesh.Mesh = null;
         }
     }
 

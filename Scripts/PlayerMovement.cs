@@ -17,7 +17,7 @@ public partial class PlayerMovement : CharacterBody3D
 	public const float Speed = 20.0f;
 	public const float JumpVelocity = 50.0f;
 	public const float sensitivity = 0.003f;
-	public const float playerReach = 25f;
+	public const float playerReach = 22.5f;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
