@@ -20,10 +20,23 @@ public partial class MeshEditing : Node3D
             DisableSelection();
             return;
         }
-        if(verts != null && verts[0].DistanceTo(PlayerMovement.currentPosition) > PlayerMovement.playerReach)
+
+        if(selection != SelectionType.none)
         {
-            DisableSelection();
+            bool distanceCheck = false;
+            for (int i = 0; i < verts.Length; i++)
+            {
+                if(verts[i].DistanceTo(PlayerMovement.currentPosition) <= PlayerMovement.playerReach)
+                {
+                    distanceCheck = true;
+                }
+            }
+            if (!distanceCheck)
+            {
+                DisableSelection();
+            }
         }
+
 
         if (Input.IsActionJustPressed("Action"))
         {
@@ -52,7 +65,15 @@ public partial class MeshEditing : Node3D
                 switch (faceEditType)
                 {
                     case FaceEditType.faceAxis:
-                        worldGen.MoveVertsFromFaceCollision(chunk, faceID, ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized());
+                        if(worldGen.MoveVertsFromFaceCollision(chunk, faceID, ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized()))
+                        {
+                            verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
+                            if (verts != null)
+                            {
+                                selection = SelectionType.face;
+                                DisplayFace();
+                            }
+                        }
                         break;
                     case FaceEditType.cardinalAxis:
                         break;
