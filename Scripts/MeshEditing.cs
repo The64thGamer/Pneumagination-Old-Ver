@@ -60,12 +60,17 @@ public partial class MeshEditing : Node3D
         }
         if(selection != SelectionType.none)
         {
-            if (Input.IsActionJustPressed("Scroll Up"))
+            if (Input.IsActionJustPressed("Scroll Up") || Input.IsActionJustPressed("Scroll Down"))
             {
                 switch (faceEditType)
                 {
                     case FaceEditType.faceAxis:
-                        if(worldGen.MoveVertsFromFaceCollision(chunk, faceID, ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized()))
+                        Vector3 normal = ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized();
+                        if(Input.IsActionJustPressed("Scroll Down"))
+                        {
+                            normal *= -1;
+                        }
+                        if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal))
                         {
                             verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
                             if (verts != null)
