@@ -1292,6 +1292,8 @@ public partial class WorldGen : Node3D
 
 		int finalFace = 0;
 		int currentIndices;
+		int testMove;
+		bool meshChanged = false;
 		for (int i = 0; i < 4; i++)
 		{
 			switch (i)
@@ -1312,9 +1314,30 @@ public partial class WorldGen : Node3D
 					break;
 			}
 			currentIndices = brushIndices[finalFace] * 3;
-			foundBrush.vertices[currentIndices] = (byte)((foundBrush.vertices[currentIndices] + (int)move.X) % byte.MaxValue);
-			foundBrush.vertices[currentIndices + 1] = (byte)((foundBrush.vertices[currentIndices + 1] + (int)move.Y) % byte.MaxValue);
-			foundBrush.vertices[currentIndices + 2] = (byte)((foundBrush.vertices[currentIndices + 2] + (int)move.Z) % byte.MaxValue);
+
+			testMove = foundBrush.vertices[currentIndices] + (int)move.X;
+			if(testMove > 0 && testMove <= byte.MaxValue)
+			{
+				foundBrush.vertices[currentIndices] = (byte)testMove;
+				meshChanged = true;
+			}
+			testMove = foundBrush.vertices[currentIndices + 1] + (int)move.Y;
+			if (testMove > 0 && testMove <= byte.MaxValue)
+			{
+				foundBrush.vertices[currentIndices+1] = (byte)testMove;
+				meshChanged = true;
+			}
+			testMove = foundBrush.vertices[currentIndices + 2] + (int)move.Z;
+			if (testMove > 0 && testMove <= byte.MaxValue)
+			{
+				foundBrush.vertices[currentIndices+2] = (byte)testMove;
+				meshChanged = true;
+			}
+		}
+
+		if(meshChanged)
+		{
+			RerenderLoadedChunk(foundChunk);
 		}
 	  
 		return false;

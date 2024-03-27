@@ -52,7 +52,7 @@ public partial class MeshEditing : Node3D
                 switch (faceEditType)
                 {
                     case FaceEditType.faceAxis:
-                        worldGen.MoveVertsFromFaceCollision(chunk, faceID, (verts[0] - verts[1]).Cross(verts[2] - verts[1]));
+                        worldGen.MoveVertsFromFaceCollision(chunk, faceID, ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized());
                         break;
                     case FaceEditType.cardinalAxis:
                         break;
