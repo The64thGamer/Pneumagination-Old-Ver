@@ -24,12 +24,12 @@ public partial class MeshEditing : Node3D
             return;
         }
 
-        if(selection != SelectionType.none)
+        if (selection != SelectionType.none)
         {
             bool distanceCheck = false;
             for (int i = 0; i < verts.Length; i++)
             {
-                if(verts[i].DistanceTo(PlayerMovement.currentPosition) <= WorldGen.chunkLoadingDistance * WorldGen.chunkSize / 4.0f)
+                if (verts[i].DistanceTo(PlayerMovement.currentPosition) <= WorldGen.chunkLoadingDistance * WorldGen.chunkSize / 4.0f)
                 {
                     distanceCheck = true;
                 }
@@ -58,9 +58,9 @@ public partial class MeshEditing : Node3D
                 }
                 chunk = testChunk;
                 faceID = testFaceID;
-
-                verts = worldGen.GetVertsFromFaceCollision(chunk,faceID);
-                if(verts != null)
+                hitPoint = (Vector3)result["position"];
+                verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
+                if (verts != null)
                 {
                     selection = SelectionType.face;
                     Display();
@@ -71,7 +71,7 @@ public partial class MeshEditing : Node3D
                 DisableSelection();
             }
         }
-        if(selection != SelectionType.none)
+        if (selection != SelectionType.none)
         {
             if (Input.IsActionJustPressed("Scroll Up") || Input.IsActionJustPressed("Scroll Down"))
             {
@@ -95,19 +95,33 @@ public partial class MeshEditing : Node3D
                     default:
                         break;
                 }
-                if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal, ref Mining.totalBrushes, moveType, hitPoint))
+                if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal, ref Mining.totalBrushes, moveType, ref hitPoint))
                 {
                     verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
                     if (verts != null)
                     {
-                        selection = SelectionType.face;
+                        switch (moveType)
+                        {
+                            case WorldGen.MoveType.face:
+                                selection = SelectionType.face;
+                                break;
+                            case WorldGen.MoveType.edge:
+                                selection = SelectionType.edge;
+                                break;
+                            case WorldGen.MoveType.vert:
+                                selection = SelectionType.vertex;
+                                break;
+                            default:
+                                break;
+                        }
                         Display();
                     }
                 }
             }
         }
 
-}
+    }
+
 
     void DisableSelection()
     {
@@ -140,14 +154,13 @@ public partial class MeshEditing : Node3D
 
     void DisplayFace()
     {
-
         ArrayMesh arrMesh = new ArrayMesh();
         Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
         surfaceArray.Resize((int)Mesh.ArrayType.Max);
         surfaceArray[(int)Mesh.ArrayType.Vertex] = verts;
-        surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[] { new Vector2(0,0), new Vector2(1,0), new Vector2(1,1), new Vector2(0,1) };
+        surfaceArray[(int)Mesh.ArrayType.TexUV] = new Vector2[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) };
         surfaceArray[(int)Mesh.ArrayType.Normal] = new Vector3[verts.Length];
-        surfaceArray[(int)Mesh.ArrayType.Index] = new int[] {0,1,2, 2,3,0,};
+        surfaceArray[(int)Mesh.ArrayType.Index] = new int[] { 0, 1, 2, 2, 3, 0, };
         arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
         displayMesh.Mesh = arrMesh;
         displayMesh.Mesh.SurfaceSetMaterial(0, displayMat);

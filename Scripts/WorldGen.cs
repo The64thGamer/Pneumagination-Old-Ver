@@ -1282,7 +1282,7 @@ public partial class WorldGen : Node3D
 		vert
 	}
 
-	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move, ref int units, MoveType moveType, Vector3 hitPoint)
+	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move, ref int units, MoveType moveType, ref Vector3 hitPoint)
 	{
 		if (!firstChunkLoaded)
 		{
@@ -1376,9 +1376,9 @@ public partial class WorldGen : Node3D
 							break;
 					}
 					testDistance = hitPoint.DistanceTo(new Vector3(
-						foundBrush.vertices[testVertex] + chunkMarginSize + (chunkSize * foundChunk.position.X),
-						foundBrush.vertices[testVertex + 1] + chunkMarginSize + (chunkSize * foundChunk.position.Y),
-						foundBrush.vertices[testVertex + 2] + chunkMarginSize + (chunkSize * foundChunk.position.Z)
+						foundBrush.vertices[testVertex] - chunkMarginSize + (chunkSize * foundChunk.position.X),
+						foundBrush.vertices[testVertex + 1] - chunkMarginSize + (chunkSize * foundChunk.position.Y),
+						foundBrush.vertices[testVertex + 2] - chunkMarginSize + (chunkSize * foundChunk.position.Z)
 						));
 					if (testDistance < lowestDistance)
 					{
@@ -1386,6 +1386,8 @@ public partial class WorldGen : Node3D
 						lowestDistance = testDistance;
 					}
 				}
+
+				hitPoint = new Vector3(foundBrush.vertices[finalVert], foundBrush.vertices[finalVert + 1], foundBrush.vertices[finalVert + 2]);
 
 				testMove = foundBrush.vertices[finalVert] + (int)move.X;
 				if (testMove > 0 && testMove <= byte.MaxValue)
