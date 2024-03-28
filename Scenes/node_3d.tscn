@@ -38,7 +38,7 @@
 [ext_resource type="Script" path="res://Scripts/DrawLine3D.cs" id="34_dy48u"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
-_data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.603789), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.318486, 0.2824), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.505568, 0.271829), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.589443, 0.203933), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
+_data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0486322, 0.581382), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.603789), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.315341, 0.330986), 0.0, 0.0, 0, 0, Vector2(0.404255, 0.322599), 0.0, 0.0, 0, 0, Vector2(0.508523, 0.323944), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.599432, 0.176056), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.848024, 0.174719), 0.452809, 0.452809, 0, 0, Vector2(0.902735, 0.678652), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
 point_count = 15
 
 [sub_resource type="Curve" id="Curve_0dt1a"]
@@ -50,8 +50,8 @@ _data = [Vector2(0, 0.775124), 0.0, 0.0, 0, 0, Vector2(0.100223, 0.914333), 0.0,
 point_count = 17
 
 [sub_resource type="Curve" id="Curve_81qg4"]
-_data = [Vector2(0, 0.63056), 0.0, 0.0, 0, 0, Vector2(0.104677, 0.357496), 0.0, 0.0, 0, 0, Vector2(0.155902, 0), 0.0, 0.0, 0, 0, Vector2(0.213808, 0.0790774), 0.0, 0.0, 0, 0, Vector2(0.287305, 0.09514), 0.0, 0.0, 0, 0, Vector2(0.293987, 0.0201812), 0.0, 0.0, 0, 0, Vector2(0.314031, 0.100494), 0.0, 0.0, 0, 0, Vector2(0.365256, 0.100494), 0.0, 0.0, 0, 0, Vector2(0.36971, 0.0308896), 0.0, 0.0, 0, 0, Vector2(0.458797, 0.041598), 0.0, 0.0, 0, 0, Vector2(0.461025, 0.309308), 0.0, 0.0, 0, 0, Vector2(0.521158, 0.330725), 0.0, 0.0, 0, 0, Vector2(0.525612, 0.014827), 0.0, 0.0, 0, 0, Vector2(0.576837, 0.143328), 0.0, 0.0, 0, 0, Vector2(0.632517, 0.0255353), 0.0, 0.0, 0, 0, Vector2(0.665924, 0.09514), 0.0, 0.0, 0, 0, Vector2(0.708241, 0), 0.0, 0.0, 0, 0, Vector2(0.708241, 0.191516), 0.0, 0.0, 0, 0, Vector2(0.759466, 0.469934), 0.0, 0.0, 0, 0, Vector2(0.781737, 0.368204), 0.0, 0.0, 0, 0, Vector2(0.817372, 0.689456), 0.0, 0.0, 0, 0, Vector2(1, 0.823311), 0.0, 0.0, 0, 0]
-point_count = 22
+_data = [Vector2(0, 0.63056), 0.0, 0.0, 0, 0, Vector2(0.104677, 0.357496), 0.0, 0.0, 0, 0, Vector2(0.119318, 0.190141), 0.0, 0.0, 0, 0, Vector2(0.150568, 0.190141), 0.0, 0.0, 0, 0, Vector2(0.155902, 0), 0.0, 0.0, 0, 0, Vector2(0.213808, 0.0790774), 0.0, 0.0, 0, 0, Vector2(0.287305, 0.09514), 0.0, 0.0, 0, 0, Vector2(0.293987, 0.0201812), 0.0, 0.0, 0, 0, Vector2(0.314031, 0.100494), 0.0, 0.0, 0, 0, Vector2(0.365256, 0.100494), 0.0, 0.0, 0, 0, Vector2(0.36971, 0.0308896), 0.0, 0.0, 0, 0, Vector2(0.458797, 0.041598), 0.0, 0.0, 0, 0, Vector2(0.461025, 0.309308), 0.0, 0.0, 0, 0, Vector2(0.521158, 0.330725), 0.0, 0.0, 0, 0, Vector2(0.525612, 0.014827), 0.0, 0.0, 0, 0, Vector2(0.576837, 0.143328), 0.0, 0.0, 0, 0, Vector2(0.632517, 0.0255353), 0.0, 0.0, 0, 0, Vector2(0.665924, 0.09514), 0.0, 0.0, 0, 0, Vector2(0.708241, 0), 0.0, 0.0, 0, 0, Vector2(0.708241, 0.191516), 0.0, 0.0, 0, 0, Vector2(0.759466, 0.469934), 0.0, 0.0, 0, 0, Vector2(0.781737, 0.368204), 0.0, 0.0, 0, 0, Vector2(0.817372, 0.689456), 0.0, 0.0, 0, 0, Vector2(1, 0.823311), 0.0, 0.0, 0, 0]
+point_count = 24
 
 [sub_resource type="Curve" id="Curve_yefdb"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.242762, 1), 0.0, 0.0, 0, 0, Vector2(0.365256, 0), 0.0, 0.0, 0, 0, Vector2(0.374165, 0.373558), 9.20166, 9.20166, 0, 0, Vector2(0.518931, 0.373558), 0.0, 0.0, 0, 0, Vector2(0.561247, 0), 0.0, 0.0, 0, 0, Vector2(0.561247, 0.111203), 0.0, 0.0, 0, 0, Vector2(0.650334, 0.121911), 0.0, 0.0, 0, 0, Vector2(0.652561, 0), 0.0, 0.0, 0, 0, Vector2(0.7951, 0), 0.0, 0.0, 0, 0, Vector2(0.830735, 0.453871), 0.0, 0.0, 0, 0, Vector2(0.902004, 0.753707), 0.0, 0.0, 0, 0, Vector2(0.966592, 0.641269), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -165,6 +165,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
 [node name="Player" type="CharacterBody3D" parent="." node_paths=PackedStringArray("head", "camera", "worldGen") groups=["Player"]]
 collision_layer = 3
 collision_mask = 5
+floor_constant_speed = true
 floor_max_angle = 1.39626
 safe_margin = 0.01
 script = ExtResource("3_m8gbp")
@@ -269,17 +270,65 @@ texture = ExtResource("10_n1m02")
 expand_mode = 2
 stretch_mode = 4
 
+[node name="Debug Text5" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "Y"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="TextureRect2" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("11_nqbhn")
 expand_mode = 2
 stretch_mode = 4
 
+[node name="Debug Text4" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect2" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "Y"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="TextureRect3" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("12_rpj1j")
 expand_mode = 2
 stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect3" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "Out"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="TextureRect4" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
 layout_mode = 2
