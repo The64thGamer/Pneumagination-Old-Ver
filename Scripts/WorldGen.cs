@@ -1292,7 +1292,7 @@ public partial class WorldGen : Node3D
 		Brush foundBrush = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
 		int foundFace = foundChunk.triangleIndexToBrushTextureIndex[index] * 6;
 
-		float cost = Mathf.Ceil(VolumeOfMesh(foundBrush.vertices));
+		float cost = VolumeOfMesh(foundBrush.vertices);
 		int finalFace = 0;
 		int currentIndices;
 		int testMove;
@@ -1368,10 +1368,9 @@ public partial class WorldGen : Node3D
 			foundBrush.vertices = backupCopy;
 			return false;
 		}
-
 		if (meshChanged)
 		{
-			cost = cost - VolumeOfMesh(foundBrush.vertices);
+			cost = (Mathf.Round(cost * 1000) / 1000.0f) - (Mathf.Round(VolumeOfMesh(foundBrush.vertices)*1000)/1000.0f);
 			if (cost < 0)
 			{
 				cost = Mathf.Floor(cost);
