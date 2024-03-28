@@ -46,8 +46,15 @@ public partial class MeshEditing : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
-                chunk = ((Node3D)result["collider"]).GetParent().GetParent() as Node3D;
-                faceID = (int)result["face_index"];
+                Node3D testChunk = ((Node3D)result["collider"]).GetParent().GetParent() as Node3D;
+                int testFaceID = (int)result["face_index"];
+                if (testChunk == chunk && testFaceID == faceID)
+                {
+                    DisableSelection();
+                    return;
+                }
+                chunk = testChunk;
+                faceID = testFaceID;
 
                 verts = worldGen.GetVertsFromFaceCollision(chunk,faceID);
                 if(verts != null)
@@ -55,7 +62,10 @@ public partial class MeshEditing : Node3D
                     selection = SelectionType.face;
                     DisplayFace();
                 }
-
+            }
+            else
+            {
+                DisableSelection();
             }
         }
         if(selection != SelectionType.none)
@@ -99,6 +109,8 @@ public partial class MeshEditing : Node3D
             selection = SelectionType.none;
             verts = null;
             displayMesh.Mesh = null;
+            chunk = null;
+            faceID = -1;
         }
     }
 
