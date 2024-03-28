@@ -26,7 +26,7 @@ public partial class MeshEditing : Node3D
             bool distanceCheck = false;
             for (int i = 0; i < verts.Length; i++)
             {
-                if(verts[i].DistanceTo(PlayerMovement.currentPosition) <= PlayerMovement.playerReach)
+                if(verts[i].DistanceTo(PlayerMovement.currentPosition) <= WorldGen.chunkLoadingDistance * WorldGen.chunkSize / 4.0f)
                 {
                     distanceCheck = true;
                 }
