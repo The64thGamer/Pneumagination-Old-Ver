@@ -7,3 +7,4 @@ blend_mode = 1
 no_depth_test = true
 shading_mode = 0
 albedo_color = Color(0.917647, 0.564706, 0.231373, 1)
+texture_filter = 5
