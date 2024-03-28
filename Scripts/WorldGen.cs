@@ -1303,13 +1303,17 @@ public partial class WorldGen : Node3D
 		}
 		Vector3 size = maxSize - minSize;
 		size = new Vector3(Mathf.Abs(size.X), Mathf.Abs(size.Y), Mathf.Abs(size.Z));
-		if(size.X + move.X < 0 ||
-			size.Y + move.Y < 0 ||
-			size.Z + move.Z < 0 ||
-			size.X + move.X > 86 ||
-			size.Y + move.Y > 86 ||
-			size.Z + move.Z > 86
-			)
+		size += move;
+		if(size.X < 0 ||
+            size.Y < 0 ||
+            size.Z < 0 ||
+            size.X > 86 ||
+            size.Y > 86 ||
+            size.Z > 86 ||
+			(size.X == 0 && size.Y == 0) ||
+            (size.Y == 0 && size.Z == 0) ||
+            (size.Z == 0 && size.X == 0)
+            )
 		{
 			return false;
 		}
