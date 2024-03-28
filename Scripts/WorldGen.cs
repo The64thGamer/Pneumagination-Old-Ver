@@ -1275,8 +1275,14 @@ public partial class WorldGen : Node3D
 		return verts;
 	}
 
-	//Return value is volume units cost of operation
-	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move, ref int units)
+	public enum MoveType
+	{
+		face,
+		edge,
+		vert
+	}
+
+	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move, ref int units, MoveType moveType, Vector3 hitPoint)
 	{
 		if (!firstChunkLoaded)
 		{
@@ -1293,55 +1299,120 @@ public partial class WorldGen : Node3D
 		int foundFace = foundChunk.triangleIndexToBrushTextureIndex[index] * 6;
 
 		float cost = VolumeOfMesh(foundBrush.vertices);
-		int finalFace = 0;
 		int currentIndices;
+		int finalVert = 0;
 		int testMove;
 		bool meshChanged = false;
 		byte[] backupCopy = new byte[foundBrush.vertices.Length];
 		System.Array.Copy(foundBrush.vertices, backupCopy,foundBrush.vertices.Length);
 
-		for (int i = 0; i < 4; i++)
+		switch (moveType)
 		{
-			switch (i)
-			{
-				case 0:
-					finalFace = foundFace;
-					break;
-				case 1:
-					finalFace = foundFace + 1;
-					break;
-				case 2:
-					finalFace = foundFace + 2;
-					break;
-				case 3:
-					finalFace = foundFace + 4;
-					break;
-				default:
-					break;
-			}
-			currentIndices = brushIndices[finalFace] * 3;
+			case MoveType.face:
+				for (int i = 0; i < 4; i++)
+				{
+					switch (i)
+					{
+						case 0:
+							finalVert = foundFace;
+							break;
+						case 1:
+							finalVert = foundFace + 1;
+							break;
+						case 2:
+							finalVert = foundFace + 2;
+							break;
+						case 3:
+							finalVert = foundFace + 4;
+							break;
+						default:
+							break;
+					}
+					currentIndices = brushIndices[finalVert] * 3;
 
-			testMove = foundBrush.vertices[currentIndices] + (int)move.X;
-			if(testMove > 0 && testMove <= byte.MaxValue)
-			{
-				foundBrush.vertices[currentIndices] = (byte)testMove;
-				meshChanged = true;
-			}
-			testMove = foundBrush.vertices[currentIndices + 1] + (int)move.Y;
-			if (testMove > 0 && testMove <= byte.MaxValue)
-			{
-				foundBrush.vertices[currentIndices+1] = (byte)testMove;
-				meshChanged = true;
-			}
-			testMove = foundBrush.vertices[currentIndices + 2] + (int)move.Z;
-			if (testMove > 0 && testMove <= byte.MaxValue)
-			{
-				foundBrush.vertices[currentIndices+2] = (byte)testMove;
-				meshChanged = true;
-			}
+					testMove = foundBrush.vertices[currentIndices] + (int)move.X;
+					if (testMove > 0 && testMove <= byte.MaxValue)
+					{
+						foundBrush.vertices[currentIndices] = (byte)testMove;
+						meshChanged = true;
+					}
+					testMove = foundBrush.vertices[currentIndices + 1] + (int)move.Y;
+					if (testMove > 0 && testMove <= byte.MaxValue)
+					{
+						foundBrush.vertices[currentIndices + 1] = (byte)testMove;
+						meshChanged = true;
+					}
+					testMove = foundBrush.vertices[currentIndices + 2] + (int)move.Z;
+					if (testMove > 0 && testMove <= byte.MaxValue)
+					{
+						foundBrush.vertices[currentIndices + 2] = (byte)testMove;
+						meshChanged = true;
+					}
+				}
+				break;
+			case MoveType.edge:
+				break;
+			case MoveType.vert:
+				int testVertex = 0;
+				float lowestDistance = float.MaxValue;
+				float testDistance;
+				for (int i = 0; i < 4; i++)
+				{
+					switch (i)
+					{
+						case 0:
+							testVertex = brushIndices[foundFace] * 3;
+							break;
+						case 1:
+							testVertex = brushIndices[foundFace + 1] * 3;
+							break;
+						case 2:
+							testVertex = brushIndices[foundFace + 2] * 3;
+							break;
+						case 3:
+							testVertex = brushIndices[foundFace + 4] * 3;
+							break;
+						default:
+							break;
+					}
+					testDistance = hitPoint.DistanceTo(new Vector3(
+						foundBrush.vertices[testVertex] + chunkMarginSize + (chunkSize * foundChunk.position.X),
+						foundBrush.vertices[testVertex + 1] + chunkMarginSize + (chunkSize * foundChunk.position.Y),
+						foundBrush.vertices[testVertex + 2] + chunkMarginSize + (chunkSize * foundChunk.position.Z)
+						));
+					if (testDistance < lowestDistance)
+					{
+						finalVert = testVertex;
+						lowestDistance = testDistance;
+					}
+				}
+
+				testMove = foundBrush.vertices[finalVert] + (int)move.X;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVert] = (byte)testMove;
+					meshChanged = true;
+				}
+				testMove = foundBrush.vertices[finalVert + 1] + (int)move.Y;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVert + 1] = (byte)testMove;
+					meshChanged = true;
+				}
+				testMove = foundBrush.vertices[finalVert + 2] + (int)move.Z;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVert + 2] = (byte)testMove;
+					meshChanged = true;
+				}
+				break;
+			default:
+				break;
 		}
 
+		
 
+		//Check for valid size
 		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
 		for (int j = 0; j < foundBrush.vertices.Length; j += 3)
@@ -1368,6 +1439,8 @@ public partial class WorldGen : Node3D
 			foundBrush.vertices = backupCopy;
 			return false;
 		}
+
+		//Check if mesh changed
 		if (meshChanged)
 		{
 			cost = (Mathf.Round(cost * 1000) / 1000.0f) - (Mathf.Round(VolumeOfMesh(foundBrush.vertices)*1000)/1000.0f);

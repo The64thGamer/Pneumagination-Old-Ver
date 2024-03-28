@@ -9,13 +9,16 @@ public partial class MeshEditing : Node3D
 
     public static SelectionType selection = SelectionType.none;
     Vector3[] verts;
+    Vector3 hitPoint;
     Node3D chunk;
     int faceID;
-    FaceEditType faceEditType;
 
     public override void _PhysicsProcess(double delta)
     {
-        if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.faceSlot)
+        if (PhotoMode.photoModeEnabled ||
+            (ScrollBar.currentHotbarSelection != ScrollBar.faceSlot &&
+            ScrollBar.currentHotbarSelection != ScrollBar.edgeSlot &&
+            ScrollBar.currentHotbarSelection != ScrollBar.vertexSlot))
         {
             DisableSelection();
             return;
@@ -60,7 +63,7 @@ public partial class MeshEditing : Node3D
                 if(verts != null)
                 {
                     selection = SelectionType.face;
-                    DisplayFace();
+                    Display();
                 }
             }
             else
@@ -72,30 +75,34 @@ public partial class MeshEditing : Node3D
         {
             if (Input.IsActionJustPressed("Scroll Up") || Input.IsActionJustPressed("Scroll Down"))
             {
-                switch (faceEditType)
+                Vector3 normal = ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized();
+                if (Input.IsActionJustPressed("Scroll Down"))
                 {
-                    case FaceEditType.faceAxis:
-                        Vector3 normal = ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized();
-                        if(Input.IsActionJustPressed("Scroll Down"))
-                        {
-                            normal *= -1;
-                        }
-                        if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal, ref Mining.totalBrushes))
-                        {
-                            verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
-                            if (verts != null)
-                            {
-                                selection = SelectionType.face;
-                                DisplayFace();
-                            }
-                        }
+                    normal *= -1;
+                }
+                WorldGen.MoveType moveType = WorldGen.MoveType.face;
+                switch (ScrollBar.currentHotbarSelection)
+                {
+                    case ScrollBar.faceSlot:
+                        moveType = WorldGen.MoveType.face;
                         break;
-                    case FaceEditType.cardinalAxis:
+                    case ScrollBar.edgeSlot:
+                        moveType = WorldGen.MoveType.edge;
                         break;
-                    case FaceEditType.towardsPlayer:
+                    case ScrollBar.vertexSlot:
+                        moveType = WorldGen.MoveType.vert;
                         break;
                     default:
                         break;
+                }
+                if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal, ref Mining.totalBrushes, moveType, hitPoint))
+                {
+                    verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
+                    if (verts != null)
+                    {
+                        selection = SelectionType.face;
+                        Display();
+                    }
                 }
             }
         }
@@ -111,15 +118,28 @@ public partial class MeshEditing : Node3D
             displayMesh.Mesh = null;
             chunk = null;
             faceID = -1;
+            hitPoint = Vector3.Zero;
+        }
+    }
+
+    void Display()
+    {
+        switch (selection)
+        {
+            case SelectionType.vertex:
+                break;
+            case SelectionType.edge:
+                break;
+            case SelectionType.face:
+                DisplayFace();
+                break;
+            default:
+                break;
         }
     }
 
     void DisplayFace()
     {
-        if (selection != SelectionType.face)
-        {
-            return;
-        }
 
         ArrayMesh arrMesh = new ArrayMesh();
         Godot.Collections.Array surfaceArray = new Godot.Collections.Array();
