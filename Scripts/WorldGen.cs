@@ -1275,7 +1275,8 @@ public partial class WorldGen : Node3D
 		return verts;
 	}
 
-	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move)
+	//Return value is volume units cost of operation
+	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move, ref int units)
 	{
 		if (!firstChunkLoaded)
 		{
@@ -1286,42 +1287,18 @@ public partial class WorldGen : Node3D
 		{
 			return false;
 		}
+		move = new Vector3(Mathf.Round(move.X),Mathf.Round(move.Y),Mathf.Round(move.Z));
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 		Brush foundBrush = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
 		int foundFace = foundChunk.triangleIndexToBrushTextureIndex[index] * 6;
 
-		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-		for (int j = 0; j < foundBrush.vertices.Length; j += 3)
-		{
-			if (minSize.X > foundBrush.vertices[j]) { minSize.X = foundBrush.vertices[j]; }
-			if (minSize.Y > foundBrush.vertices[j + 1]) { minSize.Y = foundBrush.vertices[j + 1]; }
-			if (minSize.Z > foundBrush.vertices[j + 2]) { minSize.Z = foundBrush.vertices[j + 2]; }
-			if (maxSize.X < foundBrush.vertices[j]) { maxSize.X = foundBrush.vertices[j]; }
-			if (maxSize.Y < foundBrush.vertices[j + 1]) { maxSize.Y = foundBrush.vertices[j + 1]; }
-			if (maxSize.Z < foundBrush.vertices[j + 2]) { maxSize.Z = foundBrush.vertices[j + 2]; }
-		}
-		Vector3 size = maxSize - minSize;
-		size = new Vector3(Mathf.Abs(size.X), Mathf.Abs(size.Y), Mathf.Abs(size.Z));
-		size += move;
-		if(size.X < 0 ||
-            size.Y < 0 ||
-            size.Z < 0 ||
-            size.X > 86 ||
-            size.Y > 86 ||
-            size.Z > 86 ||
-			(size.X == 0 && size.Y == 0) ||
-            (size.Y == 0 && size.Z == 0) ||
-            (size.Z == 0 && size.X == 0)
-            )
-		{
-			return false;
-		}
-
-			int finalFace = 0;
+		float cost = Mathf.Ceil(VolumeOfMesh(foundBrush.vertices));
+		int finalFace = 0;
 		int currentIndices;
 		int testMove;
 		bool meshChanged = false;
+		byte[] backupCopy = new byte[foundBrush.vertices.Length];
+		System.Array.Copy(foundBrush.vertices, backupCopy,foundBrush.vertices.Length);
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -1364,8 +1341,51 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		if(meshChanged)
+
+		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+		for (int j = 0; j < foundBrush.vertices.Length; j += 3)
 		{
+			if (minSize.X > foundBrush.vertices[j]) { minSize.X = foundBrush.vertices[j]; }
+			if (minSize.Y > foundBrush.vertices[j + 1]) { minSize.Y = foundBrush.vertices[j + 1]; }
+			if (minSize.Z > foundBrush.vertices[j + 2]) { minSize.Z = foundBrush.vertices[j + 2]; }
+			if (maxSize.X < foundBrush.vertices[j]) { maxSize.X = foundBrush.vertices[j]; }
+			if (maxSize.Y < foundBrush.vertices[j + 1]) { maxSize.Y = foundBrush.vertices[j + 1]; }
+			if (maxSize.Z < foundBrush.vertices[j + 2]) { maxSize.Z = foundBrush.vertices[j + 2]; }
+		}
+		Vector3 size = maxSize - minSize;
+		if (size.X == 0 ||
+			size.Y == 0 ||
+			size.Z == 0 ||
+			size.X > 86 ||
+			size.Y > 86 ||
+			size.Z > 86 ||
+			size.X < -86 ||
+			size.Y < -86 ||
+			size.Z < -86
+			)
+		{
+			foundBrush.vertices = backupCopy;
+			return false;
+		}
+
+		if (meshChanged)
+		{
+			cost = cost - VolumeOfMesh(foundBrush.vertices);
+			if (cost < 0)
+			{
+				cost = Mathf.Floor(cost);
+			}
+			else
+			{
+				cost = Mathf.Ceil(cost);
+			}
+			if(units + cost < 0)
+			{
+				foundBrush.vertices = backupCopy;
+				return false;
+			}
+			units += (int)cost;
 			RerenderLoadedChunk(foundChunk);
 			return true;
 		}

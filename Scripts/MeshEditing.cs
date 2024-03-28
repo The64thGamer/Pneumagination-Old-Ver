@@ -70,7 +70,7 @@ public partial class MeshEditing : Node3D
                         {
                             normal *= -1;
                         }
-                        if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal))
+                        if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal, ref Mining.totalBrushes))
                         {
                             verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
                             if (verts != null)
