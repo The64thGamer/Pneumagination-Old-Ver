@@ -1290,10 +1290,35 @@ public partial class WorldGen : Node3D
 		Brush foundBrush = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
 		int foundFace = foundChunk.triangleIndexToBrushTextureIndex[index] * 6;
 
-		int finalFace = 0;
+		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+		for (int j = 0; j < foundBrush.vertices.Length; j += 3)
+		{
+			if (minSize.X > foundBrush.vertices[j]) { minSize.X = foundBrush.vertices[j]; }
+			if (minSize.Y > foundBrush.vertices[j + 1]) { minSize.Y = foundBrush.vertices[j + 1]; }
+			if (minSize.Z > foundBrush.vertices[j + 2]) { minSize.Z = foundBrush.vertices[j + 2]; }
+			if (maxSize.X < foundBrush.vertices[j]) { maxSize.X = foundBrush.vertices[j]; }
+			if (maxSize.Y < foundBrush.vertices[j + 1]) { maxSize.Y = foundBrush.vertices[j + 1]; }
+			if (maxSize.Z < foundBrush.vertices[j + 2]) { maxSize.Z = foundBrush.vertices[j + 2]; }
+		}
+		Vector3 size = maxSize - minSize;
+		size = new Vector3(Mathf.Abs(size.X), Mathf.Abs(size.Y), Mathf.Abs(size.Z));
+		if(size.X + move.X < 0 ||
+			size.Y + move.Y < 0 ||
+			size.Z + move.Z < 0 ||
+			size.X + move.X > 86 ||
+			size.Y + move.Y > 86 ||
+			size.Z + move.Z > 86
+			)
+		{
+			return false;
+		}
+
+			int finalFace = 0;
 		int currentIndices;
 		int testMove;
 		bool meshChanged = false;
+
 		for (int i = 0; i < 4; i++)
 		{
 			switch (i)
