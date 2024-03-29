@@ -1469,7 +1469,23 @@ public partial class WorldGen : Node3D
 		return false;
 	}
 
-	public Brush DestroyBlock(Node3D chunkNode, int brushID)
+	public Brush FindBrushFromCollision(Node3D chunkNode, int brushID)
+	{
+        if (!firstChunkLoaded)
+        {
+            return null;
+        }
+        LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
+        if (foundChunk == null)
+        {
+            return null;
+        }
+        int index = Mathf.FloorToInt(brushID / 2.0f);
+		return foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
+    }
+
+
+    public Brush DestroyBlock(Node3D chunkNode, int brushID)
 	{
 		if (!firstChunkLoaded)
 		{

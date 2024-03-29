@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=54 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -28,6 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://cqewp1wk7xn4" path="res://UI/Slot Empty.png" id="17_dve77"]
 [ext_resource type="Texture2D" uid="uid://dtdi1d8mw3gra" path="res://Textures/Grass_Base.png" id="18_bihoa"]
 [ext_resource type="Script" path="res://Scripts/ItemCount.cs" id="18_h2tyc"]
+[ext_resource type="Script" path="res://Scripts/HideSimplePlayerUI.cs" id="18_jj0k1"]
 [ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="18_xu5bl"]
 [ext_resource type="Texture2D" uid="uid://db8skc7si2np0" path="res://Textures/Road_Base.png" id="19_pivc3"]
 [ext_resource type="Texture2D" uid="uid://bs32iedt22nhy" path="res://Textures/plasterwall_diffuse.jpg" id="20_7nkk8"]
@@ -204,9 +205,10 @@ gi_mode = 0
 mesh = SubResource("ArrayMesh_5c67k")
 script = ExtResource("9_dmydx")
 
-[node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
+[node name="Mining" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen", "miningBar") groups=["Player"]]
 script = ExtResource("4_35mrk")
 worldGen = NodePath("../../../..")
+miningBar = NodePath("../Pointer/Mining Progress")
 
 [node name="Mesh Editing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen", "displayMesh") groups=["Player"]]
 script = ExtResource("11_y4gd0")
@@ -253,6 +255,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_yvr36")
 stretch_mode = 3
+script = ExtResource("18_jj0k1")
 
 [node name="Mining Progress" type="ProgressBar" parent="Player/Player Head/Player Camera/Pointer"]
 layout_mode = 0
@@ -261,7 +264,8 @@ offset_top = 12.0
 offset_right = 33.0
 offset_bottom = 18.0
 theme = ExtResource("18_xu5bl")
-value = 50.0
+max_value = 1.0
+value = 1.0
 show_percentage = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Player/Player Head/Player Camera"]
