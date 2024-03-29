@@ -22,6 +22,11 @@ config/icon="res://UI/Logo/MediumRender.png"
 
 DrawLine3D="*res://Scripts/DrawLine3D.cs"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=960
+
 [dotnet]
 
 project/assembly_name="Pneumagination"
