@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://dmf3m5br2ywo4" path="res://Sounds/Fall Damage.wav" id="2_4te0c"]
 
 [node name="Fall Damage" type="AudioStreamPlayer3D"]
+unit_size = 80.0
 autoplay = true
 script = ExtResource("1_q3mv6")
 sounds = Array[AudioStream]([ExtResource("2_4te0c")])

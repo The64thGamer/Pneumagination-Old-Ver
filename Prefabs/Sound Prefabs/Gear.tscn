@@ -1,0 +1,20 @@
+[gd_scene load_steps=11 format=3 uid="uid://bixkn5bkno5x8"]
+
+[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_0epby"]
+[ext_resource type="AudioStream" uid="uid://cr05a4gdlbhmp" path="res://Sounds/Gear1.wav" id="2_u2ynx"]
+[ext_resource type="AudioStream" uid="uid://85h7julvs8qf" path="res://Sounds/Gear2.wav" id="3_rspgf"]
+[ext_resource type="AudioStream" uid="uid://c548gv6ou0ih3" path="res://Sounds/Gear3.wav" id="4_ct7jv"]
+[ext_resource type="AudioStream" uid="uid://l11d57c4u5fe" path="res://Sounds/Gear4.wav" id="5_6m1vj"]
+[ext_resource type="AudioStream" uid="uid://dtgmasyva12dt" path="res://Sounds/Gear5.wav" id="6_nmohg"]
+[ext_resource type="AudioStream" uid="uid://jr8861sv2pps" path="res://Sounds/Gear6.wav" id="7_pc17e"]
+[ext_resource type="AudioStream" uid="uid://n8lyeov2vmw2" path="res://Sounds/Gear7.wav" id="8_vgxys"]
+[ext_resource type="AudioStream" uid="uid://xgebh1j2r281" path="res://Sounds/Gear8.wav" id="9_a1ynw"]
+[ext_resource type="AudioStream" uid="uid://s8n2x2wf6crm" path="res://Sounds/Gear9.wav" id="10_dl5ip"]
+
+[node name="Gear" type="AudioStreamPlayer3D"]
+attenuation_model = 2
+unit_size = 50.0
+max_db = -6.0
+autoplay = true
+script = ExtResource("1_0epby")
+sounds = Array[AudioStream]([ExtResource("2_u2ynx"), ExtResource("3_rspgf"), ExtResource("4_ct7jv"), ExtResource("5_6m1vj"), ExtResource("6_nmohg"), ExtResource("7_pc17e"), ExtResource("8_vgxys"), ExtResource("9_a1ynw"), ExtResource("10_dl5ip")])

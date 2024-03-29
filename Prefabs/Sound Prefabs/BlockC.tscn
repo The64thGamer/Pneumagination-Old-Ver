@@ -7,6 +7,8 @@
 
 [node name="BlockC" type="AudioStreamPlayer3D"]
 attenuation_model = 2
+unit_size = 50.0
+max_db = -6.0
 autoplay = true
 script = ExtResource("1_addlm")
 sounds = Array[AudioStream]([ExtResource("2_kmk2c"), ExtResource("3_5vvhk"), ExtResource("4_fxyj5")])
