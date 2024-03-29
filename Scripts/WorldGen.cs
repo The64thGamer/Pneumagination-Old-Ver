@@ -1577,7 +1577,7 @@ public partial class WorldGen : Node3D
 			);
 		(destroyBrushParticles.ProcessMaterial as ParticleProcessMaterial).EmissionBoxExtents = size / 2.0f;
 		destroyBrushParticles.Amount = (int)Mathf.Max(size.X * size.Y * size.Z * 0.2f, 2);
-		destroyBrushParticles.MaterialOverride = mats[foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].textures[0]];
+		destroyBrushParticles.MaterialOverride = mats[foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].textures[1]];
 		destroyBrushParticles.Restart();
 		destroyBrushParticles.Emitting = true;
 
@@ -1675,6 +1675,10 @@ public partial class WorldGen : Node3D
 		if (chunk.node != null)
 		{
 			MeshInstance3D meshNode = chunk.node.GetChild(0) as MeshInstance3D;
+			if(meshNode == null)
+			{
+				return;
+			}
 			meshNode.Mesh = chunkData.meshNode.Mesh;
 			(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
 			chunk.triangleIndexToBrushIndex = chunkData.triangleIndexToBrushIndex;
