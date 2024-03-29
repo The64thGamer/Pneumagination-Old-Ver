@@ -10,8 +10,8 @@ public partial class PlayerMovement : CharacterBody3D
 	public static Vector3 currentPosition = new Vector3();
 
 	bool spawned;
-
 	float coyoteTime;
+	float previousYVelocity;
 
 	public const float GivenCoyoteTime = 0.2f;
 	public const float Speed = 20.0f;
@@ -82,6 +82,12 @@ public partial class PlayerMovement : CharacterBody3D
 			coyoteTime = GivenCoyoteTime;
         }
 
+		//Fall Damage
+		if(grounded && previousYVelocity > 2)
+		{
+
+		}
+
         // Handle Jump.
         if (Input.IsActionPressed("Jump") && coyoteTime > 0)
         {
@@ -105,6 +111,7 @@ public partial class PlayerMovement : CharacterBody3D
 		}
 
 		Velocity = velocity;
+		previousYVelocity = velocity.Y;
 		MoveAndSlide();
 		currentPosition = GlobalPosition;
 	}

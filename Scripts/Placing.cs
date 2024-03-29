@@ -6,7 +6,7 @@ public partial class Placing : Node3D
 {
     [Export] public WorldGen worldGen;
     int currentSizeIndex = 0;
-    int[] sizes = new int[] { 1, 2, 3, 6 };
+    int[] sizes = new int[] { 1, 2, 3, 6, 12 };
 
     public static int currentPlacementSize;
     public override void _Ready()
@@ -29,6 +29,28 @@ public partial class Placing : Node3D
             if (Math.Pow(sizes[currentSizeIndex],3) > Mining.totalBrushes)
             {
                 return;
+            }
+
+
+            switch (currentSizeIndex)
+            {
+                case 0:
+                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockA.tscn").Instantiate());
+                    break;
+                case 1:
+                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockB.tscn").Instantiate());
+                    break;
+                case 2:
+                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockC.tscn").Instantiate());
+                    break;
+                case 3:
+                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockD.tscn").Instantiate());
+                    break;
+                case 4:
+                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockE.tscn").Instantiate());
+                    break;
+                default:
+                    break;
             }
 
             PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;

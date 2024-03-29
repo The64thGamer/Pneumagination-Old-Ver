@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dmf3m5br2ywo4"
+path="res://.godot/imported/Fall Damage.wav-3b61c3e3c0deb64646e4ab8e10f66828.sample"
+
+[deps]
+
+source_file="res://Sounds/Fall Damage.wav"
+dest_files=["res://.godot/imported/Fall Damage.wav-3b61c3e3c0deb64646e4ab8e10f66828.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

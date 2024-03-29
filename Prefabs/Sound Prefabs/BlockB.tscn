@@ -1,0 +1,19 @@
+[gd_scene load_steps=13 format=3 uid="uid://c1ipfs6jvchep"]
+
+[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_tgr2g"]
+[ext_resource type="AudioStream" uid="uid://d1wu3cik735yi" path="res://Sounds/Blockb1.wav" id="2_yq7l7"]
+[ext_resource type="AudioStream" uid="uid://d2i8xhkcb3rh" path="res://Sounds/Blockb2.wav" id="3_knhjm"]
+[ext_resource type="AudioStream" uid="uid://c3xx70se533bw" path="res://Sounds/Blockb3.wav" id="4_8y0dp"]
+[ext_resource type="AudioStream" uid="uid://c56xp35cw6eqo" path="res://Sounds/Blockb4.wav" id="5_y1mnu"]
+[ext_resource type="AudioStream" uid="uid://cvp07txhx5sat" path="res://Sounds/Blockb5.wav" id="6_88mhh"]
+[ext_resource type="AudioStream" uid="uid://cvlnpqk182qay" path="res://Sounds/Blockb6.wav" id="7_d4pm2"]
+[ext_resource type="AudioStream" uid="uid://c6eguj1jkdumd" path="res://Sounds/Blockb7.wav" id="8_adskq"]
+[ext_resource type="AudioStream" uid="uid://cfabk044eqcyl" path="res://Sounds/Blockb8.wav" id="9_b663n"]
+[ext_resource type="AudioStream" uid="uid://ctbbri06t0vj1" path="res://Sounds/Blockb9.wav" id="10_libe4"]
+[ext_resource type="AudioStream" uid="uid://bw4p7j4cvx1ck" path="res://Sounds/Blockb10.wav" id="11_t324w"]
+[ext_resource type="AudioStream" uid="uid://jf33dj01000q" path="res://Sounds/Blockb11.wav" id="12_4np1y"]
+
+[node name="BlockB" type="AudioStreamPlayer3D"]
+autoplay = true
+script = ExtResource("1_tgr2g")
+sounds = Array[AudioStream]([ExtResource("2_yq7l7"), ExtResource("3_knhjm"), ExtResource("4_8y0dp"), ExtResource("5_y1mnu"), ExtResource("6_88mhh"), ExtResource("7_d4pm2"), ExtResource("8_adskq"), ExtResource("9_b663n"), ExtResource("10_libe4"), ExtResource("11_t324w"), ExtResource("12_4np1y")])

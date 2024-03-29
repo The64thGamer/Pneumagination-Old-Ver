@@ -1386,8 +1386,10 @@ public partial class WorldGen : Node3D
 						lowestDistance = testDistance;
 					}
 				}
-
-				hitPoint = new Vector3(foundBrush.vertices[finalVert], foundBrush.vertices[finalVert + 1], foundBrush.vertices[finalVert + 2]);
+				hitPoint = new Vector3(
+					foundBrush.vertices[finalVert] - chunkMarginSize + (chunkSize * foundChunk.position.X), 
+					foundBrush.vertices[finalVert + 1] - chunkMarginSize + (chunkSize * foundChunk.position.Y), 
+					foundBrush.vertices[finalVert + 2] - chunkMarginSize + (chunkSize * foundChunk.position.Z));
 
 				testMove = foundBrush.vertices[finalVert] + (int)move.X;
 				if (testMove > 0 && testMove <= byte.MaxValue)

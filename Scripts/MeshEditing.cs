@@ -62,7 +62,20 @@ public partial class MeshEditing : Node3D
                 verts = worldGen.GetVertsFromFaceCollision(chunk, faceID);
                 if (verts != null)
                 {
-                    selection = SelectionType.face;
+                    switch (ScrollBar.currentHotbarSelection)
+                    {
+                        case ScrollBar.faceSlot:
+                            selection = SelectionType.face;
+                            break;
+                        case ScrollBar.edgeSlot:
+                            selection = SelectionType.edge;
+                            break;
+                        case ScrollBar.vertexSlot:
+                            selection = SelectionType.vertex;
+                            break;
+                        default:
+                            break;
+                    }
                     Display();
                 }
             }
@@ -75,16 +88,14 @@ public partial class MeshEditing : Node3D
         {
             if (Input.IsActionJustPressed("Scroll Up") || Input.IsActionJustPressed("Scroll Down"))
             {
-                Vector3 normal = ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized();
-                if (Input.IsActionJustPressed("Scroll Down"))
-                {
-                    normal *= -1;
-                }
+                Vector3 normal = new Vector3(0, 1, 0);
+
                 WorldGen.MoveType moveType = WorldGen.MoveType.face;
                 switch (ScrollBar.currentHotbarSelection)
                 {
                     case ScrollBar.faceSlot:
                         moveType = WorldGen.MoveType.face;
+                        normal = ((verts[0] - verts[1]).Cross(verts[2] - verts[1])).Normalized();
                         break;
                     case ScrollBar.edgeSlot:
                         moveType = WorldGen.MoveType.edge;
@@ -94,6 +105,10 @@ public partial class MeshEditing : Node3D
                         break;
                     default:
                         break;
+                }
+                if (Input.IsActionJustPressed("Scroll Down"))
+                {
+                    normal *= -1;
                 }
                 if (worldGen.MoveVertsFromFaceCollision(chunk, faceID, normal, ref Mining.totalBrushes, moveType, ref hitPoint))
                 {

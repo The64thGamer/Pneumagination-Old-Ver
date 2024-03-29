@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3 uid="uid://dc7m7olx2g5ro"]
+
+[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_vuv7c"]
+[ext_resource type="AudioStream" uid="uid://bli4g844bdckc" path="res://Sounds/Blockd1.wav" id="2_nl1g5"]
+[ext_resource type="AudioStream" uid="uid://b7rvejjk0gqr" path="res://Sounds/Blockd2.wav" id="3_jcq5p"]
+[ext_resource type="AudioStream" uid="uid://i4m5jvhsjyuo" path="res://Sounds/Blockd3.wav" id="4_be8o2"]
+
+[node name="BlockD" type="AudioStreamPlayer3D"]
+autoplay = true
+script = ExtResource("1_vuv7c")
+sounds = Array[AudioStream]([ExtResource("2_nl1g5"), ExtResource("3_jcq5p"), ExtResource("4_be8o2")])

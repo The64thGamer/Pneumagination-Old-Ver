@@ -1,0 +1,15 @@
+[gd_scene load_steps=9 format=3 uid="uid://bkfmmitef6mi1"]
+
+[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_c4c7s"]
+[ext_resource type="AudioStream" uid="uid://dlf6rf76ppclw" path="res://Sounds/Blocke1.wav" id="2_4lma4"]
+[ext_resource type="AudioStream" uid="uid://jqqb1cbmqvi8" path="res://Sounds/Blocke2.wav" id="3_ac21e"]
+[ext_resource type="AudioStream" uid="uid://cqcb3ciugh6v7" path="res://Sounds/Blocke3.wav" id="4_cwptn"]
+[ext_resource type="AudioStream" uid="uid://clwx4s2xv4sy4" path="res://Sounds/Blocke4.wav" id="5_4vsux"]
+[ext_resource type="AudioStream" uid="uid://dw4neaa4ybpik" path="res://Sounds/Blocke5.wav" id="6_qvnbw"]
+[ext_resource type="AudioStream" uid="uid://bro3rxggm0tap" path="res://Sounds/Blocke6.wav" id="7_5aoes"]
+[ext_resource type="AudioStream" uid="uid://cr8jcm4j1oyun" path="res://Sounds/Blocke7.wav" id="8_hdick"]
+
+[node name="BlockE" type="AudioStreamPlayer3D"]
+autoplay = true
+script = ExtResource("1_c4c7s")
+sounds = Array[AudioStream]([ExtResource("2_4lma4"), ExtResource("3_ac21e"), ExtResource("4_cwptn"), ExtResource("5_4vsux"), ExtResource("6_qvnbw"), ExtResource("7_5aoes"), ExtResource("8_hdick")])

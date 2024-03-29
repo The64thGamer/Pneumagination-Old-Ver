@@ -1,0 +1,28 @@
+[gd_scene load_steps=22 format=3 uid="uid://br82re37rw85a"]
+
+[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_n1tps"]
+[ext_resource type="AudioStream" uid="uid://chve2ibiqkeeg" path="res://Sounds/Blocka1.wav" id="2_d4jab"]
+[ext_resource type="AudioStream" uid="uid://dxm07wx2fe8rh" path="res://Sounds/Blocka2.wav" id="3_0euxb"]
+[ext_resource type="AudioStream" uid="uid://b5iqcnyopmowy" path="res://Sounds/Blocka3.wav" id="4_vrhkr"]
+[ext_resource type="AudioStream" uid="uid://dpvh5o213nhr0" path="res://Sounds/Blocka4.wav" id="5_86gxl"]
+[ext_resource type="AudioStream" uid="uid://ubswcvffh1vw" path="res://Sounds/Blocka5.wav" id="6_okg1d"]
+[ext_resource type="AudioStream" uid="uid://lefxcs2kpspf" path="res://Sounds/Blocka6.wav" id="7_w2f61"]
+[ext_resource type="AudioStream" uid="uid://8im2wjmowau4" path="res://Sounds/Blocka7.wav" id="8_queqo"]
+[ext_resource type="AudioStream" uid="uid://cnm0ft7hamiyy" path="res://Sounds/Blocka8.wav" id="9_fch4q"]
+[ext_resource type="AudioStream" uid="uid://c3rlpv7cilre8" path="res://Sounds/Blocka9.wav" id="10_h8jck"]
+[ext_resource type="AudioStream" uid="uid://bwu8swh2jre2w" path="res://Sounds/Blocka10.wav" id="11_4f4gi"]
+[ext_resource type="AudioStream" uid="uid://bmdhyhpmt6c1p" path="res://Sounds/Blocka11.wav" id="12_2ctv8"]
+[ext_resource type="AudioStream" uid="uid://bxbhtlfabatla" path="res://Sounds/Blocka12.wav" id="13_l8c0n"]
+[ext_resource type="AudioStream" uid="uid://hb7reo2vkmgu" path="res://Sounds/Blocka13.wav" id="14_yca3q"]
+[ext_resource type="AudioStream" uid="uid://c58i3f5i65oqw" path="res://Sounds/Blocka14.wav" id="15_6aatn"]
+[ext_resource type="AudioStream" uid="uid://dbb1gtyiju7pa" path="res://Sounds/Blocka15.wav" id="16_vydyx"]
+[ext_resource type="AudioStream" uid="uid://c7n07g6me15t0" path="res://Sounds/Blocka16.wav" id="17_bjola"]
+[ext_resource type="AudioStream" uid="uid://byw13e8thp74v" path="res://Sounds/Blocka17.wav" id="18_bgvmy"]
+[ext_resource type="AudioStream" uid="uid://yi2htiqje7s6" path="res://Sounds/Blocka18.wav" id="19_7kks1"]
+[ext_resource type="AudioStream" uid="uid://bpc81uohh3dsf" path="res://Sounds/Blocka19.wav" id="20_ha58c"]
+[ext_resource type="AudioStream" uid="uid://ccn7qrmngrwos" path="res://Sounds/Blocka20.wav" id="21_6ucr8"]
+
+[node name="BlockA" type="AudioStreamPlayer3D"]
+autoplay = true
+script = ExtResource("1_n1tps")
+sounds = Array[AudioStream]([ExtResource("2_d4jab"), ExtResource("3_0euxb"), ExtResource("4_vrhkr"), ExtResource("5_86gxl"), ExtResource("6_okg1d"), ExtResource("7_w2f61"), ExtResource("8_queqo"), ExtResource("9_fch4q"), ExtResource("10_h8jck"), ExtResource("11_4f4gi"), ExtResource("12_2ctv8"), ExtResource("13_l8c0n"), ExtResource("14_yca3q"), ExtResource("15_6aatn"), ExtResource("16_vydyx"), ExtResource("17_bjola"), ExtResource("18_bgvmy"), ExtResource("19_7kks1"), ExtResource("20_ha58c"), ExtResource("21_6ucr8")])
