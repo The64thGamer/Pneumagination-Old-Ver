@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=55 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -115,6 +115,10 @@ shader_parameter/fogMinRadius = 387.66
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_5c67k"]
 
+[sub_resource type="Curve" id="Curve_v1div"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.58849, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="LabelSettings" id="LabelSettings_bbj47"]
 line_spacing = 2.0
 font = ExtResource("4_tu8wd")
@@ -209,6 +213,7 @@ script = ExtResource("9_dmydx")
 script = ExtResource("4_35mrk")
 worldGen = NodePath("../../../..")
 miningBar = NodePath("../Pointer/Mining Progress")
+miningProgressCurve = SubResource("Curve_v1div")
 
 [node name="Mesh Editing" type="Node3D" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen", "displayMesh") groups=["Player"]]
 script = ExtResource("11_y4gd0")

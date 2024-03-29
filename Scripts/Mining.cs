@@ -5,6 +5,7 @@ public partial class Mining : Node3D
 {
     [Export] public WorldGen worldGen;
     [Export] public ProgressBar miningBar;
+    [Export] public Curve miningProgressCurve;
 
     public static int totalBrushes;
 
@@ -53,7 +54,7 @@ public partial class Mining : Node3D
             {
                 //Test if on same block
                 breaktimer = Mathf.Max(0, breaktimer - (float)delta);
-                miningBar.Value =  1 - (breaktimer / breakTimerStart);
+                miningBar.Value = miningProgressCurve.SampleBaked(1 - (breaktimer / breakTimerStart));
 
                 PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
                 PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(this.GlobalPosition, this.GlobalPosition + (-this.GlobalTransform.Basis.Z * PlayerMovement.playerReach));
