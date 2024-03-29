@@ -9,6 +9,7 @@ public partial class Mining : Node3D
     public static int totalBrushes;
 
     bool breaking;
+    bool breaksound;
     float breaktimer;
     float breakTimerStart;
     Node3D chunk;
@@ -41,7 +42,7 @@ public partial class Mining : Node3D
                     faceID = (int)result["face_index"];
                     foundBrush = worldGen.FindBrushFromCollision(chunk, faceID);
                     breaking = true;
-                    breakTimerStart = Mathf.Max(worldGen.VolumeOfMesh(foundBrush.vertices) / 216.0f, 0.25f);
+                    breakTimerStart = Mathf.Clamp(worldGen.VolumeOfMesh(foundBrush.vertices) / 216.0f, 0.25f,3f);
                     breaktimer = breakTimerStart;
                     hitPos = (Vector3)result["position"];
                     miningBar.Visible = true;
@@ -49,6 +50,7 @@ public partial class Mining : Node3D
             }
             if (breaking && breaktimer > 0)
             {
+                //Test if on same block
                 breaktimer = Mathf.Max(0, breaktimer - (float)delta);
                 miningBar.Value =  1 - (breaktimer / breakTimerStart);
 
@@ -63,6 +65,24 @@ public partial class Mining : Node3D
                         DisableSelection();
                         return;
                     }
+                }
+
+                //Priming Sound
+                if(!breaksound && breaktimer < breakTimerStart * 0.75f && breakTimerStart > 0.6f)
+                {
+                    breaksound = true;
+                    //Sound
+                    Node3D sound;
+                    if (breakTimerStart <= 1)
+                    {
+                        sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/Prime.tscn").Instantiate() as Node3D;
+                    }
+                    else
+                    {
+                        sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/Prime Long.tscn").Instantiate() as Node3D;
+                    }
+                    AddChild(sound);
+                    sound.Position = Vector3.Zero;
                 }
             }
             if (breaking && breaktimer == 0)
@@ -94,7 +114,7 @@ public partial class Mining : Node3D
                     }
                     Inventory.inventory[b.textures[i]]++;
                 }
-
+                breaksound = false;
                 DisableSelection();
             }
         }
