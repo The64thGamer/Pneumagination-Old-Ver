@@ -180,9 +180,6 @@ light_energy = 10.0
 light_size = 1.0
 omni_range = 50.0
 
-[node name="AudioListener3D" type="AudioListener3D" parent="Player"]
-current = true
-
 [node name="Player Collision" type="CollisionShape3D" parent="Player" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 shape = SubResource("BoxShape3D_l23mf")
@@ -193,6 +190,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
 [node name="Player Camera" type="Camera3D" parent="Player/Player Head" groups=["Player"]]
 fov = 92.8
 far = 2000.0
+
+[node name="AudioListener3D" type="AudioListener3D" parent="Player/Player Head/Player Camera"]
+current = true
 
 [node name="Fog Mesh" type="MeshInstance3D" parent="Player/Player Head/Player Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05)
