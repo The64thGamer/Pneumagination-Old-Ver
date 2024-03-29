@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b7u4yufayv4c8"
+path="res://.godot/imported/Surge Pickup.wav-9ca9cc230a5ff6de17899a162465cbda.sample"
+
+[deps]
+
+source_file="res://Sounds/Surge Pickup.wav"
+dest_files=["res://.godot/imported/Surge Pickup.wav-9ca9cc230a5ff6de17899a162465cbda.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

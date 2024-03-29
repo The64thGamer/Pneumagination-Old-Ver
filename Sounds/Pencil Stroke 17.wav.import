@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dag2o6byjoub"
+path="res://.godot/imported/Pencil Stroke 17.wav-2fb6d288e6ab104a24aeb66c0fb5f88c.sample"
+
+[deps]
+
+source_file="res://Sounds/Pencil Stroke 17.wav"
+dest_files=["res://.godot/imported/Pencil Stroke 17.wav-2fb6d288e6ab104a24aeb66c0fb5f88c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

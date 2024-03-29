@@ -130,6 +130,9 @@ public partial class MeshEditing : Node3D
                                 break;
                         }
                         Display();
+                        Node3D sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/Gear.tscn").Instantiate() as Node3D;
+                        GetTree().Root.AddChild(sound);
+                        sound.GlobalPosition = hitPoint;
                     }
                 }
             }

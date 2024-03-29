@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://fqurgskk0wqd"
+path="res://.godot/imported/Shoot Final.wav-5e0b56caa66b6b69ee320187f92497bd.sample"
+
+[deps]
+
+source_file="res://Sounds/Shoot Final.wav"
+dest_files=["res://.godot/imported/Shoot Final.wav-5e0b56caa66b6b69ee320187f92497bd.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

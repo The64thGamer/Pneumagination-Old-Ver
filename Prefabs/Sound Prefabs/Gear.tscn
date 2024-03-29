@@ -14,7 +14,7 @@
 [node name="Gear" type="AudioStreamPlayer3D"]
 attenuation_model = 2
 unit_size = 50.0
-max_db = -6.0
+max_db = -2.0
 autoplay = true
 script = ExtResource("1_0epby")
 sounds = Array[AudioStream]([ExtResource("2_u2ynx"), ExtResource("3_rspgf"), ExtResource("4_ct7jv"), ExtResource("5_6m1vj"), ExtResource("6_nmohg"), ExtResource("7_pc17e"), ExtResource("8_vgxys"), ExtResource("9_a1ynw"), ExtResource("10_dl5ip")])

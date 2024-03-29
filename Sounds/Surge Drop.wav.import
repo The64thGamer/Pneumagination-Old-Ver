@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dcphspw8cprha"
+path="res://.godot/imported/Surge Drop.wav-22d043e11bd8874c1da95c823a014f54.sample"
+
+[deps]
+
+source_file="res://Sounds/Surge Drop.wav"
+dest_files=["res://.godot/imported/Surge Drop.wav-22d043e11bd8874c1da95c823a014f54.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

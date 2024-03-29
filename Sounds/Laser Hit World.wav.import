@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://clgn25a6jo8wx"
+path="res://.godot/imported/Laser Hit World.wav-4af534d5f8b28515ecf2a4906020fce1.sample"
+
+[deps]
+
+source_file="res://Sounds/Laser Hit World.wav"
+dest_files=["res://.godot/imported/Laser Hit World.wav-4af534d5f8b28515ecf2a4906020fce1.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

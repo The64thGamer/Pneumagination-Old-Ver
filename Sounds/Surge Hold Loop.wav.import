@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://4sg7btybe0pa"
+path="res://.godot/imported/Surge Hold Loop.wav-8cd6a665344b9da9df605fccd3af53f8.sample"
+
+[deps]
+
+source_file="res://Sounds/Surge Hold Loop.wav"
+dest_files=["res://.godot/imported/Surge Hold Loop.wav-8cd6a665344b9da9df605fccd3af53f8.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

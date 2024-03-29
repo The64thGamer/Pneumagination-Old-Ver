@@ -15,7 +15,7 @@
 
 [node name="BlockB" type="AudioStreamPlayer3D"]
 attenuation_model = 2
-unit_size = 50.0
+unit_size = 20.0
 max_db = -6.0
 autoplay = true
 script = ExtResource("1_tgr2g")

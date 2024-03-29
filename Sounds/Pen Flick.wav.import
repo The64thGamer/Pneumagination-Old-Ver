@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://n4yqyiydprhb"
+path="res://.godot/imported/Pen Flick.wav-00165bb2fbf3b242d5fdb4de5dc5bc04.sample"
+
+[deps]
+
+source_file="res://Sounds/Pen Flick.wav"
+dest_files=["res://.godot/imported/Pen Flick.wav-00165bb2fbf3b242d5fdb4de5dc5bc04.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
