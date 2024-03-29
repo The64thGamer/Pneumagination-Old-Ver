@@ -3,7 +3,7 @@
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="1_rs7qk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_we2su"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0, 0, 0, 0.498039)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1

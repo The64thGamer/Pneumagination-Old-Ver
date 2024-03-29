@@ -13,6 +13,7 @@ public partial class Mining : Node3D
     float breakTimerStart;
     Node3D chunk;
     int faceID;
+    WorldGen.Brush foundBrush;
     Vector3 hitPos;
 
     public override void _Ready()
@@ -38,18 +39,18 @@ public partial class Mining : Node3D
                 {
                     chunk = ((Node3D)result["collider"]).GetParent().GetParent() as Node3D;
                     faceID = (int)result["face_index"];
+                    foundBrush = worldGen.FindBrushFromCollision(chunk, faceID);
                     breaking = true;
                     breakTimerStart = 1;
                     breaktimer = breakTimerStart;
                     hitPos = (Vector3)result["position"];
                     miningBar.Visible = true;
-                    GD.Print("Start");
                 }
             }
             if (breaking && breaktimer > 0)
             {
                 breaktimer = Mathf.Max(0, breaktimer - (float)delta);
-                miningBar.Value = breaktimer / breakTimerStart;
+                miningBar.Value =  1 - (breaktimer / breakTimerStart);
 
                 PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
                 PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(this.GlobalPosition, this.GlobalPosition + (-this.GlobalTransform.Basis.Z * PlayerMovement.playerReach));
@@ -57,8 +58,7 @@ public partial class Mining : Node3D
                 Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
                 if (result.Count > 0)
                 {
-                    Node3D testchunk = ((Node3D)result["collider"]).GetParent().GetParent() as Node3D;
-                    if (testchunk != chunk || (testchunk == chunk && (int)result["face_index"] != faceID))
+                    if(foundBrush != worldGen.FindBrushFromCollision(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, (int)result["face_index"]))
                     {
                         DisableSelection();
                         return;
@@ -106,7 +106,6 @@ public partial class Mining : Node3D
 
     void DisableSelection()
     {
-        GD.Print("Hide");
         miningBar.Visible = false;
         chunk = null;
         faceID = -1;
