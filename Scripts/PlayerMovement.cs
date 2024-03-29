@@ -60,14 +60,7 @@ public partial class PlayerMovement : CharacterBody3D
 		// Tab out
 		if (Input.IsActionJustPressed("Pause"))
 		{
-			if (Input.MouseMode == Input.MouseModeEnum.Captured)
-			{
-                Input.MouseMode = Input.MouseModeEnum.Visible;
-            }
-            else
-			{
-                Input.MouseMode = Input.MouseModeEnum.Captured;
-            }
+            GetTree().Quit();
         }
 
 		bool grounded = IsOnFloor();
