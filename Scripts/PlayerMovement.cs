@@ -27,7 +27,9 @@ public partial class PlayerMovement : CharacterBody3D
     {
         currentPosition = GlobalPosition;
         Input.MouseMode = Input.MouseModeEnum.Captured;
-	}
+		camera.RotateX(0.0001f);
+
+    }
 
     public override void _UnhandledInput(InputEvent currentEvent)
     {
