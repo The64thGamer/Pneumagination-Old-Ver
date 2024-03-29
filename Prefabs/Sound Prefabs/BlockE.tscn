@@ -10,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://cr8jcm4j1oyun" path="res://Sounds/Blocke7.wav" id="8_hdick"]
 
 [node name="BlockE" type="AudioStreamPlayer3D"]
+attenuation_model = 2
 autoplay = true
 script = ExtResource("1_c4c7s")
 sounds = Array[AudioStream]([ExtResource("2_4lma4"), ExtResource("3_ac21e"), ExtResource("4_cwptn"), ExtResource("5_4vsux"), ExtResource("6_qvnbw"), ExtResource("7_5aoes"), ExtResource("8_hdick")])

@@ -23,6 +23,7 @@
 [ext_resource type="AudioStream" uid="uid://ccn7qrmngrwos" path="res://Sounds/Blocka20.wav" id="21_6ucr8"]
 
 [node name="BlockA" type="AudioStreamPlayer3D"]
+attenuation_model = 2
 autoplay = true
 script = ExtResource("1_n1tps")
 sounds = Array[AudioStream]([ExtResource("2_d4jab"), ExtResource("3_0euxb"), ExtResource("4_vrhkr"), ExtResource("5_86gxl"), ExtResource("6_okg1d"), ExtResource("7_w2f61"), ExtResource("8_queqo"), ExtResource("9_fch4q"), ExtResource("10_h8jck"), ExtResource("11_4f4gi"), ExtResource("12_2ctv8"), ExtResource("13_l8c0n"), ExtResource("14_yca3q"), ExtResource("15_6aatn"), ExtResource("16_vydyx"), ExtResource("17_bjola"), ExtResource("18_bgvmy"), ExtResource("19_7kks1"), ExtResource("20_ha58c"), ExtResource("21_6ucr8")])

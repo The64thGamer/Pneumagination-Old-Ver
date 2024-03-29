@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://d18ed7h64i72a" path="res://Sounds/Blockc3.wav" id="4_fxyj5"]
 
 [node name="BlockC" type="AudioStreamPlayer3D"]
+attenuation_model = 2
 autoplay = true
 script = ExtResource("1_addlm")
 sounds = Array[AudioStream]([ExtResource("2_kmk2c"), ExtResource("3_5vvhk"), ExtResource("4_fxyj5")])
