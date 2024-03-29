@@ -159,8 +159,10 @@ public partial class MeshEditing : Node3D
         switch (selection)
         {
             case SelectionType.vertex:
+                DisplayFace();
                 break;
             case SelectionType.edge:
+                DisplayFace();
                 break;
             case SelectionType.face:
                 DisplayFace();
