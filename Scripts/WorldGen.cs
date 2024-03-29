@@ -102,7 +102,7 @@ public partial class WorldGen : Node3D
 		noise.SetFrequency(0.002f);
 		noise.SetSeed((int)seedA);
 		noise.SetFractalType(FastNoiseLite.FractalType.PingPong);
-		noise.SetFractalOctaves(3);
+		noise.SetFractalOctaves(5);
 		noise.SetFractalPingPongStrength(2);
 		noise.SetCellularJitter(1.2f);
 		noise.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
@@ -129,7 +129,7 @@ public partial class WorldGen : Node3D
 		noiseD.SetFrequency(0.002f);
 		noiseD.SetSeed((int)seedD);
 		noiseD.SetFractalType(FastNoiseLite.FractalType.FBm);
-		noiseD.SetFractalOctaves(4);
+		noiseD.SetFractalOctaves(5);
 
 		noiseE = new FastNoiseLite();
 		noiseE.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
