@@ -18,6 +18,7 @@ public partial class PlayerMovement : CharacterBody3D
 	public const float JumpVelocity = 50.0f;
 	public const float sensitivity = 0.003f;
 	public const float playerReach = 22.5f;
+	public const float fallDamageMinVel = -100;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
@@ -77,16 +78,24 @@ public partial class PlayerMovement : CharacterBody3D
 			velocity.Y -= gravity * (float)delta;
 			coyoteTime = Mathf.Max(0, coyoteTime - (float)delta);
         }
-		else if(coyoteTime != GivenCoyoteTime)
+		else
+		{
+			velocity.Y = 0;
+		}
+		
+		if(grounded && coyoteTime != GivenCoyoteTime)
 		{
 			coyoteTime = GivenCoyoteTime;
         }
 
 		//Fall Damage
-		if(grounded && previousYVelocity > 2)
+		if(grounded && previousYVelocity < fallDamageMinVel)
 		{
-
-		}
+			GD.Print(previousYVelocity);
+            Node3D sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/Fall Damage.tscn").Instantiate() as Node3D;
+            GetTree().Root.AddChild(sound);
+            sound.GlobalPosition = GlobalPosition;
+        }
 
         // Handle Jump.
         if (Input.IsActionPressed("Jump") && coyoteTime > 0)

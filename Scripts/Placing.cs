@@ -82,7 +82,7 @@ public partial class Placing : Node3D
                         default:
                             break;
                     }
-                    AddChild(sound);
+                    GetTree().Root.AddChild(sound);
                     sound.GlobalPosition = position;
                 }
 
