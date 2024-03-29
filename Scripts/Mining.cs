@@ -21,8 +21,25 @@ public partial class Mining : Node3D
             Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
             if (result.Count > 0)
             {
+                //Destroy
                 WorldGen.Brush b = worldGen.DestroyBlock(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, (int)result["face_index"]);
-                totalBrushes += Mathf.CeilToInt(worldGen.VolumeOfMesh(b.vertices));
+
+                //Sound
+                int size = Mathf.CeilToInt(worldGen.VolumeOfMesh(b.vertices));
+                Node3D sound;
+                if (size <= 216)
+                {
+                    sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/Dig.tscn").Instantiate() as Node3D;
+                }
+                else
+                {
+                    sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/Dig Long.tscn").Instantiate() as Node3D;
+                }
+                GetTree().Root.AddChild(sound);
+                sound.GlobalPosition = (Vector3)result["position"];
+                
+                //Size & Textures
+                totalBrushes += size;
                 for (int i = 0; i < b.textures.Length; i++)
                 {
                     if (b.textures[i] == 0)

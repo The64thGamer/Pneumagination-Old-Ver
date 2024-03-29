@@ -1,7 +1,26 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c2m7n0pwedx3p"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://c2m7n0pwedx3p"]
 
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="1_rs7qk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_we2su"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v3cpu"]
+bg_color = Color(0.945098, 0.643137, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0.8, 0)
 
 [resource]
 default_font = ExtResource("1_rs7qk")
 default_font_size = 7
+ProgressBar/styles/background = SubResource("StyleBoxFlat_we2su")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_v3cpu")

@@ -1,0 +1,23 @@
+[gd_scene load_steps=14 format=3 uid="uid://bmq1y7ucxqsds"]
+
+[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_q2yn4"]
+[ext_resource type="AudioStream" uid="uid://i0xjxaovdyfj" path="res://Sounds/PrimeLong1.wav" id="2_5wvdf"]
+[ext_resource type="AudioStream" uid="uid://ddhv5k2xul6uu" path="res://Sounds/PrimeLong2.wav" id="3_kof5q"]
+[ext_resource type="AudioStream" uid="uid://dkw3ykqpa34po" path="res://Sounds/PrimeLong3.wav" id="4_rjsc3"]
+[ext_resource type="AudioStream" uid="uid://cyqlm5r3j5iqi" path="res://Sounds/PrimeLong4.wav" id="5_w3bxj"]
+[ext_resource type="AudioStream" uid="uid://c25jvu4nrbqgq" path="res://Sounds/PrimeLong5.wav" id="6_fl170"]
+[ext_resource type="AudioStream" uid="uid://drbowwt6daqvi" path="res://Sounds/PrimeLong6.wav" id="7_8vq26"]
+[ext_resource type="AudioStream" uid="uid://5l17n17nhen" path="res://Sounds/PrimeLong7.wav" id="8_t0b4m"]
+[ext_resource type="AudioStream" uid="uid://dll2ij0ja87m" path="res://Sounds/PrimeLong8.wav" id="9_ngg6i"]
+[ext_resource type="AudioStream" uid="uid://bxdl28sosd67b" path="res://Sounds/PrimeLong9.wav" id="10_a2djq"]
+[ext_resource type="AudioStream" uid="uid://bnqltdetxxcsg" path="res://Sounds/PrimeLong10.wav" id="11_2mkdp"]
+[ext_resource type="AudioStream" uid="uid://dlttdk6im4dhk" path="res://Sounds/PrimeLong11.wav" id="12_6jv6p"]
+[ext_resource type="AudioStream" uid="uid://come8seqrdjb5" path="res://Sounds/PrimeLong12.wav" id="13_yi6yd"]
+
+[node name="Prime Long" type="AudioStreamPlayer3D"]
+attenuation_model = 2
+unit_size = 50.0
+max_db = -3.0
+autoplay = true
+script = ExtResource("1_q2yn4")
+sounds = Array[AudioStream]([ExtResource("2_5wvdf"), ExtResource("3_kof5q"), ExtResource("4_rjsc3"), ExtResource("5_w3bxj"), ExtResource("6_fl170"), ExtResource("7_8vq26"), ExtResource("8_t0b4m"), ExtResource("9_ngg6i"), ExtResource("10_a2djq"), ExtResource("11_2mkdp"), ExtResource("12_6jv6p"), ExtResource("13_yi6yd")])

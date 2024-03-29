@@ -1,0 +1,32 @@
+[gd_scene load_steps=23 format=3 uid="uid://b4d3j8s3q1h7t"]
+
+[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_mxcwl"]
+[ext_resource type="AudioStream" uid="uid://dbhedav2kr6uh" path="res://Sounds/Dig1.wav" id="2_khsbm"]
+[ext_resource type="AudioStream" uid="uid://b76uhxnjoocll" path="res://Sounds/Dig2.wav" id="3_08j5f"]
+[ext_resource type="AudioStream" uid="uid://ctwpyli7kto2f" path="res://Sounds/Dig3.wav" id="4_tfn3e"]
+[ext_resource type="AudioStream" uid="uid://3wytet75quqk" path="res://Sounds/Dig4.wav" id="5_384y6"]
+[ext_resource type="AudioStream" uid="uid://u3ls3glcksbw" path="res://Sounds/Dig5.wav" id="6_bj2od"]
+[ext_resource type="AudioStream" uid="uid://d3ir2r0dc0ruc" path="res://Sounds/Dig6.wav" id="7_d0nya"]
+[ext_resource type="AudioStream" uid="uid://bb1yjqv5jqok6" path="res://Sounds/Dig7.wav" id="8_v1khv"]
+[ext_resource type="AudioStream" uid="uid://c7bpuvvfvqf0k" path="res://Sounds/Dig8.wav" id="9_8b6t0"]
+[ext_resource type="AudioStream" uid="uid://cy7icjbyn81bg" path="res://Sounds/Dig9.wav" id="10_i0omk"]
+[ext_resource type="AudioStream" uid="uid://damih8gtxvuoo" path="res://Sounds/Dig10.wav" id="11_wnodx"]
+[ext_resource type="AudioStream" uid="uid://cjl67lwptbi4x" path="res://Sounds/Dig11.wav" id="12_mb4fp"]
+[ext_resource type="AudioStream" uid="uid://bddsalbr7xaob" path="res://Sounds/Dig12.wav" id="13_xk3m2"]
+[ext_resource type="AudioStream" uid="uid://1rbosh7qpedx" path="res://Sounds/Dig13.wav" id="14_8uach"]
+[ext_resource type="AudioStream" uid="uid://bpxx6h0mlyve5" path="res://Sounds/Dig14.wav" id="15_lc7yn"]
+[ext_resource type="AudioStream" uid="uid://cqe4nkb3eeyqq" path="res://Sounds/Dig15.wav" id="16_dhhey"]
+[ext_resource type="AudioStream" uid="uid://c1exlbc6eg1or" path="res://Sounds/Dig16.wav" id="17_gs23t"]
+[ext_resource type="AudioStream" uid="uid://brhwnu3l4hfld" path="res://Sounds/Dig17.wav" id="18_52p0d"]
+[ext_resource type="AudioStream" uid="uid://ycer4o2we21l" path="res://Sounds/Dig18.wav" id="19_s0dyv"]
+[ext_resource type="AudioStream" uid="uid://bam7owe3oykjd" path="res://Sounds/Dig19.wav" id="20_wsi5i"]
+[ext_resource type="AudioStream" uid="uid://binodfq07hw78" path="res://Sounds/Dig20.wav" id="21_m7hcg"]
+[ext_resource type="AudioStream" uid="uid://bybjukyd3bs1m" path="res://Sounds/Dig21.wav" id="22_ill6o"]
+
+[node name="Dig" type="AudioStreamPlayer3D"]
+attenuation_model = 2
+unit_size = 50.0
+max_db = -3.0
+autoplay = true
+script = ExtResource("1_mxcwl")
+sounds = Array[AudioStream]([ExtResource("2_khsbm"), ExtResource("3_08j5f"), ExtResource("4_tfn3e"), ExtResource("5_384y6"), ExtResource("6_bj2od"), ExtResource("7_d0nya"), ExtResource("8_v1khv"), ExtResource("9_8b6t0"), ExtResource("10_i0omk"), ExtResource("11_wnodx"), ExtResource("12_mb4fp"), ExtResource("13_xk3m2"), ExtResource("14_8uach"), ExtResource("15_lc7yn"), ExtResource("16_dhhey"), ExtResource("17_gs23t"), ExtResource("18_52p0d"), ExtResource("19_s0dyv"), ExtResource("20_wsi5i"), ExtResource("21_m7hcg"), ExtResource("22_ill6o")])
