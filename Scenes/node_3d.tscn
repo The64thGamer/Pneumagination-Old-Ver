@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=57 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/WorldGen.cs" id="1_qvi55"]
 [ext_resource type="Script" path="res://Scripts/EnvironmentController.cs" id="2_ju4os"]
@@ -128,6 +128,10 @@ outline_color = Color(0, 0, 0, 1)
 shadow_size = 3
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_j2o52"]
+_data = [Vector2(0.505682, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 4.44132, 0.0, 0, 0]
+point_count = 2
 
 [node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles", "debugLine")]
 script = ExtResource("1_qvi55")
@@ -667,6 +671,7 @@ max_value = 1.0
 step = 0.001
 script = ExtResource("36_6uu1y")
 worldGen = NodePath("../../../..")
+curve = SubResource("Curve_j2o52")
 
 [node name="Photo Mode" type="Node3D" parent="Player"]
 
