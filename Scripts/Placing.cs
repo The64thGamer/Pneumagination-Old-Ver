@@ -31,28 +31,6 @@ public partial class Placing : Node3D
                 return;
             }
 
-
-            switch (currentSizeIndex)
-            {
-                case 0:
-                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockA.tscn").Instantiate());
-                    break;
-                case 1:
-                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockB.tscn").Instantiate());
-                    break;
-                case 2:
-                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockC.tscn").Instantiate());
-                    break;
-                case 3:
-                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockD.tscn").Instantiate());
-                    break;
-                case 4:
-                    AddChild(GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockE.tscn").Instantiate());
-                    break;
-                default:
-                    break;
-            }
-
             PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
             PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(this.GlobalPosition, this.GlobalPosition + (-this.GlobalTransform.Basis.Z * 50));
             query.CollisionMask = 0b00000000_00000000_00000000_00000100; //Brushes
@@ -83,7 +61,31 @@ public partial class Placing : Node3D
                 if (worldGen.PlaceBlock(position, size))
                 {
                     Mining.totalBrushes -= (int)Math.Pow(size, 3);
+                    Node3D sound = null;
+                    switch (currentSizeIndex)
+                    {
+                        case 0:
+                            sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockA.tscn").Instantiate() as Node3D;
+                            break;
+                        case 1:
+                            sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockB.tscn").Instantiate() as Node3D;
+                            break;
+                        case 2:
+                            sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockC.tscn").Instantiate() as Node3D;
+                            break;
+                        case 3:
+                            sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockD.tscn").Instantiate() as Node3D;
+                            break;
+                        case 4:
+                            sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/BlockE.tscn").Instantiate() as Node3D;
+                            break;
+                        default:
+                            break;
+                    }
+                    AddChild(sound);
+                    sound.GlobalPosition = position;
                 }
+
             }
         }
     }
