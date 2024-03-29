@@ -53,6 +53,11 @@ public partial class PhotoMode : Camera3D
 
     public override void _Process(double delta)
     {
+        if(inPhotoModeLoadingScreen)
+        {
+            parent.RotateY((float)delta * 0.5f);
+        }
+
         if(inPhotoModeLoadingScreen && WorldGen.firstChunkLoaded)
         {
             inPhotoModeLoadingScreen = false;

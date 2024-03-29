@@ -1827,6 +1827,11 @@ public partial class WorldGen : Node3D
 		}
 	}
 
+	public float GetChunksLoadedToLoadingRatio()
+	{
+		return (float)loadedChunks.Count / (float)(loadedChunks.Count + ongoingChunkRenderData.Count);
+	}
+
 	public class Brush
 	{
 		//Vert Order
