@@ -26,6 +26,7 @@ public partial class Mining : Node3D
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.miningSlot)
         {
+            breaksound = false;
             return;
         }
         if (Input.IsActionPressed("Action"))
@@ -120,6 +121,7 @@ public partial class Mining : Node3D
         }
         else
         {
+            breaksound = false;
             DisableSelection();
         }
     }
