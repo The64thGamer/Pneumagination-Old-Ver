@@ -402,7 +402,7 @@ public partial class WorldGen : Node3D
 
 						//Find Values
 						biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
-						region = GetClampedNoise(noiseC.GetNoise(newX,newZ));
+						region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
 						regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 						regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 						isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
@@ -534,7 +534,7 @@ public partial class WorldGen : Node3D
 		return false;
 	}
 
-	
+
 	//Bottom,North,Top,South,West,East
 	uint[] FindTextureOfGeneratingBrush(bool isSurface, bool regionBorderCheck, bool regionBorderCornerCheck, float biome, float region)
 	{
@@ -640,7 +640,7 @@ public partial class WorldGen : Node3D
 
 			//Find Values
 			float biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
-			float region = GetClampedNoise(noiseC.GetNoise(newX,newZ));
+			float region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
 			bool regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 			bool regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 			bool isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
@@ -650,7 +650,7 @@ public partial class WorldGen : Node3D
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(posX, posY, posZ),textures = textures };
+				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(posX, posY, posZ), textures = textures };
 				for (int e = 0; e < 24; e++)
 				{
 					b.vertices[e] = (byte)(verts[e + (i * 24)] + chunkMarginSize);
@@ -865,7 +865,7 @@ public partial class WorldGen : Node3D
 				chunk = chunkData,
 				triangleIndexToBrushIndex = new List<int>(),
 				triangleIndexToBrushTextureIndex = new List<int>()
-				
+
 			};
 		}
 
@@ -1219,12 +1219,12 @@ public partial class WorldGen : Node3D
 		LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
 		if (foundChunk == null)
 		{
- 			return -1;
+			return -1;
 		}
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 
 		int oldtex = (int)foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].textures[foundChunk.triangleIndexToBrushTextureIndex[index]];
-		if(oldtex == materialID)
+		if (oldtex == materialID)
 		{
 			return -1;
 		}
@@ -1256,7 +1256,7 @@ public partial class WorldGen : Node3D
 				foundBrush.vertices[brushIndices[foundFace] * 3] - chunkMarginSize,
 				foundBrush.vertices[(brushIndices[foundFace] * 3) + 1] - chunkMarginSize,
 				foundBrush.vertices[(brushIndices[foundFace] * 3) + 2] - chunkMarginSize)
-				+(foundChunk.position * chunkSize);
+				+ (foundChunk.position * chunkSize);
 		verts[1] = new Vector3(
 			foundBrush.vertices[brushIndices[foundFace + 1] * 3] - chunkMarginSize,
 			foundBrush.vertices[(brushIndices[foundFace + 1] * 3) + 1] - chunkMarginSize,
@@ -1293,7 +1293,7 @@ public partial class WorldGen : Node3D
 		{
 			return false;
 		}
-		move = new Vector3(Mathf.Round(move.X),Mathf.Round(move.Y),Mathf.Round(move.Z));
+		move = new Vector3(Mathf.Round(move.X), Mathf.Round(move.Y), Mathf.Round(move.Z));
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 		Brush foundBrush = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
 		int foundFace = foundChunk.triangleIndexToBrushTextureIndex[index] * 6;
@@ -1301,10 +1301,11 @@ public partial class WorldGen : Node3D
 		float cost = VolumeOfMesh(foundBrush.vertices);
 		int currentIndices;
 		int finalVert = 0;
+		int finalVertB = 0;
 		int testMove;
 		bool meshChanged = false;
 		byte[] backupCopy = new byte[foundBrush.vertices.Length];
-		System.Array.Copy(foundBrush.vertices, backupCopy,foundBrush.vertices.Length);
+		System.Array.Copy(foundBrush.vertices, backupCopy, foundBrush.vertices.Length);
 
 		switch (moveType)
 		{
@@ -1351,11 +1352,94 @@ public partial class WorldGen : Node3D
 				}
 				break;
 			case MoveType.edge:
-				break;
-			case MoveType.vert:
 				int testVertex = 0;
 				float lowestDistance = float.MaxValue;
 				float testDistance;
+				finalVertB = -100;
+				finalVert = -100;
+				for (int i = 0; i < 4; i++)
+				{
+					switch (i)
+					{
+						case 0:
+							testVertex = brushIndices[foundFace] * 3;
+							break;
+						case 1:
+							testVertex = brushIndices[foundFace + 1] * 3;
+							break;
+						case 2:
+							testVertex = brushIndices[foundFace + 2] * 3;
+							break;
+						case 3:
+							testVertex = brushIndices[foundFace + 4] * 3;
+							break;
+						default:
+							break;
+					}
+					testDistance = hitPoint.DistanceTo(new Vector3(
+						foundBrush.vertices[testVertex] - chunkMarginSize + (chunkSize * foundChunk.position.X),
+						foundBrush.vertices[testVertex + 1] - chunkMarginSize + (chunkSize * foundChunk.position.Y),
+						foundBrush.vertices[testVertex + 2] - chunkMarginSize + (chunkSize * foundChunk.position.Z)
+						));
+					if (testDistance <= lowestDistance)
+					{
+						finalVertB = finalVert;
+						finalVert = testVertex;
+						lowestDistance = testDistance;
+					}
+				}
+
+				if(finalVertB < 0 || finalVert < 0)
+				{
+					break;
+				}
+
+				hitPoint = new Vector3(
+					((foundBrush.vertices[finalVert]     + foundBrush.vertices[finalVertB]) / 2.0f)     - chunkMarginSize + (chunkSize * foundChunk.position.X),
+					((foundBrush.vertices[finalVert + 1] + foundBrush.vertices[finalVertB + 1]) / 2.0f) - chunkMarginSize + (chunkSize * foundChunk.position.Y),
+					((foundBrush.vertices[finalVert + 2] + foundBrush.vertices[finalVertB + 2]) / 2.0f) - chunkMarginSize + (chunkSize * foundChunk.position.Z));
+				testMove = foundBrush.vertices[finalVert] + (int)move.X;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVert] = (byte)testMove;
+					meshChanged = true;
+				}
+				testMove = foundBrush.vertices[finalVert + 1] + (int)move.Y;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVert + 1] = (byte)testMove;
+					meshChanged = true;
+				}
+				testMove = foundBrush.vertices[finalVert + 2] + (int)move.Z;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVert + 2] = (byte)testMove;
+					meshChanged = true;
+				}
+
+				testMove = foundBrush.vertices[finalVertB] + (int)move.X;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVertB] = (byte)testMove;
+					meshChanged = true;
+				}
+				testMove = foundBrush.vertices[finalVertB + 1] + (int)move.Y;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVertB + 1] = (byte)testMove;
+					meshChanged = true;
+				}
+				testMove = foundBrush.vertices[finalVertB + 2] + (int)move.Z;
+				if (testMove > 0 && testMove <= byte.MaxValue)
+				{
+					foundBrush.vertices[finalVertB + 2] = (byte)testMove;
+					meshChanged = true;
+				}
+				break;
+			case MoveType.vert:
+				testVertex = 0;
+				lowestDistance = float.MaxValue;
+				testDistance = 0;
 				for (int i = 0; i < 4; i++)
 				{
 					switch (i)
@@ -1387,8 +1471,8 @@ public partial class WorldGen : Node3D
 					}
 				}
 				hitPoint = new Vector3(
-					foundBrush.vertices[finalVert] - chunkMarginSize + (chunkSize * foundChunk.position.X), 
-					foundBrush.vertices[finalVert + 1] - chunkMarginSize + (chunkSize * foundChunk.position.Y), 
+					foundBrush.vertices[finalVert] - chunkMarginSize + (chunkSize * foundChunk.position.X),
+					foundBrush.vertices[finalVert + 1] - chunkMarginSize + (chunkSize * foundChunk.position.Y),
 					foundBrush.vertices[finalVert + 2] - chunkMarginSize + (chunkSize * foundChunk.position.Z));
 
 				testMove = foundBrush.vertices[finalVert] + (int)move.X;
@@ -1414,7 +1498,7 @@ public partial class WorldGen : Node3D
 				break;
 		}
 
-		
+
 
 		//Check for valid size
 		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -1447,7 +1531,7 @@ public partial class WorldGen : Node3D
 		//Check if mesh changed
 		if (meshChanged)
 		{
-			cost = (Mathf.Round(cost * 1000) / 1000.0f) - (Mathf.Round(VolumeOfMesh(foundBrush.vertices)*1000)/1000.0f);
+			cost = (Mathf.Round(cost * 1000) / 1000.0f) - (Mathf.Round(VolumeOfMesh(foundBrush.vertices) * 1000) / 1000.0f);
 			if (cost < 0)
 			{
 				cost = Mathf.Floor(cost);
@@ -1456,7 +1540,7 @@ public partial class WorldGen : Node3D
 			{
 				cost = Mathf.Ceil(cost);
 			}
-			if(units + cost < 0)
+			if (units + cost < 0)
 			{
 				foundBrush.vertices = backupCopy;
 				return false;
@@ -1465,7 +1549,7 @@ public partial class WorldGen : Node3D
 			RerenderLoadedChunk(foundChunk);
 			return true;
 		}
-	  
+
 		return false;
 	}
 
@@ -1492,7 +1576,7 @@ public partial class WorldGen : Node3D
 			return null;
 		}
 		LoadedChunkData foundChunk = FindChunkFromChunkNode(chunkNode);
-		if(foundChunk == null)
+		if (foundChunk == null)
 		{
 			return null;
 		}
@@ -1675,7 +1759,7 @@ public partial class WorldGen : Node3D
 		if (chunk.node != null)
 		{
 			MeshInstance3D meshNode = chunk.node.GetChild(0) as MeshInstance3D;
-			if(meshNode == null)
+			if (meshNode == null)
 			{
 				return;
 			}
@@ -1903,7 +1987,7 @@ public partial class WorldGen : Node3D
 
 					3,4,0, 6,4,0, 6,4,3, 3,4,0,
 					4,5,0, 6,6,0, 6,5,2, 4,5,0,
-				
+
 		}},
 		{ 0b001101,new byte[]{ //South-West Bottom Corner Connection
 				
