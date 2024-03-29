@@ -41,7 +41,7 @@ public partial class Mining : Node3D
                     faceID = (int)result["face_index"];
                     foundBrush = worldGen.FindBrushFromCollision(chunk, faceID);
                     breaking = true;
-                    breakTimerStart = 1;
+                    breakTimerStart = Mathf.Max(worldGen.VolumeOfMesh(foundBrush.vertices) / 216.0f, 0.25f);
                     breaktimer = breakTimerStart;
                     hitPos = (Vector3)result["position"];
                     miningBar.Visible = true;
