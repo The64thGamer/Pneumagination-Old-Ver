@@ -1,0 +1,174 @@
+[gd_scene load_steps=6 format=3 uid="uid://chi3uvna74yqn"]
+
+[ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
+[ext_resource type="Texture2D" uid="uid://bofcm5qc1b25m" path="res://UI/Red Blueprint Small.png" id="1_pqc4w"]
+[ext_resource type="Texture2D" uid="uid://bjrqke7ml4u3i" path="res://UI/Logo/FullTallRender.png" id="1_spluo"]
+[ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="3_dnfop"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
+
+[node name="Menu" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_7nvkl")
+stretch_mode = 6
+
+[node name="Menu Container" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="NinePatchRect" parent="CanvasLayer/Menu Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_pqc4w")
+patch_margin_left = 28
+patch_margin_top = 28
+patch_margin_right = 26
+patch_margin_bottom = 26
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -211.0
+offset_top = -207.0
+offset_right = 211.0
+offset_bottom = 207.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Create World" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Create World"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Seed "
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Online"
+
+[node name="CheckBox" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Start"
+
+[node name="Join Game" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Join Game"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Key "
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+
+[node name="Button4" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Join"
+
+[node name="Logo Holder" type="Panel" parent="CanvasLayer/Menu Container"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f0i6u")
+
+[node name="Logo" type="TextureRect" parent="CanvasLayer/Menu Container/Logo Holder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_spluo")
+expand_mode = 2
+stretch_mode = 5
