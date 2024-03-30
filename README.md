@@ -7,10 +7,10 @@ Pneumagination is an open source sandbox game focused on the automation of store
 # Roadmap
 
 ### Completed
-- World Generation
+- World Generation & Normal Smoothing
 - Cubic Chunks
 - Photo Mode
-- Mining & Placing
+- Mining, Placing, & Texturing
 - Day/Night System
 - Brush Editing
 
