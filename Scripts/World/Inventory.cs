@@ -3,5 +3,5 @@ using System;
 
 public partial class Inventory : Node
 {
-	public static int[] inventory = new int[8];
+	public static int[] inventory = new int[9];
 }

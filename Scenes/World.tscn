@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=59 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/World/WorldGen.cs" id="1_kfskv"]
 [ext_resource type="Script" path="res://Scripts/World/EnvironmentController.cs" id="2_6dq8v"]
@@ -36,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://dbv5rbwqkijtb" path="res://Textures/Sand_Rocky_Diffuse.png" id="34_ws6sr"]
 [ext_resource type="Texture2D" uid="uid://bl6l134rxbfxq" path="res://Textures/Laterite.jpg" id="35_b4823"]
 [ext_resource type="Script" path="res://Scripts/World/LoadingBar.cs" id="36_6jh7d"]
+[ext_resource type="Texture2D" uid="uid://coscl6tjyh1is" path="res://Textures/White Sand.png" id="36_a8lv5"]
 [ext_resource type="Script" path="res://Scripts/World/PhotoMode.cs" id="37_8ta5o"]
 [ext_resource type="Script" path="res://Scripts/World/Inventory.cs" id="38_qslhe"]
 [ext_resource type="Script" path="res://Scripts/World/DrawLine3D.cs" id="39_uh72q"]
@@ -657,6 +658,44 @@ offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("35_b4823")
+expand_mode = 1
+
+[node name="TextureRect13" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("27_2vlga")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect13" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("28_fhofo")
+checkItem = 8
+
+[node name="TextureRect" type="TextureRect" parent="Player/Player Head/Player Camera/HBoxContainer/TextureRect13"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("36_a8lv5")
 expand_mode = 1
 
 [node name="LoadingBar" type="ProgressBar" parent="Player/Player Head/Player Camera" node_paths=PackedStringArray("worldGen")]
