@@ -107,12 +107,13 @@ text = "Online"
 [node name="CheckBox" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer" node_paths=PackedStringArray("seed")]
 layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Start"
 script = ExtResource("5_jjsdc")
+seed = NodePath("../HBoxContainer/LineEdit")
 
 [node name="Join Game" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
 layout_mode = 2
