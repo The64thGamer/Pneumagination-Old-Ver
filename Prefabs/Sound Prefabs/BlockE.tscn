@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://bkfmmitef6mi1"]
 
-[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_c4c7s"]
+[ext_resource type="Script" path="res://Scripts/World/Quick3DSound.cs" id="1_c4c7s"]
 [ext_resource type="AudioStream" uid="uid://dlf6rf76ppclw" path="res://Sounds/Blocke1.wav" id="2_4lma4"]
 [ext_resource type="AudioStream" uid="uid://jqqb1cbmqvi8" path="res://Sounds/Blocke2.wav" id="3_ac21e"]
 [ext_resource type="AudioStream" uid="uid://cqcb3ciugh6v7" path="res://Sounds/Blocke3.wav" id="4_cwptn"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://mg5r7ssus7ei"]
 
-[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_c2nqo"]
+[ext_resource type="Script" path="res://Scripts/World/Quick3DSound.cs" id="1_c2nqo"]
 [ext_resource type="AudioStream" uid="uid://csbducre8wqgq" path="res://Sounds/Prime1.wav" id="2_oi4tn"]
 [ext_resource type="AudioStream" uid="uid://6b2grsu110ep" path="res://Sounds/Prime2.wav" id="3_34ihx"]
 [ext_resource type="AudioStream" uid="uid://dmdmf8cynxahm" path="res://Sounds/Prime3.wav" id="4_ukbi3"]

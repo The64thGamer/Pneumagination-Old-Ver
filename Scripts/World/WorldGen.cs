@@ -24,10 +24,7 @@ public partial class WorldGen : Node3D
 	[Export] DrawLine3D debugLine;
 
 	//Globals
-	public static uint seedA = 0;
-	public static uint seedB = 0;
-	public static uint seedC = 0;
-	public static uint seedD = 0;
+	public static int seedA, seedB, seedC, seedD, seedE, seedF;
 	public static int totalChunksRendered = 0;
 	public static bool firstChunkLoaded;
 
@@ -72,25 +69,15 @@ public partial class WorldGen : Node3D
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{
-		Random rnd = new Random();
-		if (seedA == 0)
-		{
-			seedA = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
-		}
-		if (seedB == 0)
-		{
-			seedB = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
-		}
-		if (seedC == 0)
-		{
-			seedC = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
-		}
-		if (seedD == 0)
-		{
-			seedD = ((uint)rnd.Next(1 << 30) << 2) | (uint)rnd.Next(1 << 2);
-		}
+		Random rnd = new Random(seedA);
+        seedB = rnd.Next();
+		seedC = rnd.Next();
+        seedD = rnd.Next();
+        seedE = rnd.Next();
+        seedF = rnd.Next();
 
-		mats = new Material[8];
+
+        mats = new Material[8];
 		for (int i = 0; i < 8; i++)
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
@@ -134,14 +121,14 @@ public partial class WorldGen : Node3D
 		noiseE = new FastNoiseLite();
 		noiseE.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseE.SetFrequency(0.0005f);
-		noiseE.SetSeed((int)seedA);
+		noiseE.SetSeed((int)seedE);
 		noiseE.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseE.SetFractalOctaves(4);
 
 		noiseF = new FastNoiseLite();
 		noiseF.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseF.SetFrequency(0.001f);
-		noiseF.SetSeed((int)seedB);
+		noiseF.SetSeed((int)seedF);
 		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseF.SetFractalOctaves(4);
 	}

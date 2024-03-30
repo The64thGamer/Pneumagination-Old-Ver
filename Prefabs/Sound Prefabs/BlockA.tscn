@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://br82re37rw85a"]
 
-[ext_resource type="Script" path="res://Scripts/Quick3DSound.cs" id="1_n1tps"]
+[ext_resource type="Script" path="res://Scripts/World/Quick3DSound.cs" id="1_n1tps"]
 [ext_resource type="AudioStream" uid="uid://chve2ibiqkeeg" path="res://Sounds/Blocka1.wav" id="2_d4jab"]
 [ext_resource type="AudioStream" uid="uid://dxm07wx2fe8rh" path="res://Sounds/Blocka2.wav" id="3_0euxb"]
 [ext_resource type="AudioStream" uid="uid://b5iqcnyopmowy" path="res://Sounds/Blocka3.wav" id="4_vrhkr"]

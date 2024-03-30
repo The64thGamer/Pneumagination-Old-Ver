@@ -21,7 +21,7 @@ config/icon="res://UI/Logo/MediumRender.png"
 
 [autoload]
 
-DrawLine3D="*res://Scripts/DrawLine3D.cs"
+DrawLine3D="*res://Scripts/World/DrawLine3D.cs"
 
 [display]
 
