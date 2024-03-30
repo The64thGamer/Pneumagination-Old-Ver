@@ -70,7 +70,7 @@ public partial class WorldGen : Node3D
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{
-		seedA = PlayerPrefs.GetInt("Seed");
+		seedA = Convert.ToInt32(PlayerPrefs.GetString("Seed"));
 		Random rnd = new Random(seedA);
 		seedB = rnd.Next();
 		seedC = rnd.Next();

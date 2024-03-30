@@ -4,9 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://bofcm5qc1b25m" path="res://UI/Red Blueprint Small.png" id="1_pqc4w"]
 [ext_resource type="Texture2D" uid="uid://bjrqke7ml4u3i" path="res://UI/Logo/FullTallRender.png" id="1_spluo"]
 [ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="3_dnfop"]
-[ext_resource type="Script" path="res://Scripts/Main Menu/MenuSeed.cs" id="4_n3cpn"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefRandom.cs" id="4_atn18"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
-[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerName.cs" id="6_hubln"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="6_hubln"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -94,7 +94,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
-script = ExtResource("4_n3cpn")
+script = ExtResource("4_atn18")
+playerPref = "Seed"
+randomizeEveryTime = true
+deterministicHashFinalValue = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -108,13 +111,12 @@ text = "Online"
 [node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer" node_paths=PackedStringArray("seed")]
+[node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Start"
 script = ExtResource("5_jjsdc")
-seed = NodePath("../HBoxContainer/Seed Edit")
 
 [node name="Join Game" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
 layout_mode = 2
@@ -154,6 +156,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
+script = ExtResource("6_hubln")
+playerPref = "Server Join Key"
+defaultValue = "?????"
 
 [node name="Button4" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
@@ -200,6 +205,8 @@ size_flags_horizontal = 3
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 script = ExtResource("6_hubln")
+playerPref = "Name"
+defaultValue = "I Forgot To Change Name"
 
 [node name="Logo Holder" type="Panel" parent="CanvasLayer/Menu Container"]
 custom_minimum_size = Vector2(350, 0)
