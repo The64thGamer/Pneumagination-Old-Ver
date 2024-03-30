@@ -20,11 +20,12 @@ public partial class WorldGen : Node3D
 	[Export] Curve curve4;
 	[Export] Curve curve5;
 	[Export] Curve curve6;
+	[Export] Curve curve7;
 	[Export] public GpuParticles3D destroyBrushParticles;
 	[Export] DrawLine3D debugLine;
 
 	//Globals
-	public static int seedA, seedB, seedC, seedD, seedE, seedF;
+	public static int seedA, seedB, seedC, seedD, seedE, seedF, seedG;
 	public static int totalChunksRendered = 0;
 	public static bool firstChunkLoaded;
 
@@ -34,7 +35,7 @@ public partial class WorldGen : Node3D
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
-	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE, noiseF;
+	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseG;
 	int maxChunksLoadingRampUp = 1;
 
 	//Consts
@@ -69,13 +70,14 @@ public partial class WorldGen : Node3D
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{
+		seedA = 1231231;
 		Random rnd = new Random(seedA);
 		seedB = rnd.Next();
 		seedC = rnd.Next();
 		seedD = rnd.Next();
 		seedE = rnd.Next();
 		seedF = rnd.Next();
-
+		seedG = rnd.Next();
 
 		mats = new Material[8];
 		for (int i = 0; i < 8; i++)
@@ -131,6 +133,13 @@ public partial class WorldGen : Node3D
 		noiseF.SetSeed(seedF);
 		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseF.SetFractalOctaves(4);
+
+		noiseG = new FastNoiseLite();
+		noiseG.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+		noiseG.SetFrequency(0.002f);
+		noiseG.SetSeed(seedG);
+		noiseG.SetFractalType(FastNoiseLite.FractalType.FBm);
+		noiseG.SetFractalOctaves(4);
 	}
 
 	public override void _Process(double delta)
@@ -572,21 +581,30 @@ public partial class WorldGen : Node3D
 
 		int chunkY = Mathf.FloorToInt(posY / (float)chunkSize / bigBlockSize);
 
+		float oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GetNoise(posX, posZ))) * 2) - 1;
+		float terrain = Math.Clamp((curve1.SampleBaked(GetClampedNoise(noise.GetNoise(posX, posY, posZ)))
+				+ curve4.SampleBaked(GetClampedNoise(noiseD.GetNoise(posX, posZ))))
+				* curve5.SampleBaked(GetClampedNoise(noiseE.GetNoise(posX, posZ))),0,1);
+
 		if (chunkY < 0)
 		{
 			//Below-Surface Generation
 			noiseValue = true;
+
+			if(oceanMultiplier < 0)
+			{
+				if (chunkY >= -6 && 1 - (terrain * -oceanMultiplier) < GetClampedChunkRange(-6 * chunkSize / bigBlockSize, 0, posY))
+				{
+					noiseValue = false;
+				}
+			}
 		}
-		if (chunkY >= 0)
+		if (chunkY >= 0 && oceanMultiplier >= 0)
 		{
 			//Above-Surface Generation
 			noiseValue = false;
 
-			if (chunkY < 6 && chunkY >= 0 &&
-				(curve1.SampleBaked(GetClampedNoise(noise.GetNoise(posX, posY, posZ)))
-				+ curve4.SampleBaked(GetClampedNoise(noiseD.GetNoise(posX, posZ))))
-				* curve5.SampleBaked(GetClampedNoise(noiseE.GetNoise(posX, posZ)))
-				> GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, posY))
+			if (chunkY < 6 && terrain * oceanMultiplier > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, posY))
 			{
 				noiseValue = true;
 			}

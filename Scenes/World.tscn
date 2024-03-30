@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=58 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/World/WorldGen.cs" id="1_kfskv"]
 [ext_resource type="Script" path="res://Scripts/World/EnvironmentController.cs" id="2_6dq8v"]
@@ -63,6 +63,10 @@ point_count = 14
 [sub_resource type="Curve" id="Curve_ijfoo"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.345212, 1), 0.0, 0.0, 0, 0, Vector2(0.579065, 0), 0.0, 0.0, 0, 0, Vector2(0.690423, 0.00411856), 0.0, 0.0, 0, 0, Vector2(0.728285, 1), 0.0, 0.0, 0, 0, Vector2(0.821826, 0.780478), 0.0, 0.0, 0, 0, Vector2(0.877506, 1), 0.0, 0.0, 0, 0]
 point_count = 7
+
+[sub_resource type="Curve" id="Curve_gy05d"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.457386, 1), 0.0, 0.0, 0, 0, Vector2(0.5625, 0.528169), 0.0, 0.0, 0, 0, Vector2(0.639205, 0.5), 0.0, 0.0, 0, 0, Vector2(0.670455, 0.366197), 0.0, 0.0, 0, 0, Vector2(0.801136, 0.316901), -1.4165, -1.4165, 0, 0, Vector2(0.849432, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 8
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_mode = 1
@@ -142,6 +146,7 @@ curve3 = SubResource("Curve_3hewv")
 curve4 = SubResource("Curve_81qg4")
 curve5 = SubResource("Curve_yefdb")
 curve6 = SubResource("Curve_ijfoo")
+curve7 = SubResource("Curve_gy05d")
 destroyBrushParticles = NodePath("Break Brush Particles")
 debugLine = NodePath("DrawLine")
 
