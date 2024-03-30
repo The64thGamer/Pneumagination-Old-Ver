@@ -86,7 +86,6 @@ public partial class PlayerMovement : CharacterBody3D
 		//Fall Damage
 		if(grounded && previousYVelocity < fallDamageMinVel)
 		{
-			GD.Print(previousYVelocity);
             Node3D sound = GD.Load<PackedScene>("res://Prefabs/Sound Prefabs/Fall Damage.tscn").Instantiate() as Node3D;
             GetTree().Root.AddChild(sound);
             sound.GlobalPosition = GlobalPosition;
