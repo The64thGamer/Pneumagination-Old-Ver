@@ -70,14 +70,14 @@ public partial class WorldGen : Node3D
 	public override void _Ready()
 	{
 		Random rnd = new Random(seedA);
-        seedB = rnd.Next();
+		seedB = rnd.Next();
 		seedC = rnd.Next();
-        seedD = rnd.Next();
-        seedE = rnd.Next();
-        seedF = rnd.Next();
+		seedD = rnd.Next();
+		seedE = rnd.Next();
+		seedF = rnd.Next();
 
 
-        mats = new Material[8];
+		mats = new Material[8];
 		for (int i = 0; i < 8; i++)
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
@@ -87,7 +87,7 @@ public partial class WorldGen : Node3D
 		noise = new FastNoiseLite();
 		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		noise.SetFrequency(0.002f);
-		noise.SetSeed((int)seedA);
+		noise.SetSeed(seedA);
 		noise.SetFractalType(FastNoiseLite.FractalType.PingPong);
 		noise.SetFractalOctaves(5);
 		noise.SetFractalPingPongStrength(2);
@@ -98,7 +98,7 @@ public partial class WorldGen : Node3D
 		noiseB = new FastNoiseLite();
 		noiseB.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2S);
 		noiseB.SetFrequency(0.06f);
-		noiseB.SetSeed((int)seedB);
+		noiseB.SetSeed(seedB);
 		noiseB.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.EuclideanSq);
 		noiseB.SetCellularReturnType(FastNoiseLite.CellularReturnType.Distance);
 		noiseB.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
@@ -107,28 +107,28 @@ public partial class WorldGen : Node3D
 		noiseC = new FastNoiseLite();
 		noiseC.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		noiseC.SetFrequency(0.005f);
-		noiseC.SetSeed((int)seedC);
+		noiseC.SetSeed(seedC);
 		noiseC.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.Manhattan);
 		noiseC.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
 
 		noiseD = new FastNoiseLite();
 		noiseD.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseD.SetFrequency(0.002f);
-		noiseD.SetSeed((int)seedD);
+		noiseD.SetSeed(seedD);
 		noiseD.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseD.SetFractalOctaves(5);
 
 		noiseE = new FastNoiseLite();
 		noiseE.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseE.SetFrequency(0.0005f);
-		noiseE.SetSeed((int)seedE);
+		noiseE.SetSeed(seedE);
 		noiseE.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseE.SetFractalOctaves(4);
 
 		noiseF = new FastNoiseLite();
 		noiseF.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseF.SetFrequency(0.001f);
-		noiseF.SetSeed((int)seedF);
+		noiseF.SetSeed(seedF);
 		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseF.SetFractalOctaves(4);
 	}
