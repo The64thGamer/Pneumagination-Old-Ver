@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=9 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Texture2D" uid="uid://bofcm5qc1b25m" path="res://UI/Red Blueprint Small.png" id="1_pqc4w"]
@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="3_dnfop"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/MenuSeed.cs" id="4_n3cpn"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerName.cs" id="6_hubln"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -63,7 +64,7 @@ theme_override_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer"]
+[node name="Create Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
@@ -82,13 +83,13 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Seed "
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_dnfop")
@@ -104,7 +105,7 @@ theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Online"
 
-[node name="CheckBox" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 
 [node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer" node_paths=PackedStringArray("seed")]
@@ -113,7 +114,7 @@ theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Start"
 script = ExtResource("5_jjsdc")
-seed = NodePath("../HBoxContainer/LineEdit")
+seed = NodePath("../HBoxContainer/Seed Edit")
 
 [node name="Join Game" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
 layout_mode = 2
@@ -159,6 +160,46 @@ layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Join"
+
+[node name="Info" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info"]
+layout_mode = 2
+
+[node name="Info Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Player Info"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Name "
+
+[node name="Name Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+script = ExtResource("6_hubln")
 
 [node name="Logo Holder" type="Panel" parent="CanvasLayer/Menu Container"]
 custom_minimum_size = Vector2(350, 0)

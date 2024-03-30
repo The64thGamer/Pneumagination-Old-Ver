@@ -104,6 +104,7 @@ Action={
 3d_physics/layer_1="Default"
 3d_physics/layer_2="Player"
 3d_physics/layer_3="Brushes"
+3d_physics/layer_4="Volumes"
 
 [physics]
 
