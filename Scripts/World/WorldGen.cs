@@ -79,8 +79,8 @@ public partial class WorldGen : Node3D
 		seedF = rnd.Next();
 		seedG = rnd.Next();
 
-		mats = new Material[8];
-		for (int i = 0; i < 8; i++)
+		mats = new Material[9];
+		for (int i = 0; i < 9; i++)
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
@@ -375,6 +375,7 @@ public partial class WorldGen : Node3D
 		float region;
 		float biome;
 		bool isSurface;
+		float oceanMultiplier;
 
 		//Big Blocks and First Surface Layer
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
@@ -399,12 +400,13 @@ public partial class WorldGen : Node3D
 						//Find Values
 						biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
 						region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
+						oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GetNoise(newX, newZ))) * 2) - 1;
 						regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 						regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 						isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
 
 						//Assign textures
-						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region);
+						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region, oceanMultiplier);
 
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
@@ -532,8 +534,19 @@ public partial class WorldGen : Node3D
 
 
 	//Bottom,North,Top,South,West,East
-	uint[] FindTextureOfGeneratingBrush(bool isSurface, bool regionBorderCheck, bool regionBorderCornerCheck, float biome, float region)
+	uint[] FindTextureOfGeneratingBrush(bool isSurface, bool regionBorderCheck, bool regionBorderCornerCheck, float biome, float region, float oceanMultiplier)
 	{
+		if(oceanMultiplier < 0.1f)
+		{
+			if (isSurface)
+			{
+				return new uint[] { 3, 8, 8, 8, 8, 8 };
+			}
+			else
+			{
+				return new uint[] { 3, 3, 3, 3, 3, 3 };
+			}
+		}
 		if (biome <= 0.5f) //Grass
 		{
 			if ((regionBorderCheck || regionBorderCornerCheck) && isSurface)
@@ -646,12 +659,13 @@ public partial class WorldGen : Node3D
 			//Find Values
 			float biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
 			float region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
+			float oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GetNoise(newX, newZ))) * 2) - 1;
 			bool regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 			bool regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 			bool isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
 
 			//Assign textures
-			uint[] textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region);
+			uint[] textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region, oceanMultiplier);
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
