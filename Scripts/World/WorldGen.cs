@@ -136,7 +136,7 @@ public partial class WorldGen : Node3D
 
 		noiseG = new FastNoiseLite();
 		noiseG.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		noiseG.SetFrequency(0.002f);
+		noiseG.SetFrequency(0.001f);
 		noiseG.SetSeed(seedG);
 		noiseG.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseG.SetFractalOctaves(4);
