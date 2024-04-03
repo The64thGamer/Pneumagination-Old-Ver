@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=10 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Texture2D" uid="uid://bofcm5qc1b25m" path="res://UI/Red Blueprint Small.png" id="1_pqc4w"]
 [ext_resource type="Texture2D" uid="uid://bjrqke7ml4u3i" path="res://UI/Logo/FullTallRender.png" id="1_spluo"]
 [ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="3_dnfop"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefRandom.cs" id="4_atn18"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefToggle.cs" id="5_1fqp2"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="6_hubln"]
 
@@ -108,8 +109,30 @@ theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Online"
 
-[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("buttonTogglesLineEdit")]
 layout_mode = 2
+script = ExtResource("5_1fqp2")
+playerPref = "Hosting Online"
+buttonTogglesLineEdit = NodePath("../../HBoxContainer3/Seed Edit")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Port "
+
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+editable = false
+script = ExtResource("6_hubln")
+playerPref = "Hosting Port"
+defaultValue = "7878"
 
 [node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -149,7 +172,7 @@ layout_mode = 2
 layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
-text = "Key "
+text = "Port "
 
 [node name="LineEdit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
@@ -157,7 +180,7 @@ size_flags_horizontal = 3
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 script = ExtResource("6_hubln")
-playerPref = "Server Join Key"
+playerPref = "Joining Port"
 defaultValue = "?????"
 
 [node name="Button4" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
