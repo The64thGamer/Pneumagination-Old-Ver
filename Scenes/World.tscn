@@ -1,6 +1,5 @@
-[gd_scene load_steps=59 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=58 format=3 uid="uid://b33cy5ihrg8qq"]
 
-[ext_resource type="Script" path="res://Scripts/World/WorldGen.cs" id="1_kfskv"]
 [ext_resource type="Script" path="res://Scripts/World/EnvironmentController.cs" id="2_6dq8v"]
 [ext_resource type="Gradient" uid="uid://ck38t5fd85an7" path="res://UI/Gradients/Sun.tres" id="3_mkm73"]
 [ext_resource type="Gradient" uid="uid://cl5kd5v3k56ma" path="res://UI/Gradients/Sky.tres" id="4_i3crq"]
@@ -39,7 +38,7 @@
 [ext_resource type="Texture2D" uid="uid://coscl6tjyh1is" path="res://Textures/White Sand.png" id="36_a8lv5"]
 [ext_resource type="Script" path="res://Scripts/World/PhotoMode.cs" id="37_8ta5o"]
 [ext_resource type="Script" path="res://Scripts/World/Inventory.cs" id="38_qslhe"]
-[ext_resource type="Script" path="res://Scripts/World/DrawLine3D.cs" id="39_uh72q"]
+[ext_resource type="Script" path="res://Scripts/World/WorldGen.cs" id="39_uh72q"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
 _data = [Vector2(0.0425532, 0.177986), 0.0, 0.0, 0, 0, Vector2(0.0511364, 0.816901), 0.0, 0.0, 0, 0, Vector2(0.09375, 0.823944), 0.0, 0.0, 0, 0, Vector2(0.100304, 0.193208), 0.0, 0.0, 0, 0, Vector2(0.313783, 0.101685), 0.0, 0.0, 0, 0, Vector2(0.321023, 0.443662), 0.0, 0.0, 0, 0, Vector2(0.409091, 0.450704), 0.0, 0.0, 0, 0, Vector2(0.511364, 0.464789), 0.0, 0.0, 0, 0, Vector2(0.513196, 0.160112), 0.0, 0.0, 0, 0, Vector2(0.599432, 0.176056), 1.13202, 1.13202, 0, 0, Vector2(0.662614, 0.0790397), 0.0, 0.0, 0, 0, Vector2(0.729483, 0.26171), 0.0, 0.0, 0, 0, Vector2(0.798295, 0.183099), 0.452809, 0.452809, 0, 0, Vector2(0.857955, 0.704225), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.199236, 0.0, 0, 0]
@@ -138,8 +137,8 @@ shadow_offset = Vector2(0, 0)
 _data = [Vector2(0.752841, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 9.9155, 0.0, 0, 0]
 point_count = 2
 
-[node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles", "debugLine")]
-script = ExtResource("1_kfskv")
+[node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles")]
+script = ExtResource("39_uh72q")
 envController = NodePath("WorldEnvironment")
 curve1 = SubResource("Curve_tpjr8")
 curve2 = SubResource("Curve_0dt1a")
@@ -149,7 +148,6 @@ curve5 = SubResource("Curve_yefdb")
 curve6 = SubResource("Curve_ijfoo")
 curve7 = SubResource("Curve_gy05d")
 destroyBrushParticles = NodePath("Break Brush Particles")
-debugLine = NodePath("DrawLine")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." node_paths=PackedStringArray("sun", "fogMesh")]
 environment = SubResource("Environment_rruv5")
@@ -730,6 +728,3 @@ envController = NodePath("../../../WorldEnvironment")
 
 [node name="Inventory" type="Node" parent="Player"]
 script = ExtResource("38_qslhe")
-
-[node name="DrawLine" type="Node2D" parent="."]
-script = ExtResource("39_uh72q")

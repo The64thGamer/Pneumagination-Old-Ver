@@ -19,10 +19,6 @@ boot_splash/show_image=false
 boot_splash/image="res://UI/Logo/FullTallRender.png"
 config/icon="res://UI/Logo/MediumRender.png"
 
-[autoload]
-
-DrawLine3D="*res://Scripts/World/DrawLine3D.cs"
-
 [display]
 
 window/size/viewport_width=1280

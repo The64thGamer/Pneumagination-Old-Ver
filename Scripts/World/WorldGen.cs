@@ -22,7 +22,6 @@ public partial class WorldGen : Node3D
 	[Export] Curve curve6;
 	[Export] Curve curve7;
 	[Export] public GpuParticles3D destroyBrushParticles;
-	[Export] DrawLine3D debugLine;
 
 	//Globals
 	public static int seedA, seedB, seedC, seedD, seedE, seedF, seedG;
