@@ -1,8 +1,13 @@
 using Godot;
+using media.Laura.SofiaConsole;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Console = media.Laura.SofiaConsole.Console;
 
 public partial class ServerClient : Node
 {
+	public static List<PlayerInfo> playerList = new List<PlayerInfo>();
 
 	ENetMultiplayerPeer peer;
 
@@ -52,26 +57,45 @@ public partial class ServerClient : Node
 		GD.Print("Joining Started");
 	}
 
-    private void ConnectionFailed()
+     void ConnectionFailed()
     {
 		GD.Print("CONNECTION FAILED");
     }
 
-    private void ConnectedToServer()
+     void ConnectedToServer()
     {
         GD.Print("Connected To Server");
     }
 
-    private void PeerDisconnected(long id)
+     void PeerDisconnected(long id)
     {
         GD.Print("Player Disconnected: " + id.ToString());
     }
 
 
-    private void PeerConnected(long id)
+     void PeerConnected(long id)
     {
         GD.Print("Player Connected! " + id.ToString());
+
+		if(!Multiplayer.IsServer())
+		{
+			return;
+		}
+
+		playerList.Add(new PlayerInfo(){id = id,});
     }
 
+	[ConsoleCommand("ListAllPlayers", Description = "Prints names of all currently connected players.")]
+	void ListPlayerNames()
+	{
+		Console.Instance.Print("Hello World");
+	}
 
+}
+
+public class PlayerInfo
+{
+	public string name;
+	public long id;
+	public CharacterBody3D playerObject;
 }

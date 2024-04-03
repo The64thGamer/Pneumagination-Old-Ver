@@ -22,5 +22,9 @@ border_color = Color(0.8, 0.8, 0.8, 0)
 [resource]
 default_font = ExtResource("1_rs7qk")
 default_font_size = 7
+MarginContainer/constants/margin_bottom = 0
+MarginContainer/constants/margin_left = 0
+MarginContainer/constants/margin_right = 0
+MarginContainer/constants/margin_top = 0
 ProgressBar/styles/background = SubResource("StyleBoxFlat_we2su")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_v3cpu")
