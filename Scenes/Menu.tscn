@@ -188,6 +188,8 @@ layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Join"
+script = ExtResource("5_jjsdc")
+joinServer = true
 
 [node name="Info" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
 layout_mode = 2
