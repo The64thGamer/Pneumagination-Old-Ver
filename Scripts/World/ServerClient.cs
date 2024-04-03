@@ -1,9 +1,9 @@
 using Godot;
-using media.Laura.SofiaConsole;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Console = media.Laura.SofiaConsole.Console;
+using media.Laura.SofiaConsole;
 
 public partial class ServerClient : Node
 {
@@ -84,18 +84,25 @@ public partial class ServerClient : Node
 		playerList.Add(new PlayerInfo(){id = id,});
     }
 
-	public string ListPlayerNames()
+	[ConsoleCommand("listplayers", Description = "Prints IDs of all currently connected players.")]
+	void ListPlayerNames()
 	{
+		if(!IsInsideTree())
+		{
+			Console.Instance.Print("Not currently in game");
+			return;
+		}
+
 		if(playerList.Count == 0)
 		{
-			return "No Players Connected";
+			Console.Instance.Print("No Players Connected");
 		}
 		string finalresult = "";
 		for(int i = 0; i < playerList.Count; i++)
 		{
 			finalresult += playerList[index: i].id.ToString() + '\n';
 		}
-		return finalresult;
+		Console.Instance.Print(finalresult);
 	}
 
 }
