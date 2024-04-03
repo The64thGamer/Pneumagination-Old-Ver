@@ -81,14 +81,21 @@ public partial class ServerClient : Node
 		{
 			return;
 		}
-
 		playerList.Add(new PlayerInfo(){id = id,});
     }
 
-	[ConsoleCommand("ListAllPlayers", Description = "Prints names of all currently connected players.")]
-	void ListPlayerNames()
+	public string ListPlayerNames()
 	{
-		Console.Instance.Print("Hello World");
+		if(playerList.Count == 0)
+		{
+			return "No Players Connected";
+		}
+		string finalresult = "";
+		for(int i = 0; i < playerList.Count; i++)
+		{
+			finalresult += playerList[index: i].id.ToString() + '\n';
+		}
+		return finalresult;
 	}
 
 }
