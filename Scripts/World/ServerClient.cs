@@ -13,16 +13,22 @@ public partial class ServerClient : Node
 
 	const string address = "127.0.0.1";
 	const int maxPlayers = 256;
+	const long hostID = 1;
 
 	public override void _Ready()
-	{
-		if(PlayerPrefs.GetBool("Joining"))
+	{		
+		if(!IsInsideTree())
 		{
-			JoinServer();
+			return;
+		}
+
+		if(PlayerPrefs.GetBool("Joining"))
+		{		
+			JoinServer(Convert.ToInt32(PlayerPrefs.GetString("Joining Port")));
 		}
 		else
-		{
-			CreateServer();
+		{		
+			CreateServer(Convert.ToInt32(PlayerPrefs.GetString("Hosting Port")));
 		}
 
 		Multiplayer.PeerConnected += PeerConnected;
@@ -31,10 +37,10 @@ public partial class ServerClient : Node
 		Multiplayer.ConnectionFailed += ConnectionFailed;
 	}
 
-	void CreateServer()
+	void CreateServer(int port)
 	{
 		peer = new ENetMultiplayerPeer();
-		Error error = peer.CreateServer(Convert.ToInt32(PlayerPrefs.GetString("Hosting Port")),maxPlayers);
+		Error error = peer.CreateServer(port,PlayerPrefs.GetBool("Hosting Online") ? maxPlayers : 1);
 		if(error != Error.Ok)
 		{
 			GD.Print("Hosting Failed: " + error.ToString());
@@ -44,12 +50,18 @@ public partial class ServerClient : Node
 		Multiplayer.MultiplayerPeer = peer;
 
 		GD.Print("Hosting Started");
+
+
+		SendPlayerInfo(new PlayerInfo(){
+			name = PlayerPrefs.GetString("Name"), 
+			id = hostID
+			});
 	}
 
-	void JoinServer()
+	void JoinServer(int port)
 	{
 		peer = new ENetMultiplayerPeer();
-		peer.CreateClient(address,Convert.ToInt32(PlayerPrefs.GetString("Joining Port")));
+		peer.CreateClient(address,port);
 
 		peer.Host.Compress(ENetConnection.CompressionMode.Zlib);
 		Multiplayer.MultiplayerPeer = peer;
@@ -65,6 +77,11 @@ public partial class ServerClient : Node
      void ConnectedToServer()
     {
         GD.Print("Connected To Server");
+
+		RpcId(hostID, nameof(SendPlayerInfo), new PlayerInfo(){
+			name = PlayerPrefs.GetString("Name"), 
+			id = Multiplayer.GetUniqueId()
+		});
     }
 
      void PeerDisconnected(long id)
@@ -84,8 +101,26 @@ public partial class ServerClient : Node
 		playerList.Add(new PlayerInfo(){id = id,});
     }
 
-	[ConsoleCommand("listplayers", Description = "Prints IDs of all currently connected players.")]
-	void ListPlayerNames()
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+	void SendPlayerInfo(PlayerInfo info)
+	{	
+		if(playerList.Contains(info))
+		{
+			return;
+		}
+		playerList.Add(info);
+
+		if(Multiplayer.IsServer())
+		{
+			foreach (var item in playerList)
+			{
+				Rpc(nameof(SendPlayerInfo), info);
+			}
+		}
+	}
+
+	[ConsoleCommand("listplayers", Description = "Prints IDs and names of all currently connected players.")]
+	void ListPlayers()
 	{
 		if(!IsInsideTree())
 		{
@@ -100,14 +135,19 @@ public partial class ServerClient : Node
 		string finalresult = "";
 		for(int i = 0; i < playerList.Count; i++)
 		{
-			finalresult += playerList[index: i].id.ToString() + '\n';
+			finalresult += playerList[index: i].name + " (ID " + playerList[index: i].id.ToString() + ")\n";
 		}
 		Console.Instance.Print(finalresult);
 	}
 
+	[ConsoleCommand("listmaxplayercount", Description = "Prints max players that can join. Singleplayer will be 1.")]
+	void ListMaxPlayerCount()
+	{
+		Console.Instance.Print(PlayerPrefs.GetBool("Hosting Online") ? maxPlayers.ToString() : "1");
+	}
 }
 
-public class PlayerInfo
+public partial class PlayerInfo : GodotObject
 {
 	public string name;
 	public long id;
