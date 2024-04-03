@@ -46,7 +46,14 @@ public partial class PlayerMovement : CharacterBody3D
     }
 
     public override void _PhysicsProcess(double delta)
-	{
+	{		
+		// Tab out
+		if (Input.IsActionJustPressed("Pause"))
+		{
+            GetTree().Quit();
+        }
+
+
 		if(!WorldGen.firstChunkLoaded)
 		{
 			return;
@@ -57,11 +64,6 @@ public partial class PlayerMovement : CharacterBody3D
             GlobalPosition = worldGen.FindValidSpawnPosition();
 		}
 
-		// Tab out
-		if (Input.IsActionJustPressed("Pause"))
-		{
-            GetTree().Quit();
-        }
 
 		bool grounded = IsOnFloor();
 
