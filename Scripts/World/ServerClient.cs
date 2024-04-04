@@ -117,7 +117,10 @@ public partial class ServerClient : Node
 
 			foreach (PlayerInfo item in playerList)
 			{			
-				RpcId(id, nameof(SendPlayerInfo), item.id, item.name);
+				if(item.id != id)
+				{
+					RpcId(id, nameof(SendPlayerInfo), item.id, item.name);
+				}
 			}
 
 			Console.Instance.Print("Synched all clients to new Player " + name + " (ID " + id + ") that has connected.");
