@@ -7,8 +7,6 @@ public partial class PlayerMovement : CharacterBody3D
 	[Export] Node3D camera;
 	WorldGen worldGen;
 
-	public static Vector3 currentPosition = new Vector3();
-
 	bool spawned;
 	float coyoteTime;
 	float previousYVelocity;
@@ -25,7 +23,6 @@ public partial class PlayerMovement : CharacterBody3D
 
     public override void _Ready()
     {
-        currentPosition = GlobalPosition;
         Input.MouseMode = Input.MouseModeEnum.Captured;
 		camera.RotateX(0.0001f);
 		worldGen = GetTree().Root.GetNode("World") as WorldGen;
@@ -119,6 +116,5 @@ public partial class PlayerMovement : CharacterBody3D
 		Velocity = velocity;
 		previousYVelocity = velocity.Y;
 		MoveAndSlide();
-		currentPosition = GlobalPosition;
 	}
 }

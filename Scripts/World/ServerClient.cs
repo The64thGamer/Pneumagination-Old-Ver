@@ -14,6 +14,8 @@ public partial class ServerClient : Node
 	const int maxPlayers = 256;
 	const long hostID = 1;
 
+	Node3D mainPlayer;
+
 	public override void _Ready()
 	{		
 		if(!IsInsideTree())
@@ -94,6 +96,11 @@ public partial class ServerClient : Node
         GD.Print("Player Connected! " + id.ToString());
     }
 
+	public Node3D GetMainPlayer()
+	{
+		return mainPlayer;
+	}
+
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	void SendPlayerInfo(long id, string name)
 	{	
@@ -112,15 +119,19 @@ public partial class ServerClient : Node
 			}
 		}
 
+		PlayerInfo info = new PlayerInfo(){id = id, name = name};
 		//Add player if not headless server
 		if(!Multiplayer.IsServer() || (Multiplayer.IsServer() && !PlayerPrefs.GetBool("Hosting Headless")))
 		{
-			GetTree().Root.AddChild(GD.Load<PackedScene>("res://Prefabs/Player.tscn").Instantiate());
+			info.playerObject = GD.Load<PackedScene>("res://Prefabs/Player.tscn").Instantiate() as Node3D;
+			GetTree().Root.AddChild(info.playerObject);
 		}
 
-		playerList.Add(new PlayerInfo(){id = id, name = name});
+		playerList.Add(info);
+		TestMainPlayer();
 		Console.Instance.Print("Player " + name + " (ID " + id + ") Connected.");
 
+		//Send info
 		if(Multiplayer.IsServer())
 		{				
 			RpcCallOnlyClientPlayerIDs(nameof(SendPlayerInfo), id, name);
@@ -134,6 +145,22 @@ public partial class ServerClient : Node
 			}
 
 			Console.Instance.Print("Synched all clients to new Player " + name + " (ID " + id + ") that has connected.");
+		}
+	}
+
+	void TestMainPlayer()
+	{				
+		if(mainPlayer != null)
+		{
+			return;
+		}
+		for(int i = 0; i < playerList.Count; i++)
+		{
+			if(playerList[i].id == Multiplayer.GetUniqueId())
+			{
+				mainPlayer = playerList[i].playerObject;
+				GD.Print(mainPlayer.Name);
+			}
 		}
 	}
 
@@ -266,5 +293,5 @@ public partial class PlayerInfo : GodotObject
 {
 	public string name;
 	public long id;
-	public CharacterBody3D playerObject;
+	public Node3D playerObject;
 }

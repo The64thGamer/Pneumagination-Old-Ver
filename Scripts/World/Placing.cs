@@ -5,15 +5,21 @@ using System.Drawing;
 public partial class Placing : Node3D
 {
     WorldGen worldGen;
+    Node3D mainPlayer;
     int currentSizeIndex = 0;
     int[] sizes = new int[] { 1, 2, 3, 6, 12 };
 
     public static int currentPlacementSize;
+            
+
     public override void _Ready()
     {
         currentPlacementSize = sizes[currentSizeIndex];
 		worldGen = GetTree().Root.GetNode("World") as WorldGen;
+        mainPlayer = (GetTree().Root.GetNode("World/Server") as ServerClient).GetMainPlayer();
+
     }
+    
     public override void _PhysicsProcess(double delta)
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.placeBrushSlot)
@@ -49,11 +55,11 @@ public partial class Placing : Node3D
                 //Check player position and height to not be inside Brush
                 //THIS IS FLAWED it only checks 3 points, make a Raycast version someday
                 if (
-                    PlayerMovement.currentPosition.X >= intPosition.X && PlayerMovement.currentPosition.X <= intPosition.X + size &&
-                    (PlayerMovement.currentPosition.Y >= intPosition.Y && PlayerMovement.currentPosition.Y <= intPosition.Y + size ||
-                    PlayerMovement.currentPosition.Y + 10 >= intPosition.Y && PlayerMovement.currentPosition.Y + 10 <= intPosition.Y + size ||
-                    PlayerMovement.currentPosition.Y + 5 >= intPosition.Y && PlayerMovement.currentPosition.Y + 5 <= intPosition.Y + size) &&
-                    PlayerMovement.currentPosition.Z >= intPosition.Z && PlayerMovement.currentPosition.Z <= intPosition.Z + size
+                    mainPlayer.GlobalPosition.X >= intPosition.X && mainPlayer.GlobalPosition.X <= intPosition.X + size &&
+                    (mainPlayer.GlobalPosition.Y >= intPosition.Y && mainPlayer.GlobalPosition.Y <= intPosition.Y + size ||
+                    mainPlayer.GlobalPosition.Y + 10 >= intPosition.Y && mainPlayer.GlobalPosition.Y + 10 <= intPosition.Y + size ||
+                    mainPlayer.GlobalPosition.Y + 5 >= intPosition.Y && mainPlayer.GlobalPosition.Y + 5 <= intPosition.Y + size) &&
+                    mainPlayer.GlobalPosition.Z >= intPosition.Z && mainPlayer.GlobalPosition.Z <= intPosition.Z + size
                     )
                 {
                     return;
