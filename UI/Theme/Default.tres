@@ -22,9 +22,16 @@ border_color = Color(0.8, 0.8, 0.8, 0)
 [resource]
 default_font = ExtResource("1_rs7qk")
 default_font_size = 7
+Button/colors/font_color = Color(1, 0.913725, 0.772549, 1)
+Label/colors/font_color = Color(1, 0.913725, 0.772549, 1)
+LineEdit/colors/font_color = Color(1, 0.913725, 0.772549, 1)
 MarginContainer/constants/margin_bottom = 0
 MarginContainer/constants/margin_left = 0
 MarginContainer/constants/margin_right = 0
 MarginContainer/constants/margin_top = 0
 ProgressBar/styles/background = SubResource("StyleBoxFlat_we2su")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_v3cpu")
+TabBar/colors/font_hovered_color = Color(1, 0.913725, 0.772549, 1)
+TabBar/colors/font_selected_color = Color(1, 0.913725, 0.772549, 1)
+TabBar/colors/font_unselected_color = Color(0.760784, 0.717647, 0.654902, 1)
+TextEdit/colors/font_color = Color(1, 0.913725, 0.772549, 1)
