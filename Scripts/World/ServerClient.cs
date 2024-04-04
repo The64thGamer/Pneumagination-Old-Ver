@@ -253,8 +253,12 @@ public partial class ServerClient : Node
 	public override void _Notification(int what)
 	{	
 		//Application Quit
-		if (what == NotificationWMCloseRequest && !Multiplayer.IsServer())
+		if (what == NotificationWMCloseRequest)
 		{
+			if(Multiplayer.IsServer())
+			{
+				GetTree().Quit();
+			}
 			RpcId(hostID,nameof(PingServerClientIsDisconnecting));
 			GetTree().Quit();
 		}
