@@ -11,7 +11,6 @@ public partial class ServerClient : Node
 
 	ENetMultiplayerPeer peer;
 
-	const string address = "127.0.0.1";
 	const int maxPlayers = 256;
 	const long hostID = 1;
 
@@ -24,7 +23,7 @@ public partial class ServerClient : Node
 
 		if(PlayerPrefs.GetBool("Joining"))
 		{		
-			JoinServer(Convert.ToInt32(PlayerPrefs.GetString("Joining Port")));
+			JoinServer(Convert.ToInt32(PlayerPrefs.GetString("Joining Port")),PlayerPrefs.GetString("Joining Address"));
 		}
 		else
 		{		
@@ -53,9 +52,14 @@ public partial class ServerClient : Node
 		GD.Print("Hosting Started");
 
 		SendPlayerInfo(hostID, PlayerPrefs.GetString("Name"));
+
+		if(PlayerPrefs.GetBool("Hosting Headless") && !Console.Instance.Open)
+		{
+			Console.Instance.ToggleConsole();
+		}
 	}
 
-	void JoinServer(int port)
+	void JoinServer(int port, string address)
 	{
 		peer = new ENetMultiplayerPeer();
 		peer.CreateClient(address,port);
