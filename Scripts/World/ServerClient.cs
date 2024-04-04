@@ -35,6 +35,7 @@ public partial class ServerClient : Node
 		Multiplayer.PeerDisconnected += PeerDisconnected;
 		Multiplayer.ConnectedToServer += ConnectedToServer;
 		Multiplayer.ConnectionFailed += ConnectionFailed;
+		GetTree().AutoAcceptQuit = false;
 	}
 
 	void CreateServer(int port)
@@ -68,6 +69,7 @@ public partial class ServerClient : Node
      void ConnectionFailed()
     {
 		GD.Print("CONNECTION FAILED");
+		GetTree().ChangeSceneToFile("res://Scenes/Menu.tscn");
     }
 
      void ConnectedToServer()
@@ -126,6 +128,60 @@ public partial class ServerClient : Node
 		}
 	}
 
+	[Rpc(MultiplayerApi.RpcMode.Authority)]
+	void DisconnectPlayer(long id)
+	{	 
+		if(!CheckHostCalledThisRPC(nameof(SendPlayerInfo)))
+		{
+			return;
+		}
+
+		//Check for missing player
+		bool check = false;
+		for(int i = 0; i < playerList.Count; i++)
+		{
+			if(playerList[i].id == Multiplayer.GetRemoteSenderId())
+			{
+				check = true;
+				Console.Instance.Print("Player " + playerList[i].name + " (ID " + playerList[i].id + ") Disconnected.");
+				playerList.RemoveAt(i);
+				break;
+			}
+		}
+		if(!check)
+		{
+			Console.Instance.Print("Server sent player disconnect request of: (ID " + Multiplayer.GetRemoteSenderId() + "). ID was not found in playerlist.");
+		}
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+	void PingServerClientIsDisconnecting()
+	{	 
+		if(!CheckClientIsCallingHost())
+		{
+			return;
+		}
+
+		//Check for missing player
+		bool check = false;
+		for(int i = 0; i < playerList.Count; i++)
+		{
+			if(playerList[i].id == Multiplayer.GetRemoteSenderId())
+			{
+				check = true;
+				Console.Instance.Print("Player " + playerList[i].name + " (ID " + playerList[i].id + ") Disconnected.");
+				playerList.RemoveAt(i);
+				break;
+			}
+		}
+		if(!check)
+		{
+			Console.Instance.Print("Player (ID " + Multiplayer.GetRemoteSenderId() + ") sent server disconnect request. ID was not found in playerlist.");
+		}
+		
+		RpcCallOnlyClientPlayerIDs(nameof(DisconnectPlayer), Multiplayer.GetRemoteSenderId());
+	}
+
 	void RpcCallOnlyClientPlayerIDs(StringName method, params Variant[] args)
 	{
 		for(int i = 0; i < playerList.Count; i++)
@@ -147,15 +203,27 @@ public partial class ServerClient : Node
 		}
 		return true;
 	}
-
-	/*
-			//Method can be called only from Client to Server and Server to Client
-		if((Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() == hostID) || 
-			(!Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() != hostID))
-		{
-			return;
+	
+	bool CheckClientIsCallingHost()
+	{
+		//Anyone can call server including server, only server can call client
+		if(Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() != hostID)
+		{			
+			return true;
 		}
-	*/
+		return false;
+	}
+
+
+	public override void _Notification(int what)
+	{	
+		//Application Quit
+		if (what == NotificationWMCloseRequest)
+		{
+			RpcId(hostID,nameof(PingServerClientIsDisconnecting));
+			GetTree().Quit();
+		}
+	}
 
 	[ConsoleCommand("listplayers", Description = "Prints IDs and names of all currently connected players.")]
 	void ListPlayers()

@@ -50,7 +50,7 @@ public partial class PlayerMovement : CharacterBody3D
 		// Tab out
 		if (Input.IsActionJustPressed("Pause"))
 		{
-            GetTree().Quit();
+			GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
         }
 
 
