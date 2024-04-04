@@ -112,9 +112,14 @@ public partial class ServerClient : Node
 			}
 		}
 
+		//Add player if not headless server
+		if(!Multiplayer.IsServer() || (Multiplayer.IsServer() && !PlayerPrefs.GetBool("Hosting Headless")))
+		{
+			GetTree().Root.AddChild(GD.Load<PackedScene>("res://Prefabs/Player.tscn").Instantiate());
+		}
+
 		playerList.Add(new PlayerInfo(){id = id, name = name});
 		Console.Instance.Print("Player " + name + " (ID " + id + ") Connected.");
-
 
 		if(Multiplayer.IsServer())
 		{				
@@ -250,7 +255,7 @@ public partial class ServerClient : Node
 		Console.Instance.Print(finalresult);
 	}
 
-	[ConsoleCommand("listmaxplayercount", Description = "Prints max players that can join. Singleplayer will be 1.")]
+	[ConsoleCommand("listmaxplayercount", Description = "Prints max players that can join. Singleplayer = 1. Singleplayer + Headless = 0")]
 	void ListMaxPlayerCount()
 	{
 		Console.Instance.Print(PlayerPrefs.GetBool("Hosting Online") ? maxPlayers.ToString() : "1");

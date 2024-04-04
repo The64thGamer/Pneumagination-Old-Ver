@@ -16,7 +16,7 @@ public partial class MeshEditing : Node3D
 
     public override void _Ready()
     {
-        worldGen = GetTree().Root.FindChild("World") as WorldGen;
+		worldGen = GetTree().Root.GetNode("World") as WorldGen;
     }
 
     public override void _PhysicsProcess(double delta)

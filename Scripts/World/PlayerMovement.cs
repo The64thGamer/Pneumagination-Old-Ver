@@ -28,7 +28,7 @@ public partial class PlayerMovement : CharacterBody3D
         currentPosition = GlobalPosition;
         Input.MouseMode = Input.MouseModeEnum.Captured;
 		camera.RotateX(0.0001f);
-        worldGen = GetTree().Root.FindChild("World") as WorldGen;
+		worldGen = GetTree().Root.GetNode("World") as WorldGen;
 
     }
 

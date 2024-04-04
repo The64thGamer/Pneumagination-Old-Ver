@@ -12,7 +12,7 @@ public partial class Placing : Node3D
     public override void _Ready()
     {
         currentPlacementSize = sizes[currentSizeIndex];
-        worldGen = GetTree().Root.FindChild("World") as WorldGen;
+		worldGen = GetTree().Root.GetNode("World") as WorldGen;
     }
     public override void _PhysicsProcess(double delta)
     {

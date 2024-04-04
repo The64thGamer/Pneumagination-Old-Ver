@@ -3,19 +3,23 @@ using System;
 
 public partial class PhotoMode : Camera3D
 {
-    [Export] EnvironmentController envController;
+    EnvironmentController envController;
     public static bool photoModeEnabled;
 
     bool inPhotoModeLoadingScreen = true;
-    float camZoomDelta;
+    float camZoomDelta; 
     Node3D parent;
     public override void _Ready()
-    {
-        EnterPhotoMode();
-        parent = (GetParent() as Node3D);
+    {       
+        //This is awful but FindChild doesn't work, please fix 
+        envController = GetTree().Root.GetNode("World/WorldEnvironment") as EnvironmentController;
+
+        parent = GetParent() as Node3D;
         Size = WorldGen.chunkUnloadingDistance * WorldGen.chunkSize;
         camZoomDelta = WorldGen.chunkUnloadingDistance * WorldGen.chunkSize;
         parent.Rotation = new Vector3(Mathf.DegToRad(-30), Mathf.DegToRad(45), 0);
+
+        EnterPhotoMode();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -22,7 +22,7 @@ public partial class Mining : Node3D
     {
         miningBar.Visible = false;
 
-        worldGen = GetTree().Root.FindChild("World") as WorldGen;
+		worldGen = GetTree().Root.GetNode("World") as WorldGen;
     }
 
     public override void _PhysicsProcess(double delta)
