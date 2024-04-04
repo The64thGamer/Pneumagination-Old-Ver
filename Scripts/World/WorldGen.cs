@@ -38,7 +38,7 @@ public partial class WorldGen : Node3D
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
 	ServerClient server;
-	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseG;
+	FastNoise noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseG;
 	int maxChunksLoadingRampUp = 1;
 
 	//Consts
@@ -91,18 +91,15 @@ public partial class WorldGen : Node3D
 		}
 
 
-		noise = new FastNoiseLite();
-		noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-		noise.SetFrequency(0.002f);
-		noise.SetSeed(seedA);
-		noise.SetFractalType(FastNoiseLite.FractalType.PingPong);
-		noise.SetFractalOctaves(5);
-		noise.SetFractalPingPongStrength(2);
-		noise.SetCellularJitter(1.2f);
-		noise.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
-		noise.SetDomainWarpAmp(400);
-
-		noiseB = new FastNoiseLite();
+		noise = FastNoise.FromEncodedNodeTree("EAA9Ctc+DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABAAAAAgD8=");
+		noiseB = FastNoise.FromEncodedNodeTree("EAA9Ctc+DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABAAAAAgD8=");
+		noiseC = FastNoise.FromEncodedNodeTree("EAA9Ctc+DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABAAAAAgD8=");
+		noiseD = FastNoise.FromEncodedNodeTree("EAA9Ctc+DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABAAAAAgD8=");
+		noiseE = FastNoise.FromEncodedNodeTree("EAA9Ctc+DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABAAAAAgD8=");
+		noiseF = FastNoise.FromEncodedNodeTree("EAA9Ctc+DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABAAAAAgD8=");
+		noiseG = FastNoise.FromEncodedNodeTree("EAA9Ctc+DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABAAAAAgD8=");
+/*
+		noiseB = new FastNoise();
 		noiseB.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2S);
 		noiseB.SetFrequency(0.06f);
 		noiseB.SetSeed(seedB);
@@ -111,40 +108,41 @@ public partial class WorldGen : Node3D
 		noiseB.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
 		noiseB.SetDomainWarpAmp(400);
 
-		noiseC = new FastNoiseLite();
+		noiseC = new FastNoise();
 		noiseC.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
 		noiseC.SetFrequency(0.005f);
 		noiseC.SetSeed(seedC);
 		noiseC.SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction.Manhattan);
 		noiseC.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
 
-		noiseD = new FastNoiseLite();
+		noiseD = new FastNoise();
 		noiseD.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseD.SetFrequency(0.002f);
 		noiseD.SetSeed(seedD);
 		noiseD.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseD.SetFractalOctaves(5);
 
-		noiseE = new FastNoiseLite();
+		noiseE = new FastNoise();
 		noiseE.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseE.SetFrequency(0.0005f);
 		noiseE.SetSeed(seedE);
 		noiseE.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseE.SetFractalOctaves(4);
 
-		noiseF = new FastNoiseLite();
+		noiseF = new FastNoise();
 		noiseF.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 		noiseF.SetFrequency(0.001f);
 		noiseF.SetSeed(seedF);
 		noiseF.SetFractalType(FastNoiseLite.FractalType.FBm);
 		noiseF.SetFractalOctaves(4);
 
-		noiseG = new FastNoiseLite();
+		noiseG = new FastNoise();
 		noiseG.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-		noiseG.SetFrequency(0.001f);
+		noiseG.SetFrequency(0.0005f);
 		noiseG.SetSeed(seedG);
-		noiseG.SetFractalType(FastNoiseLite.FractalType.FBm);
-		noiseG.SetFractalOctaves(4);
+		noiseG.SetFractalType(FastNoiseLite.FractalType.Ridged);
+		noiseG.SetFractalOctaves(2);
+		*/
 	}
 
 	public override void _Process(double delta)
@@ -412,9 +410,9 @@ public partial class WorldGen : Node3D
 						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, posX, posY, posZ, 0, x, y, z);
 
 						//Find Values
-						biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
-						region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
-						oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GetNoise(newX, newZ))) * 2) - 1;
+						biome = GetClampedNoise(noiseF.GenSingle2D(newX, newZ,seedF));
+						region = GetClampedNoise(noiseC.GenSingle2D(newX, newZ,seedC));
+						oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GenSingle2D(newX, newZ,seedG))) * 2) - 1;
 						regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 						regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 						isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
@@ -524,10 +522,10 @@ public partial class WorldGen : Node3D
 
 	bool FindIfRoadBlock(float region, float newX, float newZ)
 	{
-		if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ)) ||
-			region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ)) ||
-			region != GetClampedNoise(noiseC.GetNoise(newX, newZ - 1)) ||
-			region != GetClampedNoise(noiseC.GetNoise(newX, newZ + 1)))
+		if (region != GetClampedNoise(noiseC.GenSingle2D(newX - 1, newZ,seedC)) ||
+			region != GetClampedNoise(noiseC.GenSingle2D(newX + 1, newZ,seedC)) ||
+			region != GetClampedNoise(noiseC.GenSingle2D(newX, newZ - 1,seedC)) ||
+			region != GetClampedNoise(noiseC.GenSingle2D(newX, newZ + 1,seedC)))
 		{
 			return true;
 		}
@@ -536,10 +534,10 @@ public partial class WorldGen : Node3D
 
 	bool FindIfCornerRoadBlock(float region, float newX, float newZ)
 	{
-		if (region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ - 1)) ||
-			region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ - 1)) ||
-			region != GetClampedNoise(noiseC.GetNoise(newX - 1, newZ + 1)) ||
-			region != GetClampedNoise(noiseC.GetNoise(newX + 1, newZ + 1)))
+		if (region != GetClampedNoise(noiseC.GenSingle2D(newX - 1, newZ - 1,seedC)) ||
+			region != GetClampedNoise(noiseC.GenSingle2D(newX + 1, newZ - 1,seedC)) ||
+			region != GetClampedNoise(noiseC.GenSingle2D(newX - 1, newZ + 1,seedC)) ||
+			region != GetClampedNoise(noiseC.GenSingle2D(newX + 1, newZ + 1,seedC)))
 		{
 			return true;
 		}
@@ -608,10 +606,10 @@ public partial class WorldGen : Node3D
 
 		int chunkY = Mathf.FloorToInt(posY / (float)chunkSize / bigBlockSize);
 
-		float oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GetNoise(posX, posZ))) * 2) - 1;
-		float terrain = Math.Clamp((curve1.SampleBaked(GetClampedNoise(noise.GetNoise(posX, posY, posZ)))
-				+ curve4.SampleBaked(GetClampedNoise(noiseD.GetNoise(posX, posZ))))
-				* curve5.SampleBaked(GetClampedNoise(noiseE.GetNoise(posX, posZ))),0,1);
+		float oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GenSingle2D(posX, posZ,seedG))) * 2) - 1;
+		float terrain = Math.Clamp((curve1.SampleBaked(GetClampedNoise(noise.GenSingle3D(posX, posY, posZ,seedA)))
+				+ curve4.SampleBaked(GetClampedNoise(noiseD.GenSingle2D(posX, posZ,seedD))))
+				* curve5.SampleBaked(GetClampedNoise(noiseE.GenSingle2D(posX, posZ,seedE))),0,1);
 
 		if (chunkY < 0)
 		{
@@ -639,8 +637,8 @@ public partial class WorldGen : Node3D
 
 		//Both Surface Generation
 		if (chunkY < 5 && chunkY >= -10 &&
-			curve2.SampleBaked(GetClampedNoise(noiseB.GetNoise(posX, posY, posZ)))
-			* curve6.SampleBaked(GetClampedNoise(noiseE.GetNoise(posX, posY, posZ)))
+			curve2.SampleBaked(GetClampedNoise(noiseB.GenSingle3D(posX, posY, posZ,seedB)))
+			* curve6.SampleBaked(GetClampedNoise(noiseE.GenSingle3D(posX, posY, posZ,seedE)))
 			> curve3.SampleBaked(1 - GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, posY)))
 
 		{
@@ -671,9 +669,9 @@ public partial class WorldGen : Node3D
 			float newZ = (posZ / bigBlockSize) + (chunkSize * z / bigBlockSize);
 
 			//Find Values
-			float biome = GetClampedNoise(noiseF.GetNoise(newX, newZ));
-			float region = GetClampedNoise(noiseC.GetNoise(newX, newZ));
-			float oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GetNoise(newX, newZ))) * 2) - 1;
+			float biome = GetClampedNoise(noiseF.GenSingle2D(newX, newZ,seedF));
+			float region = GetClampedNoise(noiseC.GenSingle2D(newX, newZ,seedC));
+			float oceanMultiplier = (curve7.SampleBaked(GetClampedNoise(noiseG.GenSingle2D(newX, newZ,seedG))) * 2) - 1;
 			bool regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 			bool regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 			bool isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
