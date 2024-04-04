@@ -14,7 +14,7 @@ public partial class ServerClient : Node
 	const int maxPlayers = 256;
 	const long hostID = 1;
 
-	Node3D mainPlayer;
+	Node3D mainPlayer = null;
 
 	public override void _Ready()
 	{		
@@ -159,7 +159,6 @@ public partial class ServerClient : Node
 			if(playerList[i].id == Multiplayer.GetUniqueId())
 			{
 				mainPlayer = playerList[i].playerObject;
-				GD.Print(mainPlayer.Name);
 			}
 		}
 	}

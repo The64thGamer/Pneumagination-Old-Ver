@@ -11,7 +11,7 @@ public partial class EnvironmentController : WorldEnvironment
     [Export] Curve maxFogDistance;
     [Export] Curve minFogDistance;
     [Export] DirectionalLight3D sun;
-    [Export] ShaderMaterial fogMat;
+    ShaderMaterial fogMat;
     
     ServerClient server;
 
@@ -35,6 +35,14 @@ public partial class EnvironmentController : WorldEnvironment
     {
         float range = GetClampedRange(-200, 0, server.GetMainPlayer().GlobalPosition.Y);
 
+        if(fogMat == null)
+        {
+            if(server.GetMainPlayer() == null)
+            {
+                return;
+            }
+            fogMat = (ShaderMaterial)(server.GetMainPlayer().GetNode("Player Head/Player Camera/Fog Mesh") as MeshInstance3D).MaterialOverride;
+        }
 
         exactTimeOfDay = (exactTimeOfDay + (float)delta) % lengthOfDay;
         timeOfDay = exactTimeOfDay / lengthOfDay;
