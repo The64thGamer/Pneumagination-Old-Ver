@@ -51,8 +51,7 @@ public partial class ServerClient : Node
 
 		GD.Print("Hosting Started");
 
-
-		Rpc(nameof(SendPlayerInfo),hostID, PlayerPrefs.GetString("Name"));
+		SendPlayerInfo(hostID, PlayerPrefs.GetString("Name"));
 	}
 
 	void JoinServer(int port)
