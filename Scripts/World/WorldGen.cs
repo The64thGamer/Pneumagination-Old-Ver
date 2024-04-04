@@ -153,6 +153,11 @@ public partial class WorldGen : Node3D
 
 	void LoadChunks()
 	{
+		if(server.GetMainPlayer() == null)
+		{
+			return;
+		}
+
 		//Check
 		Vector3 chunkPos = new Vector3(Mathf.RoundToInt(server.GetMainPlayer().GlobalPosition.X / chunkSize), Mathf.RoundToInt(server.GetMainPlayer().GlobalPosition.Y / chunkSize), Mathf.RoundToInt(server.GetMainPlayer().GlobalPosition.Z / chunkSize));
 		if (chunkPos == oldChunkPos && !lastFrameMaxChunkLimitReached)
@@ -211,7 +216,11 @@ public partial class WorldGen : Node3D
 	}
 
 	void UnloadChunks()
-	{
+	{		
+		if(server.GetMainPlayer == null)
+		{
+			return;
+		}
 		//Unload Far Away Chunks
 		for (int i = loadedChunks.Count - 1; i > -1; i--)
 		{

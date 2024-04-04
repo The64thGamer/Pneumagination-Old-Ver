@@ -53,11 +53,14 @@ public partial class ServerClient : Node
 
 		GD.Print("Hosting Started");
 
-		SendPlayerInfo(hostID, PlayerPrefs.GetString("Name"));
 
-		if(PlayerPrefs.GetBool("Hosting Headless") && !Console.Instance.Open)
+		if(PlayerPrefs.GetBool("Hosting Headless"))
 		{
 			Console.Instance.ToggleConsole();
+		}
+		else
+		{
+			SendPlayerInfo(hostID, PlayerPrefs.GetString("Name"));
 		}
 	}
 
@@ -159,6 +162,7 @@ public partial class ServerClient : Node
 			if(playerList[i].id == Multiplayer.GetUniqueId())
 			{
 				mainPlayer = playerList[i].playerObject;
+				return;
 			}
 		}
 	}

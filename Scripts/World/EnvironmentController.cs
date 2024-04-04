@@ -32,7 +32,11 @@ public partial class EnvironmentController : WorldEnvironment
 		server = GetTree().Root.GetNode("World/Server") as ServerClient;
     }
     public override void _Process(double delta)
-    {
+    {		
+        if(server.GetMainPlayer() == null)
+		{
+			return;
+		}
         float range = GetClampedRange(-200, 0, server.GetMainPlayer().GlobalPosition.Y);
 
         if(fogMat == null)
