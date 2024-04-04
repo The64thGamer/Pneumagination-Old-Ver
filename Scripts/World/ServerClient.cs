@@ -52,7 +52,7 @@ public partial class ServerClient : Node
 		GD.Print("Hosting Started");
 
 
-		Rpc(nameof(SendPlayerInfo),PlayerPrefs.GetString("Name"),hostID);
+		Rpc(nameof(SendPlayerInfo),hostID, PlayerPrefs.GetString("Name"));
 	}
 
 	void JoinServer(int port)
@@ -75,7 +75,7 @@ public partial class ServerClient : Node
     {
         GD.Print("Connected To Server");
 
-		RpcId(hostID, nameof(SendPlayerInfo), PlayerPrefs.GetString("Name"),Multiplayer.GetUniqueId());
+		RpcId(hostID, nameof(SendPlayerInfo),Multiplayer.GetUniqueId(), PlayerPrefs.GetString("Name"));
     }
 
      void PeerDisconnected(long id)
@@ -92,8 +92,7 @@ public partial class ServerClient : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	void SendPlayerInfo(long id, string name)
 	{	
-		//Anyone can call server including server, only server can call client
-		if(!Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() != hostID)
+		if(!CheckHostCalledThisRPC(nameof(SendPlayerInfo)))
 		{
 			return;
 		}
@@ -103,12 +102,14 @@ public partial class ServerClient : Node
 		{
 			if(playerList[i].id == id)
 			{
+				Console.Instance.Print("Duplicate player information was sent to you. (ID " + id + ")");
 				return;
 			}
 		}
 
-
 		playerList.Add(new PlayerInfo(){id = id, name = name});
+		Console.Instance.Print("Player " + name + " (ID " + id + ") Connected.");
+
 
 		if(Multiplayer.IsServer())
 		{				
@@ -118,6 +119,8 @@ public partial class ServerClient : Node
 			{			
 				RpcId(id, nameof(SendPlayerInfo), item.id, item.name);
 			}
+
+			Console.Instance.Print("Synched all clients to new Player " + name + " (ID " + id + ") that has connected.");
 		}
 	}
 
@@ -130,6 +133,17 @@ public partial class ServerClient : Node
 				RpcId(playerList[i].id, method, args);
 			}
 		}
+	}
+
+	bool CheckHostCalledThisRPC(string methodName)
+	{
+		//Anyone can call server including server, only server can call client
+		if(!Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() != hostID)
+		{			
+			Console.Instance.Print("Player (ID " + Multiplayer.GetRemoteSenderId() +  ") attempted to call server authoritative function: " + methodName);
+			return false;
+		}
+		return true;
 	}
 
 	/*
