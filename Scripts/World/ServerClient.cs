@@ -52,10 +52,7 @@ public partial class ServerClient : Node
 		GD.Print("Hosting Started");
 
 
-		SendPlayerInfo(new PlayerInfo(){
-			name = PlayerPrefs.GetString("Name"), 
-			id = hostID
-			});
+		Rpc(nameof(SendPlayerInfo),PlayerPrefs.GetString("Name"),hostID);
 	}
 
 	void JoinServer(int port)
@@ -78,10 +75,7 @@ public partial class ServerClient : Node
     {
         GD.Print("Connected To Server");
 
-		RpcId(hostID, nameof(SendPlayerInfo), new PlayerInfo(){
-			name = PlayerPrefs.GetString("Name"), 
-			id = Multiplayer.GetUniqueId()
-		});
+		RpcId(hostID, nameof(SendPlayerInfo), PlayerPrefs.GetString("Name"),Multiplayer.GetUniqueId());
     }
 
      void PeerDisconnected(long id)
@@ -93,31 +87,59 @@ public partial class ServerClient : Node
      void PeerConnected(long id)
     {
         GD.Print("Player Connected! " + id.ToString());
-
-		if(!Multiplayer.IsServer())
-		{
-			return;
-		}
-		playerList.Add(new PlayerInfo(){id = id,});
     }
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-	void SendPlayerInfo(PlayerInfo info)
+	void SendPlayerInfo(long id, string name)
 	{	
-		if(playerList.Contains(info))
+		//Anyone can call server including server, only server can call client
+		if(!Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() != hostID)
 		{
 			return;
 		}
-		playerList.Add(info);
+
+		//Check for duplicate call
+		for(int i = 0; i < playerList.Count; i++)
+		{
+			if(playerList[i].id == id)
+			{
+				return;
+			}
+		}
+
+
+		playerList.Add(new PlayerInfo(){id = id, name = name});
 
 		if(Multiplayer.IsServer())
-		{
-			foreach (var item in playerList)
-			{
-				Rpc(nameof(SendPlayerInfo), info);
+		{				
+			RpcCallOnlyClientPlayerIDs(nameof(SendPlayerInfo), id, name);
+
+			foreach (PlayerInfo item in playerList)
+			{			
+				RpcId(id, nameof(SendPlayerInfo), item.id, item.name);
 			}
 		}
 	}
+
+	void RpcCallOnlyClientPlayerIDs(StringName method, params Variant[] args)
+	{
+		for(int i = 0; i < playerList.Count; i++)
+		{
+			if(playerList[i].id != hostID)
+			{
+				RpcId(playerList[i].id, method, args);
+			}
+		}
+	}
+
+	/*
+			//Method can be called only from Client to Server and Server to Client
+		if((Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() == hostID) || 
+			(!Multiplayer.IsServer() && Multiplayer.GetRemoteSenderId() != hostID))
+		{
+			return;
+		}
+	*/
 
 	[ConsoleCommand("listplayers", Description = "Prints IDs and names of all currently connected players.")]
 	void ListPlayers()
