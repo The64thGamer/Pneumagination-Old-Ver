@@ -292,7 +292,31 @@ public partial class ServerClient : Node
 	[ConsoleCommand("listmaxplayercount", Description = "Prints max players that can join. Singleplayer = 1. Singleplayer + Headless = 0")]
 	void ListMaxPlayerCount()
 	{
+		if(!IsInsideTree())
+		{
+			Console.Instance.Print("Not currently in game");
+			return;
+		}
 		Console.Instance.Print(PlayerPrefs.GetBool("Hosting Online") ? maxPlayers.ToString() : "1");
+	}
+
+	[ConsoleCommand("getmyposition", Description = "Prints position of currently controlled player.")]
+	void GetMyPosition()
+	{
+		if(!IsInsideTree())
+		{
+			Console.Instance.Print("Not currently in game");
+			return;
+		}
+		if(mainPlayer == null)
+		{
+			Console.Instance.Print("No player currently controlled");
+			return;
+		}
+		
+		Console.Instance.Print("X " + Mathf.FloorToInt(mainPlayer.GlobalPosition.X) +
+		 					   "  Y " + Mathf.FloorToInt(mainPlayer.GlobalPosition.Y) +
+		  					   "  Z " + Mathf.FloorToInt(mainPlayer.GlobalPosition.Z));
 	}
 }
 

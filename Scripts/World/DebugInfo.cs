@@ -24,7 +24,7 @@ public partial class DebugInfo : Label
             Visible = true;
         }
 
-        text = "\n " + (string)ProjectSettings.GetSetting("application/config/name") + " v" + (string)ProjectSettings.GetSetting("application/config/version") + " Seed- " + WorldGen.seedA.ToString("D10")+ WorldGen.seedB.ToString("D10") + WorldGen.seedC.ToString("D10") + WorldGen.seedD.ToString("D10") + " X" + (int)server.GetMainPlayer().GlobalPosition.X + " Y" + (int)server.GetMainPlayer().GlobalPosition.Y + " Z"+ (int)server.GetMainPlayer().GlobalPosition.Z + " " + DateTime.Today.Add(TimeSpan.FromDays(EnvironmentController.timeOfDay)).ToString("hhtt").TrimStart('0'); ;
+        text = "\n " + (string)ProjectSettings.GetSetting("application/config/name") + " v" + (string)ProjectSettings.GetSetting("application/config/version");
         if(this.Text != text)
         {
             this.Text = text;

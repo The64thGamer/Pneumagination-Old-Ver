@@ -8,6 +8,9 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using static WorldGen;
+using media.Laura.SofiaConsole;
+using Console = media.Laura.SofiaConsole.Console;
+
 
 public partial class WorldGen : Node3D
 {
@@ -1860,6 +1863,17 @@ public partial class WorldGen : Node3D
 	public float GetChunksLoadedToLoadingRatio()
 	{
 		return (float)loadedChunks.Count / (float)(loadedChunks.Count + ongoingChunkRenderData.Count);
+	}
+
+	[ConsoleCommand("getseed", Description = "Prints the hashed seed value.")]
+	void GetSeed()
+	{
+		if(!IsInsideTree())
+		{
+			Console.Instance.Print("Not currently in game");
+			return;
+		}
+		Console.Instance.Print(seedA.ToString());
 	}
 
 	public class Brush

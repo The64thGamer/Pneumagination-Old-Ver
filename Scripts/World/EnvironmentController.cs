@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using media.Laura.SofiaConsole;
+using Console = media.Laura.SofiaConsole.Console;
 
 public partial class EnvironmentController : WorldEnvironment
 {
@@ -74,4 +76,25 @@ public partial class EnvironmentController : WorldEnvironment
     {
         Environment.SdfgiMaxDistance = sdfgiMaxDistance;
     }
+	[ConsoleCommand("gettime", Description = "Prints the current in-game time.")]
+	void GetTime()
+	{
+        if(!IsInsideTree())
+		{
+			Console.Instance.Print("Not currently in game");
+			return;
+		}
+		Console.Instance.Print(DateTime.Today.Add(TimeSpan.FromDays(timeOfDay)).ToString("hhtt").TrimStart('0'));
+	}
+
+    [ConsoleCommand("getexacttime", Description = "Prints the exact in-game time of the day in seconds out of total.")]
+	void GetExactTime()
+	{
+        if(!IsInsideTree())
+		{
+			Console.Instance.Print("Not currently in game");
+			return;
+		}
+		Console.Instance.Print(exactTimeOfDay + " / " + lengthOfDay);
+	}
 }
