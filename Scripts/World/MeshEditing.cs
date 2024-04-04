@@ -3,7 +3,7 @@ using System;
 
 public partial class MeshEditing : Node3D
 {
-    [Export] public WorldGen worldGen;
+    WorldGen worldGen;
     [Export] public MeshInstance3D displayMesh;
     [Export] public Material displayMat;
 
@@ -12,6 +12,12 @@ public partial class MeshEditing : Node3D
     Vector3 hitPoint;
     Node3D chunk;
     int faceID;
+
+
+    public override void _Ready()
+    {
+        worldGen = GetTree().Root.FindChild("World") as WorldGen;
+    }
 
     public override void _PhysicsProcess(double delta)
     {

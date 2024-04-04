@@ -5,7 +5,7 @@ public partial class PlayerMovement : CharacterBody3D
 {
 	[Export] Node3D head;
 	[Export] Node3D camera;
-	[Export] WorldGen worldGen;
+	WorldGen worldGen;
 
 	public static Vector3 currentPosition = new Vector3();
 
@@ -28,6 +28,7 @@ public partial class PlayerMovement : CharacterBody3D
         currentPosition = GlobalPosition;
         Input.MouseMode = Input.MouseModeEnum.Captured;
 		camera.RotateX(0.0001f);
+        worldGen = GetTree().Root.FindChild("World") as WorldGen;
 
     }
 

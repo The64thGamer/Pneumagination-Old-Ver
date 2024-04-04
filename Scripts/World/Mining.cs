@@ -3,7 +3,7 @@ using System;
 
 public partial class Mining : Node3D
 {
-    [Export] public WorldGen worldGen;
+    WorldGen worldGen;
     [Export] public ProgressBar miningBar;
     [Export] public Curve miningProgressCurve;
 
@@ -21,6 +21,8 @@ public partial class Mining : Node3D
     public override void _Ready()
     {
         miningBar.Visible = false;
+
+        worldGen = GetTree().Root.FindChild("World") as WorldGen;
     }
 
     public override void _PhysicsProcess(double delta)

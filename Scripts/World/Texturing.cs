@@ -3,7 +3,14 @@ using System;
 
 public partial class Texturing : Node3D
 {
-    [Export] public WorldGen worldGen;
+    WorldGen worldGen;
+
+
+    public override void _Ready()
+    {
+        worldGen = GetTree().Root.FindChild("World") as WorldGen;
+    }
+    
     public override void _PhysicsProcess(double delta)
     {
         if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection <= ScrollBar.miningSlot)

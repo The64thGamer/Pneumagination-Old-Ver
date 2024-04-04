@@ -4,7 +4,7 @@ using System.Drawing;
 
 public partial class Placing : Node3D
 {
-    [Export] public WorldGen worldGen;
+    WorldGen worldGen;
     int currentSizeIndex = 0;
     int[] sizes = new int[] { 1, 2, 3, 6, 12 };
 
@@ -12,6 +12,7 @@ public partial class Placing : Node3D
     public override void _Ready()
     {
         currentPlacementSize = sizes[currentSizeIndex];
+        worldGen = GetTree().Root.FindChild("World") as WorldGen;
     }
     public override void _PhysicsProcess(double delta)
     {
