@@ -64,16 +64,15 @@ shadow_offset = Vector2(0, 0)
 _data = [Vector2(0.752841, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 9.9155, 0.0, 0, 0]
 point_count = 2
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "camera", "worldGen") groups=["Player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "camera") groups=["Player"]]
 collision_layer = 3
 collision_mask = 5
 floor_constant_speed = true
 floor_max_angle = 1.39626
 safe_margin = 0.01
 script = ExtResource("1_cwgi3")
-head = NodePath("")
-camera = NodePath("")
-worldGen = NodePath("")
+head = NodePath("Player Head")
+camera = NodePath("Player Head/Player Camera")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -105,16 +104,14 @@ gi_mode = 0
 mesh = SubResource("ArrayMesh_5c67k")
 script = ExtResource("3_f30lj")
 
-[node name="Mining" type="Node3D" parent="Player Head/Player Camera" node_paths=PackedStringArray("worldGen", "miningBar") groups=["Player"]]
+[node name="Mining" type="Node3D" parent="Player Head/Player Camera" node_paths=PackedStringArray("miningBar") groups=["Player"]]
 script = ExtResource("4_v8ch8")
-worldGen = NodePath("")
-miningBar = NodePath("")
+miningBar = NodePath("../Pointer/Mining Progress")
 miningProgressCurve = SubResource("Curve_v1div")
 
-[node name="Mesh Editing" type="Node3D" parent="Player Head/Player Camera" node_paths=PackedStringArray("worldGen", "displayMesh") groups=["Player"]]
+[node name="Mesh Editing" type="Node3D" parent="Player Head/Player Camera" node_paths=PackedStringArray("displayMesh") groups=["Player"]]
 script = ExtResource("5_uxnim")
-worldGen = NodePath("")
-displayMesh = NodePath("")
+displayMesh = NodePath("DisplayMesh")
 displayMat = ExtResource("6_8todr")
 
 [node name="DisplayMesh" type="MeshInstance3D" parent="Player Head/Player Camera/Mesh Editing"]
@@ -122,13 +119,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0)
 top_level = true
 skeleton = NodePath("../../../../..")
 
-[node name="Placing" type="Node3D" parent="Player Head/Player Camera" node_paths=PackedStringArray("worldGen") groups=["Player"]]
+[node name="Placing" type="Node3D" parent="Player Head/Player Camera" groups=["Player"]]
 script = ExtResource("7_vh6iw")
-worldGen = NodePath("")
 
-[node name="Texturing" type="Node3D" parent="Player Head/Player Camera" node_paths=PackedStringArray("worldGen")]
+[node name="Texturing" type="Node3D" parent="Player Head/Player Camera"]
 script = ExtResource("8_qljlp")
-worldGen = NodePath("")
 
 [node name="Debug Text" type="Label" parent="Player Head/Player Camera" groups=["Player"]]
 texture_filter = 1
@@ -149,9 +144,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -3.0
-offset_top = -3.0
+offset_top = 1.0
 offset_right = 3.0
-offset_bottom = 3.0
+offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("11_4cycp")
@@ -583,7 +578,7 @@ grow_vertical = 2
 texture = ExtResource("30_ghq6r")
 expand_mode = 1
 
-[node name="LoadingBar" type="ProgressBar" parent="Player Head/Player Camera" node_paths=PackedStringArray("worldGen")]
+[node name="LoadingBar" type="ProgressBar" parent="Player Head/Player Camera"]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -599,19 +594,17 @@ theme = ExtResource("13_n5r38")
 max_value = 1.0
 step = 0.001
 script = ExtResource("31_84inb")
-worldGen = NodePath("")
 curve = SubResource("Curve_j2o52")
 
 [node name="Photo Mode" type="Node3D" parent="."]
 
-[node name="Photo Mode Camera" type="Camera3D" parent="Photo Mode" node_paths=PackedStringArray("envController")]
+[node name="Photo Mode Camera" type="Camera3D" parent="Photo Mode"]
 projection = 1
 fov = 1.0
 size = 1000.0
 near = 10.0
 far = 1500.0
 script = ExtResource("32_4wyds")
-envController = NodePath("")
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource("33_tfi6h")

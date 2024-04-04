@@ -11,8 +11,7 @@ public partial class EnvironmentController : WorldEnvironment
     [Export] Curve maxFogDistance;
     [Export] Curve minFogDistance;
     [Export] DirectionalLight3D sun;
-    [Export] MeshInstance3D fogMesh;
-    ShaderMaterial fogMat;
+    [Export] ShaderMaterial fogMat;
 
     //Statics
     public static float timeOfDay;
@@ -25,11 +24,6 @@ public partial class EnvironmentController : WorldEnvironment
     //Consts
     const float sdfgiMaxDistance = 1600;
     const float sdfgiMaxDistancePhotoMode = 2400;
-
-    public override void _Ready()
-    {
-        fogMat = ((ShaderMaterial)fogMesh.MaterialOverride);
-    }
 
     public override void _Process(double delta)
     {

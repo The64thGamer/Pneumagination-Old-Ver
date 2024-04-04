@@ -113,18 +113,33 @@ text = "Online"
 layout_mode = 2
 script = ExtResource("5_1fqp2")
 playerPref = "Hosting Online"
-buttonTogglesLineEdit = NodePath("../../HBoxContainer3/Seed Edit")
+buttonTogglesLineEdit = NodePath("../../HBoxContainer5/Seed Edit")
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Headless"
+
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4" node_paths=PackedStringArray("buttonTogglesLineEdit")]
+layout_mode = 2
+script = ExtResource("5_1fqp2")
+playerPref = "Hosting Headless"
+buttonTogglesLineEdit = NodePath("")
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Port "
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_dnfop")
@@ -164,6 +179,24 @@ theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2"]
 layout_mode = 2
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+text = "Address "
+
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_dnfop")
+theme_override_font_sizes/font_size = 20
+script = ExtResource("6_hubln")
+playerPref = "Joining Address"
+defaultValue = "127.0.0.1"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
