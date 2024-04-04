@@ -40,7 +40,7 @@ public partial class ServerClient : Node
 	void CreateServer(int port)
 	{
 		peer = new ENetMultiplayerPeer();
-		Error error = peer.CreateServer(port,PlayerPrefs.GetBool("Hosting Online") ? maxPlayers : 1);
+		Error error = peer.CreateServer(port,PlayerPrefs.GetBool("Hosting Online") ? maxPlayers : (PlayerPrefs.GetBool("Hosting Headless") ? 0 : 1));
 		if(error != Error.Ok)
 		{
 			GD.Print("Hosting Failed: " + error.ToString());
