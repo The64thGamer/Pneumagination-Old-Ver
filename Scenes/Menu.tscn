@@ -124,11 +124,10 @@ theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "Headless"
 
-[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4" node_paths=PackedStringArray("buttonTogglesLineEdit")]
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
 script = ExtResource("5_1fqp2")
 playerPref = "Hosting Headless"
-buttonTogglesLineEdit = NodePath("")
 
 [node name="HBoxContainer5" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

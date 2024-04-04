@@ -34,7 +34,7 @@ public partial class WorldGen : Node3D
 	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
-	Node3D mainPlayer;
+	ServerClient server;
 	FastNoiseLite noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseG;
 	int maxChunksLoadingRampUp = 1;
 
@@ -70,7 +70,7 @@ public partial class WorldGen : Node3D
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{        
-		mainPlayer = (GetTree().Root.GetNode("World/Server") as ServerClient).GetMainPlayer();
+		server = GetTree().Root.GetNode("World/Server") as ServerClient;
 
 		seedA = Convert.ToInt32(PlayerPrefs.GetString("Seed"));
 		Random rnd = new Random(seedA);
@@ -154,7 +154,7 @@ public partial class WorldGen : Node3D
 	void LoadChunks()
 	{
 		//Check
-		Vector3 chunkPos = new Vector3(Mathf.RoundToInt(mainPlayer.GlobalPosition.X / chunkSize), Mathf.RoundToInt(mainPlayer.GlobalPosition.Y / chunkSize), Mathf.RoundToInt(mainPlayer.GlobalPosition.Z / chunkSize));
+		Vector3 chunkPos = new Vector3(Mathf.RoundToInt(server.GetMainPlayer().GlobalPosition.X / chunkSize), Mathf.RoundToInt(server.GetMainPlayer().GlobalPosition.Y / chunkSize), Mathf.RoundToInt(server.GetMainPlayer().GlobalPosition.Z / chunkSize));
 		if (chunkPos == oldChunkPos && !lastFrameMaxChunkLimitReached)
 		{
 			return;

@@ -6,11 +6,11 @@ public partial class DebugInfo : Label
 {
     string text = "";
 
-    Node3D mainPlayer;
+    ServerClient server;
 
     public override void _Ready()
     {
-        mainPlayer = (GetTree().Root.GetNode("World/Server") as ServerClient).GetMainPlayer();
+		server = GetTree().Root.GetNode("World/Server") as ServerClient;
     }
     public override void _Process(double delta)
     {
@@ -24,7 +24,7 @@ public partial class DebugInfo : Label
             Visible = true;
         }
 
-        text = "\n " + (string)ProjectSettings.GetSetting("application/config/name") + " v" + (string)ProjectSettings.GetSetting("application/config/version") + " Seed- " + WorldGen.seedA.ToString("D10")+ WorldGen.seedB.ToString("D10") + WorldGen.seedC.ToString("D10") + WorldGen.seedD.ToString("D10") + " X" + (int)mainPlayer.GlobalPosition.X + " Y" + (int)mainPlayer.GlobalPosition.Y + " Z"+ (int)mainPlayer.GlobalPosition.Z + " " + DateTime.Today.Add(TimeSpan.FromDays(EnvironmentController.timeOfDay)).ToString("hhtt").TrimStart('0'); ;
+        text = "\n " + (string)ProjectSettings.GetSetting("application/config/name") + " v" + (string)ProjectSettings.GetSetting("application/config/version") + " Seed- " + WorldGen.seedA.ToString("D10")+ WorldGen.seedB.ToString("D10") + WorldGen.seedC.ToString("D10") + WorldGen.seedD.ToString("D10") + " X" + (int)server.GetMainPlayer().GlobalPosition.X + " Y" + (int)server.GetMainPlayer().GlobalPosition.Y + " Z"+ (int)server.GetMainPlayer().GlobalPosition.Z + " " + DateTime.Today.Add(TimeSpan.FromDays(EnvironmentController.timeOfDay)).ToString("hhtt").TrimStart('0'); ;
         if(this.Text != text)
         {
             this.Text = text;

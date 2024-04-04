@@ -13,7 +13,7 @@ public partial class EnvironmentController : WorldEnvironment
     [Export] DirectionalLight3D sun;
     [Export] ShaderMaterial fogMat;
     
-    Node3D mainPlayer;
+    ServerClient server;
 
     //Statics
     public static float timeOfDay;
@@ -29,11 +29,11 @@ public partial class EnvironmentController : WorldEnvironment
 
     public override void _Ready()
     {
-        mainPlayer = (GetTree().Root.GetNode("World/Server") as ServerClient).GetMainPlayer();
+		server = GetTree().Root.GetNode("World/Server") as ServerClient;
     }
     public override void _Process(double delta)
     {
-        float range = GetClampedRange(-200, 0, mainPlayer.GlobalPosition.Y);
+        float range = GetClampedRange(-200, 0, server.GetMainPlayer().GlobalPosition.Y);
 
 
         exactTimeOfDay = (exactTimeOfDay + (float)delta) % lengthOfDay;
@@ -42,7 +42,7 @@ public partial class EnvironmentController : WorldEnvironment
         Environment.FogLightColor = 
         Environment.BackgroundColor = skyColor.Sample(timeOfDay) * skyDepthColor.Sample(range);
         fogMat.SetShaderParameter("fog_color", fogColor.Sample(timeOfDay) * fogDepthColor.Sample(range));
-        fogMat.SetShaderParameter("fogCenterWorldPos", mainPlayer.GlobalPosition);
+        fogMat.SetShaderParameter("fogCenterWorldPos", server.GetMainPlayer().GlobalPosition);
         fogMat.SetShaderParameter("fogMaxRadius", maxFogRange * maxFogDistance.Sample(timeOfDay));
         fogMat.SetShaderParameter("fogMinRadius", maxFogRange * minFogDistance.Sample(timeOfDay));
 

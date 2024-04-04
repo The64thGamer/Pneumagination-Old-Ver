@@ -13,12 +13,11 @@ public partial class MeshEditing : Node3D
     Node3D chunk;
     int faceID;
 
-    Node3D mainPlayer;
-
+    ServerClient server;
     public override void _Ready()
     {
 		worldGen = GetTree().Root.GetNode("World") as WorldGen;
-        mainPlayer = (GetTree().Root.GetNode("World/Server") as ServerClient).GetMainPlayer();
+		server = GetTree().Root.GetNode("World/Server") as ServerClient;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -37,7 +36,7 @@ public partial class MeshEditing : Node3D
             bool distanceCheck = false;
             for (int i = 0; i < verts.Length; i++)
             {
-                if (verts[i].DistanceTo(mainPlayer.GlobalPosition) <= WorldGen.chunkLoadingDistance * WorldGen.chunkSize / 4.0f)
+                if (verts[i].DistanceTo(server.GetMainPlayer().GlobalPosition) <= WorldGen.chunkLoadingDistance * WorldGen.chunkSize / 4.0f)
                 {
                     distanceCheck = true;
                 }

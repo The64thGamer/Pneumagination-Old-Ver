@@ -5,7 +5,7 @@ using System.Drawing;
 public partial class Placing : Node3D
 {
     WorldGen worldGen;
-    Node3D mainPlayer;
+    ServerClient server;
     int currentSizeIndex = 0;
     int[] sizes = new int[] { 1, 2, 3, 6, 12 };
 
@@ -16,7 +16,7 @@ public partial class Placing : Node3D
     {
         currentPlacementSize = sizes[currentSizeIndex];
 		worldGen = GetTree().Root.GetNode("World") as WorldGen;
-        mainPlayer = (GetTree().Root.GetNode("World/Server") as ServerClient).GetMainPlayer();
+		server = GetTree().Root.GetNode("World/Server") as ServerClient;
 
     }
     
@@ -55,11 +55,11 @@ public partial class Placing : Node3D
                 //Check player position and height to not be inside Brush
                 //THIS IS FLAWED it only checks 3 points, make a Raycast version someday
                 if (
-                    mainPlayer.GlobalPosition.X >= intPosition.X && mainPlayer.GlobalPosition.X <= intPosition.X + size &&
-                    (mainPlayer.GlobalPosition.Y >= intPosition.Y && mainPlayer.GlobalPosition.Y <= intPosition.Y + size ||
-                    mainPlayer.GlobalPosition.Y + 10 >= intPosition.Y && mainPlayer.GlobalPosition.Y + 10 <= intPosition.Y + size ||
-                    mainPlayer.GlobalPosition.Y + 5 >= intPosition.Y && mainPlayer.GlobalPosition.Y + 5 <= intPosition.Y + size) &&
-                    mainPlayer.GlobalPosition.Z >= intPosition.Z && mainPlayer.GlobalPosition.Z <= intPosition.Z + size
+                    server.GetMainPlayer().GlobalPosition.X >= intPosition.X && server.GetMainPlayer().GlobalPosition.X <= intPosition.X + size &&
+                    (server.GetMainPlayer().GlobalPosition.Y >= intPosition.Y && server.GetMainPlayer().GlobalPosition.Y <= intPosition.Y + size ||
+                    server.GetMainPlayer().GlobalPosition.Y + 10 >= intPosition.Y && server.GetMainPlayer().GlobalPosition.Y + 10 <= intPosition.Y + size ||
+                    server.GetMainPlayer().GlobalPosition.Y + 5 >= intPosition.Y && server.GetMainPlayer().GlobalPosition.Y + 5 <= intPosition.Y + size) &&
+                    server.GetMainPlayer().GlobalPosition.Z >= intPosition.Z && server.GetMainPlayer().GlobalPosition.Z <= intPosition.Z + size
                     )
                 {
                     return;
