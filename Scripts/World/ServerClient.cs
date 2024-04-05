@@ -262,6 +262,7 @@ public partial class ServerClient : Node
 			if(Multiplayer.IsServer())
 			{
 				GetTree().Quit();
+				return;
 			}
 			RpcId(hostID,nameof(PingServerClientIsDisconnecting));
 			GetTree().Quit();
