@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using static ProjectDMG.Utils.BitOps;
 using Godot;
+using System;
 
 namespace ProjectDMG {
     public class PPU {
@@ -24,7 +25,7 @@ namespace ProjectDMG {
 
         public PPU() {
             bmp = new Image();
-            bmp.SetData(SCREEN_WIDTH,SCREEN_HEIGHT,false, Image.Format.Rgb8,new byte[SCREEN_WIDTH*SCREEN_HEIGHT*3]);
+            bmp.SetData(SCREEN_WIDTH,SCREEN_HEIGHT,false, Image.Format.Rgba8,new byte[SCREEN_WIDTH*SCREEN_HEIGHT*4]);
             finalScreen = new ImageTexture();
             finalScreen.SetImage(bmp);
         }
@@ -162,17 +163,23 @@ namespace ProjectDMG {
                 int colorBit = 7 - (x & 7); //inversed
                 int colorId = GetColorIdBits(colorBit, lo, hi);
                 int colorIdThroughtPalette = GetColorIdThroughtPalette(BGP, colorId);
-                int finalColor = color[colorIdThroughtPalette];
-                bmp.SetPixel(p, LY, new Color((finalColor >> 16) & 0xff, (finalColor >> 8) & 0xff, (finalColor >> 0) & 0xff));
+                bmp.SetPixel(p, LY, SetColor(color[colorIdThroughtPalette]));
             }
 
+        }
+
+        Color SetColor(int starter)
+        {
+            //Values are 256, 128, 64, and 0
+            int final = (starter >> 0) & 0xff;
+            return new Color(final/255.0f,final/255.0f,final/255.0f);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int GetColorIdBits(int colorBit, byte l, byte h) {
             int hi = (h >> colorBit) & 0x1;
             int lo = (l >> colorBit) & 0x1;
-            return (hi << 1 | lo);
+            return hi << 1 | lo;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -229,8 +236,7 @@ namespace ProjectDMG {
 
                         if ((x + p) >= 0 && (x + p) < SCREEN_WIDTH) {
                             if (!isTransparent(colorId) && (isAboveBG(attr) || isBGWhite(mmu.BGP, x + p, LY))) {
-                                int finalColor = color[colorIdThroughtPalette];
-                                bmp.SetPixel(p, LY, new Color((finalColor >> 16) & 0xff, (finalColor >> 8) & 0xff, (finalColor >> 0) & 0xff));
+                                bmp.SetPixel(x + p, LY, SetColor(color[colorIdThroughtPalette]));
                             }
 
                         }
@@ -244,7 +250,7 @@ namespace ProjectDMG {
         private bool isBGWhite(byte BGP, int x, int y) {
             int id = BGP & 0x3;
             int finalColor = color[id];
-            return bmp.GetPixel(x, y) == new Color((finalColor >> 16) & 0xff, (finalColor >> 8) & 0xff, (finalColor >> 0) & 0xff);
+            return bmp.GetPixel(x, y) == SetColor(color[id]);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
