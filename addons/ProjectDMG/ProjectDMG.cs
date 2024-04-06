@@ -12,6 +12,7 @@ namespace ProjectDMG {
         [Export] public  Color customPaletteC;
         [Export] public Color customPaletteD;
         [Export] public string path;
+        [Export] public bool useKeyboardInput;
 
         private CPU cpu;
         private MMU mmu;
@@ -32,7 +33,14 @@ namespace ProjectDMG {
         {
             if (power_switch)
             {
-                joypad.HandleInput();
+                if(useKeyboardInput)
+                {
+                    joypad.HandleKeyboardInput();
+                }
+                else
+                {
+                    joypad.HandleInput();
+                }
             }
 
             EXECUTE();

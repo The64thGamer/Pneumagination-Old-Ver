@@ -1,5 +1,7 @@
 ﻿using static ProjectDMG.Utils.BitOps;
 using Godot;
+using System.Collections.Generic;
+using System;
 
 namespace ProjectDMG {
     public partial class JOYPAD : Node
@@ -11,6 +13,35 @@ namespace ProjectDMG {
         private byte pad = 0xF;
         private byte buttons = 0xF;
 
+        static Dictionary<Key, uint> keyMappings = new Dictionary<Key, uint>()
+            {
+                {Key.A, 1},
+                {Key.B, 2},
+                {Key.C, 3},
+                {Key.D, 4},
+                {Key.E, 5},
+                {Key.F, 6},
+                {Key.G, 7},
+                {Key.H, 8},
+                {Key.I, 9},
+                {Key.J, 10},
+                {Key.K, 11},
+                {Key.L, 12},
+                {Key.M, 13},
+                {Key.N, 14},
+                {Key.O, 15},
+                {Key.P, 16},
+                {Key.Q, 17},
+                {Key.R, 18},
+                {Key.S, 19},
+                {Key.T, 20},
+                {Key.U, 21},
+                {Key.V, 22},
+                {Key.W, 23},
+                {Key.X, 24},
+                {Key.Y, 25},
+                {Key.Z, 26}
+            };
 
         public void HandleInput()
         {
@@ -32,6 +63,32 @@ namespace ProjectDMG {
             if(!Input.IsActionPressed("Arcade Select")){handleKeyUp(0x24);}
         }
 
+        public void HandleKeyboardInput()
+        {     
+            buttons = 0xF;
+            pad = 0xF;
+            //Standard Keys
+            foreach (Key key in keyMappings.Keys)
+            {
+                if (Input.IsKeyPressed(key))
+                {
+                    SetByte(keyMappings[key]);
+                    return;
+                }
+            }
+        }
+
+        public void SetByte(uint num)
+        {
+            if(num == 0)
+            {
+                return;
+            }
+            GD.Print("B " + Convert.ToString(num,2).PadZeros(8));
+
+            pad = (byte)((num & 0xF) ^ 0xF);
+            buttons = (byte)(((num >> 4) & 0xF) ^ 0xF);            
+        }
 
         internal void handleKeyDown(byte b) {
             if ((b & PAD_MASK) == PAD_MASK) {
@@ -50,16 +107,18 @@ namespace ProjectDMG {
         }
 
         public void update(MMU mmu) {
-            byte JOYP = mmu.JOYP;
-            if(!isBit(4, JOYP)) {
-                mmu.JOYP = (byte)((JOYP & 0xF0) | pad);
-                if(pad != 0xF) mmu.requestInterrupt(JOYPAD_INTERRUPT);
-            }
-            if (!isBit(5, JOYP)) {
-                mmu.JOYP = (byte)((JOYP & 0xF0) | buttons);
-                if (buttons != 0xF) mmu.requestInterrupt(JOYPAD_INTERRUPT);
-            }
-            if ((JOYP & 0b00110000) == 0b00110000) mmu.JOYP = 0xFF;
+                byte JOYP = mmu.JOYP;
+                if(!isBit(4, JOYP)) {
+                    mmu.JOYP = (byte)((JOYP & 0xF0) | pad);
+                    if(pad != 0xF) mmu.requestInterrupt(JOYPAD_INTERRUPT);
+                }
+                if (!isBit(5, JOYP)) {
+                    mmu.JOYP = (byte)((JOYP & 0xF0) | buttons);
+                    if (buttons != 0xF) mmu.requestInterrupt(JOYPAD_INTERRUPT);
+                }
+                if ((JOYP & 0b00110000) == 0b00110000) mmu.JOYP = 0xFF;
+
+
         }
 
     }
