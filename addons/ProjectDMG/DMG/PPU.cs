@@ -21,9 +21,10 @@ namespace ProjectDMG {
         public ImageTexture finalScreen;
         public Image bmp;
         private int scanlineCounter;
+        ProjectDMG dmg;
 
-
-        public PPU() {
+        public PPU(ProjectDMG passedDmg) {
+            dmg = passedDmg;
             bmp = new Image();
             bmp.SetData(SCREEN_WIDTH,SCREEN_HEIGHT,false, Image.Format.Rgba8,new byte[SCREEN_WIDTH*SCREEN_HEIGHT*4]);
             finalScreen = new ImageTexture();
@@ -170,9 +171,20 @@ namespace ProjectDMG {
 
         Color SetColor(int starter)
         {
-            //Values are 256, 128, 64, and 0
-            int final = (starter >> 0) & 0xff;
-            return new Color(final/255.0f,final/255.0f,final/255.0f);
+            switch(starter)
+            {
+                case 16777215:
+                    return dmg.customPaletteA;
+                case 4210752:
+                    return dmg.customPaletteC;
+                case 8421504:
+                    return dmg.customPaletteB;
+                case 0:
+                    return dmg.customPaletteD;
+                default:
+                GD.Print("Undefined Color: " + starter);
+                return dmg.customPaletteA;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

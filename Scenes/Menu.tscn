@@ -291,3 +291,7 @@ offset_top = 407.0
 offset_right = 1138.0
 offset_bottom = 772.0
 script = ExtResource("9_7x7bx")
+customPaletteA = Color(0.764706, 0.643137, 0.756863, 1)
+customPaletteB = Color(0.74902, 0.27451, 0.568627, 1)
+customPaletteC = Color(0.188235, 0.188235, 0.419608, 1)
+customPaletteD = Color(0, 0, 0, 1)

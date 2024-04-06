@@ -7,6 +7,10 @@ using Godot;
 namespace ProjectDMG {
     public partial class ProjectDMG : TextureRect {
 
+        [Export] public  Color customPaletteA;
+        [Export] public  Color customPaletteB;
+        [Export] public  Color customPaletteC;
+        [Export] public Color customPaletteD;
 
         private CPU cpu;
         private MMU mmu;
@@ -42,7 +46,7 @@ namespace ProjectDMG {
         public void POWER_ON(string cartName) {
             mmu = new MMU();
             cpu = new CPU(mmu);
-            ppu = new PPU();
+            ppu = new PPU(this);
             timer = new TIMER();
             joypad = new JOYPAD();
             Texture = ppu.finalScreen;
