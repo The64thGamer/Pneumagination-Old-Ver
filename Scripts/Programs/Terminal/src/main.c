@@ -29,7 +29,7 @@ void main(void)
 		// Game main loop processing goes here
         if(joypad() != 0)
         {
-            Tilemap1[cursor] = joypad();
+            Tilemap1[cursor] = joypad() - 1;
             cursor++;
         }
 

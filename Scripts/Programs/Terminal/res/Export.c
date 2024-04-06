@@ -1,5 +1,4 @@
 
-
 /* Start of tile array. */
 unsigned char Terminal[] =
 {
