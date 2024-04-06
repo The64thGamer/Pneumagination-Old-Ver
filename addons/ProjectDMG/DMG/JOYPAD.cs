@@ -14,22 +14,22 @@ namespace ProjectDMG {
 
         public void HandleInput()
         {
-            if(Input.IsActionJustPressed("Arcade Up")){handleKeyDown(0x14);}
-            if(!Input.IsActionJustPressed("Arcade Up")){handleKeyUp(0x14);}
-            if(Input.IsActionJustPressed("Arcade Down")){handleKeyDown(0x18);}
-            if(!Input.IsActionJustPressed("Arcade Down")){handleKeyUp(0x18);}
-            if(Input.IsActionJustPressed("Arcade Left")){handleKeyDown(0x12);}
-            if(!Input.IsActionJustPressed("Arcade Left")){handleKeyUp(0x12);}
-            if(Input.IsActionJustPressed("Arcade Right")){handleKeyDown(0x11);}
-            if(!Input.IsActionJustPressed("Arcade Right")){handleKeyUp(0x11);}
-            if(Input.IsActionJustPressed("Arcade A")){handleKeyDown(0x21);}
-            if(!Input.IsActionJustPressed("Arcade A")){handleKeyUp(0x21);}
-            if(Input.IsActionJustPressed("Arcade B")){handleKeyDown(0x22);}
-            if(!Input.IsActionJustPressed("Arcade B")){handleKeyUp(0x22);}
-            if(Input.IsActionJustPressed("Arcade Start")){handleKeyDown(0x28);}
-            if(!Input.IsActionJustPressed("Arcade Start")){handleKeyUp(0x28);}
-            if(Input.IsActionJustPressed("Arcade Select")){handleKeyDown(0x24);}
-            if(!Input.IsActionJustPressed("Arcade Select")){handleKeyUp(0x24);}
+            if(Input.IsActionPressed("Arcade Up")){handleKeyDown(0x14);}
+            if(!Input.IsActionPressed("Arcade Up")){handleKeyUp(0x14);}
+            if(Input.IsActionPressed("Arcade Down")){handleKeyDown(0x18);}
+            if(!Input.IsActionPressed("Arcade Down")){handleKeyUp(0x18);}
+            if(Input.IsActionPressed("Arcade Left")){handleKeyDown(0x12);}
+            if(!Input.IsActionPressed("Arcade Left")){handleKeyUp(0x12);}
+            if(Input.IsActionPressed("Arcade Right")){handleKeyDown(0x11);}
+            if(!Input.IsActionPressed("Arcade Right")){handleKeyUp(0x11);}
+            if(Input.IsActionPressed("Arcade A")){handleKeyDown(0x21);}
+            if(!Input.IsActionPressed("Arcade A")){handleKeyUp(0x21);}
+            if(Input.IsActionPressed("Arcade B")){handleKeyDown(0x22);}
+            if(!Input.IsActionPressed("Arcade B")){handleKeyUp(0x22);}
+            if(Input.IsActionPressed("Arcade Start")){handleKeyDown(0x28);}
+            if(!Input.IsActionPressed("Arcade Start")){handleKeyUp(0x28);}
+            if(Input.IsActionPressed("Arcade Select")){handleKeyDown(0x24);}
+            if(!Input.IsActionPressed("Arcade Select")){handleKeyUp(0x24);}
         }
 
 
