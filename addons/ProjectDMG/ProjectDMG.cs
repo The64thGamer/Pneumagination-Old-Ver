@@ -11,6 +11,7 @@ namespace ProjectDMG {
         [Export] public  Color customPaletteB;
         [Export] public  Color customPaletteC;
         [Export] public Color customPaletteD;
+        [Export] public string path;
 
         private CPU cpu;
         private MMU mmu;
@@ -39,7 +40,7 @@ namespace ProjectDMG {
 
         public override void _Ready()
         {            
-            POWER_ON("ROM.binary");
+            POWER_ON(path);
             timerCounter.Start();
         }
 
