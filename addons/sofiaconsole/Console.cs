@@ -26,6 +26,8 @@ public partial class Console : Node
     [Export] private Button _commandSendButton;
     [Export] private ScrollContainer _historyScrollContainer;
     [Export] private VBoxContainer _historyContent;
+
+    Input.MouseModeEnum mouse;
     
     public override void _EnterTree()
     {
@@ -90,13 +92,26 @@ public partial class Console : Node
         }
     }
 
+
+
     public void ToggleConsole()
-    {
+    {        
+
         SetConsole(!Open);
     }
 
     private void SetConsole(bool open)
-    {
+    {        
+        if(open)
+        {
+            mouse = Input.MouseMode;
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+        }
+        else
+        {
+            Input.MouseMode = mouse;
+        }
+
         Open = open;
         
         _consoleCanvas.Visible = Open;
