@@ -13,6 +13,9 @@ namespace ProjectDMG {
         private byte pad = 0xF;
         private byte buttons = 0xF;
 
+        Key previousKey = Key.None;
+        bool keyPassed;
+
         static Dictionary<Key, uint> keyMappings = new Dictionary<Key, uint>()
             {
                 {Key.A, 1},
@@ -65,17 +68,36 @@ namespace ProjectDMG {
 
         public void HandleKeyboardInput()
         {     
-            buttons = 0xF;
-            pad = 0xF;
             //Standard Keys
             foreach (Key key in keyMappings.Keys)
             {
                 if (Input.IsKeyPressed(key))
                 {
+                    if(previousKey == key)
+                    {   
+                        if(keyPassed)  
+                        {
+                            GD.Print("?????");
+                            buttons = 0xF;
+                            pad = 0xF;    
+                        }  
+                        return;
+                    }
                     SetByte(keyMappings[key]);
+                    previousKey = key;
+                    keyPassed = false;
                     return;
                 }
+                if(key == previousKey && !Input.IsKeyPressed(key))
+                {
+                    previousKey = Key.None;
+                }
             }
+            if(keyPassed)  
+            {                            
+                buttons = 0xF;
+                pad = 0xF;    
+            }  
         }
 
         public void SetByte(uint num)
@@ -84,7 +106,6 @@ namespace ProjectDMG {
             {
                 return;
             }
-            GD.Print("B " + Convert.ToString(num,2).PadZeros(8));
 
             pad = (byte)((num & 0xF) ^ 0xF);
             buttons = (byte)(((num >> 4) & 0xF) ^ 0xF);            
@@ -111,14 +132,14 @@ namespace ProjectDMG {
                 if(!isBit(4, JOYP)) {
                     mmu.JOYP = (byte)((JOYP & 0xF0) | pad);
                     if(pad != 0xF) mmu.requestInterrupt(JOYPAD_INTERRUPT);
+                    keyPassed = true;
                 }
                 if (!isBit(5, JOYP)) {
                     mmu.JOYP = (byte)((JOYP & 0xF0) | buttons);
                     if (buttons != 0xF) mmu.requestInterrupt(JOYPAD_INTERRUPT);
+                    keyPassed = true;
                 }
                 if ((JOYP & 0b00110000) == 0b00110000) mmu.JOYP = 0xFF;
-
-
         }
 
     }
