@@ -18,6 +18,67 @@ namespace ProjectDMG {
 
         static Dictionary<Key, uint> keyMappings = new Dictionary<Key, uint>()
             {
+                {Key.A, 27},
+                {Key.B, 28},
+                {Key.C, 29},
+                {Key.D, 30},
+                {Key.E, 31},
+                {Key.F, 32},
+                {Key.G, 33},
+                {Key.H, 34},
+                {Key.I, 35},
+                {Key.J, 36},
+                {Key.K, 37},
+                {Key.L, 38},
+                {Key.M, 39},
+                {Key.N, 40},
+                {Key.O, 41},
+                {Key.P, 42},
+                {Key.Q, 43},
+                {Key.R, 44},
+                {Key.S, 45},
+                {Key.T, 46},
+                {Key.U, 47},
+                {Key.V, 48},
+                {Key.W, 49},
+                {Key.X, 50},
+                {Key.Y, 51},
+                {Key.Z, 52},
+
+                {Key.Key0, 53},
+                {Key.Key1, 54},
+                {Key.Key2, 55},
+                {Key.Key3, 56},
+                {Key.Key4, 57},
+                {Key.Key5, 58},
+                {Key.Key6, 59},
+                {Key.Key7, 60},
+                {Key.Key8, 61},
+                {Key.Key9, 62},
+
+                {Key.Period, 63},
+                {Key.Comma, 64},
+
+                {Key.Apostrophe, 66},
+
+                {Key.Minus, 79},
+                {Key.Slash, 80},
+
+                {Key.Semicolon, 82},
+
+                {Key.Equal, 84},
+
+                {Key.Bracketleft, 86},
+                {Key.Bracketright, 87},
+                {Key.Backslash, 88},
+
+                {Key.Space, 95},
+
+                {Key.Backspace, 255}
+            };
+
+            static Dictionary<Key, uint> shiftKeyMappings = new Dictionary<Key, uint>()
+            {
                 {Key.A, 1},
                 {Key.B, 2},
                 {Key.C, 3},
@@ -43,7 +104,38 @@ namespace ProjectDMG {
                 {Key.W, 23},
                 {Key.X, 24},
                 {Key.Y, 25},
-                {Key.Z, 26}
+                {Key.Z, 26},
+
+                {Key.Key0, 77},
+                {Key.Key1, 68},
+                {Key.Key2, 69},
+                {Key.Key3, 72},
+                {Key.Key4, 73},
+                {Key.Key5, 74},
+                {Key.Key6, 89},
+                {Key.Key7, 75},
+                {Key.Key8, 71},
+                {Key.Key9, 76},
+
+                {Key.Period, 85},
+                {Key.Comma, 83},
+
+                {Key.Apostrophe, 65},
+
+                {Key.Minus, 70},
+                {Key.Slash, 67},
+
+                {Key.Semicolon, 81},
+
+                {Key.Equal, 78},
+
+                {Key.Bracketleft, 91},
+                {Key.Bracketright, 92},
+                {Key.Backslash, 93},
+
+                {Key.Space, 95},
+
+                {Key.Backspace, 255}
             };
 
         public void HandleInput()
@@ -69,7 +161,24 @@ namespace ProjectDMG {
         public void HandleKeyboardInput()
         {     
             //Standard Keys
-            foreach (Key key in keyMappings.Keys)
+            if (Input.IsKeyPressed(Key.Shift))
+            {
+                SetKeyType(shiftKeyMappings);
+            }
+            else
+            {
+                SetKeyType(keyMappings);
+            }
+            if(keyPassed)  
+            {                            
+                buttons = 0xF;
+                pad = 0xF;    
+            }  
+        }
+
+        void SetKeyType(Dictionary<Key, uint> dict)
+        {
+            foreach (Key key in dict.Keys)
             {
                 if (Input.IsKeyPressed(key))
                 {
@@ -77,13 +186,12 @@ namespace ProjectDMG {
                     {   
                         if(keyPassed)  
                         {
-                            GD.Print("?????");
                             buttons = 0xF;
                             pad = 0xF;    
                         }  
                         return;
                     }
-                    SetByte(keyMappings[key]);
+                    SetByte(dict[key]);
                     previousKey = key;
                     keyPassed = false;
                     return;
@@ -93,11 +201,6 @@ namespace ProjectDMG {
                     previousKey = Key.None;
                 }
             }
-            if(keyPassed)  
-            {                            
-                buttons = 0xF;
-                pad = 0xF;    
-            }  
         }
 
         public void SetByte(uint num)
