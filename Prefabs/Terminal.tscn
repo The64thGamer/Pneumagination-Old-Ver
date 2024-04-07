@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://4ksvp65fr6y6"]
+
+[ext_resource type="Script" path="res://addons/ProjectDMG/ProjectDMG.cs" id="1_j3hb8"]
+
+[node name="Terminal" type="TextureRect"]
+texture_filter = 1
+offset_left = 676.0
+offset_top = 214.0
+offset_right = 1249.0
+offset_bottom = 638.0
+expand_mode = 1
+stretch_mode = 4
+script = ExtResource("1_j3hb8")
+customPaletteA = Color(0.431373, 0.682353, 0, 1)
+customPaletteB = Color(0.321569, 0.380392, 0.176471, 1)
+customPaletteC = Color(0.176471, 0.196078, 0.152941, 1)
+customPaletteD = Color(0.0156863, 0.0196078, 0.0117647, 1)
+path = "Scripts/Programs/Terminal/Terminal.ROM"
+useKeyboardInput = true

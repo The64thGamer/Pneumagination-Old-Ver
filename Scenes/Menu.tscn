@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=10 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Texture2D" uid="uid://bofcm5qc1b25m" path="res://UI/Red Blueprint Small.png" id="1_pqc4w"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefToggle.cs" id="5_1fqp2"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="6_hubln"]
-[ext_resource type="Script" path="res://addons/ProjectDMG/ProjectDMG.cs" id="9_2nvwj"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -283,19 +282,3 @@ size_flags_horizontal = 3
 texture = ExtResource("1_spluo")
 expand_mode = 2
 stretch_mode = 5
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
-texture_filter = 1
-offset_left = 676.0
-offset_top = 214.0
-offset_right = 1249.0
-offset_bottom = 638.0
-expand_mode = 1
-stretch_mode = 4
-script = ExtResource("9_2nvwj")
-customPaletteA = Color(0.431373, 0.682353, 0, 1)
-customPaletteB = Color(0.321569, 0.380392, 0.176471, 1)
-customPaletteC = Color(0.176471, 0.196078, 0.152941, 1)
-customPaletteD = Color(0.0156863, 0.0196078, 0.0117647, 1)
-path = "Scripts/Programs/Terminal/Terminal.ROM"
-useKeyboardInput = true
