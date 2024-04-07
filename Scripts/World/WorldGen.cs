@@ -41,6 +41,9 @@ public partial class WorldGen : Node3D
 	FastNoiseContainer noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseG;
 	int maxChunksLoadingRampUp = 1;
 
+	//Generation optimized locals
+	float oceanMultiplier, noiseDSampled,noiseESampled;
+
 	//Consts
 	public const int chunkLoadingDistance = 8;
 	public const int chunkUnloadingDistance = 11;
@@ -375,12 +378,18 @@ public partial class WorldGen : Node3D
 		int posX, posY, posZ, newX, newZ;
 
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
-		{
-			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
+		{					
+			newX = posX + (chunkSize * x / bigBlockSize);
+			
+			for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 			{
-				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
+				newZ = posZ + (chunkSize * z / bigBlockSize);
+
+				PregenNoiseValues(newX,newZ);
+				
+				for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
 				{
-					if (CheckBigBlock(posX + (chunkSize * x / bigBlockSize), posY + (chunkSize * y / bigBlockSize), posZ + (chunkSize * z / bigBlockSize)))
+					if (CheckBigBlock(newX, posY + (chunkSize * y / bigBlockSize), newZ))
 					{
 						SetBitOfByte(ref bigBlockArray[posX, posY, posZ], 0, true);
 					}
@@ -395,19 +404,22 @@ public partial class WorldGen : Node3D
 		float region;
 		float biome;
 		bool isSurface;
-		float oceanMultiplier;
 
 		//Big Blocks and First Surface Layer
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
-		{
-			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
+		{						
+			newX = posX + (chunkSize * x / bigBlockSize);
+
+			for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 			{
-				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
+				newZ = posZ + (chunkSize * z / bigBlockSize);
+
+				PregenNoiseValues(newX,newZ);
+
+				for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
 				{
 					if (GetBitOfByte(bigBlockArray[posX, posY, posZ], 0))
 					{
-						newX = posX + (chunkSize * x / bigBlockSize);
-						newZ = posZ + (chunkSize * z / bigBlockSize);
 
 						//Regular Square "Big Blocks"
 						bigBlock = CreateBrush(
@@ -420,13 +432,12 @@ public partial class WorldGen : Node3D
 						//Find Values
 						biome = GetClampedFastNoise2D(noiseF,newX,newZ);
 						region = GetClampedFastNoise2D(noiseC,newX, newZ);
-						oceanMultiplier = (curve7.SampleBaked(GetClampedFastNoise2D(noiseG,newX, newZ)) * 2) - 1;
 						regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 						regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 						isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
 
 						//Assign textures
-						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region, oceanMultiplier);
+						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region);
 
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[posX, posY, posZ] = bigBlock;
@@ -453,10 +464,17 @@ public partial class WorldGen : Node3D
 		//Second Surface Layer & Visibility Assigning
 		for (posX = 0; posX < chunkSize / bigBlockSize; posX++)
 		{
-			for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
+			newX = posX + (chunkSize * x / bigBlockSize);
+
+			for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
 			{
-				for (posZ = 0; posZ < chunkSize / bigBlockSize; posZ++)
+				newZ = posZ + (chunkSize * z / bigBlockSize);
+
+				PregenNoiseValues(newX,newZ);
+
+				for (posY = 0; posY < chunkSize / bigBlockSize; posY++)
 				{
+
 					if (bigBlockBrushArray[posX, posY, posZ] != null && (bigBlockBrushArray[posX, posY, posZ].hiddenFlag || bigBlockBrushArray[posX, posY, posZ].borderFlag))
 					{
 						if (posX - 1 >= 0 && bigBlockBrushArray[posX - 1, posY, posZ] != null)
@@ -527,6 +545,14 @@ public partial class WorldGen : Node3D
 
 		return chunk;
 	}
+	
+	void PregenNoiseValues(int newX, int newZ)
+	{
+		//Pregenerate values independent of Y level
+		oceanMultiplier = (curve7.SampleBaked(GetClampedFastNoise2D(noiseG,newX, newZ)) * 2) - 1;
+		noiseDSampled = curve4.SampleBaked(GetClampedFastNoise2D(noiseD,newX, newZ));
+		noiseESampled = curve5.SampleBaked(GetClampedFastNoise2D(noiseE,newX, newZ));
+	}
 
 	bool FindIfRoadBlock(float region, float newX, float newZ)
 	{
@@ -554,7 +580,7 @@ public partial class WorldGen : Node3D
 
 
 	//Bottom,North,Top,South,West,East
-	uint[] FindTextureOfGeneratingBrush(bool isSurface, bool regionBorderCheck, bool regionBorderCornerCheck, float biome, float region, float oceanMultiplier)
+	uint[] FindTextureOfGeneratingBrush(bool isSurface, bool regionBorderCheck, bool regionBorderCornerCheck, float biome, float region)
 	{
 		if(oceanMultiplier < 0.1f)
 		{
@@ -614,10 +640,10 @@ public partial class WorldGen : Node3D
 
 		int chunkY = Mathf.FloorToInt(posY / (float)chunkSize / bigBlockSize);
 
-		float oceanMultiplier = (curve7.SampleBaked(GetClampedFastNoise2D(noiseG,posX, posZ)) * 2) - 1;
+		
 		float terrain = Math.Clamp((curve1.SampleBaked(GetClampedFastNoise3D(noise,posX, posY, posZ))
-				+ curve4.SampleBaked(GetClampedFastNoise2D(noiseD,posX, posZ)))
-				* curve5.SampleBaked(GetClampedFastNoise2D(noiseE,posX, posZ)),0,1);
+				+ noiseDSampled)
+				* noiseESampled,0,1);
 
 		if (chunkY < 0)
 		{
@@ -679,13 +705,12 @@ public partial class WorldGen : Node3D
 			//Find Values
 			float biome = GetClampedFastNoise2D(noiseF,newX, newZ);
 			float region = GetClampedFastNoise2D(noiseC,newX, newZ);
-			float oceanMultiplier = (curve7.SampleBaked(GetClampedFastNoise2D(noiseG,newX, newZ)) * 2) - 1;
 			bool regionBordercheck = FindIfRoadBlock(region, newX, newZ);
 			bool regionBorderCornercheck = FindIfCornerRoadBlock(region, newX, newZ);
 			bool isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
 
 			//Assign textures
-			uint[] textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region, oceanMultiplier);
+			uint[] textures = FindTextureOfGeneratingBrush(isSurface, regionBordercheck, regionBorderCornercheck, biome, region);
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
@@ -715,13 +740,52 @@ public partial class WorldGen : Node3D
 
 	byte CheckSurfaceBrushType(byte[,,] bigBlockArray, int x, int y, int z, int pos, int chunkX, int chunkY, int chunkZ)
 	{
-		chunkX = (chunkSize * chunkX / bigBlockSize);
-		chunkY = (chunkSize * chunkY / bigBlockSize);
-		chunkZ = (chunkSize * chunkZ / bigBlockSize);
+		chunkX = x + (chunkSize * chunkX / bigBlockSize);
+		chunkY = y + (chunkSize * chunkY / bigBlockSize);
+		chunkZ = z + (chunkSize * chunkZ / bigBlockSize);
+
 		int bitmask = 0;
+
+		//HEY HEY!!!
+		//Optimization, top and bottom go FIRST
+		//Because PreGen values are the same, THEN
+		//Pregen goes again when shifting X and Y
+
+		//Top
+		if (y < bigBlockArray.GetLength(1) - 1)
+		{
+			if (GetBitOfByte(bigBlockArray[x, y + 1, z], pos))
+			{
+				bitmask |= 1 << 1;
+			}
+		}
+		else
+		{
+			if (CheckBigBlock(chunkX, 1 + chunkY, chunkZ))
+			{
+				bitmask |= 1 << 1;
+
+			}
+		}
+		//Bottom
+		if (y > 0)
+		{
+			if (GetBitOfByte(bigBlockArray[x, y - 1, z], pos))
+			{
+				bitmask |= 1 << 0;
+			}
+		}
+		else
+		{
+			if (CheckBigBlock(chunkX, chunkY - 1, chunkZ))
+			{
+				bitmask |= 1 << 0;
+
+			}
+		}
 		//North
 		if (z < bigBlockArray.GetLength(2) - 1)
-		{
+		{			
 			if (GetBitOfByte(bigBlockArray[x, y, z + 1], pos))
 			{
 				bitmask |= 1 << 5;
@@ -729,7 +793,8 @@ public partial class WorldGen : Node3D
 		}
 		else
 		{
-			if (CheckBigBlock(x + chunkX, y + chunkY, z + chunkZ + 1))
+			PregenNoiseValues(chunkX, chunkZ+1);
+			if (CheckBigBlock(chunkX, chunkY, chunkZ + 1))
 			{
 				bitmask |= 1 << 5;
 			}
@@ -743,8 +808,9 @@ public partial class WorldGen : Node3D
 			}
 		}
 		else
-		{
-			if (CheckBigBlock(x + 1 + chunkX, y + chunkY, z + chunkZ))
+		{			
+			PregenNoiseValues(chunkX + 1, chunkZ);
+			if (CheckBigBlock(chunkX + 1, chunkY, chunkZ))
 			{
 				bitmask |= 1 << 4;
 
@@ -760,8 +826,10 @@ public partial class WorldGen : Node3D
 			}
 		}
 		else
-		{
-			if (CheckBigBlock(x + chunkX, y + chunkY, z - 1 + chunkZ))
+		{			
+			PregenNoiseValues(chunkX, chunkZ-1);
+
+			if (CheckBigBlock(chunkX, chunkY, chunkZ - 1))
 			{
 				bitmask |= 1 << 3;
 
@@ -778,41 +846,10 @@ public partial class WorldGen : Node3D
 		}
 		else
 		{
-			if (CheckBigBlock(x - 1 + chunkX, y + chunkY, z + chunkZ))
+			PregenNoiseValues(chunkX-1, chunkZ);
+			if (CheckBigBlock(chunkX - 1, chunkY, chunkZ))
 			{
 				bitmask |= 1 << 2;
-
-			}
-		}
-		//Top
-		if (y < bigBlockArray.GetLength(1) - 1)
-		{
-			if (GetBitOfByte(bigBlockArray[x, y + 1, z], pos))
-			{
-				bitmask |= 1 << 1;
-			}
-		}
-		else
-		{
-			if (CheckBigBlock(x + chunkX, y + 1 + chunkY, z + chunkZ))
-			{
-				bitmask |= 1 << 1;
-
-			}
-		}
-		//Bottom
-		if (y > 0)
-		{
-			if (GetBitOfByte(bigBlockArray[x, y - 1, z], pos))
-			{
-				bitmask |= 1 << 0;
-			}
-		}
-		else
-		{
-			if (CheckBigBlock(x + chunkX, y - 1 + chunkY, z + chunkZ))
-			{
-				bitmask |= 1 << 0;
 
 			}
 		}
