@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://dayc5ri3bltvr"]
+[gd_scene load_steps=42 format=3 uid="uid://dayc5ri3bltvr"]
 
 [ext_resource type="Script" path="res://Scripts/World/PlayerMovement.cs" id="1_cwgi3"]
 [ext_resource type="Shader" path="res://Shaders/Fog.gdshader" id="2_88pqh"]
@@ -59,6 +59,12 @@ outline_color = Color(0, 0, 0, 1)
 shadow_size = 3
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
+
+[sub_resource type="Gradient" id="Gradient_4iflf"]
+colors = PackedColorArray(1.63645e-06, 0.366683, 0.507355, 1, 7.89344e-06, 0.72976, 0.978508, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_blwo2"]
+gradient = SubResource("Gradient_4iflf")
 
 [sub_resource type="Curve" id="Curve_j2o52"]
 _data = [Vector2(0.752841, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 9.9155, 0.0, 0, 0]
@@ -576,6 +582,44 @@ offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("30_ghq6r")
+expand_mode = 1
+
+[node name="TextureRect14" type="TextureRect" parent="Player Head/Player Camera/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("21_605ke")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Debug Text3" type="Label" parent="Player Head/Player Camera/HBoxContainer/TextureRect14" groups=["Player"]]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -27.0
+offset_top = -10.0
+offset_right = 29.0
+offset_bottom = -2.0
+grow_horizontal = 2
+text = "99999"
+label_settings = SubResource("LabelSettings_bbj47")
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("22_o1dh5")
+checkItem = 9
+
+[node name="TextureRect" type="TextureRect" parent="Player Head/Player Camera/HBoxContainer/TextureRect14"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture1D_blwo2")
 expand_mode = 1
 
 [node name="LoadingBar" type="ProgressBar" parent="Player Head/Player Camera"]
