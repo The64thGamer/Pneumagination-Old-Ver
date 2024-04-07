@@ -74,6 +74,10 @@ namespace ProjectDMG {
 
                 {Key.Space, 95},
 
+                {Key.Up, 251},
+                {Key.Right, 252},
+                {Key.Down, 253},
+                {Key.Left, 254},
                 {Key.Backspace, 255}
             };
 
@@ -135,6 +139,10 @@ namespace ProjectDMG {
 
                 {Key.Space, 95},
 
+                {Key.Up, 251},
+                {Key.Right, 252},
+                {Key.Down, 253},
+                {Key.Left, 254},
                 {Key.Backspace, 255}
             };
 
