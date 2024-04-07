@@ -1,3 +1,24 @@
+/*
+
+ EXPORT.C
+
+ Tile Source File.
+
+ Info:
+  Form                 : All tiles as one unit.
+  Format               :  4 color.
+  Compression          : None.
+  Counter              : None.
+  Tile size            : 8 x 8
+  Tiles                : 0 to 94
+
+  Palette colors       : None.
+
+  Convert to metatiles : No.
+
+
+
+*/
 
 /* Start of tile array. */
 unsigned char Terminal[] =
