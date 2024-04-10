@@ -15,7 +15,6 @@ using Console = media.Laura.SofiaConsole.Console;
 public partial class WorldGen : Node3D
 {
 	//Exports
-	[Export] bool hideBigBlocks = false;
 	[Export] EnvironmentController envController;
 	[Export] Curve curve1;
 	[Export] Curve curve2;
@@ -422,10 +421,7 @@ public partial class WorldGen : Node3D
 
 				PregenNoiseValues(ref preGen);
 				//Find Values
-				preGen.biome = GetClampedFastNoise2D(noiseF,preGen.newX,preGen.newZ);
-				preGen.region = GetClampedFastNoise2D(noiseC,preGen.newX, preGen.newZ);
-				preGen.regionBordercheck = FindIfRoadBlock(ref preGen);
-				preGen.regionBorderCornercheck = FindIfCornerRoadBlock(ref preGen);
+
 
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
@@ -481,55 +477,56 @@ public partial class WorldGen : Node3D
 
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
+					Brush assignedBrush = bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ];
 
-					if (bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] != null && (bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ].hiddenFlag || bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ].borderFlag))
+					if (assignedBrush != null && (assignedBrush.hiddenFlag || assignedBrush.borderFlag))
 					{
 						if (preGen.posX - 1 >= 0 && bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]].Add(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ]); }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]].Add(assignedBrush); }
 							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]] = new List<Brush>() { bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] }; }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
 						}
 
 						if (preGen.posY - 1 >= 0 && bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]].Add(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ]); }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]].Add(assignedBrush); }
 							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]] = new List<Brush>() { bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] }; }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
 						}
 
 						if (preGen.posZ - 1 >= 0 && bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]].Add(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ]); }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]].Add(assignedBrush); }
 							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]] = new List<Brush>() { bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] }; }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]] = new List<Brush>() { assignedBrush }; }
 						}
 
 						if (preGen.posX + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]].Add(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ]); }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]].Add(assignedBrush); }
 							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]] = new List<Brush>() { bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] }; }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
 						}
 
 						if (preGen.posY + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]].Add(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ]); }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]].Add(assignedBrush); }
 							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]] = new List<Brush>() { bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] }; }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
 						}
 
 						if (preGen.posZ + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1] != null)
 						{
 							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]].Add(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ]); }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]].Add(assignedBrush); }
 							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]] = new List<Brush>() { bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] }; }
+							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]] = new List<Brush>() { assignedBrush }; }
 						}
 					}
 
@@ -559,6 +556,10 @@ public partial class WorldGen : Node3D
 		preGen.oceanMultiplier = (curve7.SampleBaked(GetClampedFastNoise2D(noiseG,preGen.newX, preGen.newZ)) * 2) - 1;
 		preGen.noiseDSampled = curve4.SampleBaked(GetClampedFastNoise2D(noiseD,preGen.newX, preGen.newZ));
 		preGen.noiseESampled = curve5.SampleBaked(GetClampedFastNoise2D(noiseE,preGen.newX, preGen.newZ));
+		preGen.biome = GetClampedFastNoise2D(noiseF,preGen.newX,preGen.newZ);
+		preGen.region = GetClampedFastNoise2D(noiseC,preGen.newX, preGen.newZ);
+		preGen.regionBordercheck = FindIfRoadBlock(ref preGen);
+		preGen.regionBorderCornercheck = FindIfCornerRoadBlock(ref preGen);
 	}
 
 	bool FindIfRoadBlock(ref PreGenNoiseValues preGen)
@@ -753,6 +754,7 @@ public partial class WorldGen : Node3D
 		//Pregen goes again when shifting X and Y
 
 		//Top
+		bool check = false;
 		if (preGen.posY < bigBlockArray.GetLength(1) - 1)
 		{
 			if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], pos))
@@ -805,6 +807,7 @@ public partial class WorldGen : Node3D
 				bitmask |= 1 << 5;
 			}
 			preGen.newZ -= 1;
+			check = true;
 		}
 		//East
 		if (preGen.posX < bigBlockArray.GetLength(0) - 1)
@@ -824,6 +827,7 @@ public partial class WorldGen : Node3D
 
 			}
 			preGen.newX -= 1;
+			check = true;
 		}
 		//South
 		if (preGen.posZ > 0)
@@ -831,7 +835,6 @@ public partial class WorldGen : Node3D
 			if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ - 1], pos))
 			{
 				bitmask |= 1 << 3;
-
 			}
 		}
 		else
@@ -844,6 +847,7 @@ public partial class WorldGen : Node3D
 
 			}
 			preGen.newZ += 1;
+			check = true;
 		}
 		//West
 		if (preGen.posX > 0)
@@ -864,18 +868,18 @@ public partial class WorldGen : Node3D
 
 			}
 			preGen.newX += 1;
+			check = true;
 		}
-		PregenNoiseValues(ref preGen);
+		if(check)
+		{
+			PregenNoiseValues(ref preGen);
+		}
 		return (byte)bitmask;
 	}
 
 
 	bool CheckBrushVisibility(ref byte[,,] bigBlockArray, int byteIndex, ref PreGenNoiseValues preGen)
 	{
-		if (hideBigBlocks)
-		{
-			return true;
-		}
 		bool visibility = true;
 
 		//OPTIMIZATION, Y goes first to not pregen noise
@@ -884,20 +888,16 @@ public partial class WorldGen : Node3D
 		if (preGen.posY == 0)
 		{
 			preGen.newY -= 1;
-			PregenNoiseValues(ref preGen);
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], byteIndex);
 			preGen.newY += 1;
-			check = true;
 		}
 		else if (preGen.posY >= bigBlockArray.GetLength(1) - 1)
 		{
 			preGen.newY += 1;
-			PregenNoiseValues(ref preGen);
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], byteIndex);
 			preGen.newY -= 1;
-			check = true;
 		}
 		else
 		{
