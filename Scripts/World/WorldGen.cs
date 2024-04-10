@@ -427,17 +427,16 @@ public partial class WorldGen : Node3D
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
 					preGen.newY = preGen.posY + (chunkSize * y / bigBlockSize);
+											
+					bitMask = CheckSurfaceBrushType(bigBlockArray, 0, ref preGen);
 					if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 0))
 					{
-
 						//Regular Square "Big Blocks"
 						bigBlock = CreateBrush(
 								new Vector3((preGen.posX * bigBlockSize) + chunkMarginSize, (preGen.posY * bigBlockSize) + chunkMarginSize, (preGen.posZ * bigBlockSize) + chunkMarginSize),
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, 0, ref preGen);
 						bigBlock.borderFlag = CheckBrushOnBorder(ref preGen);
-						bitMask = CheckSurfaceBrushType(bigBlockArray, 0, ref preGen);
-
 						isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
 
 						//Assign textures
@@ -446,20 +445,15 @@ public partial class WorldGen : Node3D
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] = bigBlock;
 					}
-					else
+					else if (bitMask != 0)
 					{
 						//First layer of "Surface Brushes"
-						bitMask = CheckSurfaceBrushType(bigBlockArray, 0, ref preGen);
-						if (bitMask != 0)
+
+						brushes = CreateSurfaceBrushes(bitMask, false, ref preGen);
+						if (brushes != null)
 						{
-
-								brushes = CreateSurfaceBrushes(bitMask, false, ref preGen);
-								if (brushes != null)
-								{
-									SetBitOfByte(ref bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 1, true);
-									chunk.brushes.AddRange(brushes);
-								}
-
+							SetBitOfByte(ref bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 1, true);
+							chunk.brushes.AddRange(brushes);
 						}
 					}
 				}
@@ -481,6 +475,7 @@ public partial class WorldGen : Node3D
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
 					preGen.newY = preGen.posY + (chunkSize * y / bigBlockSize);
+					
 					Brush assignedBrush = bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ];
 					if (assignedBrush != null && (assignedBrush.hiddenFlag || assignedBrush.borderFlag))
 					{					
@@ -741,57 +736,14 @@ public partial class WorldGen : Node3D
 
 	byte CheckSurfaceBrushType(byte[,,] bigBlockArray, int pos, ref PreGenNoiseValues preGen)
 	{
-
 		int bitmask = 0;
 
 		//HEY HEY!!!
 		//Optimization, top and bottom go FIRST
 		//Because PreGen values are the same, THEN
 		//Pregen goes again when shifting X and Y
-
-		//Top
 		bool check = false;
-		if (preGen.posY < bigBlockArray.GetLength(1) - 1)
-		{
-			if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], pos))
-			{
-				bitmask |= 1 << 1;
-			}
-		}
-		else
-		{
-			preGen.newY += 1;
-			int oldY = preGen.chunkY;
-			preGen.chunkY = Mathf.FloorToInt(preGen.newY / ((float)chunkSize / bigBlockSize));
-			if (CheckBigBlock(ref preGen))
-			{
-				bitmask |= 1 << 1;
 
-			}
-			preGen.chunkY = oldY;
-			preGen.newY -= 1;
-		}
-		//Bottom
-		if (preGen.posY > 0)
-		{
-			if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], pos))
-			{
-				bitmask |= 1 << 0;
-			}
-		}
-		else
-		{
-			preGen.newY -= 1;
-			int oldY = preGen.chunkY;
-			preGen.chunkY = Mathf.FloorToInt(preGen.newY / ((float)chunkSize / bigBlockSize));
-			if (CheckBigBlock(ref preGen))
-			{
-				bitmask |= 1 << 0;
-
-			}
-			preGen.chunkY = oldY;
-			preGen.newY += 1;
-		}
 		//North
 		if (preGen.posZ < bigBlockArray.GetLength(2) - 1)
 		{			
@@ -876,6 +828,49 @@ public partial class WorldGen : Node3D
 		{
 			PregenNoiseValues(ref preGen);
 		}
+		//Top
+		if (preGen.posY < bigBlockArray.GetLength(1) - 1)
+		{
+			if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], pos))
+			{
+				bitmask |= 1 << 1;
+			}
+		}
+		else
+		{
+			preGen.newY += 1;
+			int oldY = preGen.chunkY;
+			preGen.chunkY = Mathf.FloorToInt((float)preGen.newY / (chunkSize / bigBlockSize));
+			if (CheckBigBlock(ref preGen))
+			{
+				bitmask |= 1 << 1;
+
+			}
+			preGen.chunkY = oldY;
+			preGen.newY -= 1;
+		}
+		//Bottom
+		if (preGen.posY > 0)
+		{
+			if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], pos))
+			{
+				bitmask |= 1 << 0;
+			}
+		}
+		else
+		{
+			preGen.newY -= 1;
+			int oldY = preGen.chunkY;
+			preGen.chunkY = Mathf.FloorToInt((float)preGen.newY / (chunkSize / bigBlockSize));
+			if (CheckBigBlock(ref preGen))
+			{
+				bitmask |= 1 << 0;
+
+			}
+			preGen.chunkY = oldY;
+			preGen.newY += 1;
+		}
+
 		return (byte)bitmask;
 	}
 
@@ -885,27 +880,7 @@ public partial class WorldGen : Node3D
 		bool visibility = true;
 
 		//OPTIMIZATION, Y goes first to not pregen noise
-		//Y
 		bool check = false;
-		if (preGen.posY == 0)
-		{
-			preGen.newY -= 1;
-			visibility &= CheckBigBlock(ref preGen);
-			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], byteIndex);
-			preGen.newY += 1;
-		}
-		else if (preGen.posY >= bigBlockArray.GetLength(1) - 1)
-		{
-			preGen.newY += 1;
-			visibility &= CheckBigBlock(ref preGen);
-			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], byteIndex);
-			preGen.newY -= 1;
-		}
-		else
-		{
-			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], byteIndex);
-			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], byteIndex);
-		}
 		//X
 		if (preGen.posX == 0)
 		{
@@ -960,6 +935,26 @@ public partial class WorldGen : Node3D
 			PregenNoiseValues(ref preGen);
 		}
 
+		//Y
+		if (preGen.posY == 0)
+		{
+			preGen.newY -= 1;
+			visibility &= CheckBigBlock(ref preGen);
+			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], byteIndex);
+			preGen.newY += 1;
+		}
+		else if (preGen.posY >= bigBlockArray.GetLength(1) - 1)
+		{
+			preGen.newY += 1;
+			visibility &= CheckBigBlock(ref preGen);
+			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], byteIndex);
+			preGen.newY -= 1;
+		}
+		else
+		{
+			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], byteIndex);
+			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], byteIndex);
+		}
 		//If hidden
 		return visibility;
 	}
