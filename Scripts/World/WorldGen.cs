@@ -730,9 +730,9 @@ public partial class WorldGen : Node3D
 			{
 				for (int i = 0; i < brushCopies[e].vertices.Length; i += 3)
 				{
-					brushCopies[e].vertices[i] += (byte)preGen.posX;
-					brushCopies[e].vertices[i + 1] += (byte)preGen.posY;
-					brushCopies[e].vertices[i + 2] += (byte)preGen.posZ;
+					brushCopies[e].vertices[i] += (byte)(preGen.posX * bigBlockSize);
+					brushCopies[e].vertices[i + 1] += (byte)(preGen.posY * bigBlockSize);
+					brushCopies[e].vertices[i + 2] += (byte)(preGen.posZ * bigBlockSize);
 				}
 			}
 
@@ -880,6 +880,7 @@ public partial class WorldGen : Node3D
 
 		//OPTIMIZATION, Y goes first to not pregen noise
 		//Y
+		bool check = false;
 		if (preGen.posY == 0)
 		{
 			preGen.newY -= 1;
@@ -887,6 +888,7 @@ public partial class WorldGen : Node3D
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], byteIndex);
 			preGen.newY += 1;
+			check = true;
 		}
 		else if (preGen.posY >= bigBlockArray.GetLength(1) - 1)
 		{
@@ -895,6 +897,7 @@ public partial class WorldGen : Node3D
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], byteIndex);
 			preGen.newY -= 1;
+			check = true;
 		}
 		else
 		{
@@ -909,6 +912,7 @@ public partial class WorldGen : Node3D
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX + 1, preGen.posY, preGen.posZ], byteIndex);
 			preGen.newX += 1;
+			check = true;
 		}
 		else if (preGen.posX >= bigBlockArray.GetLength(0) - 1)
 		{
@@ -917,6 +921,7 @@ public partial class WorldGen : Node3D
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX - 1, preGen.posY, preGen.posZ], byteIndex);
 			preGen.newX -= 1;
+			check = true;
 		}
 		else
 		{
@@ -932,6 +937,7 @@ public partial class WorldGen : Node3D
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ + 1], byteIndex);
 			preGen.newZ += 1;
+			check = true;
 		}
 		else if (preGen.posZ >= bigBlockArray.GetLength(2) - 1)
 		{
@@ -940,13 +946,17 @@ public partial class WorldGen : Node3D
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ - 1], byteIndex);
 			preGen.newZ -= 1;
+			check = true;
 		}
 		else
 		{
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ - 1], byteIndex);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ + 1], byteIndex);
 		}
-		PregenNoiseValues(ref preGen);
+		if(check)
+		{
+			PregenNoiseValues(ref preGen);
+		}
 
 		//If hidden
 		return visibility;
@@ -954,7 +964,7 @@ public partial class WorldGen : Node3D
 
 	bool CheckBrushOnBorder(ref PreGenNoiseValues preGen)
 	{
-		int length = chunkSize / bigBlockSize;
+		int length = chunkSize;
 		return preGen.posX == 0 || preGen.posY == 0 || preGen.posZ == 0 || preGen.posX >= length - 1 || preGen.posY >= length - 1 || preGen.posZ >= length - 1;
 	}
 
