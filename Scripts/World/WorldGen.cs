@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static WorldGen;
 using media.Laura.SofiaConsole;
 using Console = media.Laura.SofiaConsole.Console;
+using System.Diagnostics;
 
 
 public partial class WorldGen : Node3D
@@ -478,56 +479,33 @@ public partial class WorldGen : Node3D
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
 					Brush assignedBrush = bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ];
-
 					if (assignedBrush != null && (assignedBrush.hiddenFlag || assignedBrush.borderFlag))
-					{
-						if (preGen.posX - 1 >= 0 && bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ] != null)
-						{
-							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]].Add(assignedBrush); }
-							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
+					{					
+						if(assignedBrush.borderFlag)
+						{	
+							if(preGen.posX + 1 < chunkSize / bigBlockSize){
+								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]);}
+							if(preGen.posY + 1 < chunkSize / bigBlockSize){
+								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]);}
+							if(preGen.posZ + 1 < chunkSize / bigBlockSize){
+								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]);}	
+							if(preGen.posX - 1 >= 0){
+								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]);}
+							if(preGen.posY - 1 >= 0){
+								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]);}
+							if(preGen.posZ - 1 >= 0){
+								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]);}
 						}
-
-						if (preGen.posY - 1 >= 0 && bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ] != null)
-						{
-							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]].Add(assignedBrush); }
-							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
+						else
+						{				
+							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]);
+							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]);
+							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]);
+							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]);
+							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]);
+							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]);
 						}
-
-						if (preGen.posZ - 1 >= 0 && bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1] != null)
-						{
-							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]].Add(assignedBrush); }
-							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]] = new List<Brush>() { assignedBrush }; }
-						}
-
-						if (preGen.posX + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ] != null)
-						{
-							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]].Add(assignedBrush); }
-							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
-						}
-
-						if (preGen.posY + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ] != null)
-						{
-							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]].Add(assignedBrush); }
-							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]] = new List<Brush>() { assignedBrush }; }
-						}
-
-						if (preGen.posZ + 1 < chunkSize / bigBlockSize && bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1] != null)
-						{
-							if (chunk.connectedInvisibleBrushes.ContainsKey(bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]))
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]].Add(assignedBrush); }
-							else
-							{ chunk.connectedInvisibleBrushes[bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]] = new List<Brush>() { assignedBrush }; }
-						}
+						
 					}
 
 					if (!GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 1) && !GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 0))
@@ -548,6 +526,23 @@ public partial class WorldGen : Node3D
 		}
 
 		return chunk;
+	}
+
+	void SetConnectedInvisibleBrushes(Chunk chunk, Brush assignedBrush, Brush checkBrush)
+	{
+		if(checkBrush == null)
+		{
+			return;
+		}
+
+		if (chunk.connectedInvisibleBrushes.ContainsKey(checkBrush))
+		{ 
+			chunk.connectedInvisibleBrushes[checkBrush].Add(assignedBrush); 
+		}
+		else
+		{ 
+			chunk.connectedInvisibleBrushes[checkBrush] = new List<Brush>() { assignedBrush }; 
+		}
 	}
 	
 	void PregenNoiseValues(ref PreGenNoiseValues preGen)
@@ -646,38 +641,36 @@ public partial class WorldGen : Node3D
 	{
 		bool noiseValue = false;
 		
-		int chunkY = Mathf.FloorToInt(preGen.newY / (float)chunkSize / bigBlockSize);
-		
 		float terrain = Math.Clamp((curve1.SampleBaked(GetClampedFastNoise3D(noise,preGen.newX, preGen.newY, preGen.newZ))
 				+ preGen.noiseDSampled)
 				* preGen.noiseESampled,0,1);
 
-		if (chunkY < 0)
+		if (preGen.chunkY < 0)
 		{
 			//Below-Surface Generation
 			noiseValue = true;
 
 			if(preGen.oceanMultiplier < 0)
 			{
-				if (chunkY >= -6 && 1 - (terrain * -preGen.oceanMultiplier) < GetClampedChunkRange(-6 * chunkSize / bigBlockSize, 0, preGen.newY))
+				if (preGen.chunkY >= -6 && 1 - (terrain * -preGen.oceanMultiplier) < GetClampedChunkRange(-6 * chunkSize / bigBlockSize, 0, preGen.newY))
 				{
 					noiseValue = false;
 				}
 			}
 		}
-		if (chunkY >= 0 && preGen.oceanMultiplier >= 0)
+		if (preGen.chunkY >= 0 && preGen.oceanMultiplier >= 0)
 		{
 			//Above-Surface Generation
 			noiseValue = false;
 
-			if (chunkY < 6 && terrain * preGen.oceanMultiplier > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, preGen.newY))
+			if (preGen.chunkY < 6 && terrain * preGen.oceanMultiplier > GetClampedChunkRange(0, 6 * chunkSize / bigBlockSize, preGen.newY))
 			{
 				noiseValue = true;
 			}
 		}
 
 		//Both Surface Generation
-		if (chunkY < 5 && chunkY >= -10 &&
+		if (preGen.chunkY < 5 && preGen.chunkY >= -10 &&
 			curve2.SampleBaked(GetClampedFastNoise3D(noiseB,preGen.newX, preGen.newY, preGen.newZ))
 			* curve6.SampleBaked(GetClampedFastNoise3D(noiseE,preGen.newX, preGen.newY, preGen.newZ))
 			> curve3.SampleBaked(1 - GetClampedChunkRange(-10 * chunkSize / bigBlockSize, 5 * chunkSize / bigBlockSize, preGen.newY)))
@@ -964,7 +957,7 @@ public partial class WorldGen : Node3D
 
 	bool CheckBrushOnBorder(ref PreGenNoiseValues preGen)
 	{
-		int length = chunkSize;
+		int length = chunkSize / bigBlockSize;
 		return preGen.posX == 0 || preGen.posY == 0 || preGen.posZ == 0 || preGen.posX >= length - 1 || preGen.posY >= length - 1 || preGen.posZ >= length - 1;
 	}
 
@@ -1333,7 +1326,7 @@ public partial class WorldGen : Node3D
 	bool GetBitOfByte(byte aByte, int pos)
 	{
 		//left-shift 1, then bitwise AND, then check for non-zero
-		return ((aByte & (1 << pos)) != 0);
+		return (aByte & (1 << pos)) != 0;
 	}
 
 	public int AssignBrushTexture(Node3D chunkNode, int brushID, uint materialID)
