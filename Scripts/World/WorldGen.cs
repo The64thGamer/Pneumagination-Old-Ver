@@ -426,6 +426,7 @@ public partial class WorldGen : Node3D
 
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
+					preGen.newY = preGen.posY + (chunkSize * y / bigBlockSize);
 					if (GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 0))
 					{
 
@@ -435,7 +436,7 @@ public partial class WorldGen : Node3D
 								new Vector3(bigBlockSize, bigBlockSize, bigBlockSize));
 						bigBlock.hiddenFlag = CheckBrushVisibility(ref bigBlockArray, 0, ref preGen);
 						bigBlock.borderFlag = CheckBrushOnBorder(ref preGen);
-						bitMask = (byte)CheckSurfaceBrushType(bigBlockArray, 0, ref preGen);
+						bitMask = CheckSurfaceBrushType(bigBlockArray, 0, ref preGen);
 
 						isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && y >= -1;
 
@@ -462,6 +463,7 @@ public partial class WorldGen : Node3D
 						}
 					}
 				}
+				
 			}
 		}
 
@@ -758,11 +760,14 @@ public partial class WorldGen : Node3D
 		else
 		{
 			preGen.newY += 1;
+			int oldY = preGen.chunkY;
+			preGen.chunkY = Mathf.FloorToInt(preGen.newY / (float)chunkSize / bigBlockSize);
 			if (CheckBigBlock(ref preGen))
 			{
 				bitmask |= 1 << 1;
 
 			}
+			preGen.chunkY = oldY;
 			preGen.newY -= 1;
 		}
 		//Bottom
@@ -776,11 +781,14 @@ public partial class WorldGen : Node3D
 		else
 		{
 			preGen.newY -= 1;
+			int oldY = preGen.chunkY;
+			preGen.chunkY = Mathf.FloorToInt(preGen.newY / (float)chunkSize / bigBlockSize);
 			if (CheckBigBlock(ref preGen))
 			{
 				bitmask |= 1 << 0;
 
 			}
+			preGen.chunkY = oldY;
 			preGen.newY += 1;
 		}
 		//North
