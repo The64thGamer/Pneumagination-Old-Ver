@@ -480,6 +480,7 @@ public partial class WorldGen : Node3D
 
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
+					preGen.newY = preGen.posY + (chunkSize * y / bigBlockSize);
 					Brush assignedBrush = bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ];
 					if (assignedBrush != null && (assignedBrush.hiddenFlag || assignedBrush.borderFlag))
 					{					
@@ -761,7 +762,7 @@ public partial class WorldGen : Node3D
 		{
 			preGen.newY += 1;
 			int oldY = preGen.chunkY;
-			preGen.chunkY = Mathf.FloorToInt(preGen.newY / (float)chunkSize / bigBlockSize);
+			preGen.chunkY = Mathf.FloorToInt(preGen.newY / ((float)chunkSize / bigBlockSize));
 			if (CheckBigBlock(ref preGen))
 			{
 				bitmask |= 1 << 1;
@@ -782,7 +783,7 @@ public partial class WorldGen : Node3D
 		{
 			preGen.newY -= 1;
 			int oldY = preGen.chunkY;
-			preGen.chunkY = Mathf.FloorToInt(preGen.newY / (float)chunkSize / bigBlockSize);
+			preGen.chunkY = Mathf.FloorToInt(preGen.newY / ((float)chunkSize / bigBlockSize));
 			if (CheckBigBlock(ref preGen))
 			{
 				bitmask |= 1 << 0;
