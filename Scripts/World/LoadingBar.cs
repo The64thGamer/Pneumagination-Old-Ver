@@ -4,7 +4,6 @@ using System;
 public partial class LoadingBar : ProgressBar
 {
 	WorldGen worldGen;
-	[Export] Curve curve;
 
     public override void _Ready()
     {    			
@@ -17,6 +16,6 @@ public partial class LoadingBar : ProgressBar
 			QueueFree();
 		}
 
-		Value = curve.SampleBaked(worldGen.GetChunksLoadedToLoadingRatio());
+		Value = worldGen.GetChunksLoadedToLoadingRatio();
 	}
 }

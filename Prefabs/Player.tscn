@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://dayc5ri3bltvr"]
+[gd_scene load_steps=41 format=3 uid="uid://dayc5ri3bltvr"]
 
 [ext_resource type="Script" path="res://Scripts/World/PlayerMovement.cs" id="1_cwgi3"]
 [ext_resource type="Shader" path="res://Shaders/Fog.gdshader" id="2_88pqh"]
@@ -65,10 +65,6 @@ colors = PackedColorArray(1.63645e-06, 0.366683, 0.507355, 1, 7.89344e-06, 0.729
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_blwo2"]
 gradient = SubResource("Gradient_4iflf")
-
-[sub_resource type="Curve" id="Curve_j2o52"]
-_data = [Vector2(0.752841, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 9.9155, 0.0, 0, 0]
-point_count = 2
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "camera") groups=["Player"]]
 collision_layer = 3
@@ -638,7 +634,6 @@ theme = ExtResource("13_n5r38")
 max_value = 1.0
 step = 0.001
 script = ExtResource("31_84inb")
-curve = SubResource("Curve_j2o52")
 
 [node name="Photo Mode" type="Node3D" parent="."]
 

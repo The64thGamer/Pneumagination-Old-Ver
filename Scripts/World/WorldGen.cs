@@ -28,7 +28,6 @@ public partial class WorldGen : Node3D
 
 	//Globals
 	public static int seedA, seedB, seedC, seedD, seedE, seedF, seedG;
-	public static int totalChunksRendered = 0;
 	public static bool firstChunkLoaded;
 
 	//Locals
@@ -44,6 +43,7 @@ public partial class WorldGen : Node3D
 	//Consts
 	public const int chunkLoadingDistance = 8;
 	public const int chunkUnloadingDistance = 11;
+	const float loadingBarChunks = 2106;
 	const int bigBlockSize = 6;
 	public const int chunkSize = 84;
 	public const int chunkMarginSize = 86; //(256 - Chunksize) / 2. 
@@ -250,13 +250,8 @@ public partial class WorldGen : Node3D
 		{
 			return;
 		}
-		for (int i = ongoingChunkRenderData.Count - 1; i > -1; i--)
-		{
-			if (ongoingChunkRenderData[i].state == ChunkRenderDataState.garbageCollector)
-			{
-				ongoingChunkRenderData.RemoveAt(i);
-			}
-		}
+		
+		ongoingChunkRenderData.RemoveAll(elem => elem.state == ChunkRenderDataState.garbageCollector);
 
 		bool check = false;
 		for (int e = 0; e < ongoingChunkRenderData.Count; e++)
@@ -294,7 +289,7 @@ public partial class WorldGen : Node3D
 					});
 				}
 			}
-			if (ongoingChunkRenderData[e].state == ChunkRenderDataState.running)
+			if (ongoingChunkRenderData[e].state != ChunkRenderDataState.garbageCollector)
 			{
 				check = true;
 			}
@@ -310,15 +305,13 @@ public partial class WorldGen : Node3D
 				maxChunksLoadingRampUp = Mathf.Min(maxChunksLoadingRampUp + 1, maxChunksLoading);
 			}
 			ongoingChunkRenderData = new List<ChunkRenderData>();
-		}
+		}		
 	}
 
 	void RenderChunk(int x, int y, int z)
 	{
-		totalChunksRendered++;
-		int id = totalChunksRendered;
+		Guid id = Guid.NewGuid();
 		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
-
 		Task.Run(() =>
 		{
 			Chunk chunk = GenerateChunk(x, y, z, id);
@@ -330,6 +323,11 @@ public partial class WorldGen : Node3D
 			{
 				if (ongoingChunkRenderData[i].id == id)
 				{
+					if(ongoingChunkRenderData[i].state == ChunkRenderDataState.garbageCollector)
+					{
+						GD.PrintErr("Chunk attempting to save over used data. (ID " + id + ")");
+						break;
+					}
 					if (chunkData == null)
 					{
 						ongoingChunkRenderData[i].state = ChunkRenderDataState.garbageCollector;
@@ -346,7 +344,7 @@ public partial class WorldGen : Node3D
 
 			if (!check)
 			{
-				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ")");
+				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ") (Seed " + PlayerPrefs.GetString("Seed") + ")");
 				firstChunkLoaded = true; //Bandaid fix, please figure out why chunks are missing IDs
 			}
 
@@ -365,7 +363,7 @@ public partial class WorldGen : Node3D
 	}
 
 	//Chunks are 126x126x126
-	Chunk GenerateChunk(int x, int y, int z, int id)
+	Chunk GenerateChunk(int x, int y, int z, Guid id)
 	{
 
 		Chunk chunk = new Chunk();
@@ -385,6 +383,8 @@ public partial class WorldGen : Node3D
 		PreGenNoiseValues preGen = new PreGenNoiseValues();
 		preGen.chunkY = y;
 
+		bool airChunkCheck = true;
+
 		for (preGen.posX = 0; preGen.posX < chunkSize / bigBlockSize; preGen.posX++)
 		{					
 			preGen.newX = preGen.posX + (chunkSize * x / bigBlockSize);
@@ -401,9 +401,15 @@ public partial class WorldGen : Node3D
 					if (CheckBigBlock(ref preGen))
 					{
 						SetBitOfByte(ref bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 0, true);
+						airChunkCheck = false;
 					}
 				}
 			}
+		}
+
+		if(airChunkCheck)
+		{
+			return chunk;
 		}
 
 		Brush[] brushes;
@@ -508,8 +514,13 @@ public partial class WorldGen : Node3D
 
 					if (!GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 1) && !GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 0))
 					{
+						
 						//Second layer of "Sub-Surface Brushes"
 						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, 0, ref preGen) | CheckSurfaceBrushType(bigBlockArray, 1, ref preGen));
+						if(preGen.newX == 6 && preGen.newY == 120 && preGen.posZ == 0)
+						{
+							GD.Print(Convert.ToString(bitMask,2));
+						}
 						if (bitMask != 0)
 						{
 							brushes = CreateSurfaceBrushes(bitMask, true, ref preGen);
@@ -1952,7 +1963,7 @@ public partial class WorldGen : Node3D
 
 	public float GetChunksLoadedToLoadingRatio()
 	{
-		return (float)loadedChunks.Count / (float)(loadedChunks.Count + ongoingChunkRenderData.Count);
+		return (float)loadedChunks.Count / loadingBarChunks;
 	}
 
 	[ConsoleCommand("getseed", Description = "Prints the hashed seed value.")]
@@ -2006,7 +2017,7 @@ public partial class WorldGen : Node3D
 	public class Chunk
 	{
 		public bool hasGeneratedBorders;
-		public int id;
+		public Guid id;
 		public int positionX;
 		public int positionY;
 		public int positionZ;
@@ -2020,7 +2031,7 @@ public partial class WorldGen : Node3D
 		public Node3D chunkNode;
 		public MeshInstance3D meshNode;
 		public Vector3 position;
-		public int id;
+		public Guid id;
 		public CollisionShape3D collisionShape;
 		public StaticBody3D staticBody;
 		public List<int> triangleIndexToBrushIndex;
@@ -2032,7 +2043,7 @@ public partial class WorldGen : Node3D
 	{
 		public Node3D node;
 		public Vector3 position;
-		public int id;
+		public Guid id;
 		public List<int> triangleIndexToBrushIndex;
 		public List<int> triangleIndexToBrushTextureIndex;
 		public Chunk chunk;
