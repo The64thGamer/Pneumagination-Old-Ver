@@ -490,7 +490,7 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		if(airChunkCheck && chunk.brushes.Count == 0)
+		if(airChunkCheck)
 		{
 			return chunk;
 		}
@@ -995,16 +995,22 @@ public partial class WorldGen : Node3D
 		if (preGen.posY == 0)
 		{
 			preGen.newY -= 1;
+			int oldY = preGen.chunkY;
+			preGen.chunkY = Mathf.FloorToInt((float)preGen.newY / (chunkSize / bigBlockSize));
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY + 1, preGen.posZ], byteIndex);
 			preGen.newY += 1;
+			preGen.chunkY = oldY;
 		}
 		else if (preGen.posY >= bigBlockArray.GetLength(1) - 1)
 		{
 			preGen.newY += 1;
+			int oldY = preGen.chunkY;
+			preGen.chunkY = Mathf.FloorToInt((float)preGen.newY / (chunkSize / bigBlockSize));
 			visibility &= CheckBigBlock(ref preGen);
 			visibility &= GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY - 1, preGen.posZ], byteIndex);
 			preGen.newY -= 1;
+			preGen.chunkY = oldY;
 		}
 		else
 		{
@@ -1351,8 +1357,8 @@ public partial class WorldGen : Node3D
 	float GetClampedFastNoise2D(FastNoiseContainer container, float x, float z)
 	{
 		return GetClampedNoise(container.noise.GenSingle2D(
-			x * container.frequency + (container.seed % 5000),
-			z * container.frequency + (container.seed % 5000),
+			(x * container.frequency) + (container.seed % 20000),
+			(z * container.frequency) + (container.seed % 20000),
 			container.seed
 		));
 	}
@@ -1360,9 +1366,9 @@ public partial class WorldGen : Node3D
 	float GetClampedFastNoise3D(FastNoiseContainer container, int x, int y, int z)
 	{
 		return GetClampedNoise(container.noise.GenSingle3D(
-			x * container.frequency + (container.seed % 5000),
-			y * container.frequency + (container.seed % 5000),
-			z * container.frequency + (container.seed % 5000),
+			(x * container.frequency) + (container.seed % 20000),
+			(y * container.frequency) + (container.seed % 20000),
+			(z * container.frequency) + (container.seed % 20000),
 			container.seed
 		));
 	}
@@ -1960,10 +1966,7 @@ public partial class WorldGen : Node3D
 			}
 			if (meshNode == null)
 			{
-				AddChild(chunkData.chunkNode);
-				chunkData.chunkNode.Name = "Chunk " + chunkData.id.ToString();
-				chunkData.chunkNode.AddChild(chunkData.meshNode);
-				chunkData.chunkNode.GlobalPosition = new Vector3((chunkData.position.X * chunkSize) - chunkMarginSize, (chunkData.position.Y * chunkSize) - chunkMarginSize, (chunkData.position.Z * chunkSize) - chunkMarginSize);
+				chunk.node.AddChild(chunkData.meshNode);
 				chunkData.meshNode.AddChild(chunkData.staticBody);
 				chunkData.staticBody.AddChild(chunkData.collisionShape);
 
