@@ -45,6 +45,10 @@ public partial class Mining : Node3D
                     chunk = ((Node3D)result["collider"]).GetParent().GetParent() as Node3D;
                     faceID = (int)result["face_index"];
                     foundBrush = worldGen.FindBrushFromCollision(chunk, faceID);
+                    if(foundBrush == null)
+                    {
+                        return;
+                    }
                     breaking = true;
                     breakTimerStart = Mathf.Clamp(worldGen.VolumeOfMesh(foundBrush.vertices) / 216.0f, 0.25f,3f);
                     breaktimer = breakTimerStart;
@@ -64,11 +68,16 @@ public partial class Mining : Node3D
                 Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
                 if (result.Count > 0)
                 {
-                    if(foundBrush != worldGen.FindBrushFromCollision(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, (int)result["face_index"]))
+                    if(foundBrush == null || foundBrush != worldGen.FindBrushFromCollision(((Node3D)result["collider"]).GetParent().GetParent() as Node3D, (int)result["face_index"]))
                     {
                         DisableSelection();
                         return;
                     }
+                }
+                else
+                {
+                    DisableSelection();
+                    return;
                 }
 
                 //Priming Sound

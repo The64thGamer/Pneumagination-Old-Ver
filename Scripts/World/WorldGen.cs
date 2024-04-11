@@ -1721,6 +1721,10 @@ public partial class WorldGen : Node3D
 			return null;
 		}
 		int index = Mathf.FloorToInt(brushID / 2.0f);
+		if(foundChunk.chunk.brushes == null || foundChunk.chunk.brushes.Count == 0)
+		{
+			return null;
+		}
 		return foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
 	}
 
@@ -1915,14 +1919,15 @@ public partial class WorldGen : Node3D
 		if (chunk.node != null)
 		{
 			MeshInstance3D meshNode = chunk.node.GetChild(0) as MeshInstance3D;
-			if (meshNode == null)
+			chunk.triangleIndexToBrushIndex = chunkData.triangleIndexToBrushIndex;
+			chunk.triangleIndexToBrushTextureIndex = chunkData.triangleIndexToBrushTextureIndex;
+			if (meshNode == null || chunkData.meshNode == null)
 			{
 				return;
 			}
 			meshNode.Mesh = chunkData.meshNode.Mesh;
 			(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
-			chunk.triangleIndexToBrushIndex = chunkData.triangleIndexToBrushIndex;
-			chunk.triangleIndexToBrushTextureIndex = chunkData.triangleIndexToBrushTextureIndex;
+			
 		}
 		else if (chunkData.chunkNode != null)
 		{
