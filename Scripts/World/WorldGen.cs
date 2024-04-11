@@ -84,12 +84,21 @@ public partial class WorldGen : Node3D
 		seedF = rnd.Next();
 		seedG = rnd.Next();
 
-		mats = new Material[9];
-		for (int i = 0; i < 9; i++)
+
+		int matsize = 0;
+		while (true)
+		{
+			if(!FileAccess.FileExists("res://Materials/" + matsize + ".tres"))
+			{
+				mats = new Material[matsize];
+				break;
+			}
+			matsize++;
+		}    
+		for (int i = 0; i < mats.Length; i++)
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
-
 
 		noise = new FastNoiseContainer(){
 			noise = FastNoise.FromEncodedNodeTree("DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABA"),
@@ -384,6 +393,7 @@ public partial class WorldGen : Node3D
 		preGen.chunkY = y;
 
 		bool airChunkCheck = true;
+		bool oceanChunkCheck = false;
 
 		for (preGen.posX = 0; preGen.posX < chunkSize / bigBlockSize; preGen.posX++)
 		{					
@@ -427,8 +437,12 @@ public partial class WorldGen : Node3D
 				preGen.newZ = preGen.posZ + (chunkSize * z / bigBlockSize);
 
 				PregenNoiseValues(ref preGen);
-				//Find Values
 
+				//Ocean
+				if(preGen.oceanMultiplier <= 0)
+				{
+					oceanChunkCheck = true;
+				}
 
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
@@ -469,7 +483,7 @@ public partial class WorldGen : Node3D
 
 		//Second Surface Layer & Visibility Assigning
 		for (preGen.posX = 0; preGen.posX < chunkSize / bigBlockSize; preGen.posX++)
-		{
+		{						
 			preGen.newX = preGen.posX + (chunkSize * x / bigBlockSize);
 
 			for (preGen.posZ = 0; preGen.posZ < chunkSize / bigBlockSize; preGen.posZ++)
@@ -511,16 +525,11 @@ public partial class WorldGen : Node3D
 						}
 						
 					}
-
+					
 					if (!GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 1) && !GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 0))
 					{
-						
 						//Second layer of "Sub-Surface Brushes"
 						bitMask = (byte)(CheckSurfaceBrushType(bigBlockArray, 0, ref preGen) | CheckSurfaceBrushType(bigBlockArray, 1, ref preGen));
-						if(preGen.newX == 6 && preGen.newY == 120 && preGen.posZ == 0)
-						{
-							GD.Print(Convert.ToString(bitMask,2));
-						}
 						if (bitMask != 0)
 						{
 							brushes = CreateSurfaceBrushes(bitMask, true, ref preGen);
@@ -532,6 +541,27 @@ public partial class WorldGen : Node3D
 					}
 				}
 			}
+		}
+
+		if(oceanChunkCheck)
+		{
+			if(y < -1)
+			{
+				Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize);
+				water.textures = new uint[]{9,9,9,9,9,9};
+				water.hiddenFlag = false;
+				water.borderFlag = false;
+				chunk.brushes.Add(water);
+			}
+			else if(y == -1)
+			{
+				Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize - new Vector3(0,1,0));
+				water.textures = new uint[]{9,9,9,9,9,9};
+				water.hiddenFlag = false;
+				water.borderFlag = false;
+				chunk.brushes.Add(water);
+			}
+			
 		}
 
 		return chunk;
@@ -693,8 +723,8 @@ public partial class WorldGen : Node3D
 
 	Brush[] CreateSurfaceBrushes(byte bitMask, bool subSurface, ref PreGenNoiseValues preGen)
 	{
-		bool check;
-		byte[] verts;
+		bool check = false;
+		byte[] verts = null;
 		if (subSurface)
 		{
 			check = subSurfaceBrushes.TryGetValue(bitMask, out verts);
@@ -705,7 +735,7 @@ public partial class WorldGen : Node3D
 		}
 		if(verts == null)
 		{
-			return new Brush[0];
+			return null;
 		}
 
 		Brush[] brushCopies = new Brush[verts.Length / 24];
@@ -722,21 +752,13 @@ public partial class WorldGen : Node3D
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
 				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(ref preGen), textures = textures };
-				for (int e = 0; e < 24; e++)
+				for (int e = 0; e < 24; e += 3)
 				{
-					b.vertices[e] = (byte)(verts[e + (i * 24)] + chunkMarginSize);
+					b.vertices[e] = (byte)(verts[e + (i * 24)] + chunkMarginSize + (preGen.posX * bigBlockSize));
+					b.vertices[e + 1] = (byte)(verts[e + 1 + (i * 24)] + chunkMarginSize + (preGen.posY * bigBlockSize));
+					b.vertices[e + 2] = (byte)(verts[e + 2 + (i * 24)] + chunkMarginSize + (preGen.posZ * bigBlockSize));
 				}
 				brushCopies[i] = b;
-			}
-
-			for (int e = 0; e < brushCopies.Length; e++)
-			{
-				for (int i = 0; i < brushCopies[e].vertices.Length; i += 3)
-				{
-					brushCopies[e].vertices[i] += (byte)(preGen.posX * bigBlockSize);
-					brushCopies[e].vertices[i + 1] += (byte)(preGen.posY * bigBlockSize);
-					brushCopies[e].vertices[i + 2] += (byte)(preGen.posZ * bigBlockSize);
-				}
 			}
 
 			return brushCopies;

@@ -3,12 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://coscl6tjyh1is" path="res://Textures/White Sand.png" id="1_cs1u5"]
 
 [resource]
-transparency = 1
 albedo_color = Color(0, 0.792157, 1, 0.533333)
 albedo_texture = ExtResource("1_cs1u5")
 albedo_texture_force_srgb = true
+metallic = 1.0
 metallic_specular = 1.0
-roughness = 0.07
+roughness = 0.12
 refraction_texture_channel = 3
 uv1_scale = Vector3(0.0236705, 0.0236705, 0.0236705)
 uv1_triplanar = true
