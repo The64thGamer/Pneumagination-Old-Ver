@@ -37,7 +37,7 @@ public partial class WorldGen : Node3D
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
 	ServerClient server;
-	FastNoiseContainer noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseG;
+	FastNoiseContainer noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseOcean;
 	int maxChunksLoadingRampUp = 1;
 
 	//Consts
@@ -153,13 +153,13 @@ public partial class WorldGen : Node3D
 		//noiseF.Set("Octaves", 4);
 
 
-		noiseG = new FastNoiseContainer(){
-			noise = FastNoise.FromEncodedNodeTree("DwACAAAAAAAAQAkAAAAAAD8AAAAAAA=="),
+		noiseOcean = new FastNoiseContainer(){
+			noise = FastNoise.FromEncodedNodeTree("DQACAAAAAAAAQA8AAwAAAAAAAEAJAAAAAAA/AFK4nkAAAAAAPwA9Clc/"),
 			frequency = 0.0005f,
 			seed = seedG,
 		};
-		//noiseG.SetFractalType(FastNoise.FractalType.Ridged);
-		//noiseG.Set("Octaves", 2);
+		//noiseOcean.SetFractalType(FastNoise.FractalType.Ridged);
+		//noiseOcean.Set("Octaves", 2);
 	}
 
 	public override void _Process(double delta)
@@ -610,7 +610,7 @@ public partial class WorldGen : Node3D
 	void PregenNoiseValues(ref PreGenNoiseValues preGen)
 	{
 		//Pregenerate values independent of Y level
-		preGen.oceanMultiplier = (curve7.SampleBaked(GetClampedFastNoise2D(noiseG,preGen.newX, preGen.newZ)) * 2) - 1;
+		preGen.oceanMultiplier = (curve7.SampleBaked(GetClampedFastNoise2D(noiseOcean,preGen.newX, preGen.newZ)) * 2) - 1;
 		preGen.noiseDSampled = curve4.SampleBaked(GetClampedFastNoise2D(noiseD,preGen.newX, preGen.newZ));
 		preGen.noiseESampled = curve5.SampleBaked(GetClampedFastNoise2D(noiseE,preGen.newX, preGen.newZ));
 		preGen.biome = GetClampedFastNoise2D(noiseF,preGen.newX,preGen.newZ);
