@@ -416,7 +416,10 @@ public partial class WorldGen : Node3D
 				}
 			}
 		}
-
+		if(airChunkCheck && y >= 0)
+		{
+			return chunk;
+		}
 
 		Brush[] brushes;
 		byte bitMask;
@@ -487,7 +490,7 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		if(airChunkCheck)
+		if(airChunkCheck && chunk.brushes.Count == 0)
 		{
 			return chunk;
 		}
@@ -2046,7 +2049,7 @@ public partial class WorldGen : Node3D
 			Console.Instance.Print("Not currently in game");
 			return;
 		}
-		Console.Instance.Print(seedA.ToString());
+		Console.Instance.Print(PlayerPrefs.GetString("Seed"));
 	}
 
 	public class Brush
