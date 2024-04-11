@@ -5,13 +5,21 @@ public partial class PlayerPrefLine : LineEdit
 {
 	[Export] public string playerPref;
 	[Export] public string defaultValue;
+	[Export] public bool defaultIsTranslationKey;
 
 	public override void _Ready()
 	{
 		string name = PlayerPrefs.GetString(playerPref);
 		if(name == "")
 		{
-			name = defaultValue;
+			if(defaultIsTranslationKey)
+			{
+				name = Tr(defaultValue);
+			}
+			else
+			{
+				name = defaultValue;
+			}
 			PlayerPrefs.SetString(playerPref, defaultValue);
 		}
 		Text = name;

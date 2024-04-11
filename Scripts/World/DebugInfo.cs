@@ -24,7 +24,7 @@ public partial class DebugInfo : Label
             Visible = true;
         }
 
-        text = "\n " + (string)ProjectSettings.GetSetting("application/config/name") + " v" + (string)ProjectSettings.GetSetting("application/config/version") + "a";
+        text = "\n " + Tr("TITLE") + " v" + (string)ProjectSettings.GetSetting("application/config/version") + "a";
         if(this.Text != text)
         {
             this.Text = text;

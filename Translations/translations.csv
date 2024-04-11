@@ -1,0 +1,15 @@
+key,en
+TITLE,Pneumagination
+CREATOR,The 64th Gamer
+CREATE_WORLD,Create World
+WORLD_SEED,Seed
+ONLINE,Online
+HEADLESS_SERVER,Headless
+PORT_NUMBER,Port
+START_BUTTON,Start
+JOIN_GAME,Join Game
+SERVER_ADDRESS,Address
+JOIN_BUTTON,Join
+PLAYER_INFO,Player Info
+PLAYER_NAME,Name
+DEBUG_CONSOLE_HEADER,Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]

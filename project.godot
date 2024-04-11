@@ -166,6 +166,10 @@ toggle_console={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://Translations/translations.en.translation")
+
 [layer_names]
 
 3d_render/layer_1="Default"

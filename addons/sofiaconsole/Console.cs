@@ -34,18 +34,15 @@ public partial class Console : Node
         Instance?.Free();
         Instance = this;
         
-        GD.Print("[SofiaConsole] Initializing");
-
         _closeButton.Pressed += () => { SetConsole(false); };
         _commandSendButton.Pressed += () => { ProcessCommand(_commandInput.Text); };
         _commandInput.TextSubmitted += ProcessCommand;
         
         LoadCommands();
         
-        Print("Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]", PrintType.Success);
+        Print(Tr("DEBUG_CONSOLE_HEADER"), PrintType.Success);
         Space();
         
-        GD.Print("[SofiaConsole] Done");
     }
 
     public override void _Input(InputEvent @event)
@@ -96,7 +93,6 @@ public partial class Console : Node
 
     public void ToggleConsole()
     {        
-
         SetConsole(!Open);
     }
 
@@ -128,7 +124,6 @@ public partial class Console : Node
     {
         if (rawCommand == "" || rawCommand == " ") return;
         
-        GD.Print($"[SofiaConsole] Command: {rawCommand}");
         if (_commandHistory.Count > 50)
         {
             _commandHistory.RemoveAt(0);
@@ -199,7 +194,6 @@ public partial class Console : Node
 
     private void LoadCommands()
     {
-        GD.Print("[SofiaConsole] Loading Commands");
         
         Commands = new List<ConsoleCommandReference>();
 
