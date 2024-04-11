@@ -1327,12 +1327,21 @@ public partial class WorldGen : Node3D
 
 	float GetClampedFastNoise2D(FastNoiseContainer container, float x, float z)
 	{
-		return GetClampedNoise(container.noise.GenSingle2D(x * container.frequency, z * container.frequency,container.seed));
+		return GetClampedNoise(container.noise.GenSingle2D(
+			x * container.frequency + (container.seed % 5000),
+			z * container.frequency + (container.seed % 5000),
+			container.seed
+		));
 	}
 
 	float GetClampedFastNoise3D(FastNoiseContainer container, int x, int y, int z)
 	{
-		return GetClampedNoise(container.noise.GenSingle3D(x * container.frequency,y * container.frequency, z * container.frequency,container.seed));
+		return GetClampedNoise(container.noise.GenSingle3D(
+			x * container.frequency + (container.seed % 5000),
+			y * container.frequency + (container.seed % 5000),
+			z * container.frequency + (container.seed % 5000),
+			container.seed
+		));
 	}
 
 	float GetClampedNoise(float noise)
