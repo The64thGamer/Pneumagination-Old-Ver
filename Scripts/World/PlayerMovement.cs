@@ -12,7 +12,7 @@ public partial class PlayerMovement : CharacterBody3D
 	float previousYVelocity;
 
 	public const float GivenCoyoteTime = 0.2f;
-	public const float Speed = 200.0f;
+	public const float Speed = 20.0f;
 	public const float JumpVelocity = 50.0f;
 	public const float sensitivity = 0.003f;
 	public const float playerReach = 22.5f;
