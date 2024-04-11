@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dayc5ri3bltvr"]
+[gd_scene load_steps=42 format=3 uid="uid://dayc5ri3bltvr"]
 
 [ext_resource type="Script" path="res://Scripts/World/PlayerMovement.cs" id="1_cwgi3"]
 [ext_resource type="Shader" path="res://Shaders/Fog.gdshader" id="2_88pqh"]
@@ -33,6 +33,9 @@
 [ext_resource type="Script" path="res://Scripts/World/LoadingBar.cs" id="31_84inb"]
 [ext_resource type="Script" path="res://Scripts/World/PhotoMode.cs" id="32_4wyds"]
 [ext_resource type="Script" path="res://Scripts/World/Inventory.cs" id="33_tfi6h"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6afil"]
+size = Vector3(3, 11, 3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l23mf"]
 size = Vector3(3, 11, 3)
@@ -81,7 +84,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 light_color = Color(0.152941, 0.152941, 0.152941, 1)
 light_energy = 10.0
 light_size = 1.0
+light_specular = 0.0
 omni_range = 50.0
+
+[node name="Player Box" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+layers = 2
+mesh = SubResource("BoxMesh_6afil")
+skeleton = NodePath("../Player Collision")
 
 [node name="Player Collision" type="CollisionShape3D" parent="." groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
@@ -91,6 +101,7 @@ shape = SubResource("BoxShape3D_l23mf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
 
 [node name="Player Camera" type="Camera3D" parent="Player Head" groups=["Player"]]
+cull_mask = 1048573
 fov = 92.8
 far = 2000.0
 
