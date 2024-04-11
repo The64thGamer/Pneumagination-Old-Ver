@@ -9,7 +9,7 @@ public partial class Inventory : Node
 		int i = 0;
 		while (true)
 		{
-			if(!FileAccess.FileExists("res://Materials/" + i + ".tres"))
+			if(!ResourceLoader.Exists("res://Materials/" + i + ".tres"))
 			{
 				inventory = new int[i];
 				return;

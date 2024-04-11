@@ -88,7 +88,7 @@ public partial class WorldGen : Node3D
 		int matsize = 0;
 		while (true)
 		{
-			if(!FileAccess.FileExists("res://Materials/" + matsize + ".tres"))
+			if(!ResourceLoader.Exists("res://Materials/" + matsize + ".tres"))
 			{
 				mats = new Material[matsize];
 				break;
