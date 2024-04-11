@@ -417,10 +417,6 @@ public partial class WorldGen : Node3D
 			}
 		}
 
-		if(airChunkCheck)
-		{
-			return chunk;
-		}
 
 		Brush[] brushes;
 		byte bitMask;
@@ -442,6 +438,16 @@ public partial class WorldGen : Node3D
 				if(preGen.oceanMultiplier <= 0)
 				{
 					oceanChunkCheck = true;
+
+					if(airChunkCheck)
+					{
+						Brush water = CreateWaterBrush(y);
+						if(water != null)
+						{
+							chunk.brushes.Add(water);
+						}
+						return chunk;
+					}
 				}
 
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
@@ -479,6 +485,11 @@ public partial class WorldGen : Node3D
 				}
 				
 			}
+		}
+
+		if(airChunkCheck)
+		{
+			return chunk;
 		}
 
 		//Second Surface Layer & Visibility Assigning
@@ -545,26 +556,35 @@ public partial class WorldGen : Node3D
 
 		if(oceanChunkCheck)
 		{
-			if(y < -1)
+			Brush water = CreateWaterBrush(y);
+			if(water != null)
 			{
-				Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize);
-				water.textures = new uint[]{9,9,9,9,9,9};
-				water.hiddenFlag = false;
-				water.borderFlag = false;
 				chunk.brushes.Add(water);
 			}
-			else if(y == -1)
-			{
-				Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize - new Vector3(0,1,0));
-				water.textures = new uint[]{9,9,9,9,9,9};
-				water.hiddenFlag = false;
-				water.borderFlag = false;
-				chunk.brushes.Add(water);
-			}
-			
 		}
 
 		return chunk;
+	}
+
+	Brush CreateWaterBrush(int y)
+	{
+		if(y < -1)
+		{
+			Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize);
+			water.textures = new uint[]{9,9,9,9,9,9};
+			water.hiddenFlag = false;
+			water.borderFlag = false;
+			return water;
+		}
+		else if(y == -1)
+		{
+			Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize - new Vector3(0,1,0));
+			water.textures = new uint[]{9,9,9,9,9,9};
+			water.hiddenFlag = false;
+			water.borderFlag = false;
+			return water;
+		}
+		return null;
 	}
 
 	void SetConnectedInvisibleBrushes(Chunk chunk, Brush assignedBrush, Brush checkBrush)
