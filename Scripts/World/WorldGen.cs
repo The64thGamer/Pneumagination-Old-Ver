@@ -1010,8 +1010,7 @@ public partial class WorldGen : Node3D
 				position = new Vector3(chunkData.positionX, chunkData.positionY, chunkData.positionZ),
 				chunk = chunkData,
 				triangleIndexToBrushIndex = new List<int>(),
-				triangleIndexToBrushTextureIndex = new List<int>()
-
+				triangleIndexToBrushTextureIndex = new List<int>(),
 			};
 		}
 
@@ -1921,12 +1920,29 @@ public partial class WorldGen : Node3D
 			MeshInstance3D meshNode = chunk.node.GetChild(0) as MeshInstance3D;
 			chunk.triangleIndexToBrushIndex = chunkData.triangleIndexToBrushIndex;
 			chunk.triangleIndexToBrushTextureIndex = chunkData.triangleIndexToBrushTextureIndex;
-			if (meshNode == null || chunkData.meshNode == null)
+			if (chunkData.meshNode == null)
 			{
+				chunk.node = null;
+				meshNode.QueueFree();
 				return;
 			}
-			meshNode.Mesh = chunkData.meshNode.Mesh;
-			(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
+			if (meshNode == null)
+			{
+				AddChild(chunkData.chunkNode);
+				chunkData.chunkNode.Name = "Chunk " + chunkData.id.ToString();
+				chunkData.chunkNode.AddChild(chunkData.meshNode);
+				chunkData.chunkNode.GlobalPosition = new Vector3((chunkData.position.X * chunkSize) - chunkMarginSize, (chunkData.position.Y * chunkSize) - chunkMarginSize, (chunkData.position.Z * chunkSize) - chunkMarginSize);
+				chunkData.meshNode.AddChild(chunkData.staticBody);
+				chunkData.staticBody.AddChild(chunkData.collisionShape);
+
+				chunk.chunk = chunkData.chunk;
+			}
+			else
+			{
+				meshNode.Mesh = chunkData.meshNode.Mesh;
+				(meshNode.GetChild(0).GetChild(0) as CollisionShape3D).Shape = chunkData.collisionShape.Shape;//THIS WILL BREAK WITH MORE CHILD SHAPES
+			}
+			
 			
 		}
 		else if (chunkData.chunkNode != null)
