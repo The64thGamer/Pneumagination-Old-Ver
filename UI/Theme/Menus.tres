@@ -193,6 +193,10 @@ corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxjet"]
 bg_color = Color(0.121569, 0.0823529, 0.0784314, 1)
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y72kk"]
 bg_color = Color(0.0352941, 0.0235294, 0.0235294, 1)
@@ -248,6 +252,7 @@ Button/styles/hover = SubResource("StyleBoxFlat_7lh0j")
 Button/styles/normal = SubResource("StyleBoxFlat_73bbd")
 Button/styles/pressed = SubResource("StyleBoxFlat_6lbv0")
 Control/colors/font_color = Color(0.533333, 0.407843, 0.388235, 1)
+Control/colors/font_placeholder_color = Color(0.533333, 0.407843, 0.388235, 1)
 Control/constants/separation = 5
 Control/fonts/font = ExtResource("1_pjc88")
 Control/styles/background = SubResource("StyleBoxFlat_3yc6a")
@@ -264,6 +269,12 @@ Control/styles/scroll_focus = SubResource("StyleBoxFlat_o3apm")
 Control/styles/slider = SubResource("StyleBoxFlat_rpkvu")
 Label/styles/normal = SubResource("StyleBoxFlat_8rmam")
 Panel/styles/panel = SubResource("StyleBoxFlat_dxjet")
+RichTextLabel/colors/default_color = Color(0.533333, 0.407843, 0.388235, 1)
+RichTextLabel/fonts/bold_font = ExtResource("1_pjc88")
+RichTextLabel/fonts/bold_italics_font = ExtResource("1_pjc88")
+RichTextLabel/fonts/italics_font = ExtResource("1_pjc88")
+RichTextLabel/fonts/mono_font = ExtResource("1_pjc88")
+RichTextLabel/fonts/normal_font = ExtResource("1_pjc88")
 TabContainer/colors/font_disabled_color = Color(0.533333, 0.407843, 0.388235, 1)
 TabContainer/colors/font_selected_color = Color(0.866667, 0.866667, 0.866667, 1)
 TabContainer/colors/font_unselected_color = Color(0.329259, 0.0937819, 0.117235, 1)

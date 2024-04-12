@@ -14,11 +14,12 @@ PLAYER_INFO,Player Info
 PLAYER_NAME,Name
 DEBUG_CONSOLE_HEADER,Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]
 PLAYER_DEFAULT_NAME,I Forgot To Change Name
-VERSION_INDICATOR,v
-ALPHA_INDICATOR,a
-BETA_INDICATOR,b
-WIKI_MAIN_PAGE,Welcome to the Pneumagination manual!
+CURRENT_VERSION,v0.13a
+WIKI_MAIN_PAGE,Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need.
 WIKI_SEARCH,Search
+WIKI_ARTICLE_PNEU,"Pneumagination is a sandbox survival game that started development on October 16, 2023 and is still in active alpha development."
+WIKI_TITLE,Pneu Manual
+ERROR,ERROR
 MATERIAL_0,Dielectric
 MATERIAL_1,Asphalt
 MATERIAL_2,Plaster

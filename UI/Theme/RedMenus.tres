@@ -203,6 +203,10 @@ border_width_top = 10
 border_width_right = 10
 border_width_bottom = 10
 border_color = Color(0.647059, 0.113725, 0.176471, 1)
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y72kk"]
 bg_color = Color(0.498039, 0.0862745, 0.137255, 1)
@@ -258,6 +262,7 @@ Button/styles/hover = SubResource("StyleBoxFlat_7lh0j")
 Button/styles/normal = SubResource("StyleBoxFlat_73bbd")
 Button/styles/pressed = SubResource("StyleBoxFlat_6lbv0")
 Control/colors/font_color = Color(0.498039, 0.0862745, 0.137255, 1)
+Control/colors/font_placeholder_color = Color(0.498039, 0.0862745, 0.137255, 1)
 Control/constants/separation = 5
 Control/fonts/font = ExtResource("1_turrq")
 Control/styles/background = SubResource("StyleBoxFlat_3yc6a")
@@ -273,6 +278,7 @@ Control/styles/scroll = SubResource("StyleBoxFlat_77lq3")
 Control/styles/scroll_focus = SubResource("StyleBoxFlat_o3apm")
 Control/styles/slider = SubResource("StyleBoxFlat_rpkvu")
 Label/styles/normal = SubResource("StyleBoxFlat_cdn6p")
+LineEdit/colors/font_color = Color(0.866667, 0.866667, 0.866667, 1)
 Panel/styles/panel = SubResource("StyleBoxFlat_dxjet")
 ProgressBar/colors/font_color = Color(0.866667, 0.866667, 0.866667, 1)
 TabContainer/colors/font_disabled_color = Color(0.584314, 0.101961, 0.160784, 1)

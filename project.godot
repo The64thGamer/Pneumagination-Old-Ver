@@ -11,7 +11,6 @@ config_version=5
 [application]
 
 config/name="Pneumagination"
-config/version="0.13"
 run/main_scene="res://Scenes/Menu.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0.0705882, 0.0901961, 0.113725, 1)

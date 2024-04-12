@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=12 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefRandom.cs" id="4_atn18"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Scripts/Wiki/WikiStart.cs" id="9_1tct7"]
 [ext_resource type="Texture2D" uid="uid://bevpgdinslf0a" path="res://UI/Logo/FlatSmallRender.png" id="9_4qudn"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="9_nfhuh"]
+[ext_resource type="Texture2D" uid="uid://b5jvqdpcipaum" path="res://UI/Icons/Search.svg" id="10_pisug"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -303,16 +304,69 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 theme = ExtResource("8_rsibu")
 
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -18.0
+offset_right = 158.0
+offset_bottom = 18.0
+grow_vertical = 2
+text = "ERROR"
+
+[node name="Control2" type="Control" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer"]
+modulate = Color(0.498039, 0.0862745, 0.137255, 1)
+layout_mode = 2
+texture = ExtResource("10_pisug")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "WIKI_SEARCH"
+alignment = 2
+
 [node name="Panel2" type="Panel" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("9_nfhuh")
 
-[node name="Label" type="Label" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel2"]
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel2"]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_bottom = 36.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-text = "WIKI_MAIN_PAGE"
-horizontal_alignment = 1
+grow_vertical = 2
+text = "ERROR"

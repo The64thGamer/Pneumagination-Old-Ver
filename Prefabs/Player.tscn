@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://Scripts/World/Texturing.cs" id="8_qljlp"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="9_wr1ih"]
 [ext_resource type="Script" path="res://Scripts/World/DebugInfo.cs" id="10_g6c2f"]
-[ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://Cursor.png" id="11_4cycp"]
+[ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://UI/Cursor.png" id="11_4cycp"]
 [ext_resource type="Script" path="res://Scripts/World/HideSimplePlayerUI.cs" id="12_sawuk"]
 [ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="13_n5r38"]
 [ext_resource type="Script" path="res://Scripts/World/ScrollBar.cs" id="14_c4ytr"]
