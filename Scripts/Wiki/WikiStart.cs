@@ -1,13 +1,14 @@
 using Godot;
 using System;
 
-public partial class WikiStart : Container
+public partial class WikiStart : CanvasLayer
 {
 	bool canInput = true;
+	Input.MouseModeEnum oldMouse;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Modulate = new Color(1,1,1,0);
+		Visible = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -15,13 +16,15 @@ public partial class WikiStart : Container
 	{
 		if(Input.IsActionJustPressed("Toggle Wiki") && canInput)
 		{
-			if(Modulate.A == 0)
+			Visible = !Visible;
+			if(Visible)
 			{
-				Modulate = new Color(1,1,1,1);
+				oldMouse = Input.MouseMode;
+        		Input.MouseMode = Input.MouseModeEnum.Visible;
 			}
 			else
 			{
-				Modulate = new Color(1,1,1,0);
+				Input.MouseMode = oldMouse;
 			}
 		}
 	}
@@ -32,7 +35,7 @@ public partial class WikiStart : Container
 	}
 
 	public void StartInputs()
-	{
+	{		
 		canInput = true;
 	}
 }

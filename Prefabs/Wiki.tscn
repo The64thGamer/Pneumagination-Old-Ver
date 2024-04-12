@@ -7,8 +7,11 @@
 [ext_resource type="Script" path="res://Scripts/Wiki/WikiSearch.cs" id="5_l5yep"]
 
 [node name="Wiki" type="CanvasLayer"]
+layer = 2
+script = ExtResource("2_m0kat")
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,7 +19,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_irelm")
 ratio = 0.75
-script = ExtResource("2_m0kat")
 
 [node name="Panel" type="Panel" parent="AspectRatioContainer"]
 layout_mode = 2
@@ -98,7 +100,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+bbcode_enabled = true
 text = "ERROR"
 
-[connection signal="focus_entered" from="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="AspectRatioContainer" method="StopInputs"]
-[connection signal="focus_exited" from="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="AspectRatioContainer" method="StartInputs"]
+[connection signal="focus_entered" from="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="." method="StopInputs"]
+[connection signal="focus_exited" from="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="." method="StartInputs"]
+[connection signal="meta_clicked" from="AspectRatioContainer/VBoxContainer/Panel2/RichTextLabel" to="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" method="URLClick"]

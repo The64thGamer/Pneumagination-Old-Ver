@@ -253,6 +253,7 @@ Button/styles/normal = SubResource("StyleBoxFlat_73bbd")
 Button/styles/pressed = SubResource("StyleBoxFlat_6lbv0")
 Control/colors/font_color = Color(0.533333, 0.407843, 0.388235, 1)
 Control/colors/font_placeholder_color = Color(0.533333, 0.407843, 0.388235, 1)
+Control/constants/line_separation = 7
 Control/constants/separation = 5
 Control/font_sizes/font_size = 14
 Control/fonts/font = ExtResource("1_pjc88")

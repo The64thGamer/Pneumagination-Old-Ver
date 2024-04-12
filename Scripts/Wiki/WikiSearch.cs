@@ -27,6 +27,11 @@ public partial class WikiSearch : LineEdit
 		}
 	}
 
+	public void URLClick(Variant meta)
+	{
+		Search(meta.ToString());
+	}
+
 	string ParseXMLTitles(XmlParser parser, string searchText)
 	{
 		while (parser.Read() != Error.FileEof)
