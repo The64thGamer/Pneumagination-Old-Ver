@@ -27,7 +27,11 @@ public partial class EnvironmentController : WorldEnvironment
 
     //Consts
     const float sdfgiMaxDistance = 1600;
-    const float sdfgiMaxDistancePhotoMode = 2400;
+    const float sdfgiMaxDistancePhotoMode = 2500;
+    const float sdfgiProbeBias = 1.1f;
+
+    const float sdfgiProbeBiasPhotoMode = 30;
+
 
     public override void _Ready()
     {
@@ -69,11 +73,13 @@ public partial class EnvironmentController : WorldEnvironment
 
     public void EnablePhotoMode()
     {
+        Environment.SdfgiProbeBias = sdfgiProbeBiasPhotoMode;
         Environment.SdfgiMaxDistance = sdfgiMaxDistancePhotoMode;
     }
 
     public void DisablePhotoMode()
-    {
+    {        
+        Environment.SdfgiProbeBias = sdfgiProbeBias;
         Environment.SdfgiMaxDistance = sdfgiMaxDistance;
     }
 	[ConsoleCommand("gettime", Description = "Prints the current in-game time.")]
