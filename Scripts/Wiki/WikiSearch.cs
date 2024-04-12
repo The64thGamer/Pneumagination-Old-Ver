@@ -23,6 +23,7 @@ public partial class WikiSearch : LineEdit
 		{
 			articleTitle.Text = searchText;
 			articleText.Text = Tr(result);
+			Text = string.Empty;
 		}
 	}
 
