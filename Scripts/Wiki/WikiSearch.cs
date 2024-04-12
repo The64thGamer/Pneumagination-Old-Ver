@@ -14,6 +14,7 @@ public partial class WikiSearch : LineEdit
 
 	void Search(String searchText)
 	{
+		ReleaseFocus();
 		XmlParser parser = new XmlParser();
 		parser.Open("res://Scripts/Wiki/WikiArticles.xml");
 		

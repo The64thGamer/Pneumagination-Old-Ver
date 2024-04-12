@@ -1,0 +1,105 @@
+[gd_scene load_steps=6 format=3 uid="uid://cote16tc7or5h"]
+
+[ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="1_irelm"]
+[ext_resource type="Script" path="res://Scripts/Wiki/WikiStart.cs" id="2_m0kat"]
+[ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="3_3snhj"]
+[ext_resource type="Texture2D" uid="uid://b5jvqdpcipaum" path="res://UI/Icons/Search.svg" id="4_yhkl6"]
+[ext_resource type="Script" path="res://Scripts/Wiki/WikiSearch.cs" id="5_l5yep"]
+
+[node name="Wiki" type="CanvasLayer"]
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_irelm")
+ratio = 0.75
+script = ExtResource("2_m0kat")
+
+[node name="Panel" type="Panel" parent="AspectRatioContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="AspectRatioContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+theme = ExtResource("3_3snhj")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -18.0
+offset_right = 158.0
+offset_bottom = 18.0
+grow_vertical = 2
+text = "ERROR"
+
+[node name="Control2" type="Control" parent="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer"]
+modulate = Color(0.498039, 0.0862745, 0.137255, 1)
+layout_mode = 2
+texture = ExtResource("4_yhkl6")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LineEdit" type="LineEdit" parent="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer" node_paths=PackedStringArray("articleTitle", "articleText")]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "WIKI_SEARCH"
+alignment = 2
+script = ExtResource("5_l5yep")
+articleTitle = NodePath("../../../Control/Label")
+articleText = NodePath("../../../../../Panel2/RichTextLabel")
+
+[node name="Panel2" type="Panel" parent="AspectRatioContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_irelm")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="AspectRatioContainer/VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+text = "ERROR"
+
+[connection signal="focus_entered" from="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="AspectRatioContainer" method="StopInputs"]
+[connection signal="focus_exited" from="AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="AspectRatioContainer" method="StartInputs"]
