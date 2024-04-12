@@ -22,9 +22,15 @@ Current Pages:
 [ul]
 [url]Pneumagination[/url]
 [url]Brush[/url]
+[url]Material[/url]
 [/ul]"
 WIKI_ARTICLE_PNEUMAGINATION,"Pneumagination is a sandbox survival game that started development on October 16, 2023 and is still in active alpha development."
-WIKI_ARTICLE_BRUSH,Brushes are the building blocks of Pneumagination that make up the world generation and structures players build.
+WIKI_ARTICLE_BRUSH,"Brushes are the building blocks of Pneumagination that make up the world generation and structures players build.
+
+Brushes are cube shaped with 6 different sides for [url=Material]Materials[/url] to be placed on. Each vertex of the Brush can be manipulated in 1 unit intervals up to a given max size. Brushes are obtainable through mining, and are deposited in the player's inventory in units of volume mined. Units are consumed when a player places or manipulates a Brush into a larger size. If a Brush's volume is a non-whole number value, its consumed total will round up to the nearest number."
+WIKI_ARTICLE_MATERIAL,"Materials are items used for crafting and can be placed on any face of a [url]Brush[/url] to apply it like a texture.
+
+They can be obtained by mining any [url]Brush[/url], which will deposit the material for every face of the [url]Brush[/url] it is located on. No matter the size of the [url]Brush[/url] mined, each face only gives a single material."
 ERROR,ERROR
 MATERIAL_0,Dielectric
 MATERIAL_1,Asphalt
