@@ -16,13 +16,30 @@ DEBUG_CONSOLE_HEADER,Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]
 PLAYER_DEFAULT_NAME,I Forgot To Change Name
 CURRENT_VERSION,v0.13a
 WIKI_SEARCH,Search
-WIKI_ARTICLE_MAIN_PAGE,"Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need. You can open this at any time with "i".
+WIKI_ARTICLE_MAIN_PAGE,"Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need. You can open this at any time with 'i'.
 
-Current Pages:
+General Pages:
 [ul]
 [url]Pneumagination[/url]
 [url]Brush[/url]
 [url]Material[/url]
+[/ul]
+
+Versions:
+[ul]
+[url]v0.1a[/url]
+[url]v0.2a[/url]
+[url]v0.3a[/url]
+[url]v0.4a[/url]
+[url]v0.5a[/url]
+[url]v0.6a[/url]
+[url]v0.7a[/url]
+[url]v0.8a[/url]
+[url]v0.9a[/url]
+[url]v0.10a[/url]
+[url]v0.11a[/url]
+[url]v0.12a[/url]
+[url]v0.13a[/url]
 [/ul]"
 WIKI_ARTICLE_PNEUMAGINATION,"Pneumagination is a sandbox survival game that started development on October 16, 2023 and is still in active alpha development."
 WIKI_ARTICLE_BRUSH,"Brushes are the building blocks of Pneumagination that make up the world generation and structures players build.
@@ -31,6 +48,7 @@ Brushes are cube shaped with 6 different sides for [url=Material]Materials[/url]
 WIKI_ARTICLE_MATERIAL,"Materials are items used for crafting and can be placed on any face of a [url]Brush[/url] to apply it like a texture.
 
 They can be obtained by mining any [url]Brush[/url], which will deposit the material for every face of the [url]Brush[/url] it is located on. No matter the size of the [url]Brush[/url] mined, each face only gives a single material."
+WIKI_ARTICLE_V0.1A,"v0.1a is the first version of [url]Pneumagination[/url], released on October 21, 2023 (3:59AM CDT)."
 ERROR,ERROR
 MATERIAL_0,Dielectric
 MATERIAL_1,Asphalt

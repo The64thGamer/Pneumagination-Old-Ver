@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://Scripts/World/DebugInfo.cs" id="10_g6c2f"]
 [ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://UI/Cursor.png" id="11_4cycp"]
 [ext_resource type="Script" path="res://Scripts/World/HideSimplePlayerUI.cs" id="12_sawuk"]
-[ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="13_n5r38"]
+[ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="13_82pg5"]
 [ext_resource type="Script" path="res://Scripts/World/ScrollBar.cs" id="14_c4ytr"]
 [ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="15_i7i1c"]
 [ext_resource type="Texture2D" uid="uid://crtnf337fo4gr" path="res://UI/Slot Edge.png" id="16_ndtkc"]
@@ -172,7 +172,7 @@ offset_left = -27.0
 offset_top = 12.0
 offset_right = 33.0
 offset_bottom = 18.0
-theme = ExtResource("13_n5r38")
+theme = ExtResource("13_82pg5")
 max_value = 1.0
 step = 0.001
 value = 1.0
@@ -641,7 +641,7 @@ offset_right = 300.0
 offset_bottom = -68.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("13_n5r38")
+theme = ExtResource("13_82pg5")
 max_value = 1.0
 step = 0.001
 script = ExtResource("31_84inb")
