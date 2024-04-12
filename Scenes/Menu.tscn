@@ -1,14 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=11 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
-[ext_resource type="Texture2D" uid="uid://bofcm5qc1b25m" path="res://UI/Red Blueprint Small.png" id="1_pqc4w"]
-[ext_resource type="Texture2D" uid="uid://bjrqke7ml4u3i" path="res://UI/Logo/FullTallRender.png" id="1_spluo"]
-[ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="3_dnfop"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefRandom.cs" id="4_atn18"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefToggle.cs" id="5_1fqp2"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="6_hubln"]
+[ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="8_rsibu"]
 [ext_resource type="Script" path="res://Scripts/Wiki/WikiStart.cs" id="9_1tct7"]
+[ext_resource type="Texture2D" uid="uid://bevpgdinslf0a" path="res://UI/Logo/FlatSmallRender.png" id="9_4qudn"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="9_nfhuh"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
@@ -18,6 +17,7 @@
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Background" type="TextureRect" parent="CanvasLayer"]
+modulate = Color(0.364706, 0.364706, 0.364706, 1)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -26,25 +26,28 @@ grow_vertical = 2
 texture = ExtResource("1_7nvkl")
 stretch_mode = 6
 
-[node name="Menu Container" type="HBoxContainer" parent="CanvasLayer"]
+[node name="Panel2" type="Panel" parent="CanvasLayer"]
+offset_top = 959.0
+offset_right = 1280.0
+offset_bottom = 959.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("9_nfhuh")
 
-[node name="Menu" type="NinePatchRect" parent="CanvasLayer/Menu Container"]
+[node name="Menu Container" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="CanvasLayer/VBoxContainer/Menu Container"]
 layout_mode = 2
 size_flags_horizontal = 3
-texture = ExtResource("1_pqc4w")
-patch_margin_left = 28
-patch_margin_top = 28
-patch_margin_right = 26
-patch_margin_bottom = 26
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -52,238 +55,228 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -211.0
-offset_top = -207.0
+offset_top = -382.0
 offset_right = 211.0
-offset_bottom = 207.0
+offset_bottom = 382.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Create World" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
+[node name="Create World" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World"]
 layout_mode = 2
 
-[node name="Create Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer"]
+[node name="Create Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "CREATE_WORLD"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "WORLD_SEED"
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 script = ExtResource("4_atn18")
 playerPref = "Seed"
 randomizeEveryTime = true
 deterministicHashFinalValue = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "ONLINE"
 
-[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("buttonTogglesLineEdit")]
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("buttonTogglesLineEdit")]
 layout_mode = 2
 script = ExtResource("5_1fqp2")
 playerPref = "Hosting Online"
 buttonTogglesLineEdit = NodePath("../../HBoxContainer5/Seed Edit")
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "HEADLESS_SERVER"
 
-[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
 script = ExtResource("5_1fqp2")
 playerPref = "Hosting Headless"
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "PORT_NUMBER"
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 editable = false
 script = ExtResource("6_hubln")
 playerPref = "Hosting Port"
 defaultValue = "7878"
 
-[node name="Button" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "START_BUTTON"
 script = ExtResource("5_jjsdc")
 
-[node name="Join Game" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
+[node name="Join Game" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer"]
+[node name="Label2" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "JOIN_GAME"
 
-[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2"]
 layout_mode = 2
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="HBoxContainer6" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "SERVER_ADDRESS"
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 script = ExtResource("6_hubln")
 playerPref = "Joining Address"
 defaultValue = "127.0.0.1"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "PORT_NUMBER"
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 script = ExtResource("6_hubln")
 playerPref = "Joining Port"
 defaultValue = "?????"
 
-[node name="Button4" type="Button" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="Button4" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "JOIN_BUTTON"
 script = ExtResource("5_jjsdc")
 joinServer = true
 
-[node name="Info" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer"]
+[node name="Info" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info"]
 layout_mode = 2
 
-[node name="Info Label" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer"]
+[node name="Info Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "PLAYER_INFO"
 
-[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2"]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 text = "PLAYER_NAME"
 
-[node name="Name Edit" type="LineEdit" parent="CanvasLayer/Menu Container/Menu/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="Name Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_dnfop")
 theme_override_font_sizes/font_size = 20
 script = ExtResource("6_hubln")
 playerPref = "Name"
 defaultValue = "PLAYER_DEFAULT_NAME"
 defaultIsTranslationKey = true
 
-[node name="Logo Holder" type="Panel" parent="CanvasLayer/Menu Container"]
+[node name="Logo Holder" type="Panel" parent="CanvasLayer/VBoxContainer/Menu Container"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_f0i6u")
 
-[node name="Logo" type="TextureRect" parent="CanvasLayer/Menu Container/Logo Holder"]
+[node name="Panel" type="Panel" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+theme = ExtResource("8_rsibu")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/VBoxContainer/Panel"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 11
+anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_left = -333.0
+grow_horizontal = 0
 grow_vertical = 2
-size_flags_horizontal = 3
-texture = ExtResource("1_spluo")
-expand_mode = 2
+texture = ExtResource("9_4qudn")
+expand_mode = 3
 stretch_mode = 5
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
@@ -298,14 +291,17 @@ theme = ExtResource("9_nfhuh")
 ratio = 0.75
 script = ExtResource("9_1tct7")
 
+[node name="Panel" type="Panel" parent="CanvasLayer2/AspectRatioContainer"]
+layout_mode = 2
+
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/AspectRatioContainer"]
 layout_mode = 2
-theme = ExtResource("9_nfhuh")
 
 [node name="Panel" type="Panel" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("9_nfhuh")
+size_flags_stretch_ratio = 0.1
+theme = ExtResource("8_rsibu")
 
 [node name="Panel2" type="Panel" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
@@ -313,19 +309,10 @@ size_flags_vertical = 3
 theme = ExtResource("9_nfhuh")
 
 [node name="Label" type="Label" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel2"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme = ExtResource("9_nfhuh")
-text = "WIKI_MAIN_PAGE"
-
-[node name="TabBar" type="TabBar" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel2"]
-layout_mode = 0
-offset_right = 601.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
 offset_bottom = 36.0
-theme = ExtResource("9_nfhuh")
-tab_count = 3
-tab_0/title = "aaaaa"
-tab_1/title = "bbbbbbb"
-tab_2/title = "ccccccc"
-tab_2/disabled = true
+grow_horizontal = 2
+text = "WIKI_MAIN_PAGE"
+horizontal_alignment = 1

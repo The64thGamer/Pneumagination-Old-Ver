@@ -11,6 +11,7 @@ public partial class DebugInfo : Label
     public override void _Ready()
     {
 		server = GetTree().Root.GetNode("World/Server") as ServerClient;
+        text = "\n " + Tr("TITLE") + " v" + (string)ProjectSettings.GetSetting("application/config/version") + "a";
     }
     public override void _Process(double delta)
     {
@@ -24,7 +25,6 @@ public partial class DebugInfo : Label
             Visible = true;
         }
 
-        text = "\n " + Tr("TITLE") + " v" + (string)ProjectSettings.GetSetting("application/config/version") + "a";
         if(this.Text != text)
         {
             this.Text = text;
