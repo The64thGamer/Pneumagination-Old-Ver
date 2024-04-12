@@ -1,9 +1,15 @@
  <?xml version="1.0" encoding="UTF-8"?>
 <wiki>
-<article>
-    <title>Pneumagination</title>
-    <pagetype>standard</pagetype>
-    <article>standard</pagetype>
-    <translationkey>WIKI_ARTICLE_PNEU</translationkey>
-</article>
+<article 
+    title="Main Page"
+    pagetype="standard"
+></article>
+<article 
+    title="Pneumagination"
+    pagetype="standard"
+></article>
+<article 
+    title="Brush"
+    pagetype="standard"
+></article>
 </wiki> 

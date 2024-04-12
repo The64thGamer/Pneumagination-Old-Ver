@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=13 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefRandom.cs" id="4_atn18"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bevpgdinslf0a" path="res://UI/Logo/FlatSmallRender.png" id="9_4qudn"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="9_nfhuh"]
 [ext_resource type="Texture2D" uid="uid://b5jvqdpcipaum" path="res://UI/Icons/Search.svg" id="10_pisug"]
+[ext_resource type="Script" path="res://Scripts/Wiki/WikiSearch.cs" id="11_b8cmo"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -351,11 +352,14 @@ texture = ExtResource("10_pisug")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer" node_paths=PackedStringArray("articleTitle", "articleText")]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "WIKI_SEARCH"
 alignment = 2
+script = ExtResource("11_b8cmo")
+articleTitle = NodePath("../../../Control/Label")
+articleText = NodePath("../../../../../Panel2/RichTextLabel")
 
 [node name="Panel2" type="Panel" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer"]
 layout_mode = 2
