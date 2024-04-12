@@ -16,7 +16,7 @@ DEBUG_CONSOLE_HEADER,Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]
 PLAYER_DEFAULT_NAME,I Forgot To Change Name
 CURRENT_VERSION,v0.13a
 WIKI_SEARCH,Search
-WIKI_ARTICLE_MAIN_PAGE,"Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need.
+WIKI_ARTICLE_MAIN_PAGE,"Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need. You can open this at any time with "i".
 
 Current Pages:
 [ul]
