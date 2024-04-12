@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=12 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Texture2D" uid="uid://bofcm5qc1b25m" path="res://UI/Red Blueprint Small.png" id="1_pqc4w"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefToggle.cs" id="5_1fqp2"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="6_hubln"]
+[ext_resource type="Script" path="res://Scripts/Wiki/WikiStart.cs" id="9_1tct7"]
+[ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="9_nfhuh"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -283,3 +285,47 @@ size_flags_horizontal = 3
 texture = ExtResource("1_spluo")
 expand_mode = 2
 stretch_mode = 5
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="CanvasLayer2"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_nfhuh")
+ratio = 0.75
+script = ExtResource("9_1tct7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/AspectRatioContainer"]
+layout_mode = 2
+theme = ExtResource("9_nfhuh")
+
+[node name="Panel" type="Panel" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("9_nfhuh")
+
+[node name="Panel2" type="Panel" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("9_nfhuh")
+
+[node name="Label" type="Label" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel2"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("9_nfhuh")
+text = "WIKI_MAIN_PAGE"
+
+[node name="TabBar" type="TabBar" parent="CanvasLayer2/AspectRatioContainer/VBoxContainer/Panel2"]
+layout_mode = 0
+offset_right = 601.0
+offset_bottom = 36.0
+theme = ExtResource("9_nfhuh")
+tab_count = 3
+tab_0/title = "aaaaa"
+tab_1/title = "bbbbbbb"
+tab_2/title = "ccccccc"
+tab_2/disabled = true

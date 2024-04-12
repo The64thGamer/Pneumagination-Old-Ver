@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://slxngf75bqvs"]
+
+[ext_resource type="Script" path="res://Scripts/Wiki/WikiStart.cs" id="1_qx1qq"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="Container" type="Container" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qx1qq")
+
+[node name="PanelContainer" type="PanelContainer" parent="Container"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container"]
+layout_mode = 2
+
+[node name="TabBar3" type="TabBar" parent="Container/VBoxContainer"]
+layout_mode = 2
+tab_count = 3
+tab_0/title = "VERSION_INDICATOR0.1ALPHA_INDICATOR"
+tab_1/title = "v0.2a"
+tab_2/title = "v0.3a"

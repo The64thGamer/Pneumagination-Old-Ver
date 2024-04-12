@@ -13,3 +13,19 @@ JOIN_BUTTON,Join
 PLAYER_INFO,Player Info
 PLAYER_NAME,Name
 DEBUG_CONSOLE_HEADER,Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]
+PLAYER_DEFAULT_NAME,I Forgot To Change Name
+VERSION_INDICATOR,v
+ALPHA_INDICATOR,a
+BETA_INDICATOR,b
+WIKI_MAIN_PAGE,Welcome to the Pneumagination manual!
+WIKI_SEARCH,Search
+MATERIAL_0,Dielectric
+MATERIAL_1,Asphalt
+MATERIAL_2,Plaster
+MATERIAL_3,Rock
+MATERIAL_4,Grass
+MATERIAL_5,Sand
+MATERIAL_6,Sandy Trail
+MATERIAL_7,Laterite
+MATERIAL_8,White Sand
+MATERIAL_9,Water
