@@ -16,9 +16,15 @@ DEBUG_CONSOLE_HEADER,Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]
 PLAYER_DEFAULT_NAME,I Forgot To Change Name
 CURRENT_VERSION,v0.13a
 WIKI_SEARCH,Search
-WIKI_ARTICLE_MAIN_PAGE,"Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need.\n[url]Pneumagination[/url]"
+WIKI_ARTICLE_MAIN_PAGE,"Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need.
+
+Current Pages:
+[ul]
+[url]Pneumagination[/url]
+[url]Brush[/url]
+[/ul]"
 WIKI_ARTICLE_PNEUMAGINATION,"Pneumagination is a sandbox survival game that started development on October 16, 2023 and is still in active alpha development."
-WIKI_ARTICLE_BRUSH,"Brushes are the building blocks of Pneumagination that make up the world generation and structures players build."
+WIKI_ARTICLE_BRUSH,Brushes are the building blocks of Pneumagination that make up the world generation and structures players build.
 ERROR,ERROR
 MATERIAL_0,Dielectric
 MATERIAL_1,Asphalt
