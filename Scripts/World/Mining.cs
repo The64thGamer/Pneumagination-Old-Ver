@@ -50,7 +50,7 @@ public partial class Mining : Node3D
                         return;
                     }
                     breaking = true;
-                    breakTimerStart = Mathf.Clamp(worldGen.VolumeOfMesh(foundBrush.vertices) / 216.0f, 0.25f,3f);
+                    breakTimerStart = Mathf.Max(worldGen.VolumeOfMesh(foundBrush.vertices) / 216.0f, 0.25f);
                     breaktimer = breakTimerStart;
                     hitPos = (Vector3)result["position"];
                     miningBar.Visible = true;
