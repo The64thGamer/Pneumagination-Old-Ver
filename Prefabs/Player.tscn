@@ -648,7 +648,9 @@ script = ExtResource("31_84inb")
 
 [node name="Photo Mode" type="Node3D" parent="."]
 
-[node name="Photo Mode Camera" type="Camera3D" parent="Photo Mode"]
+[node name="Photo Mode Pivot" type="Node3D" parent="Photo Mode"]
+
+[node name="Photo Mode Camera" type="Camera3D" parent="Photo Mode/Photo Mode Pivot"]
 projection = 1
 fov = 1.0
 size = 1000.0

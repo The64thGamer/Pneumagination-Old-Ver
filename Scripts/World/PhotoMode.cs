@@ -8,17 +8,20 @@ public partial class PhotoMode : Camera3D
 
     bool inPhotoModeLoadingScreen = true;
     float camZoomDelta; 
+    Node3D pivot;
     Node3D parent;
+
     public override void _Ready()
     {       
         //This is awful but FindChild doesn't work, please fix 
         envController = GetTree().Root.GetNode("World/WorldEnvironment") as EnvironmentController;
 
-        parent = GetParent() as Node3D;
+        pivot = GetParent() as Node3D;
+        parent = pivot.GetParent() as Node3D;
         Size = WorldGen.chunkUnloadingDistance * WorldGen.chunkSize;
         camZoomDelta = WorldGen.chunkUnloadingDistance * WorldGen.chunkSize;
-        parent.Rotation = new Vector3(Mathf.DegToRad(-30), Mathf.DegToRad(45), 0);
-
+        parent.Rotation = new Vector3(0, Mathf.DegToRad(45), 0);
+        pivot.Rotation = new Vector3(Mathf.DegToRad(-30),0,0);
         EnterPhotoMode();
     }
 
@@ -91,6 +94,11 @@ public partial class PhotoMode : Camera3D
             {
                 Vector2 size = DisplayServer.ScreenGetSize();
                 Position += new Vector3(-motion.Relative.X, motion.Relative.Y, 0) * Size / Mathf.Min(size.X,size.Y);
+            }
+            if (Input.IsActionPressed("Middle Action"))
+            {
+                pivot.RotateX(-motion.Relative.Y * PlayerMovement.sensitivity);
+                pivot.RotationDegrees = new Vector3(Mathf.Clamp(pivot.RotationDegrees.X,-90,0),0,0);
             }
         }
     }
