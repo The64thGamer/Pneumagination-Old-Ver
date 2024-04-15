@@ -23,6 +23,7 @@ General Pages:
 [url]Pneumagination[/url]
 [url]Brush[/url]
 [url]Material[/url]
+[url]Day/Night Cycle[/url]
 [/ul]
 
 Versions:
@@ -49,6 +50,11 @@ WIKI_ARTICLE_MATERIAL,"Materials are items used for crafting and can be placed o
 
 They can be obtained by mining any [url]Brush[/url], which will deposit the material for every face of the [url]Brush[/url] it is located on. No matter the size of the [url]Brush[/url] mined, each face only gives a single material."
 WIKI_ARTICLE_V0.1A,"v0.1a is the first version of [url]Pneumagination[/url], released on October 21, 2023 (3:59AM CDT)."
+WIKI_ARTICLE_DAY/NIGHT_CYCLE,"The Day/Night Cycle is a time system present on the Earth portion of the world that lasts 25 minutes per in-game day.
+
+New save files always start 6 minutes and 40 seconds into the day around the early morning time.
+
+During the morning, heavy fog encompasses the player, making it hard to see ahead. By noon the fog clears and the full render distance is shown. By sunset the sky and fog changes to orange, pink, purple, then a dark blue. During the night the sky and lighting will slowly fade to pitch black as midnight approaches, requring external light to see. Even when in a well-lit area, the fog will then begin to roll back in and blind most of the render distance. As morning approaches the pitch blackness will lift while retaining the heavy fog."
 ERROR,ERROR
 MATERIAL_0,Dielectric
 MATERIAL_1,Asphalt
