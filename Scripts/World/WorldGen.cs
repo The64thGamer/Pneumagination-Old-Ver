@@ -2033,8 +2033,7 @@ public partial class WorldGen : Node3D
 	}
 	#endregion
 
-	#region console commands
-
+	#region saving and loading
 	[ConsoleCommand("getseed", Description = "Prints the hashed seed value.")]
 	void GetSeed()
 	{
@@ -2048,7 +2047,7 @@ public partial class WorldGen : Node3D
 	#endregion
 
 	#region class struct definitions
-		public struct PreGenNoiseValues
+	public struct PreGenNoiseValues
 	{
 		public float oceanMultiplier;
 		public float noiseDSampled;
@@ -2276,7 +2275,7 @@ public partial class WorldGen : Node3D
 
 			0,1,2,2,1,3,2,2,6,0,2,6,
 			0,4,3,3,4,6,3,4,6,0,4,6,
-			
+
 			0,4,3,3,4,6,3,4,6,0,4,6,
 			0,5,4,2,5,6,2,5,6,0,6,6,
 		}},

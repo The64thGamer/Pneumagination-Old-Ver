@@ -21,6 +21,7 @@ config/icon="res://UI/Logo/MediumRender.png"
 [autoload]
 
 Console="*res://addons/sofiaconsole/Console.tscn"
+FileSaver="*res://Scripts/World/FileSaver.cs"
 
 [display]
 
