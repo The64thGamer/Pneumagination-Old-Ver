@@ -15,13 +15,15 @@ public partial class CreateWorld : Button
 	{
 		PlayerPrefs.SetBool("Joining",joinServer);
 		if(!joinServer)
-		GetNode<FileSaver>("/root/FileSaver").CreateNewSaveFile(new Godot.Collections.Dictionary<string, Variant>()
-		{
-			{ "World Name", PlayerPrefs.GetString("World Name")},
-			{ "World Author", PlayerPrefs.GetString("Name")},
-			{ "World Seed", PlayerPrefs.GetString("Seed")},
-		});
+		GetNode<FileSaver>("/root/FileSaver").CreateNewSaveFile(
+			new Godot.Collections.Dictionary<string, Variant>(){
+				{ "World Name", PlayerPrefs.GetString("World Name")},
+				{ "World Author", PlayerPrefs.GetString("Name")},
+				{ "World Created Time UTC", DateTime.Now.ToUniversalTime().ToString(@"MM\/dd\/yyyy h\:mm tt")},
+				{ "World Created Version", Tr("CURRENT_VERSION")},
+				{ "World Seed", PlayerPrefs.GetString("Seed")},}
+			, true
+		);
 		GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
-	
 	}
 }
