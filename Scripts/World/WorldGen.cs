@@ -15,6 +15,7 @@ using System.Diagnostics;
 
 public partial class WorldGen : Node3D
 {
+	#region variables
 	//Exports
 	[Export] EnvironmentController envController;
 	[Export] Curve curve1;
@@ -69,7 +70,9 @@ public partial class WorldGen : Node3D
 					6, 5, 1,
 					1, 2, 6
 				};
-
+	#endregion
+	
+	#region processing
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{        
@@ -316,7 +319,9 @@ public partial class WorldGen : Node3D
 			ongoingChunkRenderData = new List<ChunkRenderData>();
 		}		
 	}
+	#endregion
 
+	#region chunk generation
 	void RenderChunk(int x, int y, int z)
 	{
 		Guid id = Guid.NewGuid();
@@ -360,16 +365,6 @@ public partial class WorldGen : Node3D
 		});
 	}
 
-	public struct PreGenNoiseValues
-	{
-		public float oceanMultiplier;
-		public float noiseDSampled;
-		public float noiseESampled;
-		public int posX, posY, posZ, newX, newY, newZ, chunkY;
-		public bool regionBordercheck, regionBorderCornercheck;
-		public float region;
-		public float biome;
-	}
 
 	//Chunks are 126x126x126
 	Chunk GenerateChunk(int x, int y, int z, Guid id)
@@ -1468,13 +1463,6 @@ public partial class WorldGen : Node3D
 		return verts;
 	}
 
-	public enum MoveType
-	{
-		face,
-		edge,
-		vert
-	}
-
 	public bool MoveVertsFromFaceCollision(Node3D chunkNode, int brushID, Vector3 move, ref int units, MoveType moveType, ref Vector3 hitPoint)
 	{
 		if (!firstChunkLoaded)
@@ -2043,6 +2031,9 @@ public partial class WorldGen : Node3D
 	{
 		return (float)loadedChunks.Count / loadingBarChunks;
 	}
+	#endregion
+
+	#region console commands
 
 	[ConsoleCommand("getseed", Description = "Prints the hashed seed value.")]
 	void GetSeed()
@@ -2053,6 +2044,25 @@ public partial class WorldGen : Node3D
 			return;
 		}
 		Console.Instance.Print(PlayerPrefs.GetString("Seed"));
+	}
+	#endregion
+
+	#region class struct definitions
+		public struct PreGenNoiseValues
+	{
+		public float oceanMultiplier;
+		public float noiseDSampled;
+		public float noiseESampled;
+		public int posX, posY, posZ, newX, newY, newZ, chunkY;
+		public bool regionBordercheck, regionBorderCornercheck;
+		public float region;
+		public float biome;
+	}
+	public enum MoveType
+	{
+		face,
+		edge,
+		vert
 	}
 
 	public class Brush
@@ -2255,46 +2265,20 @@ public partial class WorldGen : Node3D
 			2,0,3,3,0,1,5,0,3,3,0,4,
 			2,1,3,3,0,1,5,0,3,3,1,4,
 
-			5,0,3,
-6,0,6,
-4,0,6,
-3,0,4,
-5,0,3,
-6,0,6,
-4,1,6,
-3,1,4,
-0,0,2,
-2,0,3,
-4,0,6,
-0,0,6,
-0,1,2,
-2,1,3,
-2,2,6,
-0,2,6,
-2,0,3,
-3,0,4,
-4,0,6,
-2,2,6,
-2,1,3,
-3,1,4,
-4,1,6,
-3,4,6,
-0,1,2,
-2,1,3,
-2,2,6,
-0,2,6,
-0,4,3,
-3,4,6,
-3,4,6,
-0,4,6,
-0,4,3,
-3,4,6,
-3,4,6,
-0,4,6,
-0,5,4,
-2,5,6,
-2,5,6,
-0,6,6,
+			5,0,3,6,0,6,4,0,6,3,0,4,
+			5,0,3,6,0,6,4,1,6,3,1,4,
+
+			0,0,2,2,0,3,4,0,6,0,0,6,
+			0,1,2,2,1,3,2,2,6,0,2,6,
+
+			2,0,3,3,0,4,4,0,6,2,2,6,
+			2,1,3,3,1,4,4,1,6,3,4,6,
+
+			0,1,2,2,1,3,2,2,6,0,2,6,
+			0,4,3,3,4,6,3,4,6,0,4,6,
+			
+			0,4,3,3,4,6,3,4,6,0,4,6,
+			0,5,4,2,5,6,2,5,6,0,6,6,
 		}},
 		{ 0b110101,new byte[]{ //North Ramp 3-Direction Smushed
 					0,0,0, 6,0,0, 6,0,3, 0,0,3,
@@ -2465,4 +2449,5 @@ public partial class WorldGen : Node3D
 		}},
 
 	};
+	#endregion
 }
