@@ -2033,7 +2033,7 @@ public partial class WorldGen : Node3D
 	}
 	#endregion
 
-	#region saving and loading
+	#region console commands
 	[ConsoleCommand("getseed", Description = "Prints the hashed seed value.")]
 	void GetSeed()
 	{

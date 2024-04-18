@@ -91,9 +91,26 @@ layout_mode = 2
 [node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "WORLD_SEED"
+text = "WORLD_NAME"
 
 [node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+script = ExtResource("6_hubln")
+playerPref = "World Name"
+defaultValue = "WORLD_DEFAULT_NAME"
+defaultIsTranslationKey = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "WORLD_SEED"
+
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
@@ -280,3 +297,4 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="Wiki" parent="." instance=ExtResource("9_1oa2y")]
+visible = false

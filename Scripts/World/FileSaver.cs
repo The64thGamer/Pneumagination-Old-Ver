@@ -2,16 +2,14 @@ using Godot;
 using System;
 using System.Linq;
 using Chunk = WorldGen.Chunk;
+using Console = media.Laura.SofiaConsole.Console;
 
 public partial class FileSaver : Node
 {
 	const string savePath = "user://Your Precious Save Files/";
-    public override void _Ready()
-    {
-        CreateNewSaveFile();
-    }
+	const string worldSaveDataFile = "World Save Data";
 
-	public void CreateNewSaveFile()
+	public void CreateNewSaveFile(Godot.Collections.Dictionary<string, Variant> data)
 	{
 		//Ensure saves folder exists
 		if(!DirAccess.DirExistsAbsolute(savePath))
@@ -28,10 +26,13 @@ public partial class FileSaver : Node
 			{
 				break;
 			}
-			GD.Print("One in a 7,007,092,303,604,023,000 chance you got the same random folder name, freak!");
+			Console.Instance.Print("One in a 218,169,540,588,403,680 chance you got the same random folder name, freak!");
 		}
 		GD.Print(savePath + hashFolderName);
 		DirAccess.MakeDirAbsolute(savePath + hashFolderName);
+
+		//Create 
+		FileAccess.Open(savePath + hashFolderName + "/" + worldSaveDataFile, FileAccess.ModeFlags.Write).StoreLine(Json.Stringify(data));
 	}
 
 
@@ -40,6 +41,7 @@ public partial class FileSaver : Node
 		return null;
 	}
 
+	#region pure functions
 	string RandomString(int length)
 	{
 		Random random = new Random();
@@ -47,4 +49,6 @@ public partial class FileSaver : Node
 		return new string(Enumerable.Repeat(chars, length)
 			.Select(s => s[random.Next(s.Length)]).ToArray());
 	}
+
+	#endregion
 }

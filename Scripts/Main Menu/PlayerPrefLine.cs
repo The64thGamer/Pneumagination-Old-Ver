@@ -20,7 +20,7 @@ public partial class PlayerPrefLine : LineEdit
 			{
 				name = defaultValue;
 			}
-			PlayerPrefs.SetString(playerPref, defaultValue);
+			PlayerPrefs.SetString(playerPref, name);
 		}
 		Text = name;
 

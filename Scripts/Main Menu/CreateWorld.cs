@@ -14,6 +14,14 @@ public partial class CreateWorld : Button
 	void PressedCreateWorld()
 	{
 		PlayerPrefs.SetBool("Joining",joinServer);
+		if(!joinServer)
+		GetNode<FileSaver>("/root/FileSaver").CreateNewSaveFile(new Godot.Collections.Dictionary<string, Variant>()
+		{
+			{ "World Name", PlayerPrefs.GetString("World Name")},
+			{ "World Author", PlayerPrefs.GetString("Name")},
+			{ "World Seed", PlayerPrefs.GetString("Seed")},
+		});
 		GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
+	
 	}
 }
