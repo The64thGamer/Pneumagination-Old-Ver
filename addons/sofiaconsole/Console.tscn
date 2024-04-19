@@ -19,7 +19,7 @@ shadow_color = Color(0, 0, 0, 1)
 script = ExtResource("1_dw41g")
 _consoleCanvas = NodePath("ConsoleCanvas")
 _background = NodePath("ConsoleCanvas/Background")
-_closeButton = NodePath("ConsoleCanvas/Background/Window/Content/Header/HBoxContainer/CloseButton")
+_closeButton = NodePath("ConsoleCanvas/Background/Window/Content/Input/HBoxContainer/CloseButton")
 _commandInput = NodePath("ConsoleCanvas/Background/Window/Content/Input/HBoxContainer/CommandInput")
 _commandSendButton = NodePath("ConsoleCanvas/Background/Window/Content/Input/HBoxContainer/CommandSendButton")
 _historyScrollContainer = NodePath("ConsoleCanvas/Background/Window/Content/History/ScrollContainer")
@@ -27,6 +27,7 @@ _historyContent = NodePath("ConsoleCanvas/Background/Window/Content/History/Scro
 
 [node name="ConsoleCanvas" type="CanvasLayer" parent="."]
 layer = 128
+visible = false
 
 [node name="Background" type="Panel" parent="ConsoleCanvas"]
 anchors_preset = 15
@@ -59,24 +60,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Header" type="PanelContainer" parent="ConsoleCanvas/Background/Window/Content"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ConsoleCanvas/Background/Window/Content/Header"]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="ConsoleCanvas/Background/Window/Content/Header/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Console"
-
-[node name="CloseButton" type="Button" parent="ConsoleCanvas/Background/Window/Content/Header/HBoxContainer"]
-custom_minimum_size = Vector2(65, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-text = "Close"
 
 [node name="History" type="PanelContainer" parent="ConsoleCanvas/Background/Window/Content"]
 layout_mode = 2
@@ -111,6 +94,12 @@ custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Send"
+
+[node name="CloseButton" type="Button" parent="ConsoleCanvas/Background/Window/Content/Input/HBoxContainer"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Close"
 
 [node name="BuiltinCommands" type="Node" parent="."]
 

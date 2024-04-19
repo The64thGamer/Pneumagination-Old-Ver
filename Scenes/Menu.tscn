@@ -276,13 +276,11 @@ layout_mode = 2
 
 [node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3/VBoxContainer3"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "SAVE_FILES"
 script = ExtResource("7_56e5y")
 
 [node name="Button2" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3/VBoxContainer3"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "JOIN_GAME"
 script = ExtResource("7_56e5y")
 
@@ -298,20 +296,17 @@ layout_mode = 2
 
 [node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "OPTIONS"
 script = ExtResource("7_56e5y")
 buttonFunction = 2
 
 [node name="Button2" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "WIKI_TITLE"
 script = ExtResource("7_56e5y")
 
 [node name="Button3" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "DEBUG_CONSOLE_TITLE"
 script = ExtResource("7_56e5y")
 buttonFunction = 1

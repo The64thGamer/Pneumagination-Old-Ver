@@ -1,0 +1,9 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://cybh5rg4eypne"]
+
+[ext_resource type="FontFile" uid="uid://brmevqyomi40" path="res://Fonts/256 bytes.otf" id="1_cfkc5"]
+
+[resource]
+base_font = ExtResource("1_cfkc5")
+variation_embolden = 0.5
+spacing_glyph = 2
+spacing_space = 5
