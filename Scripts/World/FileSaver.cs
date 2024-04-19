@@ -92,6 +92,15 @@ public partial class FileSaver : Node
 		return null;
 	}
 
+	public string GetSeed()
+	{
+		if(loadedWorldData.TryGetValue("World Seed",out Variant value))
+		{
+			return value.ToString();
+		}
+		return "";
+	}
+
 	#region pure functions
 	string RandomString(int length)
 	{

@@ -38,6 +38,7 @@ public partial class WorldGen : Node3D
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
 	ServerClient server;
+	FileSaver fileSaver;
 	FastNoiseContainer noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseOcean;
 	int maxChunksLoadingRampUp = 1;
 
@@ -75,10 +76,12 @@ public partial class WorldGen : Node3D
 	#region processing
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
-	{        
+	{     
+		fileSaver = GetNode<FileSaver>("/root/FileSaver");
+   
 		server = GetTree().Root.GetNode("World/Server") as ServerClient;
 
-		seedA = Convert.ToInt32(PlayerPrefs.GetString("Seed"));
+		seedA = Convert.ToInt32(fileSaver.GetSeed());
 		Random rnd = new Random(seedA);
 		seedB = rnd.Next();
 		seedC = rnd.Next();
@@ -358,7 +361,7 @@ public partial class WorldGen : Node3D
 
 			if (!check)
 			{
-				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ") (Seed " + PlayerPrefs.GetString("Seed") + ")");
+				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ") (Seed " + fileSaver.GetSeed() + ")");
 				firstChunkLoaded = true; //Bandaid fix, please figure out why chunks are missing IDs
 			}
 
@@ -2042,7 +2045,7 @@ public partial class WorldGen : Node3D
 			Console.Instance.Print("Not currently in game");
 			return;
 		}
-		Console.Instance.Print(PlayerPrefs.GetString("Seed"));
+		Console.Instance.Print(fileSaver.GetSeed());
 	}
 	#endregion
 

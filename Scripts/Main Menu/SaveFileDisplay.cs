@@ -13,7 +13,6 @@ public partial class SaveFileDisplay : Control
 
 	void SetSaveFiles()
 	{
-		GD.Print("????");
 		foreach(Node n in container.GetChildren())
 		{
 			n.QueueFree();

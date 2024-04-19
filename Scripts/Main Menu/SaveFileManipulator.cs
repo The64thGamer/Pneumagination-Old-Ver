@@ -17,6 +17,14 @@ public partial class SaveFileManipulator : Node
 		description.Text = desc;
 	}
 
+	public void StartWorld()
+	{
+		if(GetNode<FileSaver>("/root/FileSaver").LoadNewSaveFile(saveFolder))
+		{
+			GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
+		}
+	}
+
 
 	public void SetSaveFolder(string folder)
 	{
