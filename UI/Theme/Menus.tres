@@ -180,12 +180,12 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8rmam"]
-bg_color = Color(0.121569, 0.0823529, 0.0784314, 1)
+bg_color = Color(0.121569, 0.0823529, 0.0784314, 0)
 border_width_left = 10
-border_width_top = 10
+border_width_top = 5
 border_width_right = 10
-border_width_bottom = 10
-border_color = Color(0.121569, 0.0823529, 0.0784314, 1)
+border_width_bottom = 5
+border_color = Color(0.121569, 0.0823529, 0.0784314, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -296,6 +296,7 @@ RichTextLabel/styles/normal = SubResource("StyleBoxFlat_11gtf")
 TabContainer/colors/font_disabled_color = Color(0.533333, 0.407843, 0.388235, 1)
 TabContainer/colors/font_selected_color = Color(0.866667, 0.866667, 0.866667, 1)
 TabContainer/colors/font_unselected_color = Color(0.329259, 0.0937819, 0.117235, 1)
+TabContainer/font_sizes/font_size = 16
 TabContainer/styles/panel = SubResource("StyleBoxFlat_t4sru")
 TabContainer/styles/tab_disabled = SubResource("StyleBoxFlat_y72kk")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_qnu02")

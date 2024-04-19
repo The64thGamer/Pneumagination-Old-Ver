@@ -1,51 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://dyya4j4ywm1k6"]
+[gd_scene load_steps=7 format=3 uid="uid://dyya4j4ywm1k6"]
 
 [ext_resource type="Script" path="res://addons/sofiaconsole/Console.cs" id="1_dw41g"]
 [ext_resource type="Theme" uid="uid://c2m7n0pwedx3p" path="res://UI/Theme/Default.tres" id="2_egytt"]
+[ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="2_g27to"]
 [ext_resource type="Script" path="res://addons/sofiaconsole/Commands/FpsCounterCommand.cs" id="2_nkfel"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvk4f"]
-bg_color = Color(0, 0, 0, 0.392157)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lpjvy"]
-bg_color = Color(0.133333, 0.133333, 0.133333, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.2, 0.2, 0.2, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5a6w"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.133333, 0.133333, 0.133333, 0)
-border_width_bottom = 1
-border_color = Color(0.2, 0.2, 0.2, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rquom"]
-bg_color = Color(0.133333, 0.133333, 0.133333, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fbsm3"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.133333, 0.133333, 0.133333, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25al0"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_top = 1
-border_color = Color(0.2, 0.2, 0.2, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2ijg"]
 bg_color = Color(0, 0, 0, 0)
@@ -69,7 +27,6 @@ _historyContent = NodePath("ConsoleCanvas/Background/Window/Content/History/Scro
 
 [node name="ConsoleCanvas" type="CanvasLayer" parent="."]
 layer = 128
-visible = false
 
 [node name="Background" type="Panel" parent="ConsoleCanvas"]
 anchors_preset = 15
@@ -78,8 +35,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme = ExtResource("2_egytt")
-theme_override_styles/panel = SubResource("StyleBoxFlat_cvk4f")
 
 [node name="Window" type="Panel" parent="ConsoleCanvas/Background"]
 custom_minimum_size = Vector2(600, 400)
@@ -95,8 +50,7 @@ offset_right = 350.0
 offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_egytt")
-theme_override_styles/panel = SubResource("StyleBoxFlat_lpjvy")
+theme = ExtResource("2_g27to")
 
 [node name="Content" type="VBoxContainer" parent="ConsoleCanvas/Background/Window"]
 layout_mode = 1
@@ -105,70 +59,50 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_egytt")
-theme_override_constants/separation = 0
 
 [node name="Header" type="PanelContainer" parent="ConsoleCanvas/Background/Window/Content"]
 layout_mode = 2
-theme = ExtResource("2_egytt")
-theme_override_styles/panel = SubResource("StyleBoxFlat_t5a6w")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ConsoleCanvas/Background/Window/Content/Header"]
 layout_mode = 2
-theme = ExtResource("2_egytt")
-theme_override_constants/separation = 15
 alignment = 1
 
 [node name="Label" type="Label" parent="ConsoleCanvas/Background/Window/Content/Header/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("2_egytt")
-theme_override_font_sizes/font_size = 0
 text = "Console"
 
 [node name="CloseButton" type="Button" parent="ConsoleCanvas/Background/Window/Content/Header/HBoxContainer"]
 custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 size_flags_horizontal = 8
-theme = ExtResource("2_egytt")
 text = "Close"
 
 [node name="History" type="PanelContainer" parent="ConsoleCanvas/Background/Window/Content"]
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("2_egytt")
-theme_override_styles/panel = SubResource("StyleBoxFlat_rquom")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ConsoleCanvas/Background/Window/Content/History"]
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("2_egytt")
-theme_override_styles/panel = SubResource("StyleBoxFlat_fbsm3")
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
 [node name="Content" type="VBoxContainer" parent="ConsoleCanvas/Background/Window/Content/History/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("2_egytt")
-theme_override_constants/separation = 0
 
 [node name="Input" type="PanelContainer" parent="ConsoleCanvas/Background/Window/Content"]
 layout_mode = 2
 size_flags_vertical = 8
-theme = ExtResource("2_egytt")
-theme_override_styles/panel = SubResource("StyleBoxFlat_25al0")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ConsoleCanvas/Background/Window/Content/Input"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme = ExtResource("2_egytt")
-theme_override_constants/separation = 15
 
 [node name="CommandInput" type="LineEdit" parent="ConsoleCanvas/Background/Window/Content/Input/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("2_egytt")
 placeholder_text = "Enter \"help\" for a list of commands"
 flat = true
 
@@ -176,7 +110,6 @@ flat = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 8
-theme = ExtResource("2_egytt")
 text = "Send"
 
 [node name="BuiltinCommands" type="Node" parent="."]

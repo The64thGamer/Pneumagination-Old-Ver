@@ -241,6 +241,7 @@ public partial class Console : Node
                 DefaultFontSize = 7
             }
         };
+        newLabel.AddThemeColorOverride("font_color",new Color(1,1,1,1));
 
         Color labelColor;
         switch (type)
