@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=21 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Menu Backgrounds/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Texture2D" uid="uid://b6t7iv7cw6v71" path="res://UI/Menu Backgrounds/Screenshot from 2024-04-12 23-22-14.png" id="1_hhbs3"]
@@ -7,15 +7,19 @@
 [ext_resource type="Texture2D" uid="uid://cvck4ankb5xus" path="res://UI/Menu Backgrounds/Screenshot from 2024-04-12 23-25-19.png" id="4_qwsrx"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefToggle.cs" id="5_1fqp2"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
-[ext_resource type="Texture2D" uid="uid://c23u64daqw62s" path="res://UI/Menu Backgrounds/Screenshot from 2024-04-13 22-06-27.png" id="5_oxtbg"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="6_hubln"]
 [ext_resource type="Texture2D" uid="uid://bl6851udc5v32" path="res://UI/Menu Backgrounds/Screenshot from 2024-04-18 15-43-47.png" id="6_vk66o"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/MenuButton.cs" id="7_56e5y"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/MenuSelector.cs" id="7_tllme"]
 [ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="8_rsibu"]
 [ext_resource type="PackedScene" uid="uid://cote16tc7or5h" path="res://Prefabs/Wiki.tscn" id="9_1oa2y"]
 [ext_resource type="Texture2D" uid="uid://bevpgdinslf0a" path="res://UI/Logo/FlatSmallRender.png" id="9_4qudn"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="9_nfhuh"]
 [ext_resource type="PackedScene" uid="uid://ckmu0mbbjrji2" path="res://Prefabs/Options.tscn" id="11_ljw5u"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/SaveFileDisplay.cs" id="12_2utx7"]
+[ext_resource type="PackedScene" uid="uid://b2aq7mss7phns" path="res://Prefabs/SaveFile.tscn" id="13_by6a7"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xjrp5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -32,7 +36,7 @@ grow_vertical = 2
 texture = ExtResource("1_hhbs3")
 stretch_mode = 6
 script = ExtResource("2_j5xdm")
-textures = Array[Texture2D]([ExtResource("1_7nvkl"), ExtResource("1_hhbs3"), ExtResource("4_qwsrx"), ExtResource("5_oxtbg"), ExtResource("6_vk66o")])
+textures = Array[Texture2D]([ExtResource("1_7nvkl"), ExtResource("1_hhbs3"), ExtResource("4_qwsrx"), SubResource("CompressedTexture2D_xjrp5"), ExtResource("6_vk66o")])
 
 [node name="Panel2" type="Panel" parent="CanvasLayer"]
 offset_top = 959.0
@@ -55,6 +59,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
+script = ExtResource("7_tllme")
 
 [node name="Create World" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel"]
 visible = false
@@ -288,11 +293,13 @@ layout_mode = 2
 layout_mode = 2
 text = "SAVE_FILES"
 script = ExtResource("7_56e5y")
+buttonFunction = 3
 
 [node name="Button2" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3/VBoxContainer3"]
 layout_mode = 2
 text = "JOIN_GAME"
 script = ExtResource("7_56e5y")
+buttonFunction = 4
 
 [node name="MarginContainer5" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2"]
 layout_mode = 2
@@ -320,6 +327,31 @@ layout_mode = 2
 text = "DEBUG_CONSOLE_TITLE"
 script = ExtResource("7_56e5y")
 buttonFunction = 1
+
+[node name="Save Files" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel" node_paths=PackedStringArray("container")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("12_2utx7")
+fileNode = ExtResource("13_by6a7")
+container = NodePath("ScrollContainer/SaveFileContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Save Files"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="SaveFileContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Save Files/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Logo Holder" type="Panel" parent="CanvasLayer/VBoxContainer/Menu Container"]
 custom_minimum_size = Vector2(350, 0)

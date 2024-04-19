@@ -31,6 +31,9 @@ public partial class MenuButton : BaseButton
 			case ButtonFunctionType.openOptions:
 				GetTree().Root.GetNode<OptionsStart>("Menu/Options").ToggleOptions();
 				break;
+			case ButtonFunctionType.saveFiles:
+				GetTree().Root.GetNode<MenuSelector>("Menu/CanvasLayer/VBoxContainer/Menu Container/Panel").SetVisible("Save Files");
+				break;
 			default:
 				break;
 		}

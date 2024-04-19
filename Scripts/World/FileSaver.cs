@@ -10,8 +10,8 @@ public partial class FileSaver : Node
 	Godot.Collections.Dictionary<string, Variant> loadedWorldData;
 
 	//Consts
-	const string savePath = "user://Your Precious Save Files/";
-	const string worldSaveDataFile = "World Save Data";
+	public const string savePath = "user://Your Precious Save Files/";
+	public const string worldSaveDataFile = "World Save Data";
 	
 
 	public void CreateNewSaveFile(Godot.Collections.Dictionary<string, Variant> data, bool alsoLoadFile)
@@ -44,22 +44,35 @@ public partial class FileSaver : Node
 		Console.Instance.Print("Saved World File to :" + savePath + hashFolderName, Console.PrintType.Success);
 	}
 
+	//folderPath is just the random string folder name.
 	public bool LoadNewSaveFile(string folderPath)
+	{
+		Godot.Collections.Dictionary<string, Variant> data = AcquireSaveData(folderPath);
+		if(data == null)
+		{
+			return false;
+		}
+		loadedWorldData = data;
+		Console.Instance.Print("Save File Loaded :" + savePath + folderPath, Console.PrintType.Success);
+		return true;
+	}
+
+	public Godot.Collections.Dictionary<string, Variant> AcquireSaveData(string folderPath)
 	{
 		if(!DirAccess.DirExistsAbsolute(savePath))
 		{
 			Console.Instance.Print("No parent save folder found", Console.PrintType.Error);
-			return false;
+			return null;
 		}
 		if (!DirAccess.DirExistsAbsolute(savePath + folderPath))
 		{
 			Console.Instance.Print("Given save folder name not found", Console.PrintType.Error);
-			return false;
+			return null;
 		}
 		if (!FileAccess.FileExists(savePath + folderPath + "/" + worldSaveDataFile))
 		{
 			Console.Instance.Print("Save folder found but no World Data file found (?????)", Console.PrintType.Error);
-			return false;
+			return null;
 		}
     	FileAccess saveGame = FileAccess.Open(savePath + folderPath + "/" + worldSaveDataFile, FileAccess.ModeFlags.Read);
         Json json = new Json();
@@ -67,12 +80,10 @@ public partial class FileSaver : Node
         if (parseResult != Error.Ok)
         {
             Console.Instance.Print($"JSON Parse Error: {json.GetErrorMessage()} at line {json.GetErrorLine()}", Console.PrintType.Error);
-			return false;
+			return null;
         }
 
-        loadedWorldData = new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
-		Console.Instance.Print("Save File Loaded :" + savePath + folderPath, Console.PrintType.Success);
-		return true;
+        return new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
 	}
 
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c23u64daqw62s"
-path.bptc="res://.godot/imported/Screenshot from 2024-04-13 22-06-27.png-012b555b66f2599d31a454c2c00068c9.bptc.ctex"
+uid="uid://ctwvxfvkop600"
+path.bptc="res://.godot/imported/trash-can-solid.svg-2014e55604dc823fecca5762920237a7.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://UI/Menu Backgrounds/Screenshot from 2024-04-13 22-06-27.png"
-dest_files=["res://.godot/imported/Screenshot from 2024-04-13 22-06-27.png-012b555b66f2599d31a454c2c00068c9.bptc.ctex"]
+source_file="res://UI/Icons/trash-can-solid.svg"
+dest_files=["res://.godot/imported/trash-can-solid.svg-2014e55604dc823fecca5762920237a7.bptc.ctex"]
 
 [params]
 
@@ -33,3 +33,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=0
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

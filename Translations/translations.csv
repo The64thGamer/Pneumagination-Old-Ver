@@ -8,6 +8,7 @@ ONLINE,Online
 HEADLESS_SERVER,Headless
 PORT_NUMBER,Port
 START_BUTTON,Start
+PLAY_BUTTON,Play
 JOIN_GAME,Join Game
 OPTIONS,Options
 OPTIONS_GAMEPLAY,Gameplay
@@ -67,6 +68,8 @@ New save files always start 6 minutes and 40 seconds into the day around the ear
 
 During the morning, heavy fog encompasses the player, making it hard to see ahead. By noon the fog clears and the full render distance is shown. By sunset the sky and fog changes to orange, pink, purple, then a dark blue. During the night the sky and lighting will slowly fade to pitch black as midnight approaches, requring external light to see. Even when in a well-lit area, the fog will then begin to roll back in and blind most of the render distance. As morning approaches the pitch blackness will lift while retaining the heavy fog."
 ERROR,ERROR
+ERROR_CORRUPTED_WORLD,[>Corrupted World Data<]
+ERROR_CORRUPTED_WORLD_TIP,(Might still be loadable)
 MATERIAL_0,Dielectric
 MATERIAL_1,Asphalt
 MATERIAL_2,Plaster

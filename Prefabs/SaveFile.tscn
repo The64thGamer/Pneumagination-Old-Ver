@@ -1,0 +1,118 @@
+[gd_scene load_steps=7 format=3 uid="uid://b2aq7mss7phns"]
+
+[ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="1_0c4el"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/SaveFileManipulator.cs" id="2_cdtdx"]
+[ext_resource type="FontVariation" uid="uid://cybh5rg4eypne" path="res://Fonts/256 bytes spaced.tres" id="2_e5wd0"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/MenuButton.cs" id="3_ha68w"]
+[ext_resource type="Texture2D" uid="uid://3ydj0tsj1f0r" path="res://UI/Icons/copy-solid.svg" id="4_vj6e7"]
+[ext_resource type="Texture2D" uid="uid://bd2md2kaa0m5f" path="res://UI/Icons/box-archive-solid.svg" id="5_16jta"]
+
+[node name="MarginContainer5" type="MarginContainer" node_paths=PackedStringArray("title", "description")]
+offset_right = 424.0
+offset_bottom = 124.0
+theme = ExtResource("1_0c4el")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+script = ExtResource("2_cdtdx")
+title = NodePath("MarginContainer6/VBoxContainer4/Label")
+description = NodePath("MarginContainer6/VBoxContainer4/Label2")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer6" type="MarginContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("1_0c4el")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="MarginContainer6"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer6/VBoxContainer4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_e5wd0")
+theme_override_font_sizes/font_size = 20
+text = "ERROR"
+
+[node name="Label2" type="Label" parent="MarginContainer6/VBoxContainer4"]
+layout_mode = 2
+text = "ERROR"
+horizontal_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer6/VBoxContainer4"]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="MarginContainer6/VBoxContainer4/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "PLAY_BUTTON"
+script = ExtResource("3_ha68w")
+
+[node name="Button3" type="Button" parent="MarginContainer6/VBoxContainer4/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.14
+text = " "
+script = ExtResource("3_ha68w")
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer6/VBoxContainer4/HBoxContainer/Button3"]
+modulate = Color(0.156863, 0.109804, 0.105882, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+texture_normal = ExtResource("4_vj6e7")
+texture_pressed = ExtResource("4_vj6e7")
+texture_hover = ExtResource("4_vj6e7")
+texture_disabled = ExtResource("4_vj6e7")
+texture_focused = ExtResource("4_vj6e7")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Button4" type="Button" parent="MarginContainer6/VBoxContainer4/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.14
+text = " "
+script = ExtResource("3_ha68w")
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer6/VBoxContainer4/HBoxContainer/Button4"]
+modulate = Color(0.156863, 0.109804, 0.105882, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 11.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+texture_normal = ExtResource("5_16jta")
+texture_pressed = ExtResource("5_16jta")
+texture_hover = ExtResource("5_16jta")
+texture_disabled = ExtResource("5_16jta")
+texture_focused = ExtResource("5_16jta")
+ignore_texture_size = true
+stretch_mode = 5
