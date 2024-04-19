@@ -27,8 +27,9 @@ public partial class Mining : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
-        if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.miningSlot)
+        if (PhotoMode.photoModeEnabled || MenuToggle.pauseMenuEnabled|| WikiStart.wikiEnabled|| ScrollBar.currentHotbarSelection != ScrollBar.miningSlot)
         {
+            breaking = false;
             breaksound = false;
             return;
         }

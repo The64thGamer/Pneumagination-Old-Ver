@@ -31,7 +31,7 @@ public partial class PlayerMovement : CharacterBody3D
 
     public override void _UnhandledInput(InputEvent currentEvent)
     {
-		if(PhotoMode.photoModeEnabled || MenuToggle.pauseMenuEnabled)
+		if(PhotoMode.photoModeEnabled || WikiStart.wikiEnabled|| MenuToggle.pauseMenuEnabled)
 		{
 			return;
 		}
@@ -85,16 +85,23 @@ public partial class PlayerMovement : CharacterBody3D
             sound.GlobalPosition = GlobalPosition;
         }
 
-        // Handle Jump.
-        if (Input.IsActionPressed("Jump") && coyoteTime > 0)
-        {
-            velocity.Y = JumpVelocity;
-            coyoteTime = 0;
-        }
+
 
         // Get the input direction and handle the movement/deceleration.
         // As good practice, you should replace UI actions with custom gameplay actions.
-        Vector2 inputDir = Input.GetVector("Move Left", "Move Right", "Move Forward", "Move Back");
+        Vector2 inputDir = Vector2.Zero;
+
+		if(!PhotoMode.photoModeEnabled && !MenuToggle.pauseMenuEnabled && !WikiStart.wikiEnabled)
+		{
+			inputDir = Input.GetVector("Move Left", "Move Right", "Move Forward", "Move Back");
+
+			// Handle Jump.
+			if (Input.IsActionPressed("Jump") && coyoteTime > 0)
+			{
+				velocity.Y = JumpVelocity;
+				coyoteTime = 0;
+			}
+		}
 		Vector3 direction = (head.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{

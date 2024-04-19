@@ -4,6 +4,8 @@ using System;
 public partial class WikiStart : CanvasLayer
 {
 	bool canInput = true;
+	public static bool wikiEnabled;
+
 	Input.MouseModeEnum oldMouse;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -36,6 +38,7 @@ public partial class WikiStart : CanvasLayer
 		{
 			Input.MouseMode = oldMouse;
 		}
+		wikiEnabled = Visible;
 	}
 
 	public void StopInputs()

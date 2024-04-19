@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/World/MeshEditing.cs" id="5_uxnim"]
 [ext_resource type="Material" uid="uid://bmv3unkepswms" path="res://Materials/FaceDisplay.tres" id="6_8todr"]
 [ext_resource type="Script" path="res://Scripts/Player/Placing.cs" id="7_vh6iw"]
-[ext_resource type="Script" path="res://Scripts/World/Texturing.cs" id="8_qljlp"]
+[ext_resource type="Script" path="res://Scripts/Player/Texturing.cs" id="8_qljlp"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="9_wr1ih"]
 [ext_resource type="Script" path="res://Scripts/World/DebugInfo.cs" id="10_g6c2f"]
 [ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://UI/Cursor.png" id="11_4cycp"]

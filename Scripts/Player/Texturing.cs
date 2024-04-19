@@ -13,7 +13,7 @@ public partial class Texturing : Node3D
     
     public override void _PhysicsProcess(double delta)
     {
-        if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection <= ScrollBar.miningSlot)
+        if (PhotoMode.photoModeEnabled || MenuToggle.pauseMenuEnabled|| WikiStart.wikiEnabled || ScrollBar.currentHotbarSelection <= ScrollBar.miningSlot)
         {
             return;
         }

@@ -22,7 +22,7 @@ public partial class Placing : Node3D
     
     public override void _PhysicsProcess(double delta)
     {
-        if (PhotoMode.photoModeEnabled || ScrollBar.currentHotbarSelection != ScrollBar.placeBrushSlot)
+        if (PhotoMode.photoModeEnabled || MenuToggle.pauseMenuEnabled || WikiStart.wikiEnabled || ScrollBar.currentHotbarSelection != ScrollBar.placeBrushSlot)
         {
             return;
         }
