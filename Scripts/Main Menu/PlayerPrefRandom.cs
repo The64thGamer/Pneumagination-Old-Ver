@@ -42,6 +42,7 @@ public partial class PlayerPrefRandom : LineEdit
         {
             PlayerPrefs.SetString(playerPref, newText);
         }
+        GetTree().Root.PropagateNotification(64646464);
     }
 
     string GetDeterministicHashCode(string str)

@@ -8,4 +8,12 @@ public partial class FOVAdjust : Camera3D
 		Fov = PlayerPrefs.GetFloat("FOV");
 	}
 
+	public override void _Notification(int what)
+	{	
+		//Application Quit
+		if (what == 64646464)
+		{
+			Fov = PlayerPrefs.GetFloat("FOV");
+		}
+	}
 }

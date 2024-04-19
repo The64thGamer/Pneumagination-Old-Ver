@@ -325,6 +325,22 @@ text = "DEBUG_CONSOLE_TITLE"
 script = ExtResource("12_50e3r")
 buttonFunction = 1
 
+[node name="MarginContainer6" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer6"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer6/VBoxContainer4"]
+layout_mode = 2
+text = "QUIT"
+script = ExtResource("12_50e3r")
+buttonFunction = 2
+
 [node name="Save Files" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel" node_paths=PackedStringArray("container")]
 visible = false
 layout_mode = 1

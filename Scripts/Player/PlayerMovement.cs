@@ -31,7 +31,7 @@ public partial class PlayerMovement : CharacterBody3D
 
     public override void _UnhandledInput(InputEvent currentEvent)
     {
-		if(PhotoMode.photoModeEnabled)
+		if(PhotoMode.photoModeEnabled || MenuToggle.pauseMenuEnabled)
 		{
 			return;
 		}

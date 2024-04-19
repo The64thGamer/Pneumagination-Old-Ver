@@ -12,7 +12,8 @@ public partial class MenuButton : BaseButton
 		openTerminal,
 		openOptions,
 		saveFiles,
-		joinGame
+		joinGame,
+		quit,
 	}
 	public override void _Ready()
 	{
@@ -22,7 +23,6 @@ public partial class MenuButton : BaseButton
 
 	void ButtonPress()
 	{
-		GD.Print(GetTree().Root.GetChild(0).Name);
 		switch(buttonFunction)
 		{
 			case ButtonFunctionType.openTerminal:
@@ -36,6 +36,9 @@ public partial class MenuButton : BaseButton
 				break;
 			case ButtonFunctionType.saveFiles:
 				GetTree().Root.GetNode<MenuSelector>(currentScene + "/Menu/VBoxContainer/Menu Container/Panel").SetVisible("Save Files");
+				break;
+			case ButtonFunctionType.quit:
+				GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
 				break;
 			default:
 				break;

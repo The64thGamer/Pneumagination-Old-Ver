@@ -50,27 +50,21 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 theme = ExtResource("3_3snhj")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer"]
-layout_mode = 2
 alignment = 1
 
-[node name="Control" type="Control" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,34 +72,34 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control/HBoxContainer"]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control/HBoxContainer"]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 stretch_mode = 1
 alignment_horizontal = 0
 
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control/HBoxContainer/AspectRatioContainer"]
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control/HBoxContainer/AspectRatioContainer"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("4_4lcdj")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control/HBoxContainer"]
 layout_mode = 2
 text = "ERROR"
 
-[node name="Container" type="Container" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control/HBoxContainer"]
+[node name="Container" type="Container" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control/HBoxContainer"]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control/HBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control/HBoxContainer"]
 layout_mode = 2
 
-[node name="Control2" type="Control" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer"]
+[node name="Control2" type="Control" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -117,7 +111,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control2/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer"]
 modulate = Color(0.498039, 0.0862745, 0.137255, 1)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -126,16 +120,16 @@ texture = ExtResource("4_yhkl6")
 expand_mode = 4
 stretch_mode = 5
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control2/HBoxContainer" node_paths=PackedStringArray("articleTitle", "articleText")]
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer" node_paths=PackedStringArray("articleTitle", "articleText")]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "WIKI_SEARCH"
 alignment = 2
 script = ExtResource("5_l5yep")
 articleTitle = NodePath("../../../Control/HBoxContainer/Label")
-articleText = NodePath("../../../../../../Panel2/RichTextLabel")
+articleText = NodePath("../../../../../Panel2/RichTextLabel")
 
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer"]
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer"]
 modulate = Color(0.498039, 0.0862745, 0.137255, 1)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -164,7 +158,7 @@ grow_vertical = 2
 bbcode_enabled = true
 text = "ERROR"
 
-[connection signal="pressed" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control/HBoxContainer/AspectRatioContainer/TextureButton" to="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control2/HBoxContainer/LineEdit" method="Search" binds= ["Main Page"]]
-[connection signal="focus_entered" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control2/HBoxContainer/LineEdit" to="." method="StopInputs"]
-[connection signal="focus_exited" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control2/HBoxContainer/LineEdit" to="." method="StartInputs"]
-[connection signal="meta_clicked" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel2/RichTextLabel" to="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/MarginContainer/HBoxContainer/Control2/HBoxContainer/LineEdit" method="URLClick"]
+[connection signal="pressed" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control/HBoxContainer/AspectRatioContainer/TextureButton" to="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" method="Search" binds= ["Main Page"]]
+[connection signal="focus_entered" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="." method="StopInputs"]
+[connection signal="focus_exited" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" to="." method="StartInputs"]
+[connection signal="meta_clicked" from="MarginContainer/AspectRatioContainer/VBoxContainer/Panel2/RichTextLabel" to="MarginContainer/AspectRatioContainer/VBoxContainer/Panel/HBoxContainer/Control2/HBoxContainer/LineEdit" method="URLClick"]

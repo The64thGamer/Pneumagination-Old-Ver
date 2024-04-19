@@ -4,6 +4,7 @@ using System;
 public partial class MenuToggle : CanvasLayer
 {
 	Input.MouseModeEnum oldMouse;
+	public static bool pauseMenuEnabled;
 
 	public override void _Ready()
 	{
@@ -35,5 +36,6 @@ public partial class MenuToggle : CanvasLayer
 		{
 			Input.MouseMode = oldMouse;
 		}
+		pauseMenuEnabled = Visible;
 	}
 }

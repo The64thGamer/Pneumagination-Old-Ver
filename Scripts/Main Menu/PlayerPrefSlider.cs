@@ -28,5 +28,6 @@ public partial class PlayerPrefSlider : Range
 	void SliderChanged(double value)
 	{
 		PlayerPrefs.SetFloat(playerPref, (float)value);
+		GetTree().Root.PropagateNotification(64646464);
 	}
 }

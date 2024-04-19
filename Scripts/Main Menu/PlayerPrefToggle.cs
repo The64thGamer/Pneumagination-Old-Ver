@@ -24,5 +24,6 @@ public partial class PlayerPrefToggle : CheckBox
 		{
 			buttonTogglesLineEdit.Editable = toggle;
 		}
+		GetTree().Root.PropagateNotification(64646464);
 	}
 }

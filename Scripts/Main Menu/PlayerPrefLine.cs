@@ -31,5 +31,6 @@ public partial class PlayerPrefLine : LineEdit
 	void NameChanged(string newText)
 	{
 		PlayerPrefs.SetString(playerPref, newText);
+		GetTree().Root.PropagateNotification(64646464);
 	}
 }
