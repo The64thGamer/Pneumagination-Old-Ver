@@ -9,7 +9,9 @@ public partial class MenuButton : BaseButton
 	{
 		openWiki,
 		openTerminal,
-		openOptions
+		openOptions,
+		saveFiles,
+		joinGame
 	}
 	public override void _Ready()
 	{
