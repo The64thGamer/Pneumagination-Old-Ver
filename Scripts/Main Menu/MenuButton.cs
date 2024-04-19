@@ -5,6 +5,7 @@ using Console = media.Laura.SofiaConsole.Console;
 public partial class MenuButton : BaseButton
 {
 	[Export] public ButtonFunctionType buttonFunction;
+	string currentScene;
 	public enum ButtonFunctionType
 	{
 		openWiki,
@@ -15,24 +16,26 @@ public partial class MenuButton : BaseButton
 	}
 	public override void _Ready()
 	{
+		currentScene = GetTree().CurrentScene.Name;
 		Pressed += ButtonPress;
 	}
 
 	void ButtonPress()
 	{
+		GD.Print(GetTree().Root.GetChild(0).Name);
 		switch(buttonFunction)
 		{
 			case ButtonFunctionType.openTerminal:
 				Console.Instance.ToggleConsole();
 				break;
 			case ButtonFunctionType.openWiki:
-				GetTree().Root.GetNode<WikiStart>("Menu/Wiki").ToggleWiki();
+				GetTree().Root.GetNode<WikiStart>(currentScene + "/Wiki").ToggleWiki();
 				break;
 			case ButtonFunctionType.openOptions:
-				GetTree().Root.GetNode<OptionsStart>("Menu/Options").ToggleOptions();
+				GetTree().Root.GetNode<OptionsStart>(currentScene + "/Options").ToggleOptions();
 				break;
 			case ButtonFunctionType.saveFiles:
-				GetTree().Root.GetNode<MenuSelector>("Menu/CanvasLayer/VBoxContainer/Menu Container/Panel").SetVisible("Save Files");
+				GetTree().Root.GetNode<MenuSelector>(currentScene + "/Menu/VBoxContainer/Menu Container/Panel").SetVisible("Save Files");
 				break;
 			default:
 				break;

@@ -18,6 +18,10 @@ public partial class WikiStart : CanvasLayer
 		{
 			ToggleWiki();
 		}
+		if (Input.IsActionJustPressed("Pause") && Visible)
+		{
+			ToggleWiki();
+		}
 	}
 
 	public void ToggleWiki()

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://ckmu0mbbjrji2"]
+[gd_scene load_steps=9 format=3 uid="uid://ckmu0mbbjrji2"]
 
 [ext_resource type="Script" path="res://Scripts/Main Menu/OptionsStart.cs" id="1_b103d"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="1_jieyh"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="2_qrsrg"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefSlider.cs" id="3_4e5r1"]
 [ext_resource type="Texture2D" uid="uid://bvexgcefmn121" path="res://UI/Icons/X Mark.svg" id="3_q6uc1"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/SliderDisplayValue.cs" id="3_rdphc"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/MenuButton.cs" id="4_6ub0g"]
@@ -95,12 +96,15 @@ size_flags_vertical = 1
 min_value = 30.0
 max_value = 140.0
 step = 5.0
-value = 90.0
+value = 30.0
+script = ExtResource("3_4e5r1")
+playerPref = "FOV"
+defaultValue = 90.0
 
 [node name="Label4" type="Label" parent="MarginContainer/TabContainer/OPTIONS_VIDEO/Player Info/VBoxContainer2/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3" node_paths=PackedStringArray("slider")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "90"
+text = "ERROR"
 script = ExtResource("3_rdphc")
 slider = NodePath("../HSlider")
 suffix = "°"

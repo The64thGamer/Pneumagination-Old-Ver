@@ -1,8 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=23 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/World/ServerClient.cs" id="2_5i8jb"]
 [ext_resource type="Script" path="res://Scripts/World/EnvironmentController.cs" id="2_6dq8v"]
+[ext_resource type="PackedScene" uid="uid://b7toradfey384" path="res://Prefabs/PauseMenu.tscn" id="2_40vuv"]
 [ext_resource type="PackedScene" uid="uid://cote16tc7or5h" path="res://Prefabs/Wiki.tscn" id="2_uvih8"]
+[ext_resource type="PackedScene" uid="uid://ckmu0mbbjrji2" path="res://Prefabs/Options.tscn" id="3_krb6d"]
 [ext_resource type="Gradient" uid="uid://ck38t5fd85an7" path="res://UI/Gradients/Sun.tres" id="3_mkm73"]
 [ext_resource type="Gradient" uid="uid://cl5kd5v3k56ma" path="res://UI/Gradients/Sky.tres" id="4_i3crq"]
 [ext_resource type="Gradient" uid="uid://j1x467tpopan" path="res://UI/Gradients/Fog.tres" id="5_suwk1"]
@@ -86,6 +88,11 @@ curve5 = SubResource("Curve_yefdb")
 curve6 = SubResource("Curve_ijfoo")
 curve7 = SubResource("Curve_gy05d")
 destroyBrushParticles = NodePath("Break Brush Particles")
+
+[node name="Menu" parent="." instance=ExtResource("2_40vuv")]
+visible = false
+
+[node name="Options" parent="." instance=ExtResource("3_krb6d")]
 
 [node name="Wiki" parent="." instance=ExtResource("2_uvih8")]
 

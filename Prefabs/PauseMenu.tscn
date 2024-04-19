@@ -1,0 +1,376 @@
+[gd_scene load_steps=20 format=3 uid="uid://b7toradfey384"]
+
+[ext_resource type="Script" path="res://Scripts/Main Menu/MenuToggle.cs" id="1_c5qrv"]
+[ext_resource type="Texture2D" uid="uid://b6t7iv7cw6v71" path="res://UI/Menu Backgrounds/Screenshot from 2024-04-12 23-22-14.png" id="1_u5r4i"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/RandomImage.cs" id="2_nosdf"]
+[ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Menu Backgrounds/Screenshot 2024-03-29 152626.png" id="3_vfl11"]
+[ext_resource type="Texture2D" uid="uid://cvck4ankb5xus" path="res://UI/Menu Backgrounds/Screenshot from 2024-04-12 23-25-19.png" id="4_5ch8j"]
+[ext_resource type="Texture2D" uid="uid://bl6851udc5v32" path="res://UI/Menu Backgrounds/Screenshot from 2024-04-18 15-43-47.png" id="5_dth2k"]
+[ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="6_wfe0t"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/MenuSelector.cs" id="7_0bibj"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="8_qx8v7"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefRandom.cs" id="9_yhf3j"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefToggle.cs" id="10_xb0e2"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="11_o8ogv"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/MenuButton.cs" id="12_50e3r"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/SaveFileDisplay.cs" id="13_4nv5t"]
+[ext_resource type="PackedScene" uid="uid://b2aq7mss7phns" path="res://Prefabs/SaveFile.tscn" id="14_wro40"]
+[ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="15_rl2ta"]
+[ext_resource type="Texture2D" uid="uid://bevpgdinslf0a" path="res://UI/Logo/FlatSmallRender.png" id="16_re7vc"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xjrp5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
+
+[node name="Menu" type="CanvasLayer"]
+script = ExtResource("1_c5qrv")
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_u5r4i")
+stretch_mode = 6
+script = ExtResource("2_nosdf")
+textures = Array[Texture2D]([ExtResource("3_vfl11"), ExtResource("1_u5r4i"), ExtResource("4_5ch8j"), SubResource("CompressedTexture2D_xjrp5"), ExtResource("5_dth2k")])
+
+[node name="Panel2" type="Panel" parent="."]
+offset_top = 959.0
+offset_right = 1280.0
+offset_bottom = 959.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_wfe0t")
+
+[node name="Menu Container" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/Menu Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+script = ExtResource("7_0bibj")
+
+[node name="Create World" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World"]
+layout_mode = 2
+alignment = 1
+
+[node name="Create World" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World"]
+layout_mode = 2
+
+[node name="Create Label" type="Label" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREATE_WORLD"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "WORLD_NAME"
+
+[node name="Seed Edit" type="LineEdit" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+script = ExtResource("8_qx8v7")
+playerPref = "World Name"
+defaultValue = "WORLD_DEFAULT_NAME"
+defaultIsTranslationKey = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "WORLD_SEED"
+
+[node name="Seed Edit" type="LineEdit" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+script = ExtResource("9_yhf3j")
+playerPref = "Seed"
+randomizeEveryTime = true
+deterministicHashFinalValue = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "ONLINE"
+
+[node name="Online Toggle" type="CheckBox" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+script = ExtResource("10_xb0e2")
+playerPref = "Hosting Online"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "HEADLESS_SERVER"
+
+[node name="Online Toggle" type="CheckBox" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+script = ExtResource("10_xb0e2")
+playerPref = "Hosting Headless"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "PORT_NUMBER"
+
+[node name="Seed Edit" type="LineEdit" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+editable = false
+script = ExtResource("8_qx8v7")
+playerPref = "Hosting Port"
+defaultValue = "7878"
+
+[node name="Button" type="Button" parent="VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "START_BUTTON"
+script = ExtResource("11_o8ogv")
+
+[node name="Join Game" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Join Game"]
+layout_mode = 2
+alignment = 1
+
+[node name="Join Game" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "JOIN_GAME"
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seed Label" type="Label" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "SERVER_ADDRESS"
+
+[node name="Seed Edit" type="LineEdit" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+script = ExtResource("8_qx8v7")
+playerPref = "Joining Address"
+defaultValue = "127.0.0.1"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "PORT_NUMBER"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+script = ExtResource("8_qx8v7")
+playerPref = "Joining Port"
+defaultValue = "?????"
+
+[node name="Button4" type="Button" parent="VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "JOIN_BUTTON"
+script = ExtResource("11_o8ogv")
+joinServer = true
+
+[node name="Main Menu" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Main Menu"]
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3/VBoxContainer3"]
+layout_mode = 2
+text = "SAVE_FILES"
+script = ExtResource("12_50e3r")
+buttonFunction = 3
+
+[node name="Button2" type="Button" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3/VBoxContainer3"]
+layout_mode = 2
+text = "JOIN_GAME"
+script = ExtResource("12_50e3r")
+buttonFunction = 4
+
+[node name="MarginContainer5" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
+layout_mode = 2
+text = "OPTIONS"
+script = ExtResource("12_50e3r")
+buttonFunction = 2
+
+[node name="Button2" type="Button" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
+layout_mode = 2
+text = "WIKI_TITLE"
+script = ExtResource("12_50e3r")
+
+[node name="Button3" type="Button" parent="VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
+layout_mode = 2
+text = "DEBUG_CONSOLE_TITLE"
+script = ExtResource("12_50e3r")
+buttonFunction = 1
+
+[node name="Save Files" type="MarginContainer" parent="VBoxContainer/Menu Container/Panel" node_paths=PackedStringArray("container")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("13_4nv5t")
+fileNode = ExtResource("14_wro40")
+container = NodePath("ScrollContainer/SaveFileContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Menu Container/Panel/Save Files"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="SaveFileContainer" type="VBoxContainer" parent="VBoxContainer/Menu Container/Panel/Save Files/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Logo Holder" type="Panel" parent="VBoxContainer/Menu Container"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f0i6u")
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+theme = ExtResource("15_rl2ta")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -333.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("16_re7vc")
+expand_mode = 3
+stretch_mode = 5

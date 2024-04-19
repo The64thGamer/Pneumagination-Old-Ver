@@ -1,9 +1,10 @@
 using Godot;
 using System;
+using Range = Godot.Range;
 
 public partial class SliderDisplayValue : Label
 {
-	[Export] public Slider slider;
+	[Export] public Range slider;
 	[Export] public string suffix;
 	public override void _Ready()
 	{

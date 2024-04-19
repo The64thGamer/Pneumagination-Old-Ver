@@ -1,17 +1,18 @@
-[gd_scene load_steps=42 format=3 uid="uid://dayc5ri3bltvr"]
+[gd_scene load_steps=43 format=3 uid="uid://dayc5ri3bltvr"]
 
-[ext_resource type="Script" path="res://Scripts/World/PlayerMovement.cs" id="1_cwgi3"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerMovement.cs" id="1_cwgi3"]
 [ext_resource type="Shader" path="res://Shaders/Fog.gdshader" id="2_88pqh"]
+[ext_resource type="Script" path="res://Scripts/Player/FOVAdjust.cs" id="2_n2ycq"]
 [ext_resource type="Script" path="res://Scripts/World/ShaderTriangle.gd" id="3_f30lj"]
-[ext_resource type="Script" path="res://Scripts/World/Mining.cs" id="4_v8ch8"]
+[ext_resource type="Script" path="res://Scripts/Player/Mining.cs" id="4_v8ch8"]
 [ext_resource type="Script" path="res://Scripts/World/MeshEditing.cs" id="5_uxnim"]
 [ext_resource type="Material" uid="uid://bmv3unkepswms" path="res://Materials/FaceDisplay.tres" id="6_8todr"]
-[ext_resource type="Script" path="res://Scripts/World/Placing.cs" id="7_vh6iw"]
+[ext_resource type="Script" path="res://Scripts/Player/Placing.cs" id="7_vh6iw"]
 [ext_resource type="Script" path="res://Scripts/World/Texturing.cs" id="8_qljlp"]
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="9_wr1ih"]
 [ext_resource type="Script" path="res://Scripts/World/DebugInfo.cs" id="10_g6c2f"]
 [ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://UI/Cursor.png" id="11_4cycp"]
-[ext_resource type="Script" path="res://Scripts/World/HideSimplePlayerUI.cs" id="12_sawuk"]
+[ext_resource type="Script" path="res://Scripts/Player/HideSimplePlayerUI.cs" id="12_sawuk"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="13_82pg5"]
 [ext_resource type="Script" path="res://Scripts/World/ScrollBar.cs" id="14_c4ytr"]
 [ext_resource type="Texture2D" uid="uid://bxkpuapk2ls6t" path="res://UI/Slot Vertex.png" id="15_i7i1c"]
@@ -21,7 +22,7 @@
 [ext_resource type="Script" path="res://Scripts/World/TotalBrushes.cs" id="19_oh782"]
 [ext_resource type="Texture2D" uid="uid://b2cujyos0ev48" path="res://UI/Slot Mining.png" id="20_86nvm"]
 [ext_resource type="Texture2D" uid="uid://cqewp1wk7xn4" path="res://UI/Slot Empty.png" id="21_605ke"]
-[ext_resource type="Script" path="res://Scripts/World/ItemCount.cs" id="22_o1dh5"]
+[ext_resource type="Script" path="res://Scripts/Player/ItemCount.cs" id="22_o1dh5"]
 [ext_resource type="Texture2D" uid="uid://db8skc7si2np0" path="res://Textures/Road_Base.png" id="23_bxcwl"]
 [ext_resource type="Texture2D" uid="uid://bs32iedt22nhy" path="res://Textures/plasterwall_diffuse.jpg" id="24_hbl3h"]
 [ext_resource type="Texture2D" uid="uid://c74obs1kj68gl" path="res://Textures/Cliffside_Diffuse.png" id="25_nglas"]
@@ -30,9 +31,9 @@
 [ext_resource type="Texture2D" uid="uid://dbv5rbwqkijtb" path="res://Textures/Sand_Rocky_Diffuse.png" id="28_bqfop"]
 [ext_resource type="Texture2D" uid="uid://bl6l134rxbfxq" path="res://Textures/Laterite.jpg" id="29_taywk"]
 [ext_resource type="Texture2D" uid="uid://coscl6tjyh1is" path="res://Textures/White Sand.png" id="30_ghq6r"]
-[ext_resource type="Script" path="res://Scripts/World/LoadingBar.cs" id="31_84inb"]
-[ext_resource type="Script" path="res://Scripts/World/PhotoMode.cs" id="32_4wyds"]
-[ext_resource type="Script" path="res://Scripts/World/Inventory.cs" id="33_tfi6h"]
+[ext_resource type="Script" path="res://Scripts/Player/LoadingBar.cs" id="31_84inb"]
+[ext_resource type="Script" path="res://Scripts/Player/PhotoMode.cs" id="32_4wyds"]
+[ext_resource type="Script" path="res://Scripts/Player/Inventory.cs" id="33_tfi6h"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_6afil"]
 size = Vector3(3, 11, 3)
@@ -104,6 +105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
 cull_mask = 1048573
 fov = 92.8
 far = 2000.0
+script = ExtResource("2_n2ycq")
 
 [node name="AudioListener3D" type="AudioListener3D" parent="Player Head/Player Camera"]
 current = true
