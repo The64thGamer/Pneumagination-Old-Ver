@@ -16,16 +16,21 @@ public partial class WikiStart : CanvasLayer
 	{
 		if(Input.IsActionJustPressed("Toggle Wiki") && canInput)
 		{
-			Visible = !Visible;
-			if(Visible)
-			{
-				oldMouse = Input.MouseMode;
-        		Input.MouseMode = Input.MouseModeEnum.Visible;
-			}
-			else
-			{
-				Input.MouseMode = oldMouse;
-			}
+			ToggleWiki();
+		}
+	}
+
+	public void ToggleWiki()
+	{
+		Visible = !Visible;
+		if(Visible)
+		{
+			oldMouse = Input.MouseMode;
+			Input.MouseMode = Input.MouseModeEnum.Visible;
+		}
+		else
+		{
+			Input.MouseMode = oldMouse;
 		}
 	}
 

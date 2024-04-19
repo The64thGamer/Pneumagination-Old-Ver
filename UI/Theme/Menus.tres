@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=26 format=3 uid="uid://csvm2c04m8ow3"]
+[gd_resource type="Theme" load_steps=27 format=3 uid="uid://csvm2c04m8ow3"]
 
 [ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="1_pjc88"]
 
@@ -210,6 +210,9 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4sru"]
+bg_color = Color(0.121569, 0.0823529, 0.0784314, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y72kk"]
 bg_color = Color(0.0352941, 0.0235294, 0.0235294, 1)
 border_width_left = 10
@@ -293,6 +296,7 @@ RichTextLabel/styles/normal = SubResource("StyleBoxFlat_11gtf")
 TabContainer/colors/font_disabled_color = Color(0.533333, 0.407843, 0.388235, 1)
 TabContainer/colors/font_selected_color = Color(0.866667, 0.866667, 0.866667, 1)
 TabContainer/colors/font_unselected_color = Color(0.329259, 0.0937819, 0.117235, 1)
+TabContainer/styles/panel = SubResource("StyleBoxFlat_t4sru")
 TabContainer/styles/tab_disabled = SubResource("StyleBoxFlat_y72kk")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_qnu02")
 TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_eidl8")

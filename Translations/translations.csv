@@ -9,14 +9,23 @@ HEADLESS_SERVER,Headless
 PORT_NUMBER,Port
 START_BUTTON,Start
 JOIN_GAME,Join Game
+OPTIONS,Options
+OPTIONS_GAMEPLAY,Gameplay
+OPTIONS_VIDEO,Video
+OPTIONS_AUDIO,Audio
+OPTIONS_PROFILE,Profile
+OPTIONS_FOV,Field of View
 SERVER_ADDRESS,Address
 JOIN_BUTTON,Join
+SAVE_FILES,My Worlds
 PLAYER_INFO,Player Info
 PLAYER_NAME,Name
-DEBUG_CONSOLE_HEADER,Pneumagination Debug Console [ Using SofiaConsole v1.2.0 ]
+DEBUG_CONSOLE_TITLE,Console
+DEBUG_CONSOLE_HEADER,Pneumagination Console [ Using SofiaConsole v1.2.0 ]
 PLAYER_DEFAULT_NAME,I Forgot To Change Name
 WORLD_DEFAULT_NAME,A New World
 CURRENT_VERSION,v0.14a
+WIKI_TITLE,In-Game Manual
 WIKI_SEARCH,Search
 WIKI_ARTICLE_MAIN_PAGE,"Welcome to the Pneumagination manual! This is built entirely in-game for offline use! Use the search above to find articles on what you need. You can open this at any time with 'i'.
 

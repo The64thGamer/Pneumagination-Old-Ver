@@ -1,14 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://chi3uvna74yqn"]
+[gd_scene load_steps=13 format=3 uid="uid://chi3uvna74yqn"]
 
 [ext_resource type="Texture2D" uid="uid://ynv80nrcjyio" path="res://UI/Screenshot 2024-03-29 152626.png" id="1_7nvkl"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefRandom.cs" id="4_atn18"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefToggle.cs" id="5_1fqp2"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/CreateWorld.cs" id="5_jjsdc"]
 [ext_resource type="Script" path="res://Scripts/Main Menu/PlayerPrefLine.cs" id="6_hubln"]
+[ext_resource type="Script" path="res://Scripts/Main Menu/MenuButton.cs" id="7_56e5y"]
 [ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="8_rsibu"]
 [ext_resource type="PackedScene" uid="uid://cote16tc7or5h" path="res://Prefabs/Wiki.tscn" id="9_1oa2y"]
 [ext_resource type="Texture2D" uid="uid://bevpgdinslf0a" path="res://UI/Logo/FlatSmallRender.png" id="9_4qudn"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="9_nfhuh"]
+[ext_resource type="PackedScene" uid="uid://ckmu0mbbjrji2" path="res://Prefabs/Options.tscn" id="11_ljw5u"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0i6u"]
 
@@ -47,53 +49,55 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel"]
+[node name="Create World" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel"]
+visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -211.0
-offset_top = -382.0
-offset_right = 211.0
-offset_bottom = 382.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World"]
+layout_mode = 2
 alignment = 1
 
-[node name="Create World" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer"]
+[node name="Create World" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World"]
 layout_mode = 2
 
-[node name="Create Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer"]
+[node name="Create Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "CREATE_WORLD"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "WORLD_NAME"
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
@@ -102,15 +106,15 @@ playerPref = "World Name"
 defaultValue = "WORLD_DEFAULT_NAME"
 defaultIsTranslationKey = true
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "WORLD_SEED"
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
@@ -119,42 +123,42 @@ playerPref = "Seed"
 randomizeEveryTime = true
 deterministicHashFinalValue = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "ONLINE"
 
-[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("buttonTogglesLineEdit")]
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" node_paths=PackedStringArray("buttonTogglesLineEdit")]
 layout_mode = 2
 script = ExtResource("5_1fqp2")
 playerPref = "Hosting Online"
 buttonTogglesLineEdit = NodePath("../../HBoxContainer5/Seed Edit")
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "HEADLESS_SERVER"
 
-[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="Online Toggle" type="CheckBox" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
 script = ExtResource("5_1fqp2")
 playerPref = "Hosting Headless"
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "PORT_NUMBER"
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
@@ -163,44 +167,61 @@ script = ExtResource("6_hubln")
 playerPref = "Hosting Port"
 defaultValue = "7878"
 
-[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Create World/VBoxContainer/Create World/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "START_BUTTON"
 script = ExtResource("5_jjsdc")
 
-[node name="Join Game" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer"]
+[node name="Join Game" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game"]
+layout_mode = 2
+alignment = 1
+
+[node name="Join Game" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2"]
 layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer"]
+[node name="Label2" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "JOIN_GAME"
 
-[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2"]
 layout_mode = 2
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="HBoxContainer6" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+[node name="Seed Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "SERVER_ADDRESS"
 
-[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
+[node name="Seed Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
@@ -208,15 +229,15 @@ script = ExtResource("6_hubln")
 playerPref = "Joining Address"
 defaultValue = "127.0.0.1"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "PORT_NUMBER"
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
@@ -224,52 +245,76 @@ script = ExtResource("6_hubln")
 playerPref = "Joining Port"
 defaultValue = "?????"
 
-[node name="Button4" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
+[node name="Button4" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Join Game/VBoxContainer2/Join Game/VBoxContainer/MarginContainer2/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "JOIN_BUTTON"
 script = ExtResource("5_jjsdc")
 joinServer = true
 
-[node name="Info" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer"]
+[node name="Main Menu" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel"]
 layout_mode = 2
+offset_right = 637.0
+offset_bottom = 80.0
+theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu"]
 layout_mode = 2
 
-[node name="Info Label" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "PLAYER_INFO"
-
-[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3"]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3/VBoxContainer3"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "PLAYER_NAME"
+text = "SAVE_FILES"
+script = ExtResource("7_56e5y")
 
-[node name="Name Edit" type="LineEdit" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/VBoxContainer/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
+[node name="Button2" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer3/VBoxContainer3"]
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
-script = ExtResource("6_hubln")
-playerPref = "Name"
-defaultValue = "PLAYER_DEFAULT_NAME"
-defaultIsTranslationKey = true
+text = "JOIN_GAME"
+script = ExtResource("7_56e5y")
+
+[node name="MarginContainer5" type="MarginContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "OPTIONS"
+script = ExtResource("7_56e5y")
+buttonFunction = 2
+
+[node name="Button2" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "WIKI_TITLE"
+script = ExtResource("7_56e5y")
+
+[node name="Button3" type="Button" parent="CanvasLayer/VBoxContainer/Menu Container/Panel/Main Menu/VBoxContainer2/MarginContainer5/VBoxContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "DEBUG_CONSOLE_TITLE"
+script = ExtResource("7_56e5y")
+buttonFunction = 1
 
 [node name="Logo Holder" type="Panel" parent="CanvasLayer/VBoxContainer/Menu Container"]
 custom_minimum_size = Vector2(350, 0)
@@ -297,4 +342,7 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="Wiki" parent="." instance=ExtResource("9_1oa2y")]
+visible = false
+
+[node name="Options" parent="." instance=ExtResource("11_ljw5u")]
 visible = false
