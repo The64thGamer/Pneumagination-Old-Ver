@@ -39,6 +39,7 @@ public partial class MenuButton : BaseButton
 				break;
 			case ButtonFunctionType.quit:
 				GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
+				GetTree().Quit();
 				break;
 			default:
 				break;
