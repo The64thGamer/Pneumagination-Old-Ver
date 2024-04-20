@@ -94,11 +94,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 min_value = 1.0
-max_value = 10.0
+max_value = 60.0
 value = 1.0
 script = ExtResource("3_4e5r1")
 playerPref = "Autosave Timer"
-defaultValue = 1.0
+defaultValue = 10.0
 
 [node name="Label4" type="Label" parent="MarginContainer/TabContainer/OPTIONS_GAMEPLAY/Player Info/VBoxContainer2/Info/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3" node_paths=PackedStringArray("slider")]
 layout_mode = 2

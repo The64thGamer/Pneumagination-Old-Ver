@@ -16,8 +16,8 @@ using Godot.Collections;
 		//5 Back Right
 		//6 Front Right
 		//7 Front Left
-		public Array<byte> vertices;
-		public Array<uint> textures = new Array<uint>{ 0, 0, 0, 0, 0, 0 };
-		public bool hiddenFlag;
-		public bool borderFlag;
+		[Export] public Array<byte> vertices;
+		[Export] public Array<uint> textures = new Array<uint>{ 0, 0, 0, 0, 0, 0 };
+		[Export] public bool hiddenFlag;
+		[Export] public bool borderFlag;
 	}

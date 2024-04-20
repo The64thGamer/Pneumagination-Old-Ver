@@ -1,15 +1,14 @@
 using Godot;
-using System;
-using System.Collections.Generic;
+using Godot.Collections;
 using System.Linq;
 using Console = media.Laura.SofiaConsole.Console;
 
 public partial class FileSaver : Node
 {
 	//Locals
-	Godot.Collections.Dictionary<string, Variant> loadedWorldData;
+	Dictionary<string, Variant> loadedWorldData;
 
-	List<Region> loadedRegions = new List<Region>();
+	[Export] Array<Region> loadedRegions = new Array<Region>();
 	string loadedFolderPath;
 
 
@@ -18,6 +17,8 @@ public partial class FileSaver : Node
 	public const string worldSaveDataFile = "World Save Data";
 	public const string regionPath = "/Chunks/Region ";
 	public const string regionExtension = ".tres";
+	public const int regionSize = 16;
+
 
 	public void SaveAllChunks(Chunk[] data)
 	{
@@ -25,15 +26,16 @@ public partial class FileSaver : Node
 		foreach(Chunk chunk in data)
 		{
 			loadedRegion = FindRegionFile(
-				chunk.positionX / Region.regionSize,
-				chunk.positionY / Region.regionSize,
-				chunk.positionZ / Region.regionSize
+				Mathf.FloorToInt(chunk.positionX / (float)regionSize),
+				Mathf.FloorToInt(chunk.positionY / (float)regionSize),
+				Mathf.FloorToInt(chunk.positionZ / (float)regionSize)
 			);
 
 			Vector3 pos = new Vector3(
-				chunk.positionX % Region.regionSize,
-				chunk.positionY % Region.regionSize,
-				chunk.positionZ % Region.regionSize);
+				mod(chunk.positionX , regionSize),
+				mod(chunk.positionY , regionSize),
+				mod(chunk.positionZ , regionSize)
+				);
 
 			if(loadedRegion.chunks.TryGetValue(pos,out Chunk oldChunk))
 			{
@@ -45,9 +47,9 @@ public partial class FileSaver : Node
 			}
 
 			ResourceSaver.Save(loadedRegion, savePath + loadedFolderPath + regionPath +
-				chunk.positionX / Region.regionSize + " " + 
-				chunk.positionY / Region.regionSize + " " + 
-				chunk.positionZ / Region.regionSize + 
+				Mathf.FloorToInt(chunk.positionX / (float)regionSize) + " " + 
+				Mathf.FloorToInt(chunk.positionY / (float)regionSize) + " " + 
+				Mathf.FloorToInt(chunk.positionZ / (float)regionSize) + 
 				regionExtension
 			);
 		}
@@ -131,9 +133,9 @@ public partial class FileSaver : Node
 	public Chunk LoadChunkFromRegion(int chunkX, int chunkY, int chunkZ)
 	{
 		Region loadedRegion = FindRegionFile(
-			chunkX / Region.regionSize,
-			chunkY / Region.regionSize,
-			chunkZ / Region.regionSize
+			Mathf.FloorToInt(chunkX / (float)regionSize),
+			Mathf.FloorToInt(chunkY / (float)regionSize),
+			Mathf.FloorToInt(chunkZ / (float)regionSize)
 		);
 
 		//Load Chunks
@@ -143,11 +145,15 @@ public partial class FileSaver : Node
 			return null;
 		}
 
-		if(loadedRegion.chunks.TryGetValue(new Vector3(
-				chunkX % Region.regionSize,
-				chunkY % Region.regionSize,
-				chunkZ % Region.regionSize
-			),out Chunk oldChunk))
+		if(loadedRegion.chunks == null)
+		{
+			loadedRegion.chunks = new Godot.Collections.Dictionary<Vector3, Chunk>();
+		}
+		else if(loadedRegion.chunks.TryGetValue(new Vector3(
+			mod(chunkX , regionSize),
+			mod(chunkY , regionSize),
+			mod(chunkZ , regionSize)
+		),out Chunk oldChunk))
 		{
 			return oldChunk;
 		}
@@ -180,20 +186,28 @@ public partial class FileSaver : Node
 		{			
 			if(FileAccess.FileExists(finalPath))
 			{
-				loadedRegion = ResourceLoader.Load<Region>(finalPath);
+				loadedRegion = ResourceLoader.Load(finalPath) as Region;
 			}
 		}
 
 		//Go ahead and create region
 		if(loadedRegion == null)
 		{
-			loadedRegion = new Region(regX,regY,regZ);
-			Error e = ResourceSaver.Save(loadedRegion, finalPath);
+            loadedRegion = new Region
+            {
+                chunks = new Dictionary<Vector3, Chunk>(),
+				positionX = regX,
+				positionY = regY,
+				positionZ = regZ,
+            };
+            Error e = ResourceSaver.Save(loadedRegion, finalPath);
 			if(e != Error.Ok)
 			{
 				GD.PrintErr("SAVING ERROR: " + e);
 			}
 		}
+
+		loadedRegions.Add(loadedRegion);
 		return loadedRegion;
 	}
 
@@ -209,10 +223,15 @@ public partial class FileSaver : Node
 	#region pure functions
 	string RandomString(int length)
 	{
-		Random random = new Random();
+		System.Random random = new System.Random();
 		const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		return new string(Enumerable.Repeat(chars, length)
 			.Select(s => s[random.Next(s.Length)]).ToArray());
+	}
+	int mod(int x, int m)
+	{
+		int r = x % m;
+		return r < 0 ? r + m : r;
 	}
 
 	#endregion
