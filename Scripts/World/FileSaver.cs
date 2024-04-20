@@ -1,30 +1,58 @@
 using Godot;
 using Godot.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Console = media.Laura.SofiaConsole.Console;
 
 public partial class FileSaver : Node
 {
 	//Locals
-	Dictionary<string, Variant> loadedWorldData;
+	Godot.Collections.Dictionary<string, Variant> loadedWorldData;
 
-	[Export] Array<Region> loadedRegions = new Array<Region>();
+	Array<Region> loadedRegions = new Array<Region>();
 	string loadedFolderPath;
+	WorldGen worldGen;
+	float autoSaveTimer;
 
 
 	//Consts
 	public const string savePath = "user://Your Precious Save Files/";
 	public const string worldSaveDataFile = "World Save Data";
 	public const string regionPath = "/Chunks/Region ";
-	public const string regionExtension = ".tres";
+	public const string regionExtension = ".res";
 	public const int regionSize = 16;
+		
+	public override void _Ready()
+	{    			
+		autoSaveTimer =  Mathf.Max(1,PlayerPrefs.GetFloat("Autosave Timer")) * 60;
+	}
 
-
-	public void SaveAllChunks(Chunk[] data)
+	public override void _Process(double delta)
 	{
-		Region loadedRegion;
-		foreach(Chunk chunk in data)
+		//Autosaving
+		if(WorldGen.firstChunkLoaded)
 		{
+			if(worldGen == null)
+			{
+				worldGen = GetTree().Root.GetNode<WorldGen>("World");
+			}
+			autoSaveTimer -= Mathf.Min((float)delta,0.2f);
+			if(autoSaveTimer <= 0)
+			{
+				GD.Print("Autosave Incoming");
+				autoSaveTimer = Mathf.Max(1,PlayerPrefs.GetFloat("Autosave Timer")) * 60;
+				SaveAllChunks();
+				Console.Instance.Print("Autosave! " + System.DateTime.Now.ToUniversalTime().ToString(@"MM\/dd\/yyyy h\:mm tt"),Console.PrintType.Success);
+			}
+		}	
+	}
+	public void SaveAllChunks()
+	{
+		GD.Print("Attempt Autosave");
+		Region loadedRegion;
+		foreach(WorldGen.LoadedChunkData loadedChunk in worldGen.loadedChunks)
+		{
+			Chunk chunk = loadedChunk.chunk;
 			loadedRegion = FindRegionFile(
 				Mathf.FloorToInt(chunk.positionX / (float)regionSize),
 				Mathf.FloorToInt(chunk.positionY / (float)regionSize),
@@ -45,12 +73,15 @@ public partial class FileSaver : Node
 			{
 				loadedRegion.chunks.Add(pos,chunk);
 			}
-
-			ResourceSaver.Save(loadedRegion, savePath + loadedFolderPath + regionPath +
-				Mathf.FloorToInt(chunk.positionX / (float)regionSize) + " " + 
-				Mathf.FloorToInt(chunk.positionY / (float)regionSize) + " " + 
-				Mathf.FloorToInt(chunk.positionZ / (float)regionSize) + 
-				regionExtension
+		}
+		foreach(Region region in loadedRegions)
+		{
+			GD.Print("ASP2 " + region);
+			ResourceSaver.Save(region, savePath + loadedFolderPath + regionPath +
+				region.positionX + " " + 
+				region.positionY + " " + 
+				region.positionZ + 
+				regionExtension,ResourceSaver.SaverFlags.Compress
 			);
 		}
 	}
@@ -187,6 +218,7 @@ public partial class FileSaver : Node
 			if(FileAccess.FileExists(finalPath))
 			{
 				loadedRegion = ResourceLoader.Load(finalPath) as Region;
+				GD.Print("Loaded File "+ finalPath);
 			}
 		}
 
@@ -195,16 +227,13 @@ public partial class FileSaver : Node
 		{
             loadedRegion = new Region
             {
-                chunks = new Dictionary<Vector3, Chunk>(),
+                chunks = new Godot.Collections.Dictionary<Vector3, Chunk>(),
 				positionX = regX,
 				positionY = regY,
 				positionZ = regZ,
             };
-            Error e = ResourceSaver.Save(loadedRegion, finalPath);
-			if(e != Error.Ok)
-			{
-				GD.PrintErr("SAVING ERROR: " + e);
-			}
+            ResourceSaver.Save(loadedRegion, finalPath,ResourceSaver.SaverFlags.Compress);
+			GD.Print("Created File "+ finalPath);
 		}
 
 		loadedRegions.Add(loadedRegion);

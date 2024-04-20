@@ -34,14 +34,13 @@ public partial class WorldGen : Node3D
 	//Locals
 	Vector3 oldChunkPos = new Vector3(float.MinValue, float.MinValue, float.MinValue);
 	bool lastFrameMaxChunkLimitReached;
-	List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
+	public List<LoadedChunkData> loadedChunks = new List<LoadedChunkData>();
 	List<ChunkRenderData> ongoingChunkRenderData = new List<ChunkRenderData>();
 	Material[] mats;
 	ServerClient server;
 	FileSaver fileSaver;
 	FastNoiseContainer noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseOcean;
 	int maxChunksLoadingRampUp = 1;
-	float autoSaveTimer;
 
 	//Consts
 	public const int chunkLoadingDistance = 8;
@@ -78,8 +77,6 @@ public partial class WorldGen : Node3D
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{     
-
-		autoSaveTimer =  Mathf.Min(1,PlayerPrefs.GetFloat("Autosave Timer")) * 60;
 		fileSaver = GetNode<FileSaver>("/root/FileSaver");
    
 		server = GetTree().Root.GetNode("World/Server") as ServerClient;
@@ -176,20 +173,6 @@ public partial class WorldGen : Node3D
 		CheckForAnyPendingFinishedChunks();
 		LoadChunks();
 		UnloadChunks();
-
-		autoSaveTimer -= (float)delta;
-		if(autoSaveTimer <= 0)
-		{
-			autoSaveTimer = Mathf.Min(1,PlayerPrefs.GetFloat("Autosave Timer")) * 60;
-			Chunk[] chunkData = new Chunk[loadedChunks.Count];
-			
-			for (int i = 0; i < loadedChunks.Count; i++)
-			{
-				chunkData[i] = loadedChunks[i].chunk;
-			}
-			fileSaver.SaveAllChunks(chunkData);
-			Console.Instance.Print("Autosave! " + DateTime.Now.ToUniversalTime().ToString(@"MM\/dd\/yyyy h\:mm tt"),Console.PrintType.Success);
-		}
 	}
 
 	void LoadChunks()
