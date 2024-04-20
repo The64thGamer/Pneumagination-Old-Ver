@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chunk = WorldGen.Chunk;
 using Console = media.Laura.SofiaConsole.Console;
 
 public partial class FileSaver : Node
@@ -31,11 +30,19 @@ public partial class FileSaver : Node
 				chunk.positionZ / Region.regionSize
 			);
 
-			loadedRegion.chunks[
+			Vector3 pos = new Vector3(
 				chunk.positionX % Region.regionSize,
 				chunk.positionY % Region.regionSize,
-				chunk.positionZ % Region.regionSize
-			] = chunk;
+				chunk.positionZ % Region.regionSize);
+
+			if(loadedRegion.chunks.TryGetValue(pos,out Chunk oldChunk))
+			{
+				oldChunk = chunk;
+			}
+			else
+			{
+				loadedRegion.chunks.Add(pos,chunk);
+			}
 
 			ResourceSaver.Save(loadedRegion, savePath + loadedFolderPath + regionPath +
 				chunk.positionX / Region.regionSize + " " + 
@@ -135,11 +142,17 @@ public partial class FileSaver : Node
 			GD.Print("Region was null.");
 			return null;
 		}
-		return loadedRegion.chunks[
-			chunkX % Region.regionSize,
-			chunkY % Region.regionSize,
-			chunkZ % Region.regionSize
-		];
+
+		if(loadedRegion.chunks.TryGetValue(new Vector3(
+				chunkX % Region.regionSize,
+				chunkY % Region.regionSize,
+				chunkZ % Region.regionSize
+			),out Chunk oldChunk))
+		{
+			return oldChunk;
+		}
+
+		return null;
 	}
 
 	Region FindRegionFile(int regX, int regY, int regZ)
@@ -184,16 +197,6 @@ public partial class FileSaver : Node
 		return loadedRegion;
 	}
 
-	public void SaveChunkToRegion(Chunk chunk)
-	{
-
-	}
-
-	void CreateRegionFile()
-	{
-
-	}
-
 	public string GetSeed()
 	{
 		if(loadedWorldData.TryGetValue("World Seed",out Variant value))
@@ -213,23 +216,4 @@ public partial class FileSaver : Node
 	}
 
 	#endregion
-}
-
-[GlobalClass]
-public partial class Region : Resource
-{
-	public const int regionSize = 5;
-
-	public int positionX;
-	public int positionY;
-	public int positionZ;
-	public Chunk[,,] chunks;
-
-	public Region(int regX, int regY, int regZ)
-	{
-		positionX = regX;
-		positionY = regY;
-		positionZ = regZ;
-		chunks = new Chunk[Region.regionSize,Region.regionSize,Region.regionSize];
-	}
 }

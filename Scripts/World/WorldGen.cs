@@ -373,7 +373,7 @@ public partial class WorldGen : Node3D
 				GD.PrintErr("Chunk was null. (ID " + id + ")");
 			}
 
-			ChunkRenderData chunkData = GetChunkMesh(chunk);
+			ChunkRenderData chunkData = GetChunkMesh(chunk,id);
 
 			if(chunkData == null)
 			{
@@ -417,13 +417,12 @@ public partial class WorldGen : Node3D
 	{
 
 		Chunk chunk = new Chunk();
-		chunk.id = id;
 		chunk.hasGeneratedBorders = false;
 		chunk.positionX = x;
 		chunk.positionY = y;
 		chunk.positionZ = z;
-		chunk.brushes = new List<Brush>();
-		chunk.connectedInvisibleBrushes = new System.Collections.Generic.Dictionary<Brush, List<Brush>>();
+		chunk.brushes = new Array<Brush>();
+		chunk.connectedInvisibleBrushes = new Godot.Collections.Dictionary<Brush, Array<Brush>>();
 
 		//BlockArray Setup
 		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
@@ -615,7 +614,7 @@ public partial class WorldGen : Node3D
 		if(y < -1)
 		{
 			Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize);
-			water.textures = new uint[]{9,9,9,9,9,9};
+			water.textures = new Godot.Collections.Array<uint>{9,9,9,9,9,9};
 			water.hiddenFlag = false;
 			water.borderFlag = false;
 			return water;
@@ -623,7 +622,7 @@ public partial class WorldGen : Node3D
 		else if(y == -1)
 		{
 			Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize - new Vector3(0,1,0));
-			water.textures = new uint[]{9,9,9,9,9,9};
+			water.textures = new Godot.Collections.Array<uint>{9,9,9,9,9,9};
 			water.hiddenFlag = false;
 			water.borderFlag = false;
 			return water;
@@ -644,7 +643,7 @@ public partial class WorldGen : Node3D
 		}
 		else
 		{ 
-			chunk.connectedInvisibleBrushes[checkBrush] = new List<Brush>() { assignedBrush }; 
+			chunk.connectedInvisibleBrushes[checkBrush] = new Array<Brush>() { assignedBrush }; 
 		}
 	}
 	
@@ -686,56 +685,56 @@ public partial class WorldGen : Node3D
 
 
 	//Bottom,North,Top,South,West,East
-	uint[] FindTextureOfGeneratingBrush(bool isSurface, ref PreGenNoiseValues preGen)
+	Godot.Collections.Array<uint> FindTextureOfGeneratingBrush(bool isSurface, ref PreGenNoiseValues preGen)
 	{
 		if(preGen.oceanMultiplier < 0.1f)
 		{
 			if (isSurface)
 			{
-				return new uint[] { 3, 8, 8, 8, 8, 8 };
+				return new Godot.Collections.Array<uint>{ 3, 8, 8, 8, 8, 8 };
 			}
 			else
 			{
-				return new uint[] { 3, 3, 3, 3, 3, 3 };
+				return new Godot.Collections.Array<uint>{ 3, 3, 3, 3, 3, 3 };
 			}
 		}
 		if (preGen.biome <= 0.5f) //Grass
 		{
 			if ((preGen.regionBordercheck || preGen.regionBorderCornercheck) && isSurface)
 			{
-				return new uint[] { 3, 1, 1, 1, 1, 1 };
+				return new Godot.Collections.Array<uint>{ 3, 1, 1, 1, 1, 1 };
 			}
 			if (isSurface)
 			{
-				return new uint[] { 3, 4, 4, 4, 4, 4 };
+				return new Godot.Collections.Array<uint>{ 3, 4, 4, 4, 4, 4 };
 			}
 			else
 			{
-				return new uint[] { 3, 3, 3, 3, 3, 3 };
+				return new Godot.Collections.Array<uint>{ 3, 3, 3, 3, 3, 3 };
 			}
 		}
 		else if (preGen.biome > 0.5f && preGen.biome <= 0.75f) //Desert
 		{
 			if ((preGen.regionBordercheck || preGen.regionBorderCornercheck) && isSurface)
 			{
-				return new uint[] { 3, 6, 6, 6, 6, 6 };
+				return new Godot.Collections.Array<uint>{ 3, 6, 6, 6, 6, 6 };
 			}
 			if (isSurface)
 			{
-				return new uint[] { 3, 5, 5, 5, 5, 5 };
+				return new Godot.Collections.Array<uint>{ 3, 5, 5, 5, 5, 5 };
 			}
 			else
 			{
-				return new uint[] { 3, 3, 3, 3, 3, 3 };
+				return new Godot.Collections.Array<uint>{ 3, 3, 3, 3, 3, 3 };
 			}
 		}
 		else //Quarry
 		{
 			if ((preGen.regionBordercheck || preGen.regionBorderCornercheck) && isSurface)
 			{
-				return new uint[] { 7, 1, 1, 1, 1, 1 };
+				return new Godot.Collections.Array<uint> { 7, 1, 1, 1, 1, 1 };
 			}
-			return new uint[] { 7, 7, 7, 7, 7, 7 };
+			return new Godot.Collections.Array<uint> { 7, 7, 7, 7, 7, 7 };
 
 		}
 	}
@@ -811,11 +810,13 @@ public partial class WorldGen : Node3D
 			bool isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && preGen.chunkY >= -1;
 
 			//Assign textures
-			uint[] textures = FindTextureOfGeneratingBrush(isSurface, ref preGen);
+			Godot.Collections.Array<uint> textures = FindTextureOfGeneratingBrush(isSurface, ref preGen);
 
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(ref preGen), textures = textures };
+				Array<byte> vertsArr = new Array<byte>();
+				vertsArr.Resize(24);
+				b = new Brush { hiddenFlag = false, vertices = vertsArr, borderFlag = CheckBrushOnBorder(ref preGen), textures = textures };
 				for (int e = 0; e < 24; e += 3)
 				{
 					b.vertices[e] = (byte)(verts[e + (i * 24)] + chunkMarginSize + (preGen.posX * bigBlockSize));
@@ -1069,13 +1070,13 @@ public partial class WorldGen : Node3D
 	}
 
 
-	ChunkRenderData GetChunkMesh(Chunk chunkData)
+	ChunkRenderData GetChunkMesh(Chunk chunkData, Guid id)
 	{
 		if (chunkData.brushes.Count == 0)
 		{
 			return new ChunkRenderData()
 			{
-				id = chunkData.id,
+				id = id,
 				state = ChunkRenderDataState.ready,
 				position = new Vector3(chunkData.positionX, chunkData.positionY, chunkData.positionZ),
 				chunk = chunkData,
@@ -1099,7 +1100,7 @@ public partial class WorldGen : Node3D
 		{
 			return new ChunkRenderData()
 			{
-				id = chunkData.id,
+				id = id,
 				state = ChunkRenderDataState.ready,
 				position = new Vector3(chunkData.positionX, chunkData.positionY, chunkData.positionZ),
 				chunk = chunkData,
@@ -1324,7 +1325,7 @@ public partial class WorldGen : Node3D
 
 		return new ChunkRenderData()
 		{
-			id = chunkData.id,
+			id = id,
 			state = ChunkRenderDataState.ready,
 			chunkNode = chunk,
 			meshNode = meshObject,
@@ -1348,7 +1349,7 @@ public partial class WorldGen : Node3D
 		byte maxZ = (byte)(newZ + (byte)size.Z);
 
 		Brush brush = new Brush();
-		brush.vertices = new byte[24]
+		brush.vertices = new Array<byte>
 			{
 				newX,newY,newZ,
 				maxX,newY,newZ,
@@ -1360,11 +1361,11 @@ public partial class WorldGen : Node3D
 				maxX,maxY,maxZ,
 				newX,maxY,maxZ,
 			};
-		brush.textures = new uint[] { 0, 0, 0, 0, 0, 0 };
+		brush.textures = new Godot.Collections.Array<uint> { 0, 0, 0, 0, 0, 0 };
 		return brush;
 	}
 
-	public float VolumeOfMesh(byte[] verts)
+	public float VolumeOfMesh(Array<byte> verts)
 	{
 		float total = 0;
 		for (int i = 0; i < brushIndices.Length; i += 3)
@@ -1531,8 +1532,8 @@ public partial class WorldGen : Node3D
 		int finalVertB = 0;
 		int testMove;
 		bool meshChanged = false;
-		byte[] backupCopy = new byte[foundBrush.vertices.Length];
-		System.Array.Copy(foundBrush.vertices, backupCopy, foundBrush.vertices.Length);
+		Array<byte> backupCopy;
+		backupCopy = foundBrush.vertices.Duplicate();
 
 		switch (moveType)
 		{
@@ -1730,7 +1731,7 @@ public partial class WorldGen : Node3D
 		//Check for valid size
 		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-		for (int j = 0; j < foundBrush.vertices.Length; j += 3)
+		for (int j = 0; j < foundBrush.vertices.Count; j += 3)
 		{
 			if (minSize.X > foundBrush.vertices[j]) { minSize.X = foundBrush.vertices[j]; }
 			if (minSize.Y > foundBrush.vertices[j + 1]) { minSize.Y = foundBrush.vertices[j + 1]; }
@@ -1814,7 +1815,7 @@ public partial class WorldGen : Node3D
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 
 		//Signal to reveal hidden blocks
-		if (foundChunk.chunk.connectedInvisibleBrushes.TryGetValue(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]], out List<Brush> updateBrushes))
+		if (foundChunk.chunk.connectedInvisibleBrushes.TryGetValue(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]], out Godot.Collections.Array<Brush> updateBrushes))
 		{
 			foreach (Brush pendingBrush in updateBrushes)
 			{
@@ -1867,11 +1868,11 @@ public partial class WorldGen : Node3D
 			}
 		}
 		//Set up Values
-		byte[] brushVerts = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].vertices;
+		Array<byte> brushVerts = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].vertices;
 		Vector3 pos = Vector3.Zero;
 		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-		for (int j = 0; j < brushVerts.Length; j += 3)
+		for (int j = 0; j < brushVerts.Count; j += 3)
 		{
 			pos += new Vector3(brushVerts[j], brushVerts[j + 1], brushVerts[j + 2]);
 			if (minSize.X > brushVerts[j]) { minSize.X = brushVerts[j]; }
@@ -1881,7 +1882,7 @@ public partial class WorldGen : Node3D
 			if (maxSize.Y < brushVerts[j + 1]) { maxSize.Y = brushVerts[j + 1]; }
 			if (maxSize.Z < brushVerts[j + 2]) { maxSize.Z = brushVerts[j + 2]; }
 		}
-		pos /= brushVerts.Length / 3;
+		pos /= brushVerts.Count / 3;
 
 		//Particles
 		Vector3 size = (maxSize - minSize);
@@ -1982,7 +1983,7 @@ public partial class WorldGen : Node3D
 	void RerenderLoadedChunk(LoadedChunkData chunk)
 	{
 		//Generate Mesh
-		ChunkRenderData chunkData = GetChunkMesh(chunk.chunk);
+		ChunkRenderData chunkData = GetChunkMesh(chunk.chunk,chunk.id);
 		if (chunkData == null)
 		{
 			return;
@@ -2110,27 +2111,6 @@ public partial class WorldGen : Node3D
 		vert
 	}
 
-	public partial class Brush : Resource
-	{
-		//Vert Order
-
-		//Bottom
-		//0 Back Left
-		//1 Back Right
-		//2 Front Right
-		//3 Front Left
-
-		//Top
-		//4 Back Left
-		//5 Back Right
-		//6 Front Right
-		//7 Front Left
-		public byte[] vertices;
-		public uint[] textures = new uint[] { 0, 0, 0, 0, 0, 0 };
-		public bool hiddenFlag;
-		public bool borderFlag;
-	}
-
 	class FastNoiseContainer
 	{
 		public FastNoise noise;
@@ -2145,17 +2125,6 @@ public partial class WorldGen : Node3D
 		public List<Vector3> normals;
 		public List<int> brushIndexes;
 		public List<int> brushface;
-	}
-
-	[GlobalClass]
-	public partial class Chunk : Resource
-	{
-		public bool hasGeneratedBorders;
-		public int positionX;
-		public int positionY;
-		public int positionZ;
-		public List<Brush> brushes;
-		public Godot.Collections.Dictionary<Brush, Godot.Collections.Array<Brush>> connectedInvisibleBrushes;
 	}
 
 	public class ChunkRenderData

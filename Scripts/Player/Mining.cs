@@ -15,7 +15,7 @@ public partial class Mining : Node3D
     float breakTimerStart;
     Node3D chunk;
     int faceID;
-    WorldGen.Brush foundBrush;
+    Brush foundBrush;
     Vector3 hitPos;
 
     public override void _Ready()
@@ -102,7 +102,7 @@ public partial class Mining : Node3D
             if (breaking && breaktimer == 0)
             {
                 //Destroy
-                WorldGen.Brush b = worldGen.DestroyBlock(chunk, faceID);
+                Brush b = worldGen.DestroyBlock(chunk, faceID);
 
                 //Sound
                 int size = Mathf.CeilToInt(worldGen.VolumeOfMesh(b.vertices));
@@ -120,7 +120,7 @@ public partial class Mining : Node3D
 
                 //Size & Textures
                 totalBrushes += size;
-                for (int i = 0; i < b.textures.Length; i++)
+                for (int i = 0; i < b.textures.Count; i++)
                 {
                     if (b.textures[i] == 0)
                     {
