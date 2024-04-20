@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chunk = WorldGen.Chunk;
 using Console = media.Laura.SofiaConsole.Console;
@@ -9,10 +10,15 @@ public partial class FileSaver : Node
 	//Locals
 	Godot.Collections.Dictionary<string, Variant> loadedWorldData;
 
+	List<Region> loadedRegions = new List<Region>();
+	string loadedFolderPath;
+
 	//Consts
 	public const string savePath = "user://Your Precious Save Files/";
 	public const string worldSaveDataFile = "World Save Data";
-	
+	public const string regionPath = "/Chunks/Region ";
+	public const string regionExtension = ".pneuchunks";
+
 
 	public void CreateNewSaveFile(Godot.Collections.Dictionary<string, Variant> data, bool alsoLoadFile)
 	{
@@ -36,10 +42,11 @@ public partial class FileSaver : Node
 		DirAccess.MakeDirAbsolute(savePath + hashFolderName);
 
 		//Create 
-		FileAccess.Open(savePath + hashFolderName + "/" + worldSaveDataFile, FileAccess.ModeFlags.Write).StoreLine(Json.Stringify(data));
+		FileAccess.Open(savePath + hashFolderName + "/" + worldSaveDataFile, FileAccess.ModeFlags.Write).StoreString(Json.Stringify(data));
 		if(alsoLoadFile)
 		{
 			loadedWorldData = data;
+			loadedFolderPath = hashFolderName;
 		}
 		Console.Instance.Print("Saved World File to :" + savePath + hashFolderName, Console.PrintType.Success);
 	}
@@ -53,6 +60,7 @@ public partial class FileSaver : Node
 			return false;
 		}
 		loadedWorldData = data;
+		loadedFolderPath = folderPath;
 		Console.Instance.Print("Save File Loaded :" + savePath + folderPath, Console.PrintType.Success);
 		return true;
 	}
@@ -87,9 +95,48 @@ public partial class FileSaver : Node
 	}
 
 
-	public Chunk LoadChunkFromRegion()
+	public Chunk LoadChunkFromRegion(int chunkX, int chunkY, int chunkZ)
 	{
-		return null;
+		int regX = chunkX / Region.regionSize;
+		int regY = chunkY / Region.regionSize;
+		int regZ = chunkZ / Region.regionSize;
+
+		//Check loaded regions
+		Region loadedRegion = null;
+		foreach(Region reg in loadedRegions)
+		{
+			if(reg.positionX == regX && reg.positionY == regY && reg.positionZ == regZ)
+			{
+				loadedRegion = reg;
+				break;
+			}
+		}
+
+		//Check filesystem
+		if(loadedRegion == null)
+		{
+			loadedRegion = ResourceLoader.Load<Region>(savePath + loadedFolderPath + regionPath + regX + " " + regY + " " + regZ + regionExtension);
+		}
+
+		//Go ahead and create region
+		if(loadedRegion == null)
+		{
+			ResourceSaver.Save(new Region(){chunks = new Chunk[Region.regionSize,Region.regionSize,Region.regionSize]}, savePath + loadedFolderPath + regionPath + regX + " " + regY + " " + regZ + regionExtension);
+			return null;
+		}
+
+		//Load Chunks
+		return loadedRegion.chunks[chunkX % Region.regionSize,chunkY % Region.regionSize,chunkZ % Region.regionSize];
+	}
+
+	public void SaveChunkToRegion(Chunk chunk)
+	{
+
+	}
+
+	void CreateRegionFile()
+	{
+
 	}
 
 	public string GetSeed()
@@ -111,4 +158,14 @@ public partial class FileSaver : Node
 	}
 
 	#endregion
+}
+
+public partial class Region : Resource
+{
+	public const int regionSize = 5;
+
+	public int positionX;
+	public int positionY;
+	public int positionZ;
+	public Chunk[,,] chunks;
 }

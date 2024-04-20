@@ -331,8 +331,16 @@ public partial class WorldGen : Node3D
 		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
 		Task.Run(() =>
 		{
-			Chunk chunk = GenerateChunk(x, y, z, id);
-
+			Chunk chunk = fileSaver.LoadChunkFromRegion(x,y,z);
+			if(chunk == null)
+			{
+				GenerateChunk(x, y, z, id);
+				GD.Print("Generated Chunk " + x + " " + y + " " + z);
+			}
+			else
+			{
+				GD.Print("Loaded Chunk " + x + " " + y + " " + z);
+			}
 			ChunkRenderData chunkData = GetChunkMesh(chunk);
 
 			bool check = false;
@@ -2067,7 +2075,7 @@ public partial class WorldGen : Node3D
 		vert
 	}
 
-	public class Brush
+	public partial class Brush : Resource
 	{
 		//Vert Order
 
@@ -2104,7 +2112,7 @@ public partial class WorldGen : Node3D
 		public List<int> brushface;
 	}
 
-	public class Chunk
+	public partial class Chunk : Resource
 	{
 		public bool hasGeneratedBorders;
 		public Guid id;
