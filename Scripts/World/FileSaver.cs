@@ -13,12 +13,38 @@ public partial class FileSaver : Node
 	List<Region> loadedRegions = new List<Region>();
 	string loadedFolderPath;
 
+
 	//Consts
 	public const string savePath = "user://Your Precious Save Files/";
 	public const string worldSaveDataFile = "World Save Data";
 	public const string regionPath = "/Chunks/Region ";
-	public const string regionExtension = ".pneuchunks";
+	public const string regionExtension = ".tres";
 
+	public void SaveAllChunks(Chunk[] data)
+	{
+		Region loadedRegion;
+		foreach(Chunk chunk in data)
+		{
+			loadedRegion = FindRegionFile(
+				chunk.positionX / Region.regionSize,
+				chunk.positionY / Region.regionSize,
+				chunk.positionZ / Region.regionSize
+			);
+
+			loadedRegion.chunks[
+				chunk.positionX % Region.regionSize,
+				chunk.positionY % Region.regionSize,
+				chunk.positionZ % Region.regionSize
+			] = chunk;
+
+			ResourceSaver.Save(loadedRegion, savePath + loadedFolderPath + regionPath +
+				chunk.positionX / Region.regionSize + " " + 
+				chunk.positionY / Region.regionSize + " " + 
+				chunk.positionZ / Region.regionSize + 
+				regionExtension
+			);
+		}
+	}
 
 	public void CreateNewSaveFile(Godot.Collections.Dictionary<string, Variant> data, bool alsoLoadFile)
 	{
@@ -97,36 +123,65 @@ public partial class FileSaver : Node
 
 	public Chunk LoadChunkFromRegion(int chunkX, int chunkY, int chunkZ)
 	{
-		int regX = chunkX / Region.regionSize;
-		int regY = chunkY / Region.regionSize;
-		int regZ = chunkZ / Region.regionSize;
+		Region loadedRegion = FindRegionFile(
+			chunkX / Region.regionSize,
+			chunkY / Region.regionSize,
+			chunkZ / Region.regionSize
+		);
+
+		//Load Chunks
+		if(loadedRegion == null)
+		{
+			GD.Print("Region was null.");
+			return null;
+		}
+		return loadedRegion.chunks[
+			chunkX % Region.regionSize,
+			chunkY % Region.regionSize,
+			chunkZ % Region.regionSize
+		];
+	}
+
+	Region FindRegionFile(int regX, int regY, int regZ)
+	{
+		Region loadedRegion = null;
 
 		//Check loaded regions
-		Region loadedRegion = null;
 		foreach(Region reg in loadedRegions)
 		{
 			if(reg.positionX == regX && reg.positionY == regY && reg.positionZ == regZ)
 			{
-				loadedRegion = reg;
-				break;
+				return reg;
 			}
+		}
+
+		string finalPath = savePath + loadedFolderPath + regionPath + regX + " " + regY + " " + regZ + regionExtension;
+
+		if(!DirAccess.DirExistsAbsolute(savePath + loadedFolderPath + "/Chunks"))
+		{
+			DirAccess.MakeDirAbsolute(savePath + loadedFolderPath + "/Chunks");
 		}
 
 		//Check filesystem
 		if(loadedRegion == null)
-		{
-			loadedRegion = ResourceLoader.Load<Region>(savePath + loadedFolderPath + regionPath + regX + " " + regY + " " + regZ + regionExtension);
+		{			
+			if(FileAccess.FileExists(finalPath))
+			{
+				loadedRegion = ResourceLoader.Load<Region>(finalPath);
+			}
 		}
 
 		//Go ahead and create region
 		if(loadedRegion == null)
 		{
-			ResourceSaver.Save(new Region(){chunks = new Chunk[Region.regionSize,Region.regionSize,Region.regionSize]}, savePath + loadedFolderPath + regionPath + regX + " " + regY + " " + regZ + regionExtension);
-			return null;
+			loadedRegion = new Region(regX,regY,regZ);
+			Error e = ResourceSaver.Save(loadedRegion, finalPath);
+			if(e != Error.Ok)
+			{
+				GD.PrintErr("SAVING ERROR: " + e);
+			}
 		}
-
-		//Load Chunks
-		return loadedRegion.chunks[chunkX % Region.regionSize,chunkY % Region.regionSize,chunkZ % Region.regionSize];
+		return loadedRegion;
 	}
 
 	public void SaveChunkToRegion(Chunk chunk)
@@ -160,6 +215,7 @@ public partial class FileSaver : Node
 	#endregion
 }
 
+[GlobalClass]
 public partial class Region : Resource
 {
 	public const int regionSize = 5;
@@ -168,4 +224,12 @@ public partial class Region : Resource
 	public int positionY;
 	public int positionZ;
 	public Chunk[,,] chunks;
+
+	public Region(int regX, int regY, int regZ)
+	{
+		positionX = regX;
+		positionY = regY;
+		positionZ = regZ;
+		chunks = new Chunk[Region.regionSize,Region.regionSize,Region.regionSize];
+	}
 }

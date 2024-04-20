@@ -41,6 +41,7 @@ public partial class WorldGen : Node3D
 	FileSaver fileSaver;
 	FastNoiseContainer noise, noiseB, noiseC, noiseD, noiseE, noiseF, noiseOcean;
 	int maxChunksLoadingRampUp = 1;
+	float autoSaveTimer;
 
 	//Consts
 	public const int chunkLoadingDistance = 8;
@@ -77,6 +78,8 @@ public partial class WorldGen : Node3D
 	//TODO: add crafting system where you get shako for 2 metal
 	public override void _Ready()
 	{     
+
+		autoSaveTimer =  Mathf.Min(1,PlayerPrefs.GetFloat("Autosave Timer")) * 60;
 		fileSaver = GetNode<FileSaver>("/root/FileSaver");
    
 		server = GetTree().Root.GetNode("World/Server") as ServerClient;
@@ -173,6 +176,20 @@ public partial class WorldGen : Node3D
 		CheckForAnyPendingFinishedChunks();
 		LoadChunks();
 		UnloadChunks();
+
+		autoSaveTimer -= (float)delta;
+		if(autoSaveTimer <= 0)
+		{
+			autoSaveTimer = Mathf.Min(1,PlayerPrefs.GetFloat("Autosave Timer")) * 60;
+			Chunk[] chunkData = new Chunk[loadedChunks.Count];
+			
+			for (int i = 0; i < loadedChunks.Count; i++)
+			{
+				chunkData[i] = loadedChunks[i].chunk;
+			}
+			fileSaver.SaveAllChunks(chunkData);
+			Console.Instance.Print("Autosave! " + DateTime.Now.ToUniversalTime().ToString(@"MM\/dd\/yyyy h\:mm tt"),Console.PrintType.Success);
+		}
 	}
 
 	void LoadChunks()
@@ -331,18 +348,37 @@ public partial class WorldGen : Node3D
 		ongoingChunkRenderData.Add(new ChunkRenderData() { state = ChunkRenderDataState.running, id = id, position = new Vector3(x, y, z) });
 		Task.Run(() =>
 		{
-			Chunk chunk = fileSaver.LoadChunkFromRegion(x,y,z);
+			Chunk chunk = null;
+			try
+			{
+				chunk = fileSaver.LoadChunkFromRegion(x,y,z);
+			}
+			catch(Exception e)
+			{
+				GD.PrintErr(e);
+			}
+
 			if(chunk == null)
 			{
-				GenerateChunk(x, y, z, id);
+				chunk = GenerateChunk(x, y, z, id);
 				GD.Print("Generated Chunk " + x + " " + y + " " + z);
 			}
 			else
 			{
 				GD.Print("Loaded Chunk " + x + " " + y + " " + z);
 			}
+
+			if(chunk == null)
+			{
+				GD.PrintErr("Chunk was null. (ID " + id + ")");
+			}
+
 			ChunkRenderData chunkData = GetChunkMesh(chunk);
 
+			if(chunkData == null)
+			{
+				GD.PrintErr("Chunk Mesh was null. (ID " + id + ")");
+			}
 			bool check = false;
 			for (int i = 0; i < ongoingChunkRenderData.Count; i++)
 			{
@@ -372,7 +408,6 @@ public partial class WorldGen : Node3D
 				GD.PrintErr("Chunk missing ID in ongoing chunk pool. (ID " + id + ") (Seed " + fileSaver.GetSeed() + ")");
 				firstChunkLoaded = true; //Bandaid fix, please figure out why chunks are missing IDs
 			}
-
 		});
 	}
 
@@ -2112,15 +2147,15 @@ public partial class WorldGen : Node3D
 		public List<int> brushface;
 	}
 
+	[GlobalClass]
 	public partial class Chunk : Resource
 	{
 		public bool hasGeneratedBorders;
-		public Guid id;
 		public int positionX;
 		public int positionY;
 		public int positionZ;
 		public List<Brush> brushes;
-		public System.Collections.Generic.Dictionary<Brush, List<Brush>> connectedInvisibleBrushes;
+		public Godot.Collections.Dictionary<Brush, Godot.Collections.Array<Brush>> connectedInvisibleBrushes;
 	}
 
 	public class ChunkRenderData
