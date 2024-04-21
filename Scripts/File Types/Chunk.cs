@@ -15,20 +15,26 @@ public partial class Chunk
 }
 
 [MemoryPackable]
-public partial class ByteVector3: IEqualityComparer<ByteVector3>
+public partial class ByteVector3
 {
 	public byte x,y,z;
 
-	public bool Equals(ByteVector3 a, ByteVector3 b)
-	{
-		if (a == null || b == null)
-			return false;
+	public override bool Equals(object obj)
+    {
+        // If the object is null, return false.
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
 
-		return a.x == b.x && a.y == b.y && a.z == b.z;
-	}
-
-	public int GetHashCode([DisallowNull] ByteVector3 obj)
-	{
-		return System.HashCode.Combine(obj.x, obj.y, obj.z);
+        // Cast the object to ByteVector3 to compare values.
+        ByteVector3 other = (ByteVector3)obj;
+        
+        // Check if all components are equal.
+        return x == other.x && y == other.y && z == other.z;
+    }
+    public override int GetHashCode()
+    {
+		return System.HashCode.Combine(x,y,z);
 	}
 }

@@ -1875,8 +1875,18 @@ public partial class WorldGen : Node3D
 
 		Brush b = foundChunk.chunk.brushes[compareValue];
 
-		//Remove and rerender
+		//Remove and shuffle dictionary
+        foreach (KeyValuePair<ByteVector3,int> value in foundChunk.chunk.brushBBPositions)
+		{	
+			if(value.Value > compareValue)
+			{
+				foundChunk.chunk.brushBBPositions[value.Key] --;
+			}
+		}
+
 		foundChunk.chunk.brushes.RemoveAt(compareValue);
+
+		//Rerender
 		if (borderCheck && !foundChunk.chunk.hasGeneratedBorders)
 		{
 			RenderChunkBordersVisible(foundChunk);
