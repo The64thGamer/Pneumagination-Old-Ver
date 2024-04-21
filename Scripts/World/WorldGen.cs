@@ -404,7 +404,7 @@ public partial class WorldGen : Node3D
 		chunk.positionY = y;
 		chunk.positionZ = z;
 		chunk.brushes = new List<Brush>();
-		chunk.brushBBPositions = new Dictionary<byte[],int>(new ByteArrayComparer());
+		chunk.brushBBPositions = new Dictionary<ByteVector3,int>();
 
 		//BlockArray Setup
 		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
@@ -493,7 +493,7 @@ public partial class WorldGen : Node3D
 						//Assign textures
 						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, ref preGen);
 						
-						chunk.brushBBPositions.Add(new byte[]{(byte)(preGen.posX+chunkMarginSize), (byte)(preGen.posY+chunkMarginSize), (byte)(preGen.posZ+chunkMarginSize)},chunk.brushes.Count);
+						chunk.brushBBPositions.Add(new ByteVector3{x = (byte)(preGen.posX+chunkMarginSize),y=(byte)(preGen.posY+chunkMarginSize),z= (byte)(preGen.posZ+chunkMarginSize)},chunk.brushes.Count);
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] = bigBlock;
 					}
@@ -1746,13 +1746,13 @@ public partial class WorldGen : Node3D
 		}
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 
-		byte[] check = null;
+		ByteVector3 check = null;
 		int compareValue = foundChunk.triangleIndexToBrushIndex[index];
-        foreach (KeyValuePair<byte[],int> value in foundChunk.chunk.brushBBPositions)
+        foreach (KeyValuePair<ByteVector3,int> value in foundChunk.chunk.brushBBPositions)
 		{		
 			if(value.Value == compareValue)
 			{
-				GD.Print("KEY FOUND " + string.Join(", ", value.Key));
+				GD.Print("KEY FOUND " + value.Key.x + " " + value.Key.y + " " + value.Key.z);
 				check = value.Key;
 				break;
 			}
@@ -1766,24 +1766,24 @@ public partial class WorldGen : Node3D
 				switch(i)
 				{
 					case 0:
-						check[0] -= 1;
+						check.x -= 1;
 						break;
 					case 1:
-						check[0] += 2;
+						check.x += 2;
 						break;
 					case 2:
-						check[0] -= 1;
-						check[1] -= 1;
+						check.x -= 1;
+						check.y -= 1;
 						break;
 					case 3:
-						check[1] += 2;
+						check.y += 2;
 						break;
 					case 4:
-						check[1] -= 1;
-						check[2] -= 1;
+						check.y -= 1;
+						check.z -= 1;
 						break;
 					case 5:
-						check[2] += 2;
+						check.z  += 2;
 						break;
 					default:
 					break;
@@ -1791,12 +1791,12 @@ public partial class WorldGen : Node3D
 
 				if(foundChunk.chunk.brushBBPositions.ContainsKey(check))
 				{
-					GD.Print("ADJ FOUND " + string.Join(", ", check));
+					GD.Print("     ADJ FOUND " + check.x + " " + check.y + " " + check.z);
 					foundChunk.chunk.brushes[foundChunk.chunk.brushBBPositions[check]].hiddenFlag = false;
 				}
 			}
 			
-			check[2] -= 1;
+			check.z  -= 1;
 			foundChunk.chunk.brushBBPositions.Remove(check);
 		}
 
@@ -2070,19 +2070,7 @@ public partial class WorldGen : Node3D
 	#endregion
 
 	#region class struct definitions
-	public class ByteArrayComparer : IEqualityComparer<byte[]> {
-		public bool Equals(byte[] left, byte[] right) {
-			if ( left == null || right == null ) {
-			return left == right;
-			}
-			return left.SequenceEqual(right);
-		}
-		public int GetHashCode(byte[] key) {
-			if (key == null)
-			throw new ArgumentNullException("key");
-			return key.Sum(b => b);
-		}
-	}
+
 	public struct PreGenNoiseValues
 	{
 		public float oceanMultiplier;

@@ -219,8 +219,7 @@ public partial class FileSaver : Node
 		{			
 			if(FileAccess.FileExists(finalPath))
 			{
-				FileAccess file = FileAccess.Open(finalPath, FileAccess.ModeFlags.Read);
-				loadedRegion = MemoryPackSerializer.Deserialize<Region>(file.GetBuffer((long)file.GetLength()));
+				loadedRegion = MemoryPackSerializer.Deserialize<Region>(FileAccess.GetFileAsBytes(finalPath));
 				GD.Print("Loaded File "+ finalPath);
 			}
 		}
