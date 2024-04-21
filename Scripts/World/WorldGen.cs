@@ -1752,7 +1752,6 @@ public partial class WorldGen : Node3D
 		{		
 			if(value.Value == compareValue)
 			{
-				GD.Print("KEY FOUND " + value.Key.x + " " + value.Key.y + " " + value.Key.z);
 				check = value.Key;
 				break;
 			}
@@ -1791,7 +1790,6 @@ public partial class WorldGen : Node3D
 
 				if(foundChunk.chunk.brushBBPositions.ContainsKey(check))
 				{
-					GD.Print("     ADJ FOUND " + check.x + " " + check.y + " " + check.z);
 					foundChunk.chunk.brushes[foundChunk.chunk.brushBBPositions[check]].hiddenFlag = false;
 				}
 			}

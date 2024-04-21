@@ -84,7 +84,7 @@ public partial class FileSaver : Node
 				regionExtension
 				, FileAccess.ModeFlags.Write);
 
-			file.StoreBuffer(MemoryPackSerializer.Serialize(region));
+			file.StoreBuffer(CLZF2.Compress(MemoryPackSerializer.Serialize(region)));
 		}
 	}
 
@@ -219,7 +219,7 @@ public partial class FileSaver : Node
 		{			
 			if(FileAccess.FileExists(finalPath))
 			{
-				loadedRegion = MemoryPackSerializer.Deserialize<Region>(FileAccess.GetFileAsBytes(finalPath));
+				loadedRegion = MemoryPackSerializer.Deserialize<Region>(CLZF2.Decompress(FileAccess.GetFileAsBytes(finalPath)));
 				GD.Print("Loaded File "+ finalPath);
 			}
 		}
@@ -235,7 +235,7 @@ public partial class FileSaver : Node
 				positionZ = regZ,
             };
 			FileAccess file = FileAccess.Open(finalPath, FileAccess.ModeFlags.Write);
-			file.StoreBuffer(MemoryPackSerializer.Serialize(loadedRegion));
+			file.StoreBuffer(CLZF2.Compress(MemoryPackSerializer.Serialize(loadedRegion)));
 			GD.Print("Created File "+ finalPath);
 		}
 
