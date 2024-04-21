@@ -120,7 +120,7 @@ public partial class Mining : Node3D
 
                 //Size & Textures
                 totalBrushes += size;
-                for (int i = 0; i < b.textures.Count; i++)
+                for (int i = 0; i < b.textures.Length; i++)
                 {
                     if (b.textures[i] == 0)
                     {

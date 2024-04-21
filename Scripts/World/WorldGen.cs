@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -404,8 +403,8 @@ public partial class WorldGen : Node3D
 		chunk.positionX = x;
 		chunk.positionY = y;
 		chunk.positionZ = z;
-		chunk.brushes = new Array<Brush>();
-		chunk.connectedInvisibleBrushes = new Godot.Collections.Dictionary<Brush, Array<Brush>>();
+		chunk.brushes = new List<Brush>();
+		chunk.brushBBPositions = new Dictionary<byte[],int>(new ByteArrayComparer());
 
 		//BlockArray Setup
 		byte[,,] bigBlockArray = new byte[chunkSize / bigBlockSize, chunkSize / bigBlockSize, chunkSize / bigBlockSize];
@@ -493,7 +492,8 @@ public partial class WorldGen : Node3D
 
 						//Assign textures
 						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, ref preGen);
-
+						
+						chunk.brushBBPositions.Add(new byte[]{(byte)(preGen.posX+chunkMarginSize), (byte)(preGen.posY+chunkMarginSize), (byte)(preGen.posZ+chunkMarginSize)},chunk.brushes.Count);
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] = bigBlock;
 					}
@@ -517,7 +517,7 @@ public partial class WorldGen : Node3D
 		{
 			return chunk;
 		}
-
+		
 		//Second Surface Layer & Visibility Assigning
 		for (preGen.posX = 0; preGen.posX < chunkSize / bigBlockSize; preGen.posX++)
 		{						
@@ -532,36 +532,6 @@ public partial class WorldGen : Node3D
 				for (preGen.posY = 0; preGen.posY < chunkSize / bigBlockSize; preGen.posY++)
 				{
 					preGen.newY = preGen.posY + (chunkSize * y / bigBlockSize);
-					
-					Brush assignedBrush = bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ];
-					if (assignedBrush != null && (assignedBrush.hiddenFlag || assignedBrush.borderFlag))
-					{					
-						if(assignedBrush.borderFlag)
-						{	
-							if(preGen.posX + 1 < chunkSize / bigBlockSize){
-								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]);}
-							if(preGen.posY + 1 < chunkSize / bigBlockSize){
-								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]);}
-							if(preGen.posZ + 1 < chunkSize / bigBlockSize){
-								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]);}	
-							if(preGen.posX - 1 >= 0){
-								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]);}
-							if(preGen.posY - 1 >= 0){
-								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]);}
-							if(preGen.posZ - 1 >= 0){
-								SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]);}
-						}
-						else
-						{				
-							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY + 1, preGen.posZ]);
-							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY - 1, preGen.posZ]);
-							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX + 1, preGen.posY, preGen.posZ]);
-							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX - 1, preGen.posY, preGen.posZ]);
-							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ + 1]);
-							SetConnectedInvisibleBrushes(chunk,assignedBrush,bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ - 1]);
-						}
-						
-					}
 					
 					if (!GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 1) && !GetBitOfByte(bigBlockArray[preGen.posX, preGen.posY, preGen.posZ], 0))
 					{
@@ -597,7 +567,7 @@ public partial class WorldGen : Node3D
 		if(y < -1)
 		{
 			Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize);
-			water.textures = new Godot.Collections.Array<uint>{9,9,9,9,9,9};
+			water.textures = new uint[]{9,9,9,9,9,9};
 			water.hiddenFlag = false;
 			water.borderFlag = false;
 			return water;
@@ -605,29 +575,12 @@ public partial class WorldGen : Node3D
 		else if(y == -1)
 		{
 			Brush water = CreateBrush(Vector3.One * chunkMarginSize,Vector3.One * chunkSize - new Vector3(0,1,0));
-			water.textures = new Godot.Collections.Array<uint>{9,9,9,9,9,9};
+			water.textures = new uint[]{9,9,9,9,9,9};
 			water.hiddenFlag = false;
 			water.borderFlag = false;
 			return water;
 		}
 		return null;
-	}
-
-	void SetConnectedInvisibleBrushes(Chunk chunk, Brush assignedBrush, Brush checkBrush)
-	{
-		if(checkBrush == null)
-		{
-			return;
-		}
-
-		if (chunk.connectedInvisibleBrushes.ContainsKey(checkBrush))
-		{ 
-			chunk.connectedInvisibleBrushes[checkBrush].Add(assignedBrush); 
-		}
-		else
-		{ 
-			chunk.connectedInvisibleBrushes[checkBrush] = new Array<Brush>() { assignedBrush }; 
-		}
 	}
 	
 	void PregenNoiseValues(ref PreGenNoiseValues preGen)
@@ -668,56 +621,56 @@ public partial class WorldGen : Node3D
 
 
 	//Bottom,North,Top,South,West,East
-	Godot.Collections.Array<uint> FindTextureOfGeneratingBrush(bool isSurface, ref PreGenNoiseValues preGen)
+	uint[] FindTextureOfGeneratingBrush(bool isSurface, ref PreGenNoiseValues preGen)
 	{
 		if(preGen.oceanMultiplier < 0.1f)
 		{
 			if (isSurface)
 			{
-				return new Godot.Collections.Array<uint>{ 3, 8, 8, 8, 8, 8 };
+				return new uint[]{ 3, 8, 8, 8, 8, 8 };
 			}
 			else
 			{
-				return new Godot.Collections.Array<uint>{ 3, 3, 3, 3, 3, 3 };
+				return new uint[]{ 3, 3, 3, 3, 3, 3 };
 			}
 		}
 		if (preGen.biome <= 0.5f) //Grass
 		{
 			if ((preGen.regionBordercheck || preGen.regionBorderCornercheck) && isSurface)
 			{
-				return new Godot.Collections.Array<uint>{ 3, 1, 1, 1, 1, 1 };
+				return new uint[]{ 3, 1, 1, 1, 1, 1 };
 			}
 			if (isSurface)
 			{
-				return new Godot.Collections.Array<uint>{ 3, 4, 4, 4, 4, 4 };
+				return new uint[]{ 3, 4, 4, 4, 4, 4 };
 			}
 			else
 			{
-				return new Godot.Collections.Array<uint>{ 3, 3, 3, 3, 3, 3 };
+				return new uint[]{ 3, 3, 3, 3, 3, 3 };
 			}
 		}
 		else if (preGen.biome > 0.5f && preGen.biome <= 0.75f) //Desert
 		{
 			if ((preGen.regionBordercheck || preGen.regionBorderCornercheck) && isSurface)
 			{
-				return new Godot.Collections.Array<uint>{ 3, 6, 6, 6, 6, 6 };
+				return new uint[]{ 3, 6, 6, 6, 6, 6 };
 			}
 			if (isSurface)
 			{
-				return new Godot.Collections.Array<uint>{ 3, 5, 5, 5, 5, 5 };
+				return new uint[]{ 3, 5, 5, 5, 5, 5 };
 			}
 			else
 			{
-				return new Godot.Collections.Array<uint>{ 3, 3, 3, 3, 3, 3 };
+				return new uint[]{ 3, 3, 3, 3, 3, 3 };
 			}
 		}
 		else //Quarry
 		{
 			if ((preGen.regionBordercheck || preGen.regionBorderCornercheck) && isSurface)
 			{
-				return new Godot.Collections.Array<uint> { 7, 1, 1, 1, 1, 1 };
+				return new uint[] { 7, 1, 1, 1, 1, 1 };
 			}
-			return new Godot.Collections.Array<uint> { 7, 7, 7, 7, 7, 7 };
+			return new uint[] { 7, 7, 7, 7, 7, 7 };
 
 		}
 	}
@@ -793,13 +746,9 @@ public partial class WorldGen : Node3D
 			bool isSurface = (bitMask & (1 << 1)) == 0 && (bitMask & (1 << 0)) != 0 && preGen.chunkY >= -1;
 
 			//Assign textures
-			Godot.Collections.Array<uint> textures = FindTextureOfGeneratingBrush(isSurface, ref preGen);
-
 			for (int i = 0; i < verts.Length / 24; i++)
 			{
-				Array<byte> vertsArr = new Array<byte>();
-				vertsArr.Resize(24);
-				b = new Brush { hiddenFlag = false, vertices = vertsArr, borderFlag = CheckBrushOnBorder(ref preGen), textures = textures };
+				b = new Brush { hiddenFlag = false, vertices = new byte[24], borderFlag = CheckBrushOnBorder(ref preGen), textures = FindTextureOfGeneratingBrush(isSurface, ref preGen) };
 				for (int e = 0; e < 24; e += 3)
 				{
 					b.vertices[e] = (byte)(verts[e + (i * 24)] + chunkMarginSize + (preGen.posX * bigBlockSize));
@@ -1332,7 +1281,7 @@ public partial class WorldGen : Node3D
 		byte maxZ = (byte)(newZ + (byte)size.Z);
 
 		Brush brush = new Brush();
-		brush.vertices = new Array<byte>
+		brush.vertices = new byte[]
 			{
 				newX,newY,newZ,
 				maxX,newY,newZ,
@@ -1344,11 +1293,11 @@ public partial class WorldGen : Node3D
 				maxX,maxY,maxZ,
 				newX,maxY,maxZ,
 			};
-		brush.textures = new Godot.Collections.Array<uint> { 0, 0, 0, 0, 0, 0 };
+		brush.textures = new uint[] { 0, 0, 0, 0, 0, 0 };
 		return brush;
 	}
 
-	public float VolumeOfMesh(Array<byte> verts)
+	public float VolumeOfMesh(byte[] verts)
 	{
 		float total = 0;
 		for (int i = 0; i < brushIndices.Length; i += 3)
@@ -1515,8 +1464,8 @@ public partial class WorldGen : Node3D
 		int finalVertB = 0;
 		int testMove;
 		bool meshChanged = false;
-		Array<byte> backupCopy;
-		backupCopy = foundBrush.vertices.Duplicate();
+		byte[] backupCopy = new byte[foundBrush.vertices.Length];
+		Array.Copy(foundBrush.vertices, backupCopy, foundBrush.vertices.Length);
 
 		switch (moveType)
 		{
@@ -1714,7 +1663,7 @@ public partial class WorldGen : Node3D
 		//Check for valid size
 		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-		for (int j = 0; j < foundBrush.vertices.Count; j += 3)
+		for (int j = 0; j < foundBrush.vertices.Length; j += 3)
 		{
 			if (minSize.X > foundBrush.vertices[j]) { minSize.X = foundBrush.vertices[j]; }
 			if (minSize.Y > foundBrush.vertices[j + 1]) { minSize.Y = foundBrush.vertices[j + 1]; }
@@ -1797,17 +1746,61 @@ public partial class WorldGen : Node3D
 		}
 		int index = Mathf.FloorToInt(brushID / 2.0f);
 
-		//Signal to reveal hidden blocks
-		if (foundChunk.chunk.connectedInvisibleBrushes.TryGetValue(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]], out Godot.Collections.Array<Brush> updateBrushes))
-		{
-			foreach (Brush pendingBrush in updateBrushes)
+		byte[] check = null;
+		int compareValue = foundChunk.triangleIndexToBrushIndex[index];
+        foreach (KeyValuePair<byte[],int> value in foundChunk.chunk.brushBBPositions)
+		{		
+			if(value.Value == compareValue)
 			{
-				pendingBrush.hiddenFlag = false;
+				GD.Print("KEY FOUND " + string.Join(", ", value.Key));
+				check = value.Key;
+				break;
 			}
-			foundChunk.chunk.connectedInvisibleBrushes.Remove(foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]]);
 		}
 
-		bool borderCheck = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].borderFlag;
+		//Ping other adjacent blocks
+		if(check != null)
+		{
+			for(int i = 0; i < 6; i++)
+			{
+				switch(i)
+				{
+					case 0:
+						check[0] -= 1;
+						break;
+					case 1:
+						check[0] += 2;
+						break;
+					case 2:
+						check[0] -= 1;
+						check[1] -= 1;
+						break;
+					case 3:
+						check[1] += 2;
+						break;
+					case 4:
+						check[1] -= 1;
+						check[2] -= 1;
+						break;
+					case 5:
+						check[2] += 2;
+						break;
+					default:
+					break;
+				}
+
+				if(foundChunk.chunk.brushBBPositions.ContainsKey(check))
+				{
+					GD.Print("ADJ FOUND " + string.Join(", ", check));
+					foundChunk.chunk.brushes[foundChunk.chunk.brushBBPositions[check]].hiddenFlag = false;
+				}
+			}
+			
+			check[2] -= 1;
+			foundChunk.chunk.brushBBPositions.Remove(check);
+		}
+
+		bool borderCheck = foundChunk.chunk.brushes[compareValue].borderFlag;
 
 		//Check for border generation
 		Vector3 chunkPos;
@@ -1851,11 +1844,11 @@ public partial class WorldGen : Node3D
 			}
 		}
 		//Set up Values
-		Array<byte> brushVerts = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].vertices;
+		byte[] brushVerts = foundChunk.chunk.brushes[compareValue].vertices;
 		Vector3 pos = Vector3.Zero;
 		Vector3 minSize = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 		Vector3 maxSize = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-		for (int j = 0; j < brushVerts.Count; j += 3)
+		for (int j = 0; j < brushVerts.Length; j += 3)
 		{
 			pos += new Vector3(brushVerts[j], brushVerts[j + 1], brushVerts[j + 2]);
 			if (minSize.X > brushVerts[j]) { minSize.X = brushVerts[j]; }
@@ -1865,7 +1858,7 @@ public partial class WorldGen : Node3D
 			if (maxSize.Y < brushVerts[j + 1]) { maxSize.Y = brushVerts[j + 1]; }
 			if (maxSize.Z < brushVerts[j + 2]) { maxSize.Z = brushVerts[j + 2]; }
 		}
-		pos /= brushVerts.Count / 3;
+		pos /= brushVerts.Length / 3;
 
 		//Particles
 		Vector3 size = (maxSize - minSize);
@@ -1876,14 +1869,14 @@ public partial class WorldGen : Node3D
 			);
 		(destroyBrushParticles.ProcessMaterial as ParticleProcessMaterial).EmissionBoxExtents = size / 2.0f;
 		destroyBrushParticles.Amount = (int)Mathf.Max(size.X * size.Y * size.Z * 0.2f, 2);
-		destroyBrushParticles.MaterialOverride = mats[foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]].textures[1]];
+		destroyBrushParticles.MaterialOverride = mats[foundChunk.chunk.brushes[compareValue].textures[1]];
 		destroyBrushParticles.Restart();
 		destroyBrushParticles.Emitting = true;
 
-		Brush b = foundChunk.chunk.brushes[foundChunk.triangleIndexToBrushIndex[index]];
+		Brush b = foundChunk.chunk.brushes[compareValue];
 
 		//Remove and rerender
-		foundChunk.chunk.brushes.RemoveAt(foundChunk.triangleIndexToBrushIndex[index]);
+		foundChunk.chunk.brushes.RemoveAt(compareValue);
 		if (borderCheck && !foundChunk.chunk.hasGeneratedBorders)
 		{
 			RenderChunkBordersVisible(foundChunk);
@@ -2077,6 +2070,19 @@ public partial class WorldGen : Node3D
 	#endregion
 
 	#region class struct definitions
+	public class ByteArrayComparer : IEqualityComparer<byte[]> {
+		public bool Equals(byte[] left, byte[] right) {
+			if ( left == null || right == null ) {
+			return left == right;
+			}
+			return left.SequenceEqual(right);
+		}
+		public int GetHashCode(byte[] key) {
+			if (key == null)
+			throw new ArgumentNullException("key");
+			return key.Sum(b => b);
+		}
+	}
 	public struct PreGenNoiseValues
 	{
 		public float oceanMultiplier;

@@ -1,15 +1,15 @@
 using Godot;
-using Godot.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Console = media.Laura.SofiaConsole.Console;
+using MemoryPack;
 
 public partial class FileSaver : Node
 {
 	//Locals
 	Godot.Collections.Dictionary<string, Variant> loadedWorldData;
 
-	Array<Region> loadedRegions = new Array<Region>();
+	List<Region> loadedRegions = new List<Region>();
 	string loadedFolderPath;
 	WorldGen worldGen;
 	float autoSaveTimer;
@@ -19,7 +19,7 @@ public partial class FileSaver : Node
 	public const string savePath = "user://Your Precious Save Files/";
 	public const string worldSaveDataFile = "World Save Data";
 	public const string regionPath = "/Chunks/Region ";
-	public const string regionExtension = ".res";
+	public const string regionExtension = ".pneuChunks";
 	public const int regionSize = 16;
 		
 	public override void _Ready()
@@ -77,12 +77,14 @@ public partial class FileSaver : Node
 		foreach(Region region in loadedRegions)
 		{
 			GD.Print("ASP2 " + region);
-			ResourceSaver.Save(region, savePath + loadedFolderPath + regionPath +
+			FileAccess file = FileAccess.Open(savePath + loadedFolderPath + regionPath +
 				region.positionX + " " + 
 				region.positionY + " " + 
 				region.positionZ + 
-				regionExtension,ResourceSaver.SaverFlags.Compress
-			);
+				regionExtension
+				, FileAccess.ModeFlags.Write);
+
+			file.StoreBuffer(MemoryPackSerializer.Serialize(region));
 		}
 	}
 
@@ -178,7 +180,7 @@ public partial class FileSaver : Node
 
 		if(loadedRegion.chunks == null)
 		{
-			loadedRegion.chunks = new Godot.Collections.Dictionary<Vector3, Chunk>();
+			loadedRegion.chunks = new Dictionary<Vector3, Chunk>();
 		}
 		else if(loadedRegion.chunks.TryGetValue(new Vector3(
 			mod(chunkX , regionSize),
@@ -217,7 +219,8 @@ public partial class FileSaver : Node
 		{			
 			if(FileAccess.FileExists(finalPath))
 			{
-				loadedRegion = ResourceLoader.Load(finalPath) as Region;
+				FileAccess file = FileAccess.Open(finalPath, FileAccess.ModeFlags.Read);
+				loadedRegion = MemoryPackSerializer.Deserialize<Region>(file.GetBuffer((long)file.GetLength()));
 				GD.Print("Loaded File "+ finalPath);
 			}
 		}
@@ -227,12 +230,13 @@ public partial class FileSaver : Node
 		{
             loadedRegion = new Region
             {
-                chunks = new Godot.Collections.Dictionary<Vector3, Chunk>(),
+                chunks = new Dictionary<Vector3, Chunk>(),
 				positionX = regX,
 				positionY = regY,
 				positionZ = regZ,
             };
-            ResourceSaver.Save(loadedRegion, finalPath,ResourceSaver.SaverFlags.Compress);
+			FileAccess file = FileAccess.Open(finalPath, FileAccess.ModeFlags.Write);
+			file.StoreBuffer(MemoryPackSerializer.Serialize(loadedRegion));
 			GD.Print("Created File "+ finalPath);
 		}
 

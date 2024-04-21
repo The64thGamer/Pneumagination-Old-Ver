@@ -1,13 +1,14 @@
+using System.Collections.Generic;
 using Godot;
-using Godot.Collections;
+using MemoryPack;
 
-[GlobalClass]
-public partial class Chunk : Resource
+[MemoryPackable]
+public partial class Chunk
 {
-	[Export] public bool hasGeneratedBorders;
-	[Export] public int positionX;
-	[Export] public int positionY;
-	[Export] public int positionZ;
-	[Export] public Array<Brush> brushes;
-	[Export] public Dictionary<Brush, Array<Brush>> connectedInvisibleBrushes;
+	public bool hasGeneratedBorders;
+	public int positionX;
+	public int positionY;
+	public int positionZ;
+	public List<Brush> brushes;
+	public Dictionary<byte[], int> brushBBPositions;
 }

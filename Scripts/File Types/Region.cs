@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using Godot;
-using Godot.Collections;
+using MemoryPack;
 
-[GlobalClass]
-public partial class Region : Resource
+[MemoryPackable]
+public partial class Region
 {
-	[Export] public int positionX;
-	[Export] public int positionY;
-	[Export] public int positionZ;
-	[Export] public Dictionary<Vector3,Chunk> chunks;
+	public int positionX;
+	public int positionY;
+	public int positionZ;
+	public Dictionary<Vector3,Chunk> chunks;
 }
