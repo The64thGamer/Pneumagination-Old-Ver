@@ -59,10 +59,10 @@ public partial class FileSaver : Node
 				Mathf.FloorToInt(chunk.positionZ / (float)regionSize)
 			);
 
-			Vector3 pos = new Vector3(
-				mod(chunk.positionX , regionSize),
-				mod(chunk.positionY , regionSize),
-				mod(chunk.positionZ , regionSize)
+			ByteVector3 pos = new ByteVector3(
+				(byte)mod(chunk.positionX , regionSize),
+				(byte)mod(chunk.positionY , regionSize),
+				(byte)mod(chunk.positionZ , regionSize)
 				);
 
 			if(loadedRegion.chunks.TryGetValue(pos,out Chunk oldChunk))
@@ -76,7 +76,11 @@ public partial class FileSaver : Node
 		}
 		foreach(Region region in loadedRegions)
 		{
-			GD.Print("ASP2 " + region);
+			GD.Print("ASP2 " + savePath + loadedFolderPath + regionPath +
+				region.positionX + " " + 
+				region.positionY + " " + 
+				region.positionZ);
+			
 			FileAccess file = FileAccess.Open(savePath + loadedFolderPath + regionPath +
 				region.positionX + " " + 
 				region.positionY + " " + 
@@ -84,7 +88,8 @@ public partial class FileSaver : Node
 				regionExtension
 				, FileAccess.ModeFlags.Write);
 
-			file.StoreBuffer(CLZF2.Compress(MemoryPackSerializer.Serialize(region)));
+			file.StoreBuffer(EasyCompressor.SnappierCompressor.Shared.Compress(MemoryPackSerializer.Serialize(region)));
+			file.Close();
 		}
 	}
 
@@ -180,12 +185,12 @@ public partial class FileSaver : Node
 
 		if(loadedRegion.chunks == null)
 		{
-			loadedRegion.chunks = new Dictionary<Vector3, Chunk>();
+			loadedRegion.chunks = new Dictionary<ByteVector3, Chunk>();
 		}
-		else if(loadedRegion.chunks.TryGetValue(new Vector3(
-			mod(chunkX , regionSize),
-			mod(chunkY , regionSize),
-			mod(chunkZ , regionSize)
+		else if(loadedRegion.chunks.TryGetValue(new ByteVector3(
+			(byte)mod(chunkX , regionSize),
+			(byte)mod(chunkY , regionSize),
+			(byte)mod(chunkZ , regionSize)
 		),out Chunk oldChunk))
 		{
 			return oldChunk;
@@ -219,8 +224,17 @@ public partial class FileSaver : Node
 		{			
 			if(FileAccess.FileExists(finalPath))
 			{
-				loadedRegion = MemoryPackSerializer.Deserialize<Region>(CLZF2.Decompress(FileAccess.GetFileAsBytes(finalPath)));
-				GD.Print("Loaded File "+ finalPath);
+				byte[] file = FileAccess.GetFileAsBytes(finalPath);
+				if(file == null || file.Length == 0)
+				{
+					GD.PrintErr("File Error " + finalPath + " " + FileAccess.GetOpenError());
+				}
+				else
+				{
+					file = EasyCompressor.SnappierCompressor.Shared.Decompress(file);
+					loadedRegion = MemoryPackSerializer.Deserialize<Region>(file);
+					GD.Print("Loaded File "+ finalPath);
+				}
 			}
 		}
 
@@ -229,13 +243,14 @@ public partial class FileSaver : Node
 		{
             loadedRegion = new Region
             {
-                chunks = new Dictionary<Vector3, Chunk>(),
+                chunks = new Dictionary<ByteVector3, Chunk>(),
 				positionX = regX,
 				positionY = regY,
 				positionZ = regZ,
             };
 			FileAccess file = FileAccess.Open(finalPath, FileAccess.ModeFlags.Write);
-			file.StoreBuffer(CLZF2.Compress(MemoryPackSerializer.Serialize(loadedRegion)));
+			file.StoreBuffer(EasyCompressor.SnappierCompressor.Shared.Compress(MemoryPackSerializer.Serialize(loadedRegion)));
+			file.Close();
 			GD.Print("Created File "+ finalPath);
 		}
 

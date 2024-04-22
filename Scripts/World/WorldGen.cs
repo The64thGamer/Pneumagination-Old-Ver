@@ -493,7 +493,7 @@ public partial class WorldGen : Node3D
 						//Assign textures
 						bigBlock.textures = FindTextureOfGeneratingBrush(isSurface, ref preGen);
 						
-						chunk.brushBBPositions.Add(new ByteVector3{x = (byte)(preGen.posX+chunkMarginSize),y=(byte)(preGen.posY+chunkMarginSize),z= (byte)(preGen.posZ+chunkMarginSize)},chunk.brushes.Count);
+						chunk.brushBBPositions.Add(new ByteVector3((byte)(preGen.posX+chunkMarginSize),(byte)(preGen.posY+chunkMarginSize),(byte)(preGen.posZ+chunkMarginSize)),chunk.brushes.Count);
 						chunk.brushes.Add(bigBlock);
 						bigBlockBrushArray[preGen.posX, preGen.posY, preGen.posZ] = bigBlock;
 					}

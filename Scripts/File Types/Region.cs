@@ -8,5 +8,5 @@ public partial class Region
 	public int positionX;
 	public int positionY;
 	public int positionZ;
-	public Dictionary<Vector3,Chunk> chunks;
+	public Dictionary<ByteVector3,Chunk> chunks;
 }

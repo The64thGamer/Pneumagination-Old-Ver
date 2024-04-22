@@ -18,6 +18,12 @@ public partial class Chunk
 public partial class ByteVector3
 {
 	public byte x,y,z;
+	public ByteVector3(byte x, byte y, byte z)
+	{
+        this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 
 	public override bool Equals(object obj)
     {
