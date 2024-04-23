@@ -331,23 +331,31 @@ public partial class WorldGen : Node3D
 		Task.Run(() =>
 		{
 			Chunk chunk = null;
+
 			try
 			{
 				chunk = fileSaver.LoadChunkFromRegion(x,y,z);
 			}
 			catch(Exception e)
 			{
-				GD.PrintErr(e);
+				GD.PrintErr("Chunk Loading Error: " + e);
 			}
-
+			
 			if(chunk == null)
 			{
-				chunk = GenerateChunk(x, y, z, id);
+				try
+				{
+					chunk = GenerateChunk(x, y, z, id);
+				}
+				catch(Exception e)
+				{
+					GD.PrintErr("Chunk Generation Error: " + e);
+				}
 				GD.Print("Generated Chunk " + x + " " + y + " " + z);
 			}
 			else
 			{
-				GD.Print("Loaded Chunk " + x + " " + y + " " + z);
+				//GD.Print("Loaded Chunk " + x + " " + y + " " + z);
 			}
 
 			if(chunk == null)

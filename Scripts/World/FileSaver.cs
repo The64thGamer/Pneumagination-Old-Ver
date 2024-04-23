@@ -184,7 +184,8 @@ public partial class FileSaver : Node
 		}
 
 		if(loadedRegion.chunks == null)
-		{
+		{			
+			GD.Print("Region chunks were null.");
 			loadedRegion.chunks = new Dictionary<ByteVector3, Chunk>();
 		}
 		else if(loadedRegion.chunks.TryGetValue(new ByteVector3(
@@ -195,7 +196,6 @@ public partial class FileSaver : Node
 		{
 			return oldChunk;
 		}
-
 		return null;
 	}
 

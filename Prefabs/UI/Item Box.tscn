@@ -22,22 +22,26 @@ corner_radius_bottom_left = 5
 anti_aliasing = false
 anti_aliasing_size = 0.1
 
-[node name="AspectRatioContainer" type="AspectRatioContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="Item Box" type="Control"]
+custom_minimum_size = Vector2(40, 45)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 45.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="Item Box" type="Panel" parent="."]
+custom_minimum_size = Vector2(40, 40)
+offset_top = 7.0
+offset_right = 40.0
+offset_bottom = 47.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme = ExtResource("1_rfros")
 theme_override_styles/panel = SubResource("StyleBoxFlat_6chci")
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Item Box"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,7 +53,7 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="TextureButton" type="TextureButton" parent="Panel/MarginContainer"]
+[node name="TextureButton" type="TextureButton" parent="Item Box/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = ExtResource("2_kbnsc")
@@ -58,9 +62,9 @@ texture_hover = ExtResource("2_4dk7m")
 texture_disabled = ExtResource("2_4dk7m")
 texture_focused = ExtResource("2_4dk7m")
 ignore_texture_size = true
-stretch_mode = 5
+stretch_mode = 6
 
-[node name="Label" type="Label" parent="Panel"]
+[node name="Label" type="Label" parent="Item Box"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

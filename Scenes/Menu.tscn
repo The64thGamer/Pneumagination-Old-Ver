@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://chi3uvna74yqn"]
 
-[ext_resource type="PackedScene" uid="uid://b7toradfey384" path="res://Prefabs/PauseMenu.tscn" id="1_3q771"]
+[ext_resource type="PackedScene" uid="uid://b7toradfey384" path="res://Prefabs/UI/PauseMenu.tscn" id="1_3q771"]
 [ext_resource type="PackedScene" uid="uid://cote16tc7or5h" path="res://Prefabs/Wiki.tscn" id="9_1oa2y"]
-[ext_resource type="PackedScene" uid="uid://ckmu0mbbjrji2" path="res://Prefabs/Options.tscn" id="11_ljw5u"]
+[ext_resource type="PackedScene" uid="uid://ckmu0mbbjrji2" path="res://Prefabs/UI/Options.tscn" id="11_ljw5u"]
 
 [node name="Menu" type="Node2D"]
 
