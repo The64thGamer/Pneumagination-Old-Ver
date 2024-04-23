@@ -66,6 +66,7 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_peyr5"]
 bg_color = Color(0.647059, 0.113725, 0.176471, 1)
@@ -78,6 +79,7 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hepos"]
 bg_color = Color(0.533333, 0.407843, 0.388235, 1)
@@ -90,6 +92,7 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kdneh"]
 bg_color = Color(0.584314, 0.101961, 0.160784, 1)
