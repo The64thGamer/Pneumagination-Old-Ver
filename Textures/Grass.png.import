@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bs32iedt22nhy"
-path.bptc="res://.godot/imported/plasterwall_diffuse.jpg-e6df1ee34a685e75cc898807dd00d432.bptc.ctex"
+uid="uid://dtdi1d8mw3gra"
+path.bptc="res://.godot/imported/Grass.png-d87f97912dbbbc34dd77d87df1b2ba42.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/plasterwall_diffuse.jpg"
-dest_files=["res://.godot/imported/plasterwall_diffuse.jpg-e6df1ee34a685e75cc898807dd00d432.bptc.ctex"]
+source_file="res://Textures/Grass.png"
+dest_files=["res://.godot/imported/Grass.png-d87f97912dbbbc34dd77d87df1b2ba42.bptc.ctex"]
 
 [params]
 

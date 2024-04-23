@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bs0riii5e5pyb"
-path.bptc="res://.godot/imported/gravel_concrete_02_diff_4k.jpg-bddaf3e7e508a5cdde258edaddbf0e73.bptc.ctex"
+path.bptc="res://.godot/imported/Beton Brut.jpg-df6a4b152425707147f97986065bc516.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/gravel_concrete_02_diff_4k.jpg"
-dest_files=["res://.godot/imported/gravel_concrete_02_diff_4k.jpg-bddaf3e7e508a5cdde258edaddbf0e73.bptc.ctex"]
+source_file="res://Textures/Beton Brut.jpg"
+dest_files=["res://.godot/imported/Beton Brut.jpg-df6a4b152425707147f97986065bc516.bptc.ctex"]
 
 [params]
 
