@@ -1,24 +1,27 @@
 [gd_scene load_steps=2 format=3 uid="uid://dra28sfjs5j7j"]
 
-[ext_resource type="PackedScene" uid="uid://c8nj3sjh2rbd5" path="res://Prefabs/UI/Item Box.tscn" id="1_dwws0"]
+[ext_resource type="PackedScene" uid="uid://c8nj3sjh2rbd5" path="res://Prefabs/UI/Inventory Item Box.tscn" id="1_dwws0"]
 
 [node name="Item Bar" type="AspectRatioContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -896.0
+offset_bottom = -915.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 ratio = 9.5
 stretch_mode = 0
+alignment_horizontal = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 2
-alignment = 1
+theme_override_constants/separation = 3
 
 [node name="Item Box" parent="HBoxContainer" instance=ExtResource("1_dwws0")]
 layout_mode = 2

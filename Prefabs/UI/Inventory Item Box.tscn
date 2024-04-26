@@ -33,6 +33,7 @@ size_flags_vertical = 4
 
 [node name="Item Box" type="Panel" parent="."]
 custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
 offset_top = 7.0
 offset_right = 40.0
 offset_bottom = 47.0
@@ -65,6 +66,7 @@ ignore_texture_size = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="Item Box"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

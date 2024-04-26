@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=3 uid="uid://ceh2t3wktuofd"]
+
+[ext_resource type="PackedScene" uid="uid://c8nj3sjh2rbd5" path="res://Prefabs/UI/Inventory Item Box.tscn" id="1_0762f"]
+[ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="1_u7duk"]
+[ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="3_i7jl8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1bgi4"]
+bg_color = Color(0.647059, 0.113725, 0.176471, 1)
+border_width_bottom = 57
+border_color = Color(0.156863, 0.109804, 0.105882, 0.501961)
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+anti_aliasing = false
+
+[node name="Item Bar" type="AspectRatioContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(230, 120)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_right = -1085.0
+offset_bottom = -843.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = ExtResource("1_u7duk")
+ratio = 1.65
+stretch_mode = 1
+alignment_horizontal = 0
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(230, 120)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1bgi4")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Item Box" parent="Panel/MarginContainer/VBoxContainer" instance=ExtResource("1_0762f")]
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Item Box"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 43.0
+offset_top = -2.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_i7jl8")
+text = "ERROR"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 3
+max_lines_visible = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 3
+
+[node name="Item Box" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_0762f")]
+layout_mode = 2
+
+[node name="Item Box2" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_0762f")]
+layout_mode = 2
+
+[node name="Item Box3" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_0762f")]
+layout_mode = 2
+
+[node name="Item Box4" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_0762f")]
+layout_mode = 2
+
+[node name="Item Box5" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_0762f")]
+layout_mode = 2
