@@ -6,7 +6,7 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1bgi4"]
 bg_color = Color(0.647059, 0.113725, 0.176471, 1)
-border_width_bottom = 57
+border_width_bottom = 59
 border_color = Color(0.156863, 0.109804, 0.105882, 0.501961)
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
