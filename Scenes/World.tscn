@@ -41,7 +41,7 @@ point_count = 19
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_mode = 1
-background_energy_multiplier = 1.29
+background_energy_multiplier = 1.5
 ambient_light_energy = 0.0
 tonemap_mode = 3
 tonemap_exposure = 0.8
@@ -113,8 +113,9 @@ sun = NodePath("../DirectionalLight3D")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-light_energy = 1.382
-light_indirect_energy = 2.0
+light_energy = 5.0
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
 shadow_enabled = true
 shadow_bias = 0.282
 shadow_normal_bias = 10.0
