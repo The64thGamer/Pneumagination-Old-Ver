@@ -23,6 +23,7 @@ anti_aliasing = false
 anti_aliasing_size = 0.1
 
 [node name="Item Box" type="Control"]
+texture_filter = 1
 custom_minimum_size = Vector2(40, 45)
 layout_mode = 3
 anchors_preset = 0

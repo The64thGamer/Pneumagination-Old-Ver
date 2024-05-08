@@ -74,13 +74,19 @@ During the morning, heavy fog encompasses the player, making it hard to see ahea
 ERROR,ERROR
 ERROR_CORRUPTED_WORLD,[>Corrupted World Data<]
 ERROR_CORRUPTED_WORLD_TIP,(Might still be loadable)
-MATERIAL_0,Dielectric
-MATERIAL_1,Asphalt
-MATERIAL_2,Plaster
-MATERIAL_3,Rock
-MATERIAL_4,Grass
-MATERIAL_5,Sand
-MATERIAL_6,Sandy Trail
-MATERIAL_7,Laterite
-MATERIAL_8,White Sand
-MATERIAL_9,Water
+MATERIAL_GENERIC,Material
+MATERIAL_ARTIFICIAL,Artificial Material
+MATERIAL_TERRAIN,Terrain Material
+MATERIAL_PLANT, Plant Material
+MATERIAL_DIALECTRIC,Dielectric
+MATERIAL_ASPHALT,Asphalt
+MATERIAL_PLASTER,Plaster
+MATERIAL_ROCK,Rock
+MATERIAL_GRASS,Grass
+MATERIAL_SAND,Sand
+MATERIAL_SANDY_TRAIL,Sandy Trail
+MATERIAL_LATERITE,Laterite
+MATERIAL_WHITE_SAND,White Sand
+VOLUME_LIQUID,Volume of Liquid
+VOLUME_WATER,Water
+

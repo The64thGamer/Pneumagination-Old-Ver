@@ -1,0 +1,16 @@
+[remap]
+
+importer="citizenl.godot-csv-importer"
+type="Resource"
+uid="uid://dbw3fvuprihcv"
+path="res://.godot/imported/ItemData.csv-249a25bbff9ab129cf748166f8a107b7.tres"
+
+[deps]
+
+source_file="res://Data/ItemData.csv"
+dest_files=["res://.godot/imported/ItemData.csv-249a25bbff9ab129cf748166f8a107b7.tres"]
+
+[params]
+
+delimiter=0
+describe_headers=false

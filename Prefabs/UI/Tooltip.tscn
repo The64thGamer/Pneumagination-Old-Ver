@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://di63s85dfv50o"]
+
+[ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="1_1e5lt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adofw"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.156863, 0.109804, 0.105882, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.121569, 0.0823529, 0.0784314, 1)
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Tooltip" type="RichTextLabel"]
+texture_filter = 1
+clip_contents = false
+custom_minimum_size = Vector2(300, 20)
+offset_right = 300.0
+offset_bottom = 54.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme_override_colors/default_color = Color(0.533333, 0.407843, 0.388235, 1)
+theme_override_constants/line_separation = 7
+theme_override_fonts/normal_font = ExtResource("1_1e5lt")
+theme_override_font_sizes/normal_font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_adofw")
+bbcode_enabled = true
+text = "[color=#FFFFFF]ERROR[/color]
+ERROR"
+fit_content = true
+scroll_active = false

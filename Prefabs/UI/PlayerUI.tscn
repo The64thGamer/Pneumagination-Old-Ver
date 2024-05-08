@@ -1,10 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://bd2w72tikpphr"]
+[gd_scene load_steps=16 format=3 uid="uid://bd2w72tikpphr"]
 
-[ext_resource type="Script" path="res://Scripts/Main Menu/MenuToggle.cs" id="1_ct0sx"]
+[ext_resource type="Texture2D" uid="uid://ietyxumfo2yv" path="res://UI/Cursor.png" id="2_laq3d"]
 [ext_resource type="PackedScene" uid="uid://dra28sfjs5j7j" path="res://Prefabs/UI/Inventory Item Bar.tscn" id="3_58obt"]
+[ext_resource type="Script" path="res://Scripts/Player/HideSimplePlayerUI.cs" id="3_dwho8"]
+[ext_resource type="Script" path="res://Scripts/Player/Inventory.cs" id="4_4q24b"]
 [ext_resource type="PackedScene" uid="uid://bqqko13w7ibcu" path="res://Prefabs/UI/Fake Inventory Bar.tscn" id="4_qnxyn"]
 [ext_resource type="PackedScene" uid="uid://ceh2t3wktuofd" path="res://Prefabs/UI/Crafting Bar.tscn" id="6_p7eu3"]
 [ext_resource type="Theme" uid="uid://csvm2c04m8ow3" path="res://UI/Theme/Menus.tres" id="7_wrgav"]
+[ext_resource type="FontFile" uid="uid://cq3fhluvc2kjn" path="res://Fonts/adm-3a.otf" id="9_guprt"]
+[ext_resource type="Script" path="res://Scripts/World/DebugInfo.cs" id="10_lqepb"]
+[ext_resource type="Script" path="res://Scripts/Player/LoadingBar.cs" id="11_yg8c1"]
 [ext_resource type="Theme" uid="uid://3g8xbrtbcefe" path="res://UI/Theme/RedMenus.tres" id="16_8jhor"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jfglt"]
@@ -29,25 +34,65 @@ corner_radius_top_right = 5
 expand_margin_right = 5.0
 anti_aliasing = false
 
-[node name="PlayerUI" type="CanvasLayer"]
-script = ExtResource("1_ct0sx")
+[sub_resource type="LabelSettings" id="LabelSettings_gofwk"]
+line_spacing = 2.0
+font = ExtResource("9_guprt")
+font_size = 7
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 3
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(0, 0)
 
-[node name="Column A" type="Control" parent="."]
+[node name="PlayerUI" type="CanvasLayer"]
+
+[node name="Pointer" type="TextureRect" parent="."]
+texture_filter = 1
+texture_repeat = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_laq3d")
+stretch_mode = 3
+script = ExtResource("3_dwho8")
+metadata/_edit_use_anchors_ = true
+
+[node name="Mining Progress" type="ProgressBar" parent="Pointer"]
+layout_mode = 0
+offset_left = -27.0
+offset_top = 12.0
+offset_right = 33.0
+offset_bottom = 18.0
+theme = ExtResource("7_wrgav")
+max_value = 1.0
+step = 0.001
+value = 1.0
+show_percentage = false
+
+[node name="Inventory" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1279.97
 offset_bottom = 960.0
 size_flags_horizontal = 3
 
-[node name="Control2" type="Control" parent="Column A"]
+[node name="Inventory" type="Control" parent="Inventory"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("4_4q24b")
 
-[node name="TabContainer" type="TabContainer" parent="Column A/Control2"]
+[node name="TabContainer" type="TabContainer" parent="Inventory/Inventory"]
 custom_minimum_size = Vector2(423, 0)
 layout_mode = 1
 anchors_preset = 9
@@ -59,13 +104,13 @@ size_flags_vertical = 3
 theme = ExtResource("7_wrgav")
 clip_tabs = false
 
-[node name="Inventory" type="Panel" parent="Column A/Control2/TabContainer"]
+[node name="Inventory" type="Panel" parent="Inventory/Inventory/TabContainer"]
 custom_minimum_size = Vector2(410, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jfglt")
 
-[node name="MarginContainer" type="MarginContainer" parent="Column A/Control2/TabContainer/Inventory"]
+[node name="MarginContainer" type="MarginContainer" parent="Inventory/Inventory/TabContainer/Inventory"]
 custom_minimum_size = Vector2(410, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -77,66 +122,66 @@ grow_vertical = 2
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Column A/Control2/TabContainer/Inventory/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer"]
 texture_filter = 1
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer"]
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Item Bar" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar2" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar2" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar3" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar3" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar4" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar4" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar7" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar7" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar8" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar8" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar9" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar9" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar10" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar10" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar14" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar14" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar15" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar15" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar16" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar16" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar17" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar17" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar6" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar6" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Item Bar5" parent="Column A/Control2/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("4_qnxyn")]
+[node name="Item Bar5" parent="Inventory/Inventory/TabContainer/Inventory/MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("4_qnxyn")]
 layout_mode = 2
 
-[node name="Gear" type="Panel" parent="Column A/Control2/TabContainer"]
+[node name="Gear" type="Panel" parent="Inventory/Inventory/TabContainer"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Column A/Control2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Inventory/Inventory"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -149,37 +194,37 @@ theme = ExtResource("7_wrgav")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_hjhf3")
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Column A/Control2/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Inventory/Inventory/ScrollContainer"]
 layout_mode = 2
 
-[node name="Item Bar" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar4" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar4" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar5" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar5" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar9" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar9" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar2" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar2" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar3" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar3" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar6" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar6" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar7" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar7" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Item Bar8" parent="Column A/Control2/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
+[node name="Item Bar8" parent="Inventory/Inventory/ScrollContainer/VBoxContainer" instance=ExtResource("6_p7eu3")]
 layout_mode = 2
 
-[node name="Hotbar" type="Panel" parent="Column A"]
+[node name="Hotbar" type="Panel" parent="Inventory"]
 custom_minimum_size = Vector2(410, 55)
 layout_mode = 1
 anchors_preset = 2
@@ -193,7 +238,7 @@ size_flags_stretch_ratio = 0.06
 theme = ExtResource("16_8jhor")
 theme_override_styles/panel = SubResource("StyleBoxFlat_ng16j")
 
-[node name="MarginContainer" type="MarginContainer" parent="Column A/Hotbar"]
+[node name="MarginContainer" type="MarginContainer" parent="Inventory/Hotbar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -205,10 +250,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 28
 theme_override_constants/margin_bottom = 4
 
-[node name="Item Bar" parent="Column A/Hotbar/MarginContainer" instance=ExtResource("3_58obt")]
+[node name="Item Bar" parent="Inventory/Hotbar/MarginContainer" instance=ExtResource("3_58obt")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Column A/Hotbar"]
+[node name="Label" type="Label" parent="Inventory/Hotbar"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -225,3 +270,35 @@ text = "A"
 horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
+
+[node name="Debug Text" type="Label" parent="." groups=["Player"]]
+texture_filter = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 25.0
+grow_horizontal = 0
+text = " 
+ LOL
+ LOL"
+label_settings = SubResource("LabelSettings_gofwk")
+horizontal_alignment = 2
+script = ExtResource("10_lqepb")
+
+[node name="LoadingBar" type="ProgressBar" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -98.0
+offset_right = 300.0
+offset_bottom = -68.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("7_wrgav")
+max_value = 1.0
+step = 0.001
+script = ExtResource("11_yg8c1")
