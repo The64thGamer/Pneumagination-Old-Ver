@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=23 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/World/ServerClient.cs" id="2_5i8jb"]
 [ext_resource type="Script" path="res://Scripts/World/EnvironmentController.cs" id="2_6dq8v"]
@@ -9,7 +9,6 @@
 [ext_resource type="Gradient" uid="uid://cl5kd5v3k56ma" path="res://UI/Gradients/Sky.tres" id="4_i3crq"]
 [ext_resource type="Gradient" uid="uid://j1x467tpopan" path="res://UI/Gradients/Fog.tres" id="5_suwk1"]
 [ext_resource type="PackedScene" uid="uid://ctebjgs6cgjjn" path="res://Particles/Break Brush.tscn" id="6_oeqbt"]
-[ext_resource type="Material" uid="uid://cnag8lj5klaun" path="res://Materials/8.tres" id="12_11n7w"]
 [ext_resource type="Script" path="res://Scripts/World/WorldGen.cs" id="39_uh72q"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
@@ -78,8 +77,6 @@ point_count = 4
 _data = [Vector2(0.318, 0), 0.0, 0.0, 0, 0, Vector2(0.443, 0.6), 0.0, 0.0, 0, 0, Vector2(0.675, 0.6), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_loyu0"]
-
 [node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles")]
 script = ExtResource("39_uh72q")
 envController = NodePath("WorldEnvironment")
@@ -129,7 +126,3 @@ directional_shadow_max_distance = 2374.0
 
 [node name="Break Brush Particles" parent="." instance=ExtResource("6_oeqbt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_loyu0")
-surface_material_override/0 = ExtResource("12_11n7w")

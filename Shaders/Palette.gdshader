@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode specular_disabled;
+render_mode specular_disabled,world_vertex_coords;
 
 uniform vec4 colorA : source_color = vec4(1,0.4,0,1);
 uniform vec4 colorB : source_color = vec4(0.4,1,0,1);
@@ -15,14 +15,36 @@ uniform vec4 colorC_black: source_color = vec4(0,0,0.1,1);
 uniform vec4 colorD_black: source_color = vec4(0,0,0,1);
 
 uniform sampler2D palette : source_color, hint_default_white;
-
+uniform vec3 triplanar_scale = vec3(1.0, 1.0, 1.0);
+	
 const float shadow = 0.5;
 const float shadow_width = 0.01;
 const vec3 white = vec3(1,1,1);
+const float triplanar_sharpness = 10.0;
 
 varying vec3 paint;
 varying vec3 paint_shaded;
 varying vec3 paint_black;
+varying vec3 triplanar_power_normal;
+varying vec3 triplanar_pos;
+
+vec4 triplanar_texture(sampler2D p_sampler, vec3 p_weights, vec3 p_triplanar_pos) {
+	vec4 samp = vec4(0.0);
+	samp += texture(p_sampler, p_triplanar_pos.xy) * p_weights.z;
+	samp += texture(p_sampler, p_triplanar_pos.xz) * p_weights.y;
+	samp += texture(p_sampler, p_triplanar_pos.zy * vec2(-1.0, 1.0)) * p_weights.x;
+	return samp;
+}
+
+void vertex() {
+// TextureParameterTriplanar
+	{
+		triplanar_power_normal = pow(abs(NORMAL), vec3(triplanar_sharpness));
+		triplanar_power_normal /= dot(triplanar_power_normal, vec3(1.0));
+		triplanar_pos = VERTEX * triplanar_scale;
+		triplanar_pos *= vec3(1.0, -1.0, 1.0);
+	}
+}
 
 void fragment() {
 	ALBEDO = white;
@@ -30,15 +52,15 @@ void fragment() {
 	paint = vec3(0);
 	paint_shaded = vec3(0);
 	
-	paint = mix(paint,colorA.rgb,texture(palette, UV).r);
-	paint = mix(paint,colorB.rgb,texture(palette, UV).g);
-	paint = mix(paint,colorC.rgb,texture(palette, UV).b);
-	paint = mix(paint,colorD.rgb,texture(palette, UV).a);
+	paint = mix(paint,colorA.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).r);
+	paint = mix(paint,colorB.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).g);
+	paint = mix(paint,colorC.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).b);
+	paint = mix(paint,colorD.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).a);
 	
-	paint_shaded = mix(paint_shaded,colorA_shaded.rgb,texture(palette, UV).r);
-	paint_shaded = mix(paint_shaded,colorB_shaded.rgb,texture(palette, UV).g);
-	paint_shaded = mix(paint_shaded,colorC_shaded.rgb,texture(palette, UV).b);
-	paint_shaded = mix(paint_shaded,colorD_shaded.rgb,texture(palette, UV).a);
+	paint_shaded = mix(paint_shaded,colorA_shaded.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).r);
+	paint_shaded = mix(paint_shaded,colorB_shaded.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).g);
+	paint_shaded = mix(paint_shaded,colorC_shaded.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).b);
+	paint_shaded = mix(paint_shaded,colorD_shaded.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).a);
 }
 
 void light() {
