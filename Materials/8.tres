@@ -1,13 +1,21 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bdnuk7wy6wiud"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cnag8lj5klaun"]
 
-[ext_resource type="Texture2D" uid="uid://coscl6tjyh1is" path="res://Textures/White Sand.png" id="1_mshku"]
+[ext_resource type="Shader" path="res://Shaders/Palette.gdshader" id="1_u2wp6"]
+[ext_resource type="Texture2D" uid="uid://774rdgujydit" path="res://Textures/PaintMasks/PaintMap.png" id="2_8ydwy"]
 
 [resource]
-albedo_color = Color(1, 1, 1, 0.0509804)
-albedo_texture = ExtResource("1_mshku")
-albedo_texture_force_srgb = true
-metallic_specular = 0.0
-uv1_scale = Vector3(0.0236705, 0.0236705, 0.0236705)
-uv1_triplanar = true
-uv1_world_triplanar = true
-texture_filter = 5
+render_priority = 0
+shader = ExtResource("1_u2wp6")
+shader_parameter/colorA = Color(0.905882, 0.807843, 0.635294, 1)
+shader_parameter/colorB = Color(0.917647, 0.901961, 0.721569, 1)
+shader_parameter/colorC = Color(0.866667, 0.811765, 0.721569, 1)
+shader_parameter/colorD = Color(1, 1, 1, 1)
+shader_parameter/colorA_shaded = Color(0.556863, 0.556863, 0.556863, 1)
+shader_parameter/colorB_shaded = Color(0.545098, 0.541176, 0.513726, 1)
+shader_parameter/colorC_shaded = Color(0.501961, 0.52549, 0.533333, 1)
+shader_parameter/colorD_shaded = Color(0.568627, 0.592157, 0.611765, 1)
+shader_parameter/colorA_black = Color(0.1, 0, 0, 1)
+shader_parameter/colorB_black = Color(0, 0.1, 0, 1)
+shader_parameter/colorC_black = Color(0, 0, 0.1, 1)
+shader_parameter/colorD_black = Color(0, 0, 0, 1)
+shader_parameter/palette = ExtResource("2_8ydwy")

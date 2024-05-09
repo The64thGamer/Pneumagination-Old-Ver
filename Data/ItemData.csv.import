@@ -13,4 +13,4 @@ dest_files=["res://.godot/imported/ItemData.csv-249a25bbff9ab129cf748166f8a107b7
 [params]
 
 delimiter=0
-describe_headers=false
+describe_headers=true
