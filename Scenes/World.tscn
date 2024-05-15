@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b33cy5ihrg8qq"]
+[gd_scene load_steps=28 format=3 uid="uid://b33cy5ihrg8qq"]
 
 [ext_resource type="Script" path="res://Scripts/World/ServerClient.cs" id="2_5i8jb"]
 [ext_resource type="Script" path="res://Scripts/World/EnvironmentController.cs" id="2_6dq8v"]
@@ -9,6 +9,10 @@
 [ext_resource type="Gradient" uid="uid://cl5kd5v3k56ma" path="res://UI/Gradients/Sky.tres" id="4_i3crq"]
 [ext_resource type="Gradient" uid="uid://j1x467tpopan" path="res://UI/Gradients/Fog.tres" id="5_suwk1"]
 [ext_resource type="PackedScene" uid="uid://ctebjgs6cgjjn" path="res://Particles/Break Brush.tscn" id="6_oeqbt"]
+[ext_resource type="Material" uid="uid://cb6me8ma6gi2o" path="res://Materials/4.tres" id="11_d3dlc"]
+[ext_resource type="Material" uid="uid://bllyk0g537y6g" path="res://Materials/3.tres" id="12_0memr"]
+[ext_resource type="Material" uid="uid://cnag8lj5klaun" path="res://Materials/8.tres" id="12_fs2kk"]
+[ext_resource type="Material" uid="uid://cu3b0row38aur" path="res://Materials/5.tres" id="14_s5v06"]
 [ext_resource type="Script" path="res://Scripts/World/WorldGen.cs" id="39_uh72q"]
 
 [sub_resource type="Curve" id="Curve_tpjr8"]
@@ -41,10 +45,8 @@ point_count = 19
 
 [sub_resource type="Environment" id="Environment_rruv5"]
 background_mode = 1
-background_energy_multiplier = 1.5
+background_energy_multiplier = 0.0
 ambient_light_energy = 0.0
-tonemap_mode = 3
-tonemap_exposure = 0.8
 tonemap_white = 7.96
 ssao_radius = 6.96
 ssao_intensity = 0.89
@@ -76,6 +78,8 @@ point_count = 4
 [sub_resource type="Curve" id="Curve_6m3dr"]
 _data = [Vector2(0.318, 0), 0.0, 0.0, 0, 0, Vector2(0.443, 0.6), 0.0, 0.0, 0, 0, Vector2(0.675, 0.6), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_8dbti"]
 
 [node name="World" type="Node3D" node_paths=PackedStringArray("envController", "destroyBrushParticles")]
 script = ExtResource("39_uh72q")
@@ -113,16 +117,36 @@ sun = NodePath("../DirectionalLight3D")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-light_energy = 0.084
 light_indirect_energy = 0.0
 light_volumetric_fog_energy = 0.0
+light_angular_distance = 90.0
 shadow_enabled = true
-shadow_bias = 0.282
+shadow_bias = 2.0
 shadow_normal_bias = 10.0
-shadow_blur = 0.364
+directional_shadow_mode = 0
 directional_shadow_split_1 = 0.052
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 2374.0
 
 [node name="Break Brush Particles" parent="." instance=ExtResource("6_oeqbt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 496.796, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(113.388, 0, 0, 0, 113.388, 0, 0, 0, 113.388, 0, 0, 0)
+material_override = ExtResource("11_d3dlc")
+mesh = SubResource("SphereMesh_8dbti")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(113.388, 0, 0, 0, 113.388, 0, 0, 0, 113.388, 32.7621, 0, -47.6897)
+material_override = ExtResource("12_0memr")
+mesh = SubResource("SphereMesh_8dbti")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(113.388, 0, 0, 0, 113.388, 0, 0, 0, 113.388, 36.5093, 0, 43.398)
+material_override = ExtResource("12_fs2kk")
+mesh = SubResource("SphereMesh_8dbti")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(113.388, 0, 0, 0, 113.388, 0, 0, 0, 113.388, 82.7421, 1.14441e-05, -33.0369)
+material_override = ExtResource("14_s5v06")
+mesh = SubResource("SphereMesh_8dbti")

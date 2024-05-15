@@ -1,13 +1,22 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b57dawp57a4nj"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bllyk0g537y6g"]
 
-[ext_resource type="Texture2D" uid="uid://c74obs1kj68gl" path="res://Textures/Cliffside_Diffuse.png" id="1_yuryf"]
+[ext_resource type="Shader" path="res://Shaders/Palette.gdshader" id="1_y3sof"]
+[ext_resource type="Texture2D" uid="uid://cqnbypcbflxrj" path="res://Textures/PaintMasks/Rock_PaintMap.png" id="2_i7w6i"]
 
 [resource]
-albedo_color = Color(1, 1, 1, 0.152941)
-albedo_texture = ExtResource("1_yuryf")
-albedo_texture_force_srgb = true
-metallic_specular = 0.0
-uv1_scale = Vector3(0.015, 0.015, 0.015)
-uv1_triplanar = true
-uv1_world_triplanar = true
-texture_filter = 5
+render_priority = 0
+shader = ExtResource("1_y3sof")
+shader_parameter/colorA = Color(0.466667, 0.462745, 0.462745, 1)
+shader_parameter/colorB = Color(0.588174, 0.572534, 0.568627, 1)
+shader_parameter/colorC = Color(0.674632, 0.6551, 0.651194, 1)
+shader_parameter/colorD = Color(0.733333, 0.713726, 0.709804, 1)
+shader_parameter/colorA_shaded = Color(0.188235, 0.12549, 0.152941, 1)
+shader_parameter/colorB_shaded = Color(0.341176, 0.270588, 0.329412, 1)
+shader_parameter/colorC_shaded = Color(0.411765, 0.392157, 0.458824, 1)
+shader_parameter/colorD_shaded = Color(0.45098, 0.439216, 0.490196, 1)
+shader_parameter/colorA_black = Color(0.1, 0, 0, 1)
+shader_parameter/colorB_black = Color(0, 0.1, 0, 1)
+shader_parameter/colorC_black = Color(0, 0, 0.1, 1)
+shader_parameter/colorD_black = Color(0, 0, 0, 1)
+shader_parameter/triplanar_scale = Vector3(0.015, 0.015, 0.015)
+shader_parameter/palette = ExtResource("2_i7w6i")

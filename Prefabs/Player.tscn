@@ -35,14 +35,6 @@ script = ExtResource("1_cwgi3")
 head = NodePath("Player Head")
 camera = NodePath("Player Head/Player Camera")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-light_color = Color(0.152941, 0.152941, 0.152941, 1)
-light_energy = 10.0
-light_size = 1.0
-light_specular = 0.0
-omni_range = 50.0
-
 [node name="Player Box" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 layers = 2

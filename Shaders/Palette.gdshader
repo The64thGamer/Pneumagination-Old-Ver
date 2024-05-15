@@ -1,6 +1,6 @@
 shader_type spatial;
 render_mode specular_disabled,world_vertex_coords;
-
+//,ambient_light_disabled
 uniform vec4 colorA : source_color = vec4(1,0.4,0,1);
 uniform vec4 colorB : source_color = vec4(0.4,1,0,1);
 uniform vec4 colorC : source_color = vec4(0.5,0.5,1,1);
@@ -18,7 +18,7 @@ uniform sampler2D palette : source_color, hint_default_white;
 uniform vec3 triplanar_scale = vec3(1.0, 1.0, 1.0);
 	
 const float shadow = 0.5;
-const float shadow_width = 0.01;
+const float shadow_width = 0.001;
 const vec3 white = vec3(1,1,1);
 const float triplanar_sharpness = 10.0;
 
