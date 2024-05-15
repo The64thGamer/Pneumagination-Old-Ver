@@ -1,6 +1,5 @@
 shader_type spatial;
-render_mode specular_disabled,world_vertex_coords;
-//,ambient_light_disabled
+render_mode specular_disabled,world_vertex_coords,ambient_light_disabled;
 uniform vec4 colorA : source_color = vec4(1,0.4,0,1);
 uniform vec4 colorB : source_color = vec4(0.4,1,0,1);
 uniform vec4 colorC : source_color = vec4(0.5,0.5,1,1);
@@ -17,7 +16,7 @@ uniform vec4 colorD_black: source_color = vec4(0,0,0,1);
 uniform sampler2D palette : source_color, hint_default_white;
 uniform vec3 triplanar_scale = vec3(1.0, 1.0, 1.0);
 	
-const float shadow = 0.5;
+const float shadow = 0.2;
 const float shadow_width = 0.001;
 const vec3 white = vec3(1,1,1);
 const float triplanar_sharpness = 10.0;
@@ -63,9 +62,8 @@ void fragment() {
 	paint_shaded = mix(paint_shaded,colorD_shaded.rgb,triplanar_texture(palette, triplanar_power_normal, triplanar_pos).a);
 }
 
-void light() {
-	float NdotL = dot(NORMAL, LIGHT) * ATTENUATION;
-	SPECULAR_LIGHT += NdotL + 0.33;
+void light() { 
+	SPECULAR_LIGHT += ATTENUATION * LIGHT_COLOR * max(dot(LIGHT,NORMAL), 0.0);
 	
 	DIFFUSE_LIGHT = mix(paint_shaded.rgb, paint.rgb, smoothstep(shadow - shadow_width, shadow + shadow_width,SPECULAR_LIGHT)) - SPECULAR_LIGHT;
 }
