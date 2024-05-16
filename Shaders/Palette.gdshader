@@ -63,7 +63,7 @@ void fragment() {
 }
 
 void light() { 
-	SPECULAR_LIGHT += ATTENUATION * LIGHT_COLOR * max(dot(LIGHT,NORMAL), 0.0);
+	SPECULAR_LIGHT += ATTENUATION * LIGHT_COLOR.r * max(dot(LIGHT,NORMAL), 0.0);
 	
 	DIFFUSE_LIGHT = mix(paint_shaded.rgb, paint.rgb, smoothstep(shadow - shadow_width, shadow + shadow_width,SPECULAR_LIGHT)) - SPECULAR_LIGHT;
 }
