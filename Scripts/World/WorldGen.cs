@@ -77,9 +77,7 @@ public partial class WorldGen : Node3D
 	public override void _Ready()
 	{     
 		fileSaver = GetNode<FileSaver>("/root/FileSaver");
-   
 		server = GetTree().Root.GetNode("World/Server") as ServerClient;
-
 		seedA = Convert.ToInt32(fileSaver.GetSeed());
 		Random rnd = new Random(seedA);
 		seedB = rnd.Next();
@@ -88,7 +86,6 @@ public partial class WorldGen : Node3D
 		seedE = rnd.Next();
 		seedF = rnd.Next();
 		seedG = rnd.Next();
-
 
 		int matsize = 0;
 		while (true)
@@ -104,7 +101,6 @@ public partial class WorldGen : Node3D
 		{
 			mats[i] = GD.Load("res://Materials/" + i + ".tres") as Material;
 		}
-
 		noise = new FastNoiseContainer(){
 			noise = FastNoise.FromEncodedNodeTree("DgAFAAAAAAAAQAsAAQAAAAAAAAABAAAAAAAAAACamZk/AAAAAD8AAAAAAAAAAABA"),
 			frequency = 0.002f,
@@ -1338,6 +1334,11 @@ public partial class WorldGen : Node3D
 
 	float GetClampedFastNoise2D(FastNoiseContainer container, float x, float z)
 	{
+		if(container == null)
+		{
+			GD.PrintErr("NoiseContainer Null???");
+			return 0;
+		}
 		return GetClampedNoise(container.noise.GenSingle2D(
 			(x * container.frequency) + ((container.seed % 20000) * container.frequency),
 			(z * container.frequency) + ((container.seed % 20000) * container.frequency),
@@ -1347,6 +1348,11 @@ public partial class WorldGen : Node3D
 
 	float GetClampedFastNoise3D(FastNoiseContainer container, int x, int y, int z)
 	{
+		if(container == null)
+		{
+			GD.PrintErr("NoiseContainer Null???");
+			return 0;
+		}
 		return GetClampedNoise(container.noise.GenSingle3D(
 			(x * container.frequency) + ((container.seed % 20000) * container.frequency),
 			(y * container.frequency) + ((container.seed % 20000) * container.frequency),

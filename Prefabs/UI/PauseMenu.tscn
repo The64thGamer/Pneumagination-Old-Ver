@@ -375,6 +375,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="Button" type="Button" parent="VBoxContainer/Menu Container/Panel/Save Files"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Create New World"
+
 [node name="Logo Holder" type="Panel" parent="VBoxContainer/Menu Container"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
@@ -399,3 +404,5 @@ grow_vertical = 2
 texture = ExtResource("16_re7vc")
 expand_mode = 3
 stretch_mode = 5
+
+[connection signal="pressed" from="VBoxContainer/Menu Container/Panel/Save Files/Button" to="VBoxContainer/Menu Container/Panel" method="SetVisible" binds= ["Create World"]]
